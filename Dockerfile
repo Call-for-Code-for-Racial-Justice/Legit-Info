@@ -33,4 +33,4 @@ COPY . /app
 #RUN python3 manage.py makemigrations learning_logs
 #RUN python3 manage.py migrate
 
-CMD ["gunicorn", "-b", "0.0.0.0:3000", "--env", "DJANGO_SETTINGS_MODULE=learning_log.settings", "learning_log.wsgi", "--timeout 120"]
+CMD ["gunicorn", "-b", "0.0.0.0:3000", "--env", "DJANGO_SETTINGS_MODULE=cfc_project.settings", "cfc_project.wsgi", "--timeout 120"]
