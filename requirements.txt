@@ -6,6 +6,7 @@ django-bootstrap4==2.2.0
 gunicorn==20.0.4
 importlib-metadata==1.7.0
 livereload==2.6.2
+mysqlclient==2.0.1
 pytz==2020.1
 six==1.15.0
 soupsieve==2.0.1
