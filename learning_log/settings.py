@@ -25,7 +25,7 @@ SECRET_KEY = 'ry()%j23$u$c7q$m2o0vo1w(u^eut8b3c0ylpy+)((6f7j08a4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0']
 
 
 # Application definition
@@ -80,17 +80,25 @@ WSGI_APPLICATION = 'learning_log.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-
-DATABASES = {
+use_SQLite3 = True
+if use_SQLite3:
+    DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'learning_logs',
-        'USER': 'fixuser',
-        'PASSWORD': 'delta.jack.anvil',
-        'HOST': 'mariadb',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'logsdb.sqlite3'),
+      }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'logsdb',
+            'USER': 'admin',
+            'PASSWORD': 'delta.jack.anvil',
+            'HOST': 'mariadb',
+            'PORT': '3306',
+        }
+    }
 
 
 
