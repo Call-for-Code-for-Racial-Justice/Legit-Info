@@ -1,0 +1,45 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: igc-python
+  labels:
+    version: 1.27.0
+spec:
+  resources:
+    - name: git-source
+      type: git
+    - name: docker-image
+      type: image
+  tasks:
+    - name: build
+      taskRef:
+        name: igc-build-tag-push-v1-27-0
+      resources:
+        inputs:
+          - name: source
+            resource: git-source
+        outputs:
+          - name: image
+            resource: docker-image
+    - name: deploy
+      taskRef:
+        name: igc-deploy-v1-27-0
+      runAfter:
+       - build
+      resources:
+        inputs:
+          - name: source
+            resource: git-source
+          - name: image
+            resource: docker-image
+    - name: release
+      taskRef:
+        name: igc-helm-package-v1-27-0
+      runAfter:
+       - deploy
+      resources:
+        inputs:
+          - name: source
+            resource: git-source
+          - name: image
+            resource: docker-image

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+IMAGE_NAME="template-python-django"
+IMAGE_VER="1.0.0"
+
+if [[ -z "${IMAGE_NAME}" ]] || [[ -z "${IMAGE_VER}" ]]; then
+   echo "Required input is missing"
+   echo "Usage: build.sh IMAGE_NAME IMAGE_VER"
+   exit 1
+fi
+
+echo "Building ${IMAGE_NAME}:${IMAGE_VER}"
+
+docker run -d -p 3000:3000 --env PORT=3000 --env APP_ROOT='sandbox' ${IMAGE_NAME}:${IMAGE_VER}
+
