@@ -7,6 +7,7 @@ USER root
 COPY MariaDB.repo /etc/yum.repos.d/
 RUN yum -y install python3
 RUN yum -y install python3-pip wget 
+RUN yum -y install sqlite3
 RUN yum -y install openssl openssl-libs openssl-devel
 RUN yum -y install MariaDB-client
 RUN yum -y install mysql-client
