@@ -85,16 +85,16 @@ if use_SQLite3:
     DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'logsdb.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
       }
     }
 else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'logsdb',
-            'USER': 'admin',
-            'PASSWORD': 'delta.jack.anvil',
+            'NAME': 'fixdb',
+            'USER': 'fixadmin',
+            'PASSWORD': 'foxtrot.indigo.xray',
             'HOST': 'mariadb',
             'PORT': '3306',
         }

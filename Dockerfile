@@ -29,8 +29,4 @@ USER 1001
 # Copy Code into Container
 COPY . /app
 
-# Configurate the Static Database
-#RUN python3 manage.py makemigrations learning_logs
-#RUN python3 manage.py migrate
-
 CMD ["gunicorn", "-b", "0.0.0.0:3000", "--env", "DJANGO_SETTINGS_MODULE=cfc_project.settings", "cfc_project.wsgi", "--timeout 120"]
