@@ -6,8 +6,6 @@ WORKDIR /root
 USER root
 RUN yum -y install sudo grep
 COPY MariaDB.repo /etc/yum.repos.d/
-COPY openssl-1.0.2k-19.el7.x86_64.rpm ./
-COPY openssl-libs-1.0.2k-19.el7.x86_64.rpm ./
 RUN yum -y install python3
 RUN yum -y install python3-pip wget 
 RUN yum -y install sqlite
