@@ -4,18 +4,24 @@ from django.db import models
 class Location(models.Model):
     """A location helps filter which legislation to look at."""
     desc = models.CharField(max_length=80)
-    hierarchy = models.CharField(max_length=255)
+    hierarchy = models.CharField(max_length=200)
+    govlevel = models.CharField(max_length=80)
+
     date_added = models.DateTimeField(auto_now_add=True)
 
-def __str__(self):
-    """Return a string representation of the model."""
-    return self.desc
+    def __str__(self):
+        """Return a string representation of the model."""
+        return self.desc
 
 class Impact(models.Model):
     """A location helps filter which legislation to look at."""
     text = models.CharField(max_length=80)
     date_added = models.DateTimeField(auto_now_add=True)
 
-def __str__(self):
-    """Return a string representation of the model."""
-    return self.text
+    def __str__(self):
+        """Return a string representation of the model."""
+        return self.text
+
+
+
+

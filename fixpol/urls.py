@@ -8,6 +8,9 @@ app_name = 'fixpol'
 urlpatterns = [
     # Home page
     path('', views.index, name='index'),
+
+    # Page that shows all locations.
+    path('locations/', views.locations, name='locations'),
     ]
 
 

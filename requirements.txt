@@ -3,6 +3,7 @@ beautifulsoup4==4.9.1
 bootstrap4==0.1.0
 Django==3.0.8
 django-bootstrap4==2.2.0
+django-tree-queries==0.3.3
 gunicorn==20.0.4
 importlib-metadata==1.7.0
 livereload==2.6.2

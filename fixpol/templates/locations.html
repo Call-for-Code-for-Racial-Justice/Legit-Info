@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<p>Locations</p>
+
+<ul>
+{% for location in locations %}
+ <li>{{ location }}</li>
+ {% empty %}
+ <li>No locations have been added yet.</li>
+ {% endfor %}
+</ul>
+
+{% endblock content %}
