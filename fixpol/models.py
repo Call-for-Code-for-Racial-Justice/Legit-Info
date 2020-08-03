@@ -4,6 +4,7 @@ from django.db import models
 class Location(models.Model):
     """A location helps filter which legislation to look at."""
     desc = models.CharField(max_length=80)
+    hierarchy = models.CharField(max_length=255)
     date_added = models.DateTimeField(auto_now_add=True)
 
 def __str__(self):
