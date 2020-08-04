@@ -6,16 +6,17 @@ from fixpol.models import Location, Impact
 
 # Create your models here.
 class Profile(models.Model):
+    """A profile holds the location and impact areas."""
     class Meta:
         app_label = 'users'
-    """A profile holds the location and impact areas."""
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, 
         related_name='profile')
 
-    loc = models.ForeignKey('fixpol.Location', null=True,
-        related_name='profloc', on_delete=models.SET_NULL)
+    prof_location = models.ForeignKey('fixpol.Location', null=True,
+        related_name='profiles', on_delete=models.SET_NULL)
 
-    areas = models.ManyToManyField(Impact)
+    prof_impacts = models.ManyToManyField(Impact)
 
     def __str__(self):
         """Return a string representation of the model."""

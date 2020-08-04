@@ -30,7 +30,12 @@ def register(request):
 @login_required
 def profile(request):
     user = request.user
-    context = {'user': user}
+    location = user.profile.prof_location
+    impacts = user.profile.prof_impacts
+       
+    context = {'user': user, 
+               'location': location, 
+                'impacts': 'Wow, lots of impacts'}
     return render(request, 'registration/profile.html', context)
 
 

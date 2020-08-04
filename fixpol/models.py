@@ -16,7 +16,7 @@ class Location(models.Model):
     hierarchy = models.CharField(max_length=200)
     govlevel = models.CharField(max_length=80)
     parent = models.ForeignKey('self', null=True, 
-            related_name='child', on_delete=models.PROTECT)
+            related_name='locations', on_delete=models.PROTECT)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
