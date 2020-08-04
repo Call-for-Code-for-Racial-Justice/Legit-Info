@@ -24,6 +24,17 @@ class Impact(models.Model):
         """Return a string representation of the model."""
         return self.text
 
+class Profile(models.Model):
+    """A profile holds the location and impact areas."""
+    user = models.OneToOneField(User, on_delete=models.PROTECT, 
+        related_name='profile')
+
+    location = models.ForeignKey('Location', null=True,
+        related_name='location', on_delete=models.SET_NULL)
+
+    impacts = models.ManyToManyField(Location)
+
+
 
 
 

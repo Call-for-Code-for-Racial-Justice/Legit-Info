@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <p>Add a new topic:</p>
+
+    <form action="{% url 'fixpol:search' %}" method='post'>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button name="submit">Search</button>
+    </form>
+
+{% endblock content %}

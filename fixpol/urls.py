@@ -14,6 +14,9 @@ urlpatterns = [
 
     # Page that shows all impacts.
     path('impacts/', views.impacts, name='impacts'),
+
+    # Page for starting a search
+    path('search/', views.search, name='search'),
     ]
 
 
