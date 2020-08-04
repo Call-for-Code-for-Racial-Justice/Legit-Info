@@ -33,7 +33,6 @@ INSTALLED_APPS = [
     # My apps
     'fixpol',
     'users',
-    'learning_logs',
 
 
     # Third party apps.
