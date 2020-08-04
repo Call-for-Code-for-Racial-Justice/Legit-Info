@@ -17,7 +17,7 @@
 
 <nav class="navbar navbar-expand-md navbar-light bg-light mb-4 border">
 
-<a class="navbar-brand" href="{% url 'learning_logs:index'%}">
+<a class="navbar-brand" href="{% url 'fixpol:index'%}">
            Fix Politics</a>
 
 <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -26,11 +26,6 @@
          
 <span class="navbar-toggler-icon"></span></button>
 <div class="collapse navbar-collapse" id="navbarCollapse">
-<ul class="navbar-nav mr-auto">
-    <li class="nav-item">
-    <a class="nav-link" href="{% url 'learning_logs:topics'%}">
-               Topics</a></li>
-</ul>
 
 <ul class="navbar-nav ml-auto">
 {% if user.is_authenticated %}
@@ -38,14 +33,14 @@
     <span class="navbar-text">Hello, {{ user.username }}.</span>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="{% url 'users:logout' %}">Log out</a>
+    <a class="nav-link" href="{% url 'users:logout' %}">Sign out</a>
 </li>
 {% else %}
 <li class="nav-item">
     <a class="nav-link" href="{% url 'users:register' %}">Register</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="{% url 'users:login' %}">Log in</a></li>
+    <a class="nav-link" href="{% url 'users:login' %}">Sign in</a></li>
 {% endif %}
 </ul>
 </div>

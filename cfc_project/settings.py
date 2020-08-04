@@ -32,8 +32,10 @@ ALLOWED_HOSTS = ['0.0.0.0']
 INSTALLED_APPS = [
     # My apps
     'fixpol',
+    'profiles',
     'learning_logs',
     'users',
+
 
     # Third party apps.
     'bootstrap4',

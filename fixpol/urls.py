@@ -11,6 +11,9 @@ urlpatterns = [
 
     # Page that shows all locations.
     path('locations/', views.locations, name='locations'),
+
+    # Page that shows all impacts.
+    path('impacts/', views.impacts, name='impacts'),
     ]
 
 

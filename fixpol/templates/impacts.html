@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<p>Impact areas</p>
+
+<ul>
+{% for impact in impacts %}
+ <li>{{ impact }}</li>
+ {% empty %}
+ <li>No impacts have been added yet.</li>
+ {% endfor %}
+</ul>
+
+{% endblock content %}

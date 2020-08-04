@@ -1,5 +1,20 @@
 {% extends "base.html" %}
 
-{% block content %}
-<p>Enter your location and the areas of impact you are interested in.</p>
-{% endblock content %}
+
+{% block page_header %}
+<div class="jumbotron">
+<h1 class="display-3">Fix Politics!</h1>
+
+<p class="lead">This project is designed to help you find
+        policies and legislation that impact you in your
+        community.  Simply select your location and the
+        impact areas you are concerned about, and the system
+        will show you the results!</p>
+
+<a class="btn btn-lg btn-primary" href="{% url 'users:register' %}"
+           role="button">Register &raquo;</a>
+     </div>
+{% endblock page_header %}
+
+
+

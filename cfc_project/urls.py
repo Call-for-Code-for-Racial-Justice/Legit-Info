@@ -21,5 +21,4 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('logs/', include('learning_logs.urls')),
     path('', include('fixpol.urls')),
-
 ]
