@@ -6,7 +6,15 @@
 <ul>
   <li>Username: {{ user.username }}</li>
   <li>Location: {{ location }}</li>
-  <li>Impacts: {{ impacts }}</li>
+  <li>Impacts selected:</li>
+<ol>
+{% for impact in impacts %}
+    <li>{{ impact }}</li>
+    {% empty %}
+    <li>There are no impacts for this profile.</li>
+{% endfor %}
+</ol>
+
 </ul>
 
 {% endblock content %}

@@ -13,4 +13,7 @@ urlpatterns = [
 
     # Profile page.
     path('profile/', views.profile, name='profile'),
+
+    # Profile page.
+    path('update/', views.update_profile, name='update'),
     ]
