@@ -32,8 +32,8 @@ ALLOWED_HOSTS = ['0.0.0.0']
 INSTALLED_APPS = [
     # My apps
     'fixpol',
-    'learning_logs',
     'users',
+    'learning_logs',
 
 
     # Third party apps.
