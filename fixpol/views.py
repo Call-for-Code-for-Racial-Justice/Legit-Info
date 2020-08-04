@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from .models import Location, Impact
-from .forms import FruitForm
 
 # Create your views here.
 def index(request):
