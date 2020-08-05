@@ -36,6 +36,13 @@ class Impact(models.Model):
         """Return a string representation of the model."""
         return self.text
 
+class SearchCriteria(models.Model):
+    """ Criteria of anonymous or user-profile search """
+
+    location = models.ForeignKey('fixpol.Location', null=True,
+        related_name='criteria', on_delete=models.SET_NULL)
+
+    impacts = models.ManyToManyField(Impact)
 
 
 
