@@ -49,11 +49,18 @@ To get started building this application locally, you can either run the applica
 #### Native Application Development
 
 * Install [Python](https://www.python.org/downloads/)
+* Install [pipenv](https://pypi.org/project/pipenv/)
 
 Running Django applications has been simplified with a `manage.py` file to avoid dealing with configuring environment variables to run your app. From your project root, you can download the project dependencies with:
 
 ```bash
 pipenv install
+```
+
+Activate your project's virtual environment with:
+
+```bash
+pipenv shell
 ```
 
 To run your application locally:
@@ -62,7 +69,7 @@ To run your application locally:
 python manage.py start
 ```
 
-Your application will be running at `http://localhost:3000`.  You can access the `/health` endpoint at the host. You can also verify the state of your locally running application using the Selenium UI test script included in the `scripts` directory.
+Your application will be running at `http://localhost:8000`.  You can access the `/health` endpoint at the host. You can also verify the state of your locally running application using the Selenium UI test script included in the `scripts` directory.
 
 ##### Debugging locally
 To debug a `django` project run `python manage.py runserver` with DEBUG set to True in `settings.py` to start a native django development server. This comes with the Django's stack-trace debugger, which will present runtime failure stack-traces. For more information, see [Django's documentation](https://docs.djangoproject.com/en/2.0/ref/settings/).
