@@ -41,7 +41,9 @@ class Criteria(models.Model):
 
     class Meta:
         app_label = 'fixpol'
+        verbose_name_plural = "criteria"  # plural of criteria
 
+    text = models.CharField(max_length=200)
     location = models.ForeignKey('fixpol.Location', null=True,
         related_name='criteria', on_delete=models.SET_NULL)
 
