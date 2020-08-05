@@ -1,12 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <p>Add a new topic:</p>
 
-    <form action="{% url 'fixpol:search' %}" method='post'>
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button name="submit">Search</button>
-    </form>
+<form method="POST">
+<form action="{% url 'user:results' loc_id impact_id %}" method='post'>
+    {% csrf_token %}
+    {{form.as_p}}
+
+  <button type="submit">Search</button>
+</form>
+
+</form>
 
 {% endblock content %}

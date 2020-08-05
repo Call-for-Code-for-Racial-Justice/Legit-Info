@@ -12,7 +12,7 @@ urlpatterns = [
     path('register/', views.register, name='register'),
 
     # Profile page.
-    path('profile/', views.profile, name='profile'),
+    path('profile/', views.show_profile, name='profile'),
 
     # Profile page.
     path('update/', views.update_profile, name='update'),

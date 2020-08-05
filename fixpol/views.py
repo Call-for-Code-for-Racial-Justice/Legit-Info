@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Location, Impact
+from .forms import SubmitForm
 
 # Create your views here.
 def index(request):
@@ -19,20 +20,38 @@ def impacts(request):
     context = {'impacts': impacts}
     return render(request, 'impacts.html', context)
 
+
 def search(request):
-    """Add a new topic."""
+    """Show all impacts."""
+
     if request.method != 'POST':
-        # No data submitted; create a blank form.
-        form = FruitForm()
+        # Initial request; pre-fill form with the current entry.
+
+        if request.user.is_anonymous:
+            form = SubmitForm()
+        else:
+            form = SubmitForm()
     else:
         # POST data submitted; process data.
-        form = FruitForm(data=request.POST)
+        form = SubmitForm(data=request.POST)
         if form.is_valid():
-            new_topic = form.save(commit=False)
-            new_topic.owner = request.user
-            new_topic.save()
-            return redirect('fixpol:index')
+            cd = form.cleaned_data
+            a = cd.get('a')
+            return redirect('fixpol:results', loc_id=7, impact_id=2)
 
-    # Display a blank or invalid form.
-    context = {'form': form}
+    context = { 'submit_form': form}
     return render(request, 'search.html', context)
+
+
+def results(request, loc_id, impact_id):
+    location = Location.objects.get(id=loc_id)
+    impact = Impact.objects.get(id=impact_id)
+    context = { 'location': location,
+                'impact': impact} 
+    return render(request, 'results.html', context)
+
+def share(request):
+    return render(request, 'share.html')
+
+
+

@@ -30,7 +30,7 @@ def register(request):
 
 
 @login_required
-def profile(request):
+def show_profile(request):
     user = request.user
     location = user.profile.prof_location
     impacts = user.profile.prof_impacts.all()
