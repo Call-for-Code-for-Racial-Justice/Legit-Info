@@ -32,8 +32,8 @@ def register(request):
 @login_required
 def show_profile(request):
     user = request.user
-    location = user.profile.prof_location
-    impacts = user.profile.prof_impacts.all()
+    location = user.profile.location
+    impacts = user.profile.impacts.all()
        
     context = {'user': user, 
                'location': location, 

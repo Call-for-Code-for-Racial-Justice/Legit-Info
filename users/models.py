@@ -13,10 +13,10 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, 
         related_name='profile')
 
-    prof_location = models.ForeignKey('fixpol.Location', null=True,
+    location = models.ForeignKey('fixpol.Location', null=True,
         related_name='profiles', on_delete=models.SET_NULL)
 
-    prof_impacts = models.ManyToManyField(Impact)
+    impacts = models.ManyToManyField(Impact)
 
     def __str__(self):
         """Return a string representation of the model."""
