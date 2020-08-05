@@ -36,8 +36,11 @@ class Impact(models.Model):
         """Return a string representation of the model."""
         return self.text
 
-class SearchCriteria(models.Model):
+class Criteria(models.Model):
     """ Criteria of anonymous or user-profile search """
+
+    class Meta:
+        app_label = 'fixpol'
 
     location = models.ForeignKey('fixpol.Location', null=True,
         related_name='criteria', on_delete=models.SET_NULL)

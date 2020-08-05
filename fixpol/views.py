@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .models import Location, Impact
-from .forms import SubmitForm
+from .models import Location, Impact, Criteria
+from .forms import SearchForm
 
 # Create your views here.
 def index(request):
@@ -27,27 +27,24 @@ def search(request):
     if request.method != 'POST':
         # Initial request; pre-fill form with the current entry.
 
-        if request.user.is_anonymous:
-            form = SubmitForm()
-        else:
-            form = SubmitForm()
+        form = SearchForm()
+        if not request.user.is_anonymous:
+            pre_fill = True
     else:
         # POST data submitted; process data.
-        form = SubmitForm(data=request.POST)
+        form = SearchForm(data=request.POST)
         if form.is_valid():
-            cd = form.cleaned_data
-            a = cd.get('a')
-            return redirect('fixpol:results', loc_id=7, impact_id=2)
+            form.save()
+            return redirect('fixpol:results', search_id= id)
 
     context = { 'submit_form': form}
     return render(request, 'search.html', context)
 
 
-def results(request, loc_id, impact_id):
-    location = Location.objects.get(id=loc_id)
-    impact = Impact.objects.get(id=impact_id)
-    context = { 'location': location,
-                'impact': impact} 
+def results(request, search_id):
+    criteria = Criteria.objects.get(id=search_id)
+    context = { 'location': criteria.location,
+                'impact': criteria.impacts} 
     return render(request, 'results.html', context)
 
 def share(request):

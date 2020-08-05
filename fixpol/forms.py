@@ -1,8 +1,9 @@
 from django import forms
-from django.db import models
-from .models import Location, Impact
+from django.contrib.auth.models import User
+from fixpol.models import Location, Impact
+from .models import Criteria
 
-class SubmitForm(forms.Form): 
-    loc_id = models.IntegerField()
-    impact_id = models.IntegerField()
-
+class SearchForm(forms.ModelForm):
+    class Meta:
+        model = Criteria
+        fields = ('location', 'impacts')
