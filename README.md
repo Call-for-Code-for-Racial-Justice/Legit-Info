@@ -66,7 +66,7 @@ pipenv shell
 To run your application locally:
 
 ```bash
-python manage.py start
+python manage.py runserver
 ```
 
 Your application will be running at `http://localhost:8000`.  You can access the `/health` endpoint at the host. You can also verify the state of your locally running application using the Selenium UI test script included in the `scripts` directory.
