@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<p>Location: {{ criteria.location }}</p>
+
+<p>Impact areas</p>
+<ul>
+
+{% for impact in criteria.impacts.all %}
+ <li>{{ impact }}</li>
+ {% empty %}
+ <li>No impacts have been specified.</li>
+{% endfor %}
+
+</ul>
+
+{% endblock content %}

@@ -26,27 +26,30 @@ def impacts(request):
 def search(request):
     """Show all impacts."""
     ARROW = r'&nbsp;&#8611;&nbsp;'
-
-    profcrit = Criteria()
-    if not request.user.is_anonymous:
-        profcrit.location = request.user.profile.location
-        for impact in request.user.profile.impacts.all():
-            profcrit.impacts.add(impact)
-
+    crit = None
     if request.method != 'POST':
         # Initial request; pre-fill form with the current entry.
-        form = SearchForm(instance=profcrit)
+        if request.user.is_anonymous:
+            form = SearchForm()             # blank search form
+        else:
+            crit = request.user.profile.criteria
+            form = SearchForm(instance=crit)  # pre-filled with profile
 
     else:
         # POST data submitted; process data.
-        form = SearchForm(data=request.POST, instance=profcrit)
+        form = SearchForm(data=request.POST)      
         if form.is_valid():
-            criteria = form.save(commit=False)
+            criteria = form.save()
             text = criteria.location.hierarchy
             if text.startswith('world.'):
                 text = text[5:].replace('.', ARROW)	
-            criteria.text = text           
+            criteria.text = text  
             criteria.save()
+            
+            impacts = criteria.impacts.all()
+            for impact in impacts:
+                text += impact.text
+
             return redirect('fixpol:results', search_id=criteria.id)
 
     context = { 'form': form }
@@ -57,6 +60,13 @@ def results(request, search_id):
     criteria = Criteria.objects.get(id=search_id)
     context = { 'text': criteria.text} 
     return render(request, 'results.html', context)
+
+
+def criteria(request, search_id):
+    """Show search criteria."""
+    criteria = Criteria.objects.get(id=search_id)
+    context = {'criteria': criteria}
+    return render(request, 'criteria.html', context)
 
 def share(request):
     return render(request, 'share.html')

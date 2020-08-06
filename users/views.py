@@ -4,7 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.contrib.auth.forms import UserCreationForm
 from .forms import UserForm, ProfileForm
+from django.contrib.auth.models import User
 from .models import Profile
+from fixpol.models import Criteria
 
 # Create your views here.
 
@@ -55,21 +57,23 @@ def update_profile(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            if user.profile.critera.exists():
-                user.profile.criteria.location = request.user.location
+            user = request.user
+            crit = user.profile.criteria
+            if crit:
+                crit.location = user.location
                 selected = user.profile.impacts.all()
                 for impact in Impact.objects.all():
                     if impact in selected:
-                        user.profile.impacts.add(impact)
+                        crit.impacts.add(impact)
                     else:
-                        user.profile.impacts.remove(impact)
+                        crit.impacts.remove(impact)
 
             else:
-                cr = Criteria(location=user.profile.location)
-                cr.save()
+                crit = Criteria(location=user.profile.location)
+                crit.save()
                 for impact in user.profile.impacts.all():
-                    cr.impacts.add(impact)
-                user.profile.criteria = cr
+                    crit.impacts.add(impact)
+                user.profile.criteria = crit
 
             return redirect('fixpol:index')
 
