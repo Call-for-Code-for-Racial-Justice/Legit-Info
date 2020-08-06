@@ -2,14 +2,20 @@
 
 {% block content %}
 
-<p>Impact areas</p>
+<div class="title-banner-standard">
+    <p class="small-header-title">
+        Impact areas
+    </p>
+  </div>
 
-<ul>
-{% for impact in impacts %}
- <li>{{ impact }}</li>
- {% empty %}
- <li>No impacts have been added yet.</li>
- {% endfor %}
-</ul>
+<div class="page-content-standard">
+    <ul>
+    {% for impact in impacts %}
+    <li>{{ impact }}</li>
+    {% empty %}
+    <li>No impacts have been added yet.</li>
+    {% endfor %}
+    </ul>
+</div>
 
 {% endblock content %}

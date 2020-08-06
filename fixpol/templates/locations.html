@@ -2,14 +2,23 @@
 
 {% block content %}
 
-<p>Locations</p>
+<div class="page-content">
 
-<ul>
-{% for location in locations %}
- <li>{{ location }}</li>
- {% empty %}
- <li>No locations have been added yet.</li>
- {% endfor %}
-</ul>
+    <div class="title-banner-standard">
+        <p class="small-header-title">
+            Locations
+        </p>
+      </div>
+
+    <div class="page-content-standard">
+        <ul>
+        {% for location in locations %}
+        <li>{{ location }}</li>
+        {% empty %}
+        <li>No locations have been added yet.</li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
 
 {% endblock content %}
