@@ -1,13 +1,18 @@
+-i https://pypi.org/simple
 asgiref==3.2.10
 beautifulsoup4==4.9.1
 bootstrap4==0.1.0
-Django==3.0.8
+decorator==4.4.2
 django-bootstrap4==2.2.0
 django-tree-queries==0.3.3
+django==3.0.8
 gunicorn==20.0.4
+ibmcloudenv==0.2.1
 importlib-metadata==1.7.0
+jsonpath-rw==1.4.0
 livereload==2.6.2
 mysqlclient==2.0.1
+ply==3.11
 pytz==2020.1
 six==1.15.0
 soupsieve==2.0.1
