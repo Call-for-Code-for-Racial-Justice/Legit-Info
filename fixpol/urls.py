@@ -19,8 +19,12 @@ urlpatterns = [
     path('search/', views.search, name='search'),
 
     # Page for showing search results
-    path('results/<int:loc_id>/<int:impact_id>/', 
+    path('results/<int:search_id>/', 
             views.results, name='results'),
+
+    # Page for showing search criteria
+    path('criteria/<int:search_id>/', 
+            views.criteria, name='criteria'),  
 
     # Page for saving or sharing results
     path('share/', views.share, name='share'),

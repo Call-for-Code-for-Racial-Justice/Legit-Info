@@ -4,16 +4,26 @@
 
 
 {% block content %}
+<style>
+ul
+{
+    list-style-type: none;
+}
+</style>
 
-<form method="POST">
-<form action="{% url 'user:results' loc_id impact_id %}" method='post'>
-    {% csrf_token %}
-    {{form.as_p}}
+    <p>Select your location and the impacts are you are concerned about:</p>
 
-  <button type="submit">Search</button>
-</form>
-
-</form>
+    <form action="{% url 'fixpol:search' %}" method='post'>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button name="submit">Search Legislation</button>
+    </form>
 </div>
 
 {% endblock content %}
+
+
+
+
+
+

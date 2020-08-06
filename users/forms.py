@@ -11,6 +11,11 @@ class UserForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('prof_location', 'prof_impacts')
+        fields = ('location', 'impacts')
+
+    impacts = forms.ModelMultipleChoiceField(
+                       widget = forms.CheckboxSelectMultiple,
+                       queryset = Impact.objects.all()
+                       )
 
 

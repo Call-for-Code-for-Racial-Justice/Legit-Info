@@ -13,7 +13,7 @@ class Location(models.Model):
 
     desc = models.CharField(max_length=80)
     shortname = models.CharField(max_length=20)
-    hierarchy = models.CharField(max_length=200)
+    hierarchy = models.CharField(max_length=200,unique=True)
     govlevel = models.CharField(max_length=80)
     parent = models.ForeignKey('self', null=True, 
             related_name='locations', on_delete=models.PROTECT)
@@ -29,12 +29,36 @@ class Impact(models.Model):
     class Meta:
         app_label = 'fixpol'
 
-    text = models.CharField(max_length=80)
+    text = models.CharField(max_length=80, unique=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         """Return a string representation of the model."""
         return self.text
+
+class Criteria(models.Model):
+    """ Criteria of anonymous or user-profile search """
+
+    class Meta:
+        app_label = 'fixpol'
+        verbose_name_plural = "criteria"  # plural of criteria
+
+    text = models.CharField(max_length=200)
+
+    location = models.ForeignKey('fixpol.Location', null=True,
+        related_name='criteria', on_delete=models.CASCADE)
+
+    impacts = models.ManyToManyField(Impact)
+
+    def __str__(self):
+        """Return a string representation of the model."""
+        return self.text
+
+
+
+
+
+
 
 
 
