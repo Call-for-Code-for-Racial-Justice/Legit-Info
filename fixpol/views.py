@@ -27,7 +27,7 @@ def search(request):
     """Show all impacts."""
     ARROW = r'&nbsp;&#8611;&nbsp;'
     crit = None
-    import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
     if request.method != 'POST':
         # Initial request; pre-fill form with the current entry.
         if request.user.is_anonymous:
