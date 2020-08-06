@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
+<style>
+ul
+{
+    list-style-type: none;
+}
+</style>
+
     <p>Select your location and the impacts are you are concerned about:</p>
 
     <form action="{% url 'fixpol:search' %}" method='post'>
@@ -10,3 +17,9 @@
     </form>
 
 {% endblock content %}
+
+
+
+
+
+

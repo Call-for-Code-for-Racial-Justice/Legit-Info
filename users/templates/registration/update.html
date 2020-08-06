@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
+<style>
+ul
+{
+    list-style-type: none;
+}
+</style>
 
 <form method="post">
   {% csrf_token %}

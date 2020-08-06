@@ -7,3 +7,8 @@ class SearchForm(forms.ModelForm):
     class Meta:
         model = Criteria
         fields = ('location', 'impacts')
+
+    impacts = forms.ModelMultipleChoiceField(
+                       widget = forms.CheckboxSelectMultiple,
+                       queryset = Impact.objects.all()
+                       )

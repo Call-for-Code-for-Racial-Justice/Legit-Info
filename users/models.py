@@ -18,6 +18,9 @@ class Profile(models.Model):
 
     impacts = models.ManyToManyField(Impact)
 
+    criteria = models.ForeignKey('fixpol.Criteria', null=True,
+        related_name='profiles', on_delete=models.SET_NULL)
+
     def __str__(self):
         """Return a string representation of the model."""
         return f'{self.user.username}'

@@ -13,4 +13,9 @@ class ProfileForm(forms.ModelForm):
         model = Profile
         fields = ('location', 'impacts')
 
+    impacts = forms.ModelMultipleChoiceField(
+                       widget = forms.CheckboxSelectMultiple,
+                       queryset = Impact.objects.all()
+                       )
+
 

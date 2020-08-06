@@ -26,13 +26,20 @@ def impacts(request):
 def search(request):
     """Show all impacts."""
     ARROW = r'&nbsp;&#8611;&nbsp;'
+
+    profcrit = Criteria()
+    if not request.user.is_anonymous:
+        profcrit.location = request.user.profile.location
+        for impact in request.user.profile.impacts.all():
+            profcrit.impacts.add(impact)
+
     if request.method != 'POST':
         # Initial request; pre-fill form with the current entry.
+        form = SearchForm(instance=profcrit)
 
-        form = SearchForm()
     else:
         # POST data submitted; process data.
-        form = SearchForm(data=request.POST)
+        form = SearchForm(data=request.POST, instance=profcrit)
         if form.is_valid():
             criteria = form.save(commit=False)
             text = criteria.location.hierarchy
