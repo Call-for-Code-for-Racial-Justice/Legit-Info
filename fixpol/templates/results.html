@@ -1,16 +1,17 @@
 {% extends "base.html" %}
 
+<div class="page-content-standard">
+    {% block page_header %}
+    Results
+    {% endblock page_header %}
 
-{% block page_header %}
-Results
-{% endblock page_header %}
+    {% block content %}
 
-{% block content %}
+    <p>Searching Location: {{ location }}</p>
+    <p>Impact: {{ impact }}</p>
 
-<p>Searching Location: {{ location }}</p>
-<p>Impact: {{ impact }}</p>
-
-<p>put results here</p>
+    <p>put results here</p>
+</div>
 
 {% endblock content %}
 

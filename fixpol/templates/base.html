@@ -15,7 +15,7 @@
 
 <body>
 
-<nav class="navbar navbar-expand-md navbar-light bg-light mb-4 border">
+<nav class="navbar navbar-expand-md mb-4">
 
 <a class="navbar-brand" href="{% url 'fixpol:index'%}">
            Fix Politics</a>
@@ -56,15 +56,162 @@
 
 </nav>
 
-<main role="main" class="container">
+<main role="main" >
 <div class="pb-2 mb-2 border-bottom">
        {% block page_header %}{% endblock page_header %}
        </div>
 <div>
        {% block content %}{% endblock content %}
        </div>
-</main>
+    </main>
 
 </body>
 
 </html>
+
+<style type="text/css">
+    body {
+        margin: 0;
+        background-color: #fff;
+    }
+    .navbar {
+        overflow: hidden;
+        background-color: #6F2F2C;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-variant: small-caps;
+    }
+    .navbar a {
+        float: left;
+        display: block;
+        color: #ffffff;
+        text-align: center;
+        padding: 15px 18px;
+        text-decoration: none;
+        font-size: 18px;
+    }
+    .navbar a:hover {
+        color: #eeeeee;
+        background-color: #6F2F2C;
+    }
+    .page-header-title {
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        text-align: center;
+        font-size: 100px;
+        padding-bottom: 2%;
+        font-variant: small-caps;
+        color: #fff;
+    }
+    .title-banner-home{
+        background-color: #7B312D;
+        top: 0;
+        width: 100%;
+        margin-top: 73px;
+        overflow: hidden;
+        position: absolute;
+        align-items: center;
+    }
+    .title-banner-content {
+        padding-top: 300px;
+        padding-left: 25%;
+        padding-right: 25%;
+        padding-bottom: 2.5%;
+        color: #fff;
+        font-size: 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+    }
+    .register-button {
+        width: 200px;
+        height: 50px;
+        margin: auto;
+        background-color: #7B312D;
+        overflow: hidden;
+        position: relative;
+        text-align: center;
+        top: 700px;
+        left: 50%;
+        margin-left: -100px;
+        border-radius: 10px;
+    }
+    .button-link {
+        color: #fff;
+        font-size: 30px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-variant: small-caps;
+    }
+    .button-link:hover {
+        color: #eeeeee;
+        background-color: #7B312D;
+        text-decoration: none;
+        
+    }
+    .title-banner-standard {
+        background-color: #7B312D;
+        top: 0;
+        width: 100%;
+        margin-top: 73px;
+        padding-top: 150px;
+        overflow: hidden;
+        position: absolute;
+    }
+    .page-content-standard {
+        padding-top: 500px;
+        padding-bottom: 2.5%;
+        color: #6F2F2C;
+        font-size: 20px;
+        width: 500px;
+        position: absolute;
+        overflow: hidden;
+        left: 50%;
+        margin-left: -250px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-align: center;
+    }
+    ul {
+        list-style: none;
+        
+    }
+    li:hover {
+        background-color: #eeeeee;
+    }
+    .signin-register {
+        padding-top: 500px;
+        left: 50%;
+        width: 700px;
+        margin-left: -350px;
+        position: relative;
+        color: #6F2F2C;
+        
+    }
+    .signin-register li:hover {
+        background-color: #fff;
+    }
+    .button-submit {
+        background-color: #2F8E92;
+        height: 50px;
+        border: none;
+        width: 150px;
+        color: #fff;
+        border-radius: 10px;
+    }
+    .button-submit:hover {
+        color: #eeeeee;
+    }
+    .button-cancel {
+        background-color: #7B312D;
+        height: 50px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        width: 150px;
+        padding-left: 50px;
+        padding-right: 50px;
+        color: #fff;
+        border-radius: 10px;
+    }
+    .button-cancel:hover {
+        text-decoration: none;
+        color: #eeeeee;
+    }
+</style>
