@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Location, Impact, Criteria
 from .forms import SearchForm
+from django.contrib.auth.models import User
+from users.models import Profile
 
 # Create your views here.
 def index(request):
@@ -23,32 +25,34 @@ def impacts(request):
 
 def search(request):
     """Show all impacts."""
-
+    ARROW = r'&nbsp;&#8611;&nbsp;'
     if request.method != 'POST':
         # Initial request; pre-fill form with the current entry.
 
         form = SearchForm()
-        if not request.user.is_anonymous:
-            pre_fill = True
     else:
         # POST data submitted; process data.
         form = SearchForm(data=request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('fixpol:results', search_id= id)
+            criteria = form.save(commit=False)
+            text = criteria.location.hierarchy
+            if text.startswith('world.'):
+                text = text[5:].replace('.', ARROW)	
+            criteria.text = text           
+            criteria.save()
+            return redirect('fixpol:results', search_id=criteria.id)
 
-    context = { 'submit_form': form}
+    context = { 'form': form }
     return render(request, 'search.html', context)
 
 
 def results(request, search_id):
     criteria = Criteria.objects.get(id=search_id)
-    context = { 'location': criteria.location,
-                'impact': criteria.impacts} 
+    context = { 'text': criteria.text} 
     return render(request, 'results.html', context)
 
 def share(request):
     return render(request, 'share.html')
 
-
+   
 

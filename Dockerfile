@@ -1,41 +1,22 @@
 FROM registry.access.redhat.com/ubi8
 
-WORKDIR /root
+WORKDIR /app
 
-# Install Python
+COPY Pipfile* /app/
+
+## NOTE - rhel enforces user container permissions stronger ##
 USER root
-RUN yum -y install sudo grep
-COPY MariaDB.repo /etc/yum.repos.d/
 RUN yum -y install python3
-RUN yum -y install python3-pip wget 
-RUN yum -y install sqlite
-RUN yum -y install openssl openssl-libs --nobest --skip-broken
-RUN ls -al /usr/lib64/ | grep "libcrypt"
-RUN ls -al /usr/lib64/ | grep "libssl"
-#RUN yum -y install MariaDB-client --nobest --skip-broken
-#RUN yum -y install mysql-client --nobest --skip-broken
+RUN yum -y install python3-pip wget
 
-RUN which python3 pip3 sqlite3 sudo
+RUN pip3 install --upgrade pip \
+  && pip3 install --upgrade pipenv \
+  && pipenv install --system --deploy
 
-ENV LC_ALL=C.UTF-8
-ENV LANG=C.UTF-8
+USER 1001
 
-RUN adduser -ms /bin/bash fixuser
-RUN echo "fixuser:foxtrot.indigo.xray" | chpasswd
-RUN find /usr/lib/python3.6/ -ls
-RUN find /usr/lib64/python3.6/ -ls
-RUN find /usr/local -ls
-RUN mkdir -p /usr/local/lib && mkdir -p /usr/local/lib/python3.6/ && find /usr/local/lib/python3.6/ -ls
+COPY . /app
 
+EXPOSE 3000
 
-# Install Dependencies
-WORKDIR /home/fixuser
-USER fixuser
-
-# Copy Code into Container
-COPY . /home/fixuser
-RUN python3 -m venv venv
-RUN source venv/bin/activate && pip3 install --upgrade pip
-RUN source venv/bin/activate && pip3 install -r requirements.txt
-RUN source venv/bin/activate && exec app.sh
-
+CMD ["gunicorn", "-b", "0.0.0.0:3000", "--env", "DJANGO_SETTINGS_MODULE=pythondjangoapp.settings.production", "pythondjangoapp.wsgi", "--timeout 120"]
