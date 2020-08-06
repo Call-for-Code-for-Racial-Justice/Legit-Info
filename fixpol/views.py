@@ -27,12 +27,14 @@ def search(request):
     """Show all impacts."""
     ARROW = r'&nbsp;&#8611;&nbsp;'
     crit = None
+    import pdb; pdb.set_trace()
     if request.method != 'POST':
         # Initial request; pre-fill form with the current entry.
         if request.user.is_anonymous:
             form = SearchForm()             # blank search form
         else:
             crit = request.user.profile.criteria
+
             form = SearchForm(instance=crit)  # pre-filled with profile
 
     else:
