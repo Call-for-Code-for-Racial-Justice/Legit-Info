@@ -2,22 +2,33 @@
 
 {% block content %}
 
+<div class="title-banner-standard">
+  <p class="small-header-title">
+      Register
+  </p>
+</div>
+
+<div class="signin-register-search">
+
+
   <form method="post" action="{% url 'users:register' %}">
     {% csrf_token %}
     {{ form.as_p }}
 
-<div class="form-group">
-  <label class="col-md-4 control-label" for="submit"></label>
-  <div class="col-md-8">
-    <button id="submit" name="submit" class="btn btn-primary" 
-        value="1">Register</button>
-    <a href="{% url 'fixpol:index' %}" id="cancel" name="cancel" 
-        class="btn btn-danger">Cancel</a>
+  <div class="form-group">
+    <label class="col-md-4 control-label" for="submit"></label>
+    <div class="col-md-8">
+      <button id="submit" name="submit" class="button-submit" 
+          value="1">Register</button>
+      <a href="{% url 'fixpol:index' %}" id="cancel" name="cancel" 
+          class="button-cancel">Cancel</a>
+    </div>
   </div>
-</div>
 
 
     <input type="hidden" name="next" value="{% url 'fixpol:index' %}" />
   </form>
+
+</div>
 
 {% endblock content %}

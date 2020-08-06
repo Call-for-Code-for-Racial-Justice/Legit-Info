@@ -1,20 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="title-banner-standard">
+  <p class="small-header-title">
+    Profile
+  </p>
+</div>
 
-<h2>{{ user.get_full_name }}</h2>
-<ul>
-  <li>Username: {{ user.username }}</li>
-  <li>Location: {{ location }}</li>
-  <li>Impacts selected:</li>
-<ol>
-{% for impact in impacts %}
-    <li>{{ impact }}</li>
-    {% empty %}
-    <li>There are no impacts for this profile.</li>
-{% endfor %}
-</ol>
+<div class="profile-details">
 
-</ul>
+  <h2>{{ user.get_full_name }}</h2>
+  <ul>
+    <li>Username: {{ user.username }}</li>
+    <li>Location: {{ location }}</li>
+    <li>Impacts selected:</li>
+  <ol>
+  {% for impact in impacts %}
+      <li>{{ impact }}</li>
+      {% empty %}
+      <li>There are no impacts for this profile.</li>
+  {% endfor %}
+  </ol>
+
+  </ul>
+
+  <div class="update-profile-button">
+    <a href="{% url 'users:update' %}"
+                            role="button">Update Profile &raquo;</a>
+</div>
 
 {% endblock content %}

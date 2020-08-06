@@ -2,18 +2,25 @@
 
 
 {% block page_header %}
-<div class="jumbotron">
-<h1 class="display-3">Fix Politics!</h1>
 
-<p class="lead">This project is designed to help you find
-        policies and legislation that impact you in your
-        community.  Simply select your location and the
-        impact areas you are concerned about, and the system
-        will show you the results!</p>
+<div class="title-banner-home">
 
-<a class="btn btn-lg btn-primary" href="{% url 'users:register' %}"
-           role="button">Register &raquo;</a>
-     </div>
+        <div class="title-banner-content">
+                <h1 class="page-header-title">Fix Politics!</h1>
+
+                <p class="motive-text">This project is designed to help you find
+                        policies and legislation that impact you in your
+                        community.  Simply select your location and the
+                        impact areas you are concerned about, and the system
+                        will show you the results!</p>
+
+        </div>
+        
+</div>
+<div class="register-button">
+        <a class="button-link" href="{% url 'users:register' %}"
+                                role="button">Register &raquo;</a>
+</div>
 {% endblock page_header %}
 
 
