@@ -39,7 +39,10 @@
 <ul class="navbar-nav ml-auto">
 {% if user.is_authenticated %}
 <li class="nav-item">
-    <span class="navbar-text">Hello, {{ user.username }}.</span>
+    <span class="navbar-text">Hello, <span class="users-name">{{ user.username }}.</span></span>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'users:profile' %}">Profile</a>
 </li>
 <li class="nav-item">
     <a class="nav-link" href="{% url 'users:logout' %}">Sign out</a>
@@ -91,6 +94,19 @@
         padding: 15px 18px;
         text-decoration: none;
         font-size: 18px;
+    }
+    .navbar-text {
+        float: left;
+        display: block;
+        color: #ffffff;
+        text-align: center;
+        padding: 15px 18px;
+        text-decoration: none;
+        background-color: #6F2F2C;
+        font-size: 18px;
+    }
+    .users-name {
+        font-style: italic;
     }
     .navbar a:hover {
         color: #eeeeee;
@@ -213,5 +229,61 @@
     .button-cancel:hover {
         text-decoration: none;
         color: #eeeeee;
+    }
+    .signed-out {
+        color: #6F2F2C;
+        padding-top: 250px;
+        text-align: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 30px;
+    }
+    .profile-details {
+        color: #6F2F2C;
+        padding-top: 400px;
+        width: 500px;
+        position: relative;
+        margin-left: -250px;
+        left: 50%;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 20px;
+    }
+    .profile-details li:hover {
+        background-color: #fff;
+    }
+    .small-header-title {
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        text-align: center;
+        font-size: 50px;
+        padding-bottom: 2%;
+        font-variant: small-caps;
+        color: #fff;
+    }
+    .update-profile-button {
+        width: 200px;
+        height: 50px;
+        margin: auto;
+        background-color: #7B312D;
+        overflow: hidden;
+        position: relative;
+        text-align: center;
+        top: 100px;
+        left: 50%;
+        margin-left: -100px;
+        border-radius: 10px;
+        padding-top: 10px;
+        font-size: 20px;
+    }
+    .update-profile-button a {
+        color: #fff;
+        font-variant: small-caps;
+    }
+    .update-profile-button a:hover {
+        color: #eee;
+        text-decoration: none;
+    }
+    .button-submit-update {
+        position: relative;
+        left: 50%;
+        margin-left: -75px;
     }
 </style>

@@ -1,26 +1,23 @@
 {% extends "base.html" %}
 
 {% load bootstrap4 %}
+{% block content %}
 
 <div class="title-banner-standard">
-    <p class="page-header-title"></p>
+    <p class="small-header-title">
         Sign in to your account
     </p>
 </div>
 
 <div class="signin-register">
 
-    {% block page_header %}
-    <h2>Sign in to your account.</h2>
-    {% endblock page_header %}
-
-    {% block content %}
+    
 
     <form method="post" action="{% url 'users:login' %}" class="form">
     {% csrf_token %}
     {% bootstrap_form form %}
     {% buttons %}
-        <button name="submit" class="btn btn-primary">Sign in</button>
+        <button name="submit" class="button-submit-update button-submit">Sign in</button>
     {% endbuttons %}
 
     <input type="hidden" name="next"

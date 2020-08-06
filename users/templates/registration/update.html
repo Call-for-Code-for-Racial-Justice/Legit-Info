@@ -1,13 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="signin-register">
+<div class="title-banner-standard">
+  <p class="small-header-title">
+    Update your profile
+  </p>
+</div>
+
+
+<div class="profile-details">
 
   <form method="post">
     {% csrf_token %}
     {{ user_form.as_p }}
     {{ profile_form.as_p }}
-    <button type="submit">Save changes</button>
+    <button class="button-submit-update button-submit" type="submit">Save changes</button>
   </form>
 
 </div>
