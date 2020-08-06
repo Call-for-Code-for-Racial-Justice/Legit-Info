@@ -4,6 +4,13 @@ from .forms import SearchForm
 from django.contrib.auth.models import User
 from users.models import Profile
 
+# Debugging options
+# return HttpResponse({variable to inspect})
+# print {variable to inspect}
+# raise Exception({variable to inspect})
+# import pdb; pdb.set_trace()
+
+
 # Create your views here.
 def index(request):
     """The home page for Fix Politics."""
@@ -26,6 +33,10 @@ def impacts(request):
 def search(request):
     """Show all impacts."""
     ARROW = r'&nbsp;&#8611;&nbsp;'
+    CONNECTOR_START = ' | ['
+    CONNECTOR_MID = ', '
+    CONNECTOR_END = ']'
+
     crit = None
     #import pdb; pdb.set_trace()
     if request.method != 'POST':
@@ -39,20 +50,24 @@ def search(request):
 
     else:
         # POST data submitted; process data.
+        
         form = SearchForm(data=request.POST)      
         if form.is_valid():
             criteria = form.save()
             text = criteria.location.hierarchy
-            if text.startswith('world.'):
-                text = text[5:].replace('.', ARROW)	
             criteria.text = text  
             criteria.save()
             
             impacts = criteria.impacts.all()
-            for impact in impacts:
-                text += impact.text
-
-            return redirect('fixpol:results', search_id=criteria.id)
+            
+            if impacts:
+                connector = CONNECTOR_START
+                for impact in impacts:
+                    text += connector + impact.text 
+                    connector = CONNECTOR_MID
+                criteria.text = text + CONNECTOR_END
+                criteria.save()
+                return redirect('fixpol:results', search_id=criteria.id)
 
     context = { 'form': form }
     return render(request, 'search.html', context)

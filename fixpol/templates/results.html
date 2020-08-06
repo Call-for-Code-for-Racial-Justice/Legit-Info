@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base-tony.html" %}
 
 {% block content %}
 <div class="title-banner-standard">
@@ -8,11 +8,7 @@
 </div>
 
 <div class="results">
-  
-  <p>Searching Location: {{ location }}</p>
-  <p>Impact: {{ impact }}</p>
-
-  <p>Searching Criteria: {{ text|safe }}</p>
+  <p>Search Criteria: {{ text|safe }}</p>
 
   <p>put results here</p>
 </div>

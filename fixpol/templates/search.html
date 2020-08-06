@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base-tony.html" %}
 
 {% block content %}
 <div class="title-banner-standard">
@@ -11,10 +11,17 @@
 
     <p>Select your location and the impacts are you are concerned about:</p>
 
+<style>
+ul {
+    list-style-type: none;
+}
+</style>
+
     <form action="{% url 'fixpol:search' %}" method='post'>
         {% csrf_token %}
         {{ form.as_p }}
-        <button name="submit" class="button-submit-update button-submit">Search Legislation</button>
+        <button name="submit" 
+        class="button-submit-update button-submit">Search Legislation</button>
     </form>
 </div>
 
