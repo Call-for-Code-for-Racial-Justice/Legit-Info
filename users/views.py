@@ -57,25 +57,9 @@ def update_profile(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            import pdb; pdb.set_trace() # DEBUG
             user = request.user
-            crit = user.profile.criteria
-            if crit:
-                crit.location = user.location
-                selected = user.profile.impacts.all()
-                for impact in Impact.objects.all():
-                    if impact in selected:
-                        crit.impacts.add(impact)
-                    else:
-                        crit.impacts.remove(impact)
-
-            else:
-                crit = Criteria(location=user.profile.location)
-                crit.save()
-                for impact in user.profile.impacts.all():
-                    crit.impacts.add(impact)
-                user.profile.criteria = crit
-
-            return redirect('fixpol:index')
+            user.profile.set_criteria()
 
 
     context = { 'user_form': user_form,

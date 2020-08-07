@@ -39,14 +39,13 @@ def search(request):
     CONNECTOR_END = ']'
 
     crit = None
-    # import pdb; pdb.set_trace()
+    import pdb; pdb.set_trace()
     if request.method != 'POST':
         # Initial request; pre-fill form with the current entry.
         if request.user.is_anonymous:
             form = SearchForm()             # blank search form
         else:
             crit = request.user.profile.criteria
-
             form = SearchForm(instance=crit)  # pre-filled with profile
 
     else:
@@ -62,7 +61,7 @@ def search(request):
             criteria.save()
             
             impacts = criteria.impacts.all()
-            # import pdb; pdb.set_trace()
+            #import pdb; pdb.set_trace()
             if impacts:
                 connector = CONNECTOR_START
                 for impact in impacts:

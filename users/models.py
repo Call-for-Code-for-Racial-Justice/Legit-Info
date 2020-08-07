@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from fixpol.models import Location, Impact
+from fixpol.models import Location, Impact, Criteria
 
 # Create your models here.
 class Profile(models.Model):
@@ -24,6 +24,30 @@ class Profile(models.Model):
     def __str__(self):
         """Return a string representation of the model."""
         return f'{self.user.username}'
+
+    def set_criteria(self):
+        """Create or update criteria record for this profile."""
+        crit = self.criteria
+        if crit:
+            crit.location = self.location
+            selected = self.impacts.all()
+            for impact in Impact.objects.all():
+                if impact in selected:
+                    crit.impacts.add(impact)
+                else:
+                    crit.impacts.remove(impact)
+
+        else:
+            crit = Criteria(location=self.location)
+            crit.save()
+            for impact in user.profile.impacts.all():
+                crit.impacts.add(impact)
+            
+        crit.save()
+        self.criteria = crit
+        self.save()
+
+        return redirect('fixpol:index')
 
 
 @receiver(post_save, sender=User)
