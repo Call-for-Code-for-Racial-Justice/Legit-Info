@@ -1,21 +1,19 @@
 {% extends "base-tony.html" %}
 
+{% block page_header %}
+Search Results
+{% endblock page_header %}
+
 {% block content %}
 
 <p>Search Criteria: {{ heading|safe }}</p>
-
-<div class="title-banner-standard">
-  <h2 class="small-header-title">
-      Results
-  </h2>
-</div>
 
 <div class="results">
   
     <div class="page-content-standard">
         <dl>
         {% for law in laws %}
-        <dt>{{ law.title }} [{{ law.impact.text }}]</dt>
+        <dt>{{ law.title }}</dt>
         <dd><p>{{ law.summary }}</p></dt>
         {% empty %}
         <p>No legislation found.</p>
@@ -24,6 +22,9 @@
     </div>
 </div>
 
+    <a class="btn btn-lg btn-primary" 
+            href="{% url 'fixpol:index' %}"
+            role="button">Save or Share Results &raquo;</a>
 
 {% endblock content %}
 

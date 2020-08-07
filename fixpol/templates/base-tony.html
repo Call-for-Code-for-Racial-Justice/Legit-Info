@@ -11,13 +11,20 @@
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
 
+<style>
+.bg-company-red {
+    background-color: #6F2F2C !important;
+    color: #ffffff;
+    }
+</style>
+
 </head>
 
 <body>
 
-<nav class="navbar navbar-expand-md navbar-light bg-light mb-4 border">
+<nav class="navbar navbar-expand-md navbar-dark bg-company-red mb-5 border">
 
-<a class="navbar-brand" href="{% url 'fixpol:index'%}">
+<a class="navbar-brand" href="{% url 'fixpol:index' %}">
            Fix Politics</a>
 
 <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -42,6 +49,9 @@
     <span class="navbar-text">Hello, {{ user.username }}.</span>
 </li>
 <li class="nav-item">
+    <a class="nav-link" href="{% url 'users:profile' %}">Profile</a>
+</li>
+<li class="nav-item">
     <a class="nav-link" href="{% url 'users:logout' %}">Sign out</a>
 </li>
 {% else %}
@@ -57,7 +67,7 @@
 </nav>
 
 <main role="main" class="container">
-<div class="pb-2 mb-2 border-bottom">
+<div class="pb-2 mb-2 border-bottom bg-company-red">
        {% block page_header %}{% endblock page_header %}
        </div>
 <div>

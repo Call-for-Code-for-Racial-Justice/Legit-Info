@@ -1,12 +1,13 @@
 {% extends "base-tony.html" %}
 
-{% block content %}
-<div class="title-banner-standard">
-    <p class="small-header-title">
-        Search legislation
-    </p>
-</div>
+{% block page_header %}
+Search legislation
+{% endblock page_header %}
 
+
+
+
+{% block content %}
 <div class="signin-register-search">
 
     <p>Select your location and the impacts are you are concerned about:</p>
@@ -20,8 +21,8 @@ ul {
     <form action="{% url 'fixpol:search' %}" method='post'>
         {% csrf_token %}
         {{ form.as_p }}
-        <button name="submit" 
-        class="button-submit-update button-submit">Search Legislation</button>
+      <button id="submit" name="submit" class="btn btn-lg btn-success"
+          value="1">Search Legislation</button>
     </form>
 </div>
 

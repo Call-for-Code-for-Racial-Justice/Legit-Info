@@ -1,27 +1,34 @@
-{% extends "base.html" %}
+{% extends "base-tony.html" %}
 
 
 {% block page_header %}
 
-<div class="title-banner-home">
+<div class="jumbotron bg-company-red">
+<h1 class="display-3">Fix Politics!</h1>
 
-        <div class="title-banner-content">
-                <h1 class="page-header-title">Fix Politics!</h1>
+<p class="lead">This project is designed to help you find
+            policies and legislation that impact you in your
+            community.  </p>
 
-                <p class="motive-text">This project is designed to help you find
-                        policies and legislation that impact you in your
-                        community.  Simply select your location and the
-                        impact areas you are concerned about, and the system
-                        will show you the results!</p>
+<p class="lead">Simply select your location and the
+            impact areas you are concerned about, and the system
+            will show you the results!</p>
 
-        </div>
-        
+<p class="lead">If you prefer, you can register your profile,
+            so that we will remember your search preferences.</p>
+
+<a class="btn btn-lg btn-warning" href="{% url 'fixpol:search' %}"
+           role="button">Search &raquo;</a>
+
+<a class="btn btn-lg btn-primary" href="{% url 'users:register' %}"
+           role="button">Register &raquo;</a>
 </div>
-<div class="register-button">
-        <a class="button-link" href="{% url 'users:register' %}"
-                                role="button">Register &raquo;</a>
-</div>
+
+
 {% endblock page_header %}
+
+
+
 
 
 
