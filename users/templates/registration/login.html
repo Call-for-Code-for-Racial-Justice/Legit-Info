@@ -1,6 +1,12 @@
-{% extends "base.html" %}
+{% extends "base-tony.html" %}
 
 {% load bootstrap4 %}
+
+{% block page_header %}
+Sign in
+{% endblock page_header %}
+
+
 {% block content %}
 
 <div class="title-banner-standard">
@@ -17,7 +23,8 @@
     {% csrf_token %}
     {% bootstrap_form form %}
     {% buttons %}
-        <button name="submit" class="button-submit-update button-submit">Sign in</button>
+      <button id="submit" name="submit" class="btn btn-lg btn-success"
+          value="1">Sign in</button>
     {% endbuttons %}
 
     <input type="hidden" name="next"

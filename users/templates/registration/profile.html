@@ -1,10 +1,13 @@
-{% extends "base.html" %}
+{% extends "base-tony.html" %}
+
+
+{% block page_header %}
+Profile
+{% endblock page_header %}
+
+
 
 {% block content %}
-<div class="title-banner-standard">
-  <p class="small-header-title">
-    Profile
-  </p>
 </div>
 
 <div class="profile-details">
@@ -24,9 +27,9 @@
 
   </ul>
 
-  <div class="update-profile-button">
-    <a href="{% url 'users:update' %}"
-                            role="button">Update Profile &raquo;</a>
-</div>
+        <a class="btn btn-lg btn-primary" id="cancel" name="cancel" 
+            href="{% url 'users:update' %}"
+           role="button">Update Profile &raquo;</a>
+
 
 {% endblock content %}

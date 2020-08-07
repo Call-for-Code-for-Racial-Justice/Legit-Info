@@ -1,16 +1,13 @@
-{% extends "base.html" %}
+{% extends "base-tony.html" %}
+
+
+{% block page_header %}
+      Register
+{% endblock page_header %}
+
 
 {% block content %}
-
-<div class="title-banner-standard">
-  <p class="small-header-title">
-      Register
-  </p>
-</div>
-
 <div class="signin-register-search">
-
-
   <form method="post" action="{% url 'users:register' %}">
     {% csrf_token %}
     {{ form.as_p }}
@@ -18,13 +15,15 @@
   <div class="form-group">
     <label class="col-md-4 control-label" for="submit"></label>
     <div class="col-md-8">
-      <button id="submit" name="submit" class="button-submit" 
+      <button id="submit" name="submit" class="btn btn-lg btn-success"
           value="1">Register</button>
-      <a href="{% url 'fixpol:index' %}" id="cancel" name="cancel" 
-          class="button-cancel">Cancel</a>
+
+        <a class="btn btn-lg btn-danger" id="cancel" name="cancel" 
+            href="{% url 'fixpol:index' %}"
+           role="button">Cancel &raquo;</a>
+
     </div>
   </div>
-
 
     <input type="hidden" name="next" value="{% url 'fixpol:index' %}" />
   </form>

@@ -14,6 +14,7 @@ from users.models import Profile
 # Create your views here.
 def index(request):
     """The home page for Fix Politics."""
+    
     return render(request, 'index.html')
 
 def locations(request):
@@ -38,7 +39,7 @@ def search(request):
     CONNECTOR_END = ']'
 
     crit = None
-    #import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     if request.method != 'POST':
         # Initial request; pre-fill form with the current entry.
         if request.user.is_anonymous:
@@ -61,7 +62,7 @@ def search(request):
             criteria.save()
             
             impacts = criteria.impacts.all()
-            
+            # import pdb; pdb.set_trace()
             if impacts:
                 connector = CONNECTOR_START
                 for impact in impacts:
@@ -76,7 +77,6 @@ def search(request):
 
 
 def results(request, search_id):
-    import pdb; pdb.set_trace()
     criteria = Criteria.objects.get(id=search_id)
     loc = criteria.location
     impact_list = criteria.impacts.all()

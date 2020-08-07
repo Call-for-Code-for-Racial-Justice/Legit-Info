@@ -1,13 +1,17 @@
-{% extends "base.html" %}
+{% extends "base-tony.html" %}
+
+
+{% block page_header %}
+Update Profile
+{% endblock page_header %}
+
 
 {% block content %}
-
-<div class="title-banner-standard">
-  <p class="small-header-title">
-    Update your profile
-  </p>
-</div>
-
+<style>
+ul {
+    list-style-type: none;
+}
+</style>
 
 <div class="profile-details">
 
@@ -15,7 +19,9 @@
     {% csrf_token %}
     {{ user_form.as_p }}
     {{ profile_form.as_p }}
-    <button class="button-submit-update button-submit" type="submit">Save changes</button>
+
+      <button id="submit" name="submit" class="btn btn-lg btn-success"
+          value="1">Save changes</button>
   </form>
 
 </div>
