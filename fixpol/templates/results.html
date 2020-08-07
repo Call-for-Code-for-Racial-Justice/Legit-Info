@@ -1,16 +1,27 @@
 {% extends "base-tony.html" %}
 
 {% block content %}
+
+<p>Search Criteria: {{ heading|safe }}</p>
+
 <div class="title-banner-standard">
-  <p class="small-header-title">
+  <h2 class="small-header-title">
       Results
-  </p>
+  </h2>
 </div>
 
 <div class="results">
-  <p>Search Criteria: {{ text|safe }}</p>
-
-  <p>put results here</p>
+  
+    <div class="page-content-standard">
+        <dl>
+        {% for law in laws %}
+        <dt>{{ law.title }} [{{ law.impact.text }}]</dt>
+        <dd><p>{{ law.summary }}</p></dt>
+        {% empty %}
+        <p>No legislation found.</p>
+        {% endfor %}
+        </dl>
+    </div>
 </div>
 
 

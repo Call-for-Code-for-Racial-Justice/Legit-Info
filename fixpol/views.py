@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Location, Impact, Criteria
+from .models import Location, Impact, Criteria, Law
 from .forms import SearchForm
 from django.contrib.auth.models import User
 from users.models import Profile
@@ -55,6 +55,8 @@ def search(request):
         if form.is_valid():
             criteria = form.save()
             text = criteria.location.hierarchy
+            if text.startswith('world'):
+                text = text[6:]
             criteria.text = text  
             criteria.save()
             
@@ -74,8 +76,16 @@ def search(request):
 
 
 def results(request, search_id):
+    import pdb; pdb.set_trace()
     criteria = Criteria.objects.get(id=search_id)
-    context = { 'text': criteria.text} 
+    loc = criteria.location
+    impact_list = criteria.impacts.all()
+
+    laws = Law.objects.filter(location=loc)
+    laws = laws.filter(impacts__in=impact_list)
+
+    context = { 'heading': criteria.text,
+                'laws' : laws} 
     return render(request, 'results.html', context)
 
 
@@ -84,6 +94,8 @@ def criteria(request, search_id):
     criteria = Criteria.objects.get(id=search_id)
     context = {'criteria': criteria}
     return render(request, 'criteria.html', context)
+
+
 
 def share(request):
     return render(request, 'share.html')

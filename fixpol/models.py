@@ -55,8 +55,26 @@ class Criteria(models.Model):
         return self.text
 
 
+class Law(models.Model):
+    """Summary of legislation resulting from Machine Learning"""
 
+    class Meta:
+        app_label = 'fixpol'
+        verbose_name_plural = "laws"  # plural of legislation
 
+    title = models.CharField(max_length=200)
+
+    summary = models.CharField(max_length=1000)
+
+    location = models.ForeignKey('fixpol.Location', null=True,
+        related_name='laws', on_delete=models.CASCADE)
+
+    impacts = models.ForeignKey('fixpol.Impact', null=True,
+        related_name='laws', on_delete=models.CASCADE)
+
+    def __str__(self):
+        """Return a string representation of the model."""
+        return self.title
 
 
 
