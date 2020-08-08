@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Location, Impact, Criteria, Law
+from .models import impact_seq, find_criteria_id
 from .forms import SearchForm
 from django.contrib.auth.models import User
 from users.models import Profile
@@ -17,12 +18,14 @@ def index(request):
     
     return render(request, 'index.html')
 
+
 def locations(request):
     """Show all locations."""
     locations = Location.objects.order_by('date_added')
     locations = locations.exclude(desc='world')
     context = {'locations': locations}
     return render(request, 'locations.html', context)
+
 
 def impacts(request):
     """Show all impacts."""
@@ -33,13 +36,8 @@ def impacts(request):
 
 def search(request):
     """Show search form to specify criteria."""
-    ARROW = r'&nbsp;&#8611;&nbsp;'
-    CONNECTOR_START = ' | ['
-    CONNECTOR_MID = ', '
-    CONNECTOR_END = ']'
-
     crit = None
-    #import pdb; pdb.set_trace()
+    
     if request.method != 'POST':
         # Initial request; pre-fill form with the current entry.
         if request.user.is_anonymous:
@@ -54,22 +52,13 @@ def search(request):
         form = SearchForm(data=request.POST)      
         if form.is_valid():
             criteria = form.save()
-            text = criteria.location.hierarchy
-            if text.startswith('world'):
-                text = text[6:]
-            criteria.text = text  
-            criteria.save()
-            
-            impacts = criteria.impacts.all()
-            #import pdb; pdb.set_trace()
-            if impacts:
-                connector = CONNECTOR_START
-                for impact in impacts:
-                    text += connector + impact.text 
-                    connector = CONNECTOR_MID
-                criteria.text = text + CONNECTOR_END
+            crit_text = criteria.set_text()
+            crit_id = find_criteria_id(crit_text)
+            print(crit_id, crit_text)
+            if crit_id == 0:
                 criteria.save()
-                return redirect('fixpol:results', search_id=criteria.id)
+                crit_id = criteria.id
+            return redirect('fixpol:results', search_id=crit_id)
 
     context = { 'form': form }
     return render(request, 'search.html', context)
@@ -96,17 +85,6 @@ def criteria(request, search_id):
     return render(request, 'criteria.html', context)
 
 
-def with_commas(impact_list):
-    """String together all selected impacts in impact_list."""
-    impact_string = ''
-    connector = '['
-    
-    for impact in impact_list:
-        impact_string += connector + impact.text
-        connector = ', '
-    impact_string += ']'
-    return impact_string
-
 def zero_if_none(item):
     """If item exists, return id, otherwise return 0."""
     result_id = 0
@@ -123,15 +101,16 @@ def criterias(request):
     profiles = Profile.objects.order_by('id')
     prof = []
     for profile in profiles:
-        impact_string2 = with_commas(profile.impacts.all())
+        impact_string2 = impact_seq(profile.impacts.all())
         prof.append([profile.id, profile.location, 
                     impact_string2, zero_if_none(profile.criteria)])
 
     criterias = Criteria.objects.order_by('id')
     crit = []
     for criteria in criterias:
-        impact_string3 = with_commas(criteria.impacts.all())
-        crit.append([criteria.id, criteria.location, impact_string3])
+        impact_string3 = impact_seq(criteria.impacts.all())
+        crit.append([criteria.id, criteria.text, 
+                    criteria.location, impact_string3])
 
     context = { 'users': users,
                 'prof': prof,

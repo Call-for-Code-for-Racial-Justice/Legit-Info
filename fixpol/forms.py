@@ -9,7 +9,7 @@ class SearchForm(forms.ModelForm):
         fields = ('location', 'impacts')
 
     location = forms.ModelChoiceField(
-                queryset = Location.objects.exclude(desc='world'),
+                queryset = Location.objects.all(),
                 empty_label='Please select a location'
                 )
 

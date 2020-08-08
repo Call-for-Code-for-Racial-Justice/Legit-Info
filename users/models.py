@@ -27,6 +27,7 @@ class Profile(models.Model):
 
     def set_criteria(self):
         """Create or update criteria record for this profile."""
+
         crit = self.criteria
         if crit:
             crit.location = self.location
@@ -36,13 +37,13 @@ class Profile(models.Model):
                     crit.impacts.add(impact)
                 else:
                     crit.impacts.remove(impact)
-
         else:
             crit = Criteria(location=self.location)
             crit.save()
             for impact in self.impacts.all():
                 crit.impacts.add(impact)
             
+        crit.set_text()   
         crit.save()
         self.criteria = crit
         self.save()

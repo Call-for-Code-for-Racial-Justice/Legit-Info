@@ -1,19 +1,21 @@
 {% extends "base.html" %}
 
 {% block page_header %}
-Search Results
+<h4>Search Results</h4>
 {% endblock page_header %}
 
 {% block content %}
 
+<!--
 <p>Search Criteria: {{ heading|safe }}</p>
+-->
 
 <div class="results">
   
     <div class="page-content-standard">
         <dl>
         {% for law in laws %}
-        <dt>{{ law.title }}</dt>
+        <dt>{{ law.title }}  [{{ law.location.desc }} | {{ law.impact.text }}]</dt>
         <dd><p>{{ law.summary }}</p></dt>
         {% empty %}
         <p>No legislation found.</p>
@@ -22,7 +24,7 @@ Search Results
     </div>
 </div>
 
-    <a class="btn btn-lg btn-primary" 
+    <a class="btn btn-lg btn-primary float-right" 
             href="{% url 'fixpol:index' %}"
             role="button">Save or Share Results &raquo;</a>
 
