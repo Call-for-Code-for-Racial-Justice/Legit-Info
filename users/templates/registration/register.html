@@ -2,7 +2,7 @@
 
 
 {% block page_header %}
-      Register
+<h4>Register</h4>
 {% endblock page_header %}
 
 
@@ -12,17 +12,17 @@
     {% csrf_token %}
     {{ form.as_p }}
 
+
+   
+
   <div class="form-group">
-    <label class="col-md-4 control-label" for="submit"></label>
-    <div class="col-md-8">
-      <button id="submit" name="submit" class="btn btn-lg btn-success"
-          value="1">Register</button>
-
-        <a class="btn btn-lg btn-danger" id="cancel" name="cancel" 
-            href="{% url 'fixpol:index' %}"
-           role="button">Cancel &raquo;</a>
-
-    </div>
+  <a class="btn btn-lg btn-danger" id="cancel" name="cancel" 
+           href="{% url 'fixpol:index' %}"
+           role="button">Cancel</a>
+    <label class="control-label" for="submit"></label>
+      <button id="submit" name="submit" 
+          class="btn btn-lg btn-success float-right"
+          value="1">Register &raquo;</button>
   </div>
 
     <input type="hidden" name="next" value="{% url 'fixpol:index' %}" />
