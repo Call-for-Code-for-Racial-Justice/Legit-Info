@@ -11,11 +11,15 @@
 <span class="d-none d-xl-block">This screen is: xl</span>
 -->
 
+
+<div class="row">
+  <div class="col-1 col-sm-2 col-md-3 col-lg-4">&nbsp;</div>
+  <div class="col-10 col-sm-8 col-md-6 col-lg-4">
 <p class="lead">This project is designed to help you find
             policies and legislation that impact you in your
             community.</p>
 
-<p class="d-none d-md-block">
+<p class="d-none d-sm-block">
 Search by location and the impact areas you are concerned about. 
 </p>
 
@@ -24,6 +28,9 @@ Search by location and the impact areas you are concerned about.
 <p class="d-none d-sm-block">If you prefer, you can register your profile,
 so that we will remember your search preferences.</p>
 {% endif %}
+  </div>
+  <div class="col-1 col-sm-2 col-md-3 col-lg-4">&nbsp;</div>
+</div>
 
 
 <!--
@@ -39,14 +46,12 @@ so that we will remember your search preferences.</p>
 
 
 
-
-
-<a class="btn btn-lg btn-warning align-self-end" 
+<a class="btn btn-lg btn-warning pull-right" 
             href="{% url 'fixpol:search' %}"
             role="button">Search &raquo;</a>
 {% if user.is_authenticated %}
 {% else %}
-<a class="btn btn-lg btn-primary align-self-end" 
+<a class="btn btn-lg btn-primary float-right" 
             href="{% url 'users:register' %}"
             role="button">Register &raquo;</a>
 {% endif %}
