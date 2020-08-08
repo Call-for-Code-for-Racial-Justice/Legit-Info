@@ -40,14 +40,14 @@ class Profile(models.Model):
         else:
             crit = Criteria(location=self.location)
             crit.save()
-            for impact in user.profile.impacts.all():
+            for impact in self.impacts.all():
                 crit.impacts.add(impact)
             
         crit.save()
         self.criteria = crit
         self.save()
 
-        return redirect('fixpol:index')
+        return self
 
 
 @receiver(post_save, sender=User)

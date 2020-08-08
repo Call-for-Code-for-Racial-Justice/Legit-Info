@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block page_header %}
+Tables for Users, Profiles, and Criterias
+{% endblock page_header %}
+
+
+{% block content %}
+
+<div class="page-content">
+    <div class="page-content-standard">
+
+<table border="3">
+    <tr bgcolor="#99FFCC">
+        <th>User id</th>
+        <th>Username</th>
+        <th>Profile id</th>
+    </tr>
+    {% for user in users %}
+    <tr> 
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.profile.id }}</td>
+    </tr>
+    {% empty %}
+    <tr> 
+        <td colspan="3">this table is empty</td>
+    </tr>
+    {% endfor %}
+</table>
+<br>
+
+<table border="3">
+    <tr bgcolor="#99FFCC">
+        <th>Profile id</th>
+        <th>Location</th>
+        <th>Impacts</th>
+        <th>Criteria id</th>
+    </tr>
+    {% for profile in prof %}
+    <tr> 
+        <td>{{ profile.0 }}</td>
+        <td>{{ profile.1 }}</td>
+        <td>{{ profile.2 }}</td>
+        <td>{{ profile.3 }}</td>
+    </tr>
+    {% empty %}
+    <tr> 
+        <td colspan="4">this table is empty</td>
+    </tr>
+    {% endfor %}
+</table>
+<br>
+
+<table border="3">
+    <tr bgcolor="#99FFCC">
+        <th>Criteria id</th>
+        <th>Location</th>
+        <th>Impacts</th>
+    </tr>
+    {% for criteria in crit %}
+    <tr> 
+        <td>{{ criteria.0 }}</td>
+        <td>{{ criteria.1 }}</td>
+        <td>{{ criteria.2 }}</td>
+    </tr>
+    {% empty %}
+    <tr> 
+        <td colspan="3">this table is empty</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+
+    </div>
+</div>
+
+{% endblock content %}

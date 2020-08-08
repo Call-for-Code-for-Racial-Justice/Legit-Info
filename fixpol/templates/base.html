@@ -16,6 +16,16 @@
     background-color: #6F2F2C !important;
     color: #ffffff;
     }
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 20px;
+  /* Vertically center the text there */
+  line-height: 20px;      
+  background-color: #f5f5f5;
+}
 </style>
 
 </head>
@@ -25,15 +35,17 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-company-red mb-5 border">
 
 <a class="navbar-brand" href="{% url 'fixpol:index' %}">
-           Fix Politics</a>
+           Fix Politics
+</a>
 
 <button class="navbar-toggler" type="button" data-toggle="collapse"
            data-target="#navbarCollapse" aria-controls="navbarCollapse"
            aria-expanded="false" aria-label="Toggle navigation">
 
 <span class="navbar-toggler-icon"></span></button>
-<div class="collapse navbar-collapse" id="navbarCollapse">
-<ul class="navbar-nav mr-auto">
+
+<div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+<ul class="navbar-nav text-right">
     <li class="nav-item">
     <a class="nav-link" href="{% url 'fixpol:locations'%}">
                Locations</a></li>
@@ -41,12 +53,10 @@
     <li class="nav-item">
     <a class="nav-link" href="{% url 'fixpol:impacts'%}">
                Impacts</a></li>
-</ul>
 
-<ul class="navbar-nav ml-auto">
 {% if user.is_authenticated %}
 <li class="nav-item">
-    <span class="navbar-text">Hello, {{ user.username }}.</span>
+<span class="nav-link active">Hello, {{ user.username }}.</span>
 </li>
 <li class="nav-item">
     <a class="nav-link" href="{% url 'users:profile' %}">Profile</a>
@@ -61,19 +71,27 @@
 <li class="nav-item">
     <a class="nav-link" href="{% url 'users:login' %}">Sign in</a></li>
 {% endif %}
+
 </ul>
 </div>
-
 </nav>
 
 <main role="main" class="container">
-<div class="pb-2 mb-2 border-bottom bg-company-red">
+
+<div class="p-3 m-2 text-center bg-company-red">
        {% block page_header %}{% endblock page_header %}
        </div>
+
 <div>
        {% block content %}{% endblock content %}
        </div>
 </main>
+
+<footer class="footer d-flex justify-content-center text-muted">
+An&nbsp;<strong>Emb(race) Call-for-Code</strong>&nbsp;project
+</footer>
+
+
 
 </body>
 

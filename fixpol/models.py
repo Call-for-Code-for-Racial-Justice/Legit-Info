@@ -36,6 +36,7 @@ class Impact(models.Model):
         """Return a string representation of the model."""
         return self.text
 
+
 class Criteria(models.Model):
     """ Criteria of anonymous or user-profile search """
 

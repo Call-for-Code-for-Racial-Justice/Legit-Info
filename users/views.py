@@ -57,9 +57,10 @@ def update_profile(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            import pdb; pdb.set_trace() # DEBUG
+            # import pdb; pdb.set_trace() # DEBUG
             user = request.user
             user.profile.set_criteria()
+            return redirect('fixpol:index')
 
 
     context = { 'user_form': user_form,

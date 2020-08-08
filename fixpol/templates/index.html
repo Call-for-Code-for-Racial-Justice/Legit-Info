@@ -1,34 +1,54 @@
-{% extends "base-tony.html" %}
-
+{% extends "base.html" %}
 
 {% block page_header %}
+<h1>Fix Politics!</h1>
 
-<div class="jumbotron bg-company-red">
-<h1 class="display-3">Fix Politics!</h1>
+<!--
+<span class="d-block d-sm-none">This screen is: xs</span>
+<span class="d-none d-sm-block d-md-none">This screen is: sm</span>
+<span class="d-none d-md-block d-lg-none">This screen is: md</span>
+<span class="d-none d-lg-block d-xl-none">This screen is: lg</span>
+<span class="d-none d-xl-block">This screen is: xl</span>
+-->
 
 <p class="lead">This project is designed to help you find
             policies and legislation that impact you in your
-            community.  </p>
+            community.</p>
 
-<p class="lead">Simply select your location and the
-            impact areas you are concerned about, and the system
-            will show you the results!</p>
+<p class="d-none d-md-block">
+Search by location and the impact areas you are concerned about. 
+</p>
 
-<p class="lead">If you prefer, you can register your profile,
-            so that we will remember your search preferences.</p>
+{% if user.is_authenticated %}
+{% else %}
+<p class="d-none d-sm-block">If you prefer, you can register your profile,
+so that we will remember your search preferences.</p>
+{% endif %}
 
-<a class="btn btn-lg btn-warning" href="{% url 'fixpol:search' %}"
-           role="button">Search &raquo;</a>
 
-<a class="btn btn-lg btn-primary" href="{% url 'users:register' %}"
-           role="button">Register &raquo;</a>
-</div>
-
+<!--
+<span class="d-none d-xl-block">xl and above</span>
+<span class="d-none d-lg-block">lg and above</span>
+<span class="d-none d-md-block">md and above</span>
+<span class="d-none d-sm-block">sm and above</span>
+-->
 
 {% endblock page_header %}
 
+{% block content %}
 
 
 
 
 
+<a class="btn btn-lg btn-warning align-self-end" 
+            href="{% url 'fixpol:search' %}"
+            role="button">Search &raquo;</a>
+{% if user.is_authenticated %}
+{% else %}
+<a class="btn btn-lg btn-primary align-self-end" 
+            href="{% url 'users:register' %}"
+            role="button">Register &raquo;</a>
+{% endif %}
+
+{% endblock content %}

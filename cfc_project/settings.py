@@ -37,6 +37,7 @@ INSTALLED_APPS = [
 
     # Third party apps.
     'bootstrap4',
+    'django_extensions',
 
     # Default django apps
     'django.contrib.admin',
@@ -45,9 +46,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Python Debugger
-    # 'django-pdb',
 
 ]
 
