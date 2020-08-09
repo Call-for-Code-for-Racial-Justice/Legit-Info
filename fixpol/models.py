@@ -3,6 +3,13 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from datetime import datetime
+
+# default to 1 day from now
+def get_default_law_key():
+    x = str(datetime.now())
+    key = x[5:25]
+    return key
 
 # Create your models here.
 class Location(models.Model):
@@ -105,6 +112,9 @@ class Law(models.Model):
         app_label = 'fixpol'
         verbose_name_plural = "laws"  # plural of legislation
 
+    key = models.CharField(max_length=20, null=False, 
+                    unique=True, default=get_default_law_key)
+
     title = models.CharField(max_length=200)
 
     summary = models.CharField(max_length=1000)
@@ -117,7 +127,9 @@ class Law(models.Model):
 
     def __str__(self):
         """Return a string representation of the model."""
-        return self.title
+        law_string = self.title[:50]
+        law_string = self.key + ' ' + law_string.rsplit(' ', 1)[0]
+        return law_string
 
 
 

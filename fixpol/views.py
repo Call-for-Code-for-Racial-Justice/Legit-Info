@@ -71,7 +71,7 @@ def results(request, search_id):
     impact_list = criteria.impacts.all()
 
     laws = Law.objects.filter(location=loc)
-    laws = laws.filter(impacts__in=impact_list)
+    laws = laws.filter(impact__in=impact_list)
 
     context = { 'heading': criteria.text,
                 'laws' : laws} 
