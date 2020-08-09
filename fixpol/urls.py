@@ -29,6 +29,9 @@ urlpatterns = [
     # Page for showing saved search critera
     path('criterias', views.criterias, name='criterias'),
 
+    # Page for showing saved search critera
+    path('sendmail', views.sendmail, name='sendmail'),
+
     # Page for saving or sharing results
     path('share/', views.share, name='share'),
 

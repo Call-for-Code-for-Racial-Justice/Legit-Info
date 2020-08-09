@@ -5,6 +5,9 @@ from .forms import SearchForm
 from django.contrib.auth.models import User
 from users.models import Profile
 
+from django.http import HttpResponse
+from django.core.mail import send_mail
+
 # Debugging options
 # return HttpResponse({variable to inspect})
 # print {variable to inspect}
@@ -117,6 +120,30 @@ def criterias(request):
                 'crit': crit}
     return render(request, 'criterias.html', context)
 
+
+def sendmail(request):
+    """ send results to profile user """
+
+# subject: A string;
+# message: A string;
+# from_email: A string;
+# recipient_list: A list of strings;
+# fail_silently: A boolean;
+# auth_user: The optional username to use to authenticate to the SMTP server;
+# auth_password: The optional password to use to authenticate to the SMTP server;
+# connection: The optional email backend to use to send the mail;
+# html_message: An optional string containg the messsage in HTML format.
+
+
+    send_mail(
+        'Subject',
+        'Email message',
+        'tpearson@us.ibm.com',
+        ['az990tony@gmail.com'],
+        fail_silently=False,
+    )
+
+    return HttpResponse('Mail successfully sent')
 
 
 def share(request):

@@ -79,6 +79,10 @@ TEMPLATES = [
     },
 ]
 
+EMAIL_HOST = 'smtp.mailtrap.io'
+EMAIL_HOST_USER = '14c001982dde17'
+EMAIL_HOST_PASSWORD = 'a576c6c6c03596'
+EMAIL_PORT = '2525'
 WSGI_APPLICATION = 'cfc_project.wsgi.application'
 
 # Database
