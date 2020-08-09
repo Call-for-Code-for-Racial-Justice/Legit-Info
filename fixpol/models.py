@@ -54,7 +54,10 @@ class Criteria(models.Model):
 
     def __str__(self):
         """Return a string representation of the model."""
-        return self.text
+        key = str(self.id)
+        if self.text:
+            key += ':' + self.text
+        return key
 
 
     def set_text(self):
