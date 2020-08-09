@@ -7,6 +7,8 @@ from users.models import Profile
 
 from django.http import HttpResponse
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.views.generic import UpdateView
 
 # Debugging options
 # return HttpResponse({variable to inspect})
@@ -134,12 +136,18 @@ def sendmail(request):
 # connection: The optional email backend to use to send the mail;
 # html_message: An optional string containg the messsage in HTML format.
 
+    subject = 'Legislation Search Results'
+    sender_email = 'fix-politics-app@embrace-call-for-code.org'
+    recipients = ['tpearson@us.ibm.com']
+    message = render_to_string(template_name='email.txt')
+    html_version = render_to_string(template_name='email.html')
 
     send_mail(
-        'Subject',
-        'Email message',
-        'tpearson@us.ibm.com',
-        ['az990tony@gmail.com'],
+        subject,
+        message,
+        sender_email,
+        recipients,
+        html_message = html_version,
         fail_silently=False,
     )
 
