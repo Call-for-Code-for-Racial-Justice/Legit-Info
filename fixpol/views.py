@@ -103,14 +103,30 @@ def make_csv(search_id, laws):
     return None
 
 
+def cte_query(loc):
+    loc_list = [loc]
+    base = loc.hierarchy
+    for n in range(10):
+        loc = loc.parent
+        if loc:
+            loc_list.append(loc)
+            if loc.shortname == 'world':
+                break
+        else:
+            break
+    return loc_list
+
+
 def results(request, search_id):
     """Show search results."""
     
     criteria = Criteria.objects.get(id=search_id)
     loc = criteria.location
+    #import pdb; pdb.set_trace()
+    loc_list = cte_query(loc)
     impact_list = criteria.impacts.all()
 
-    laws = Law.objects.filter(location=loc)
+    laws = Law.objects.filter(location__in=loc_list)
     laws = laws.filter(impact__in=impact_list)
 
     gen_date = datetime.now().strftime("%B %-d, %Y")
