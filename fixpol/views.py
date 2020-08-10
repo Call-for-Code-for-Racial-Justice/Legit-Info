@@ -89,7 +89,7 @@ def make_csv(search_id, laws):
                         'summary': law.summary})
 
     filename = results_filename(search_id)       
-    with open('names.csv', 'w', newline='') as csvfile:
+    with open(filename, 'w', newline='') as csvfile:
         fieldnames = ['location', 'impact', 'key', 'title', 'summary']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
@@ -189,7 +189,7 @@ def sendmail(request, search_id):
     with open(filename, 'rt') as res_file:
         resultsReader = csv.DictReader(res_file)
         laws_found = list(resultsReader)
-        import pdb; pdb.set_trace()
+        #import pdb; pdb.set_trace()
 
     subject = 'Legislation Search Results - ' + gen_date
     sender_email = 'fix-politics-cfc@ibm.com'
@@ -211,7 +211,8 @@ def sendmail(request, search_id):
     
 
     context = { 'status_message': status_message,
-                'recipients': recipients}
+                'recipients': recipients, 
+                'search_id': search_id}
     return render(request, 'email_sent.html', context)
 
 

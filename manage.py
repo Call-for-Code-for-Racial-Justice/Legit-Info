@@ -12,6 +12,8 @@ if __name__ == '__main__':
     if not is_venv():
         print('Virtual Environment: ERROR **NOT FOUND**')
         print('Did you forget to activate your virtual environment?')
+        print('To enter virtual environment:   pipenv shell')
+        print('To exit virtual environment:    exit')
         sys.exit()
 
     try:
