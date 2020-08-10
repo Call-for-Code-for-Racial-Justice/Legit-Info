@@ -81,10 +81,11 @@ TEMPLATES = [
     },
 ]
 
-EMAIL_HOST = 'smtp.mailtrap.io'
-EMAIL_HOST_USER = '14c001982dde17'
-EMAIL_HOST_PASSWORD = 'a576c6c6c03596'
-EMAIL_PORT = '2525'
+EMAIL_HOST = os.environ['EMAIL_HOST']
+EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+EMAIL_PORT = os.environ['EMAIL_PORT']
+
 WSGI_APPLICATION = 'cfc_project.wsgi.application'
 
 # Database

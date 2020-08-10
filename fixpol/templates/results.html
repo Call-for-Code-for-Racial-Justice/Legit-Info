@@ -1,11 +1,15 @@
 {% extends "base.html" %}
 
 {% block page_header %}
+<div class="d-none d-print-block">
+<h1>Fix Politics</h1>
+</div>
+
 <h4>Search Results for {{ gen_date }}</h4>
 {% endblock page_header %}
 
-{% block content %}
 
+{% block content %}
 <!--
 <p>Search Criteria: {{ heading|safe }}</p>
 -->
@@ -25,16 +29,27 @@
     </div>
 </div>
 
-    <a class="btn btn-lg btn-warning" 
+<div class="btn-toolbar float-right d-print-none">
+    <a class="btn btn-lg btn-warning mr-3" 
             href="{% url 'fixpol:search' %}"
             role="button"> &laquo; Search Again</a>
 
 {% if numlaws > 0 %}
+
+    <button class="btn btn-lg btn-success mr-3 float-right" 
+    onclick="javascript:window.print()" role="button">
+    <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
+    Print
+    </button>
+
+    {% if user.is_authenticated %}
     <a class="btn btn-lg btn-primary float-right" 
             href="{% url 'fixpol:sendmail' search_id %}"
             role="button">Send Results &raquo;</a>
-{% endif %}
+    {% endif %}
 
+{% endif %}
+</div>
 {% endblock content %}
 
 

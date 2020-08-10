@@ -1,4 +1,5 @@
 import os
+import csv
 from django.shortcuts import render, redirect
 from .models import Location, Impact, Criteria, Law
 from .models import impact_seq, find_criteria_id
@@ -78,11 +79,24 @@ def results_filename(search_id):
     return filename       
 
 
-def make_csv(search_id, context):
-    content = render_to_string('results-as-csv.txt', context) 
-    filename = results_filename(search_id)           
-    with open(filename, 'w') as results_file:
-            results_file.write(content)
+def make_csv(search_id, laws):
+    laws_table = []
+    for law in laws:
+        laws_table.append({'location': law.location.desc, 
+                        'impact': law.impact.text, 
+                        'key': law.key, 
+                        'title': law.title, 
+                        'summary': law.summary})
+
+    filename = results_filename(search_id)       
+    with open('names.csv', 'w', newline='') as csvfile:
+        fieldnames = ['location', 'impact', 'key', 'title', 'summary']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+        writer.writeheader()
+        for law in laws_table:
+            writer.writerow(law)
+    return None
 
 
 def results(request, search_id):
@@ -103,7 +117,7 @@ def results(request, search_id):
                 'search_id': search_id, 
                 'gen_date': gen_date} 
 
-    make_csv(search_id, context)
+    make_csv(search_id, laws)
     return render(request, 'results.html', context)
 
 
@@ -147,6 +161,13 @@ def criterias(request):
     return render(request, 'criterias.html', context)
 
 
+def strip_double_quotes(item):
+    new_item = item
+    if item.startswith('"') and item.endswith('"'):
+        new_item = item[1:-1]
+    return new_item
+
+
 def sendmail(request, search_id):
     """ send results to profile user """
 
@@ -164,25 +185,30 @@ def sendmail(request, search_id):
     today = datetime.now()
     gen_date = today.strftime("%B %d, %Y")
 
-    subject = 'Legislation Search Results - ' + gen_date
-    sender_email = 'fix-politics-app@embrace-call-for-code.org'
-    recipients = ['tpearson@us.ibm.com']
-    
-    text_version = render_to_string(
-            template_name='email.txt')
-    html_version = render_to_string(
-            template_name='email-full.html')
+    filename = results_filename(search_id)
+    with open(filename, 'rt') as res_file:
+        resultsReader = csv.DictReader(res_file)
+        laws_found = list(resultsReader)
+        import pdb; pdb.set_trace()
 
-    email = EmailMessage(subject, text_version, sender_email, recipients)
-    email.attach('results.html', html_version, 'text/html')
-    email.attach_file(results_filename(search_id))
+    subject = 'Legislation Search Results - ' + gen_date
+    sender_email = 'fix-politics-cfc@ibm.com'
+    recipients = [request.user.email]
     
-    try:
-        email.send()
+    context = {'laws_found': laws_found}
+    text_version = render_to_string(
+            template_name='email.txt', context=context, request=request)
+    html_version = render_to_string(
+            template_name='email-full.html', context=context, request=request)
+
+    sent =  send_mail(subject, text_version, sender_email, recipients, 
+            fail_silently=True, html_message=html_version)
+
+    if sent > 0:
         status_message = 'Mail successfully sent to:'
-    except Exception as err:
-        status_message = 'ERROR: Unable to deliver email - ' + err
-    #import pdb; pdb.set_trace()
+    else:
+        status_message = 'ERROR: Unable to deliver email' 
+    
 
     context = { 'status_message': status_message,
                 'recipients': recipients}

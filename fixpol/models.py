@@ -127,8 +127,14 @@ class Law(models.Model):
 
     def __str__(self):
         """Return a string representation of the model."""
-        law_string = self.title[:50]
-        law_string = self.key + ' ' + law_string.rsplit(' ', 1)[0]
+        law_length = len(self.title)
+        law_string = self.title
+        if law_length > 50:
+            law_string = self.title[:50]
+            law_string = law_string.rsplit(' ', 1)[0]
+            if len(law_string) < law_length:
+                law_string += " ..."
+        law_string = self.key + ' ' + law_string
         return law_string
 
 
