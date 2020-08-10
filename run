@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-python manage.py runserver localhost:2000
+python manage.py runserver 192.168.3.3:3000
