@@ -33,6 +33,9 @@ urlpatterns = [
     # Page for sending saved search critera via email
     path('sendmail/<int:search_id>/', views.sendmail, name='sendmail'),
 
+    # Page for sending saved search critera via email
+    path('download/<int:search_id>/', views.download, name='download'),
+
     # Page for saving or sharing results
     path('share/', views.share, name='share'),
 

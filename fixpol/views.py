@@ -72,9 +72,13 @@ def search(request):
     context = { 'form': form }
     return render(request, 'search.html', context)
 
+def results_basename(search_id):
+    basename = 'fixpol-results-{}.csv'.format(search_id)   
+    return basename    
+
 
 def results_filename(search_id):
-    basename = 'fixpol-results-{}.csv'.format(search_id)   
+    basename = results_basename(search_id)
     filename = os.path.join(settings.MEDIA_ROOT, basename) 
     return filename       
 
@@ -82,15 +86,15 @@ def results_filename(search_id):
 def make_csv(search_id, laws):
     laws_table = []
     for law in laws:
-        laws_table.append({'location': law.location.desc, 
+        laws_table.append({'key': law.key,
+                        'location': law.location.desc, 
                         'impact': law.impact.text, 
-                        'key': law.key, 
                         'title': law.title, 
                         'summary': law.summary})
 
     filename = results_filename(search_id)       
     with open(filename, 'w', newline='') as csvfile:
-        fieldnames = ['location', 'impact', 'key', 'title', 'summary']
+        fieldnames = ['key', 'location', 'impact', 'title', 'summary']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         writer.writeheader()
@@ -168,6 +172,13 @@ def strip_double_quotes(item):
     return new_item
 
 
+def recipient_format(first,last,addr):
+    if first=='' and last=='':
+        rec = addr
+    else:
+        rec = first+' '+last+' <'+addr+'>'
+    return rec
+
 def sendmail(request, search_id):
     """ send results to profile user """
 
@@ -191,15 +202,20 @@ def sendmail(request, search_id):
         laws_found = list(resultsReader)
         #import pdb; pdb.set_trace()
 
-    subject = 'Legislation Search Results - ' + gen_date
+    subject = 'Fix Politics -- Legislation Search Results -- ' + gen_date
     sender_email = 'fix-politics-cfc@ibm.com'
-    recipients = [request.user.email]
+    user = request.user
+    recipients = [ recipient_format(user.first_name,
+                                    user.last_name,
+                                    user.email)]
     
     context = {'laws_found': laws_found}
     text_version = render_to_string(
-            template_name='email.txt', context=context, request=request)
+            template_name='email-results.txt', 
+            context=context, request=request)
     html_version = render_to_string(
-            template_name='email-full.html', context=context, request=request)
+            template_name='email-results.html', 
+            context=context, request=request)
 
     sent =  send_mail(subject, text_version, sender_email, recipients, 
             fail_silently=True, html_message=html_version)
@@ -220,20 +236,16 @@ def share(request):
     return render(request, 'share.html')
 
    
-def some_view(request):
+def download(request, search_id):
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
-
-    # The data is hard-coded here, but you could load it from a database or
-    # some other source.
-    csv_data = (
-        ('First row', 'Foo', 'Bar', 'Baz'),
-        ('Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"),
-    )
-
-    t = loader.get_template('my_template_name.txt')
-    c = {'data': csv_data}
-    response.write(t.render(c))
+    basename = results_basename(search_id)
+    disp = 'attachment; filename="{}"'.format(basename)
+    response['Content-Disposition'] = disp
+    writer = csv.writer(response)
+    with open(results_filename(search_id), newline="") as in_file:
+        reader = csv.reader(in_file)
+        for row in reader:
+            writer.writerow(row)
     return response
 
