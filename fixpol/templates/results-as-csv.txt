@@ -1,0 +1,2 @@
+{% for law in laws %}  "{{ law.location.desc|addslashes }}", "{{ law.impact.text|addslashes }}", "{{ law.key|addslashes }}", "{{ law.title|addslashes }}", "{{ law.summary|addslashes }}"
+{% endfor %}

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block page_header %}
-<h4>Search Results</h4>
+<h4>Search Results for {{ gen_date }}</h4>
 {% endblock page_header %}
 
 {% block content %}
@@ -25,9 +25,15 @@
     </div>
 </div>
 
+    <a class="btn btn-lg btn-warning" 
+            href="{% url 'fixpol:search' %}"
+            role="button"> &laquo; Search Again</a>
+
+{% if numlaws > 0 %}
     <a class="btn btn-lg btn-primary float-right" 
-            href="{% url 'fixpol:sendmail' %}"
-            role="button">Save or Share Results &raquo;</a>
+            href="{% url 'fixpol:sendmail' search_id %}"
+            role="button">Send Results &raquo;</a>
+{% endif %}
 
 {% endblock content %}
 

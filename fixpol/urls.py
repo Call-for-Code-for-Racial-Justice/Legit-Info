@@ -1,7 +1,8 @@
-"""Defines URL patterns for users"""
+"""Defines URL patterns for fixpol application"""
 
 from django.urls import path, include
 from . import views
+
 
 app_name = 'fixpol'
 
@@ -27,10 +28,10 @@ urlpatterns = [
             views.criteria, name='criteria'),  
 
     # Page for showing saved search critera
-    path('criterias', views.criterias, name='criterias'),
+    path('criterias/', views.criterias, name='criterias'),
 
-    # Page for showing saved search critera
-    path('sendmail', views.sendmail, name='sendmail'),
+    # Page for sending saved search critera via email
+    path('sendmail/<int:search_id>/', views.sendmail, name='sendmail'),
 
     # Page for saving or sharing results
     path('share/', views.share, name='share'),

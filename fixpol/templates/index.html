@@ -25,13 +25,12 @@ Search by location and the impact areas you are concerned about.
 
 {% if user.is_authenticated %}
 {% else %}
-<p class="d-none d-sm-block">If you prefer, you can register your profile,
-so that we will remember your search preferences.</p>
+<p class="d-none d-sm-block">Optionally, you can register your profile,
+to save your search preferences for next time.</p>
 {% endif %}
   </div>
   <div class="col-1 col-sm-2 col-md-3 col-lg-4">&nbsp;</div>
 </div>
-
 
 <!--
 <span class="d-none d-xl-block">xl and above</span>
@@ -45,15 +44,16 @@ so that we will remember your search preferences.</p>
 {% block content %}
 
 
-
-<a class="btn btn-lg btn-warning" 
+<div class="btn-toolbar float-right">
+<a class="btn btn-lg btn-warning mr-3 float-right" 
             href="{% url 'fixpol:search' %}"
             role="button">Search &raquo;</a>
 {% if user.is_authenticated %}
 {% else %}
-<a class="btn btn-lg btn-primary float-right" 
+&nbsp;
+<a class="btn btn-lg btn-primary mr-3 float-right" 
             href="{% url 'users:register' %}"
             role="button">Register &raquo;</a>
 {% endif %}
-
+</div>
 {% endblock content %}

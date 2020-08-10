@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import render, redirect
 from .models import Location, Impact, Criteria, Law
 from .models import impact_seq, find_criteria_id
@@ -6,9 +7,10 @@ from django.contrib.auth.models import User
 from users.models import Profile
 
 from django.http import HttpResponse
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
 from django.template.loader import render_to_string
-from django.views.generic import UpdateView
+from datetime import datetime
+from django.conf import settings
 
 # Debugging options
 # return HttpResponse({variable to inspect})
@@ -16,6 +18,7 @@ from django.views.generic import UpdateView
 # raise Exception({variable to inspect})
 # import pdb; pdb.set_trace()
 
+RESULTSDIR = 'results'
 
 # Create your views here.
 def index(request):
@@ -69,8 +72,22 @@ def search(request):
     return render(request, 'search.html', context)
 
 
+def results_filename(search_id):
+    basename = 'fixpol-results-{}.csv'.format(search_id)   
+    filename = os.path.join(settings.MEDIA_ROOT, basename) 
+    return filename       
+
+
+def make_csv(search_id, context):
+    content = render_to_string('results-as-csv.txt', context) 
+    filename = results_filename(search_id)           
+    with open(filename, 'w') as results_file:
+            results_file.write(content)
+
+
 def results(request, search_id):
     """Show search results."""
+    
     criteria = Criteria.objects.get(id=search_id)
     loc = criteria.location
     impact_list = criteria.impacts.all()
@@ -78,8 +95,15 @@ def results(request, search_id):
     laws = Law.objects.filter(location=loc)
     laws = laws.filter(impact__in=impact_list)
 
+    gen_date = datetime.now().strftime("%B %-d, %Y")
+
     context = { 'heading': criteria.text,
-                'laws' : laws} 
+                'laws' : laws,
+                'numlaws': len(laws),
+                'search_id': search_id, 
+                'gen_date': gen_date} 
+
+    make_csv(search_id, context)
     return render(request, 'results.html', context)
 
 
@@ -123,7 +147,7 @@ def criterias(request):
     return render(request, 'criterias.html', context)
 
 
-def sendmail(request):
+def sendmail(request, search_id):
     """ send results to profile user """
 
 # subject: A string;
@@ -136,26 +160,53 @@ def sendmail(request):
 # connection: The optional email backend to use to send the mail;
 # html_message: An optional string containg the messsage in HTML format.
 
-    subject = 'Legislation Search Results'
+    
+    today = datetime.now()
+    gen_date = today.strftime("%B %d, %Y")
+
+    subject = 'Legislation Search Results - ' + gen_date
     sender_email = 'fix-politics-app@embrace-call-for-code.org'
     recipients = ['tpearson@us.ibm.com']
-    message = render_to_string(template_name='email.txt')
-    html_version = render_to_string(template_name='email.html')
+    
+    text_version = render_to_string(
+            template_name='email.txt')
+    html_version = render_to_string(
+            template_name='email-full.html')
 
-    send_mail(
-        subject,
-        message,
-        sender_email,
-        recipients,
-        html_message = html_version,
-        fail_silently=False,
-    )
+    email = EmailMessage(subject, text_version, sender_email, recipients)
+    email.attach('results.html', html_version, 'text/html')
+    email.attach_file(results_filename(search_id))
+    
+    try:
+        email.send()
+        status_message = 'Mail successfully sent to:'
+    except Exception as err:
+        status_message = 'ERROR: Unable to deliver email - ' + err
+    #import pdb; pdb.set_trace()
 
-    return HttpResponse('Mail successfully sent')
+    context = { 'status_message': status_message,
+                'recipients': recipients}
+    return render(request, 'email_sent.html', context)
 
 
 def share(request):
     return render(request, 'share.html')
 
    
+def some_view(request):
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
+
+    # The data is hard-coded here, but you could load it from a database or
+    # some other source.
+    csv_data = (
+        ('First row', 'Foo', 'Bar', 'Baz'),
+        ('Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"),
+    )
+
+    t = loader.get_template('my_template_name.txt')
+    c = {'data': csv_data}
+    response.write(t.render(c))
+    return response
 
