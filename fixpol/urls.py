@@ -39,6 +39,9 @@ urlpatterns = [
     # Page for saving or sharing results
     path('share/', views.share, name='share'),
 
+    # health endpoint
+    path('health', views.health, name='health'),
+
     ]
 
 

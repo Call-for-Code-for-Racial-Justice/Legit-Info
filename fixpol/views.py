@@ -1,5 +1,6 @@
 import os
 import csv
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from .models import Location, Impact, Criteria, Law
 from .models import impact_seq, find_criteria_id
@@ -265,3 +266,6 @@ def download(request, search_id):
             writer.writerow(row)
     return response
 
+def health(request):
+    state = {"status": "UP"}
+    return JsonResponse(state)
