@@ -7,6 +7,7 @@ credentials.json
 localdev-config.json
 server/localdev-config.json
 venv/
+secret-smtp-mailtrap.env
 
 # misc
 **/*DONOT_SAVE*.*

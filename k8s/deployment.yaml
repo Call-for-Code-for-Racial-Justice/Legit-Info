@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: fix-politics-app
+    version: v1
+  name: fix-politics-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fix-politics-app
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: fix-politics-app
+        version: v1
+    spec:
+      containers:
+        - name: fix-politics-app
+          image: image-registry.openshift-image-registry.svc:5000/fix-politics/fix-politics:latest
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: smtp-mailtrap
+            - secretRef:
+                name: fixpolsvc                          
+          env:
+             - name: POSTGRESQL_HOSTNAME
+               value: fixpolsvc
+             - name: POSTGRESQL_PORT
+               value: '5432'
+          ports:
+            - containerPort: 3000
+              name: http
+              protocol: TCP
+          resources:
+            limits:
+              cpu: "300m"
+              memory: "400Mi"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+              scheme: HTTP         
+            initialDelaySeconds: 20
+            timeoutSeconds: 4
+            periodSeconds: 5
+            failureThreshold: 12
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 20
+            timeoutSeconds: 4
+            periodSeconds: 5
+            failureThreshold: 12
