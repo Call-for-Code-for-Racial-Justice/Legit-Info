@@ -22,7 +22,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'results')
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ry()%j23$u$c7q$m2o0vo1w(u^eut8b3c0ylpy+)((6f7j08a4'
+if 'SECRET_KEY' in os.environ:
+    SECRET_KEY = os.environ['SECRET_KEY']
+else:
+    SECRET_KEY = 'ry()%j23$u$c7q$m2o0vo1w(u^eut8b3c0ylpy+)((6f7j08a4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -81,35 +84,41 @@ TEMPLATES = [
     },
 ]
 
-EMAIL_HOST = os.environ['EMAIL_HOST']
-EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
-EMAIL_PORT = os.environ['EMAIL_PORT']
+if 'EMAIL_HOST' in os.environ:
+    EMAIL_HOST = os.environ['EMAIL_HOST']
+    EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+    EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+    EMAIL_PORT = os.environ['EMAIL_PORT']
+else:
+    EMAIL_HOST = ''
+    EMAIL_HOST_USER = ''
+    EMAIL_HOST_PASSWORD = ''
+    EMAIL_PORT = ''
 
 WSGI_APPLICATION = 'cfc_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-use_SQLite3 = True
-if use_SQLite3:
+if 'FIXADMIN_PASSWORD' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'fixdb',
+            'USER': 'fixadmin',
+            'PASSWORD': os.environ['FIXADMIN_PASSWORD'],
+            'HOST': 'mariadb',
+            'PORT': '3306',
+        }
+    }
+else:
     DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
       }
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'fixdb',
-            'USER': 'fixadmin',
-            'PASSWORD': 'foxtrot.indigo.xray',
-            'HOST': 'mariadb',
-            'PORT': '3306',
-        }
-    }
+
 
 
 

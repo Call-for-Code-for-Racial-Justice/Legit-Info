@@ -47,6 +47,8 @@
             href="{% url 'fixpol:download' search_id %}"
             role="button">Download CSV &raquo;</a>
 
+{{ settings.EMAIL_HOST }}
+
     {% if user.is_authenticated %}
     <a class="btn btn-lg btn-primary float-right m-3" 
             href="{% url 'fixpol:sendmail' search_id %}"

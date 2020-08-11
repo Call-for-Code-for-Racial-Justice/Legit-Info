@@ -225,22 +225,25 @@ def sendmail(request, search_id):
                                     user.last_name,
                                     user.email)]
     
-    context = {'laws_found': laws_found}
-    text_version = render_to_string(
-            template_name='email-results.txt', 
-            context=context, request=request)
-    html_version = render_to_string(
-            template_name='email-results.html', 
-            context=context, request=request)
-
-    sent =  send_mail(subject, text_version, sender_email, recipients, 
-            fail_silently=True, html_message=html_version)
-
-    if sent > 0:
-        status_message = 'Mail successfully sent to:'
-    else:
-        status_message = 'ERROR: Unable to deliver email' 
     
+    if settings.EMAIL_HOST:
+        context = {'laws_found': laws_found}
+        text_version = render_to_string(
+                template_name='email-results.txt', 
+                context=context, request=request)
+        html_version = render_to_string(
+                template_name='email-results.html', 
+                context=context, request=request)
+
+        sent =  send_mail(subject, text_version, sender_email, recipients, 
+                fail_silently=True, html_message=html_version)
+
+        if sent > 0:    
+            status_message = 'Mail successfully sent to:'
+        else:
+            status_message = 'ERROR: Unable to deliver email' 
+    else:
+        status_message = 'ERROR: EMAIL_HOST envionment variable not defined'
 
     context = { 'status_message': status_message,
                 'recipients': recipients, 
