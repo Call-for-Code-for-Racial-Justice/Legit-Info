@@ -1,0 +1,23 @@
+Functional tests:
+
+1. In anonymous mode.
+a) Home screen -> press "Search"
+b) Seach screen --> select location/impact, Press "search legislation"
+c) Results --> press "Print"
+d) Results --> press "Download CSV"
+
+2. Registration Process
+a) Home Screen -> press "Register"
+b) Register User --> enter username/password
+c) Press "Cancel" to go back to Home Screen
+d) Press "Register" to update profile
+e) Enter first/last name, email, location/impact, press "Save Changes"
+
+3. Logged In as User
+a) Home screen --> "Search"
+b) Search screen pre-loaded with default choices
+c) Leave choices alone, press "Search Legislation"
+d) Change "Location", press "Search Legislation"
+e) Change "Impacts", press "Search Legislation"
+f) Results, press "Send Results"
+g) Sign out

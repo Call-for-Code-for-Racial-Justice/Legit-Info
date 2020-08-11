@@ -12,18 +12,17 @@
     {% csrf_token %}
     {{ form.as_p }}
 
-
-   
-
-  <div class="form-group">
-  <a class="btn btn-lg btn-danger" id="cancel" name="cancel" 
+<div class="row"
+  <div class="btn-group mx-auto" role="button">
+  <a class="btn btn-lg btn-danger m-3" id="cancel" name="cancel" 
            href="{% url 'fixpol:index' %}"
-           role="button">Cancel</a>
+           role="button"> &laquo; Cancel</a>
     <label class="control-label" for="submit"></label>
       <button id="submit" name="submit" 
-          class="btn btn-lg btn-success float-right"
+          class="btn btn-lg btn-success m-3" role="button"
           value="1">Register &raquo;</button>
   </div>
+</div>
 
     <input type="hidden" name="next" value="{% url 'fixpol:index' %}" />
   </form>

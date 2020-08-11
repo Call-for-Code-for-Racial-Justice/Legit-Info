@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block page_header %}
-<h1>Fix Politics!</h1>
+<h1 class="d-none d-sm-block">Fix Politics!</h1>
 
 <!--
 <span class="d-block d-sm-none">This screen is: xs</span>
@@ -15,9 +15,10 @@
 <div class="row">
   <div class="col-1 col-sm-2 col-md-3 col-lg-4">&nbsp;</div>
   <div class="col-10 col-sm-8 col-md-6 col-lg-4">
-<p class="lead">This project is designed to help you find
-            policies and legislation that impact you in your
-            community.</p>
+<p class="lead">
+This project is designed to help you find policies and legislation 
+that impact you in your community.
+</p>
 
 <p class="d-none d-sm-block">
 Search by location and the impact areas you are concerned about. 
@@ -44,16 +45,17 @@ to save your search preferences for next time.</p>
 {% block content %}
 
 
-<div class="btn-toolbar float-right">
-<a class="btn btn-lg btn-warning mr-3 float-right" 
+<div class="btn-toolbar">
+<div class="mx-auto">
+<a class="btn btn-lg btn-warning m-3" 
             href="{% url 'fixpol:search' %}"
             role="button">Search &raquo;</a>
 {% if user.is_authenticated %}
 {% else %}
 &nbsp;
-<a class="btn btn-lg btn-primary mr-3 float-right" 
+<a class="btn btn-lg btn-primary m-3" 
             href="{% url 'users:register' %}"
             role="button">Register &raquo;</a>
 {% endif %}
-</div>
+</div></div>
 {% endblock content %}

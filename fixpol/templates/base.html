@@ -37,11 +37,15 @@
 <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
 <ul class="navbar-nav text-right">
     <li class="nav-item">
-    <a class="nav-link" href="{% url 'fixpol:locations'%}">
+    <a class="nav-link" href="{% url 'fixpol:search' %}">
+               Search</a></li>
+
+    <li class="nav-item">
+    <a class="nav-link" href="{% url 'fixpol:locations' %}">
                Locations</a></li>
 
     <li class="nav-item">
-    <a class="nav-link" href="{% url 'fixpol:impacts'%}">
+    <a class="nav-link" href="{% url 'fixpol:impacts' %}">
                Impacts</a></li>
 
 {% if user.is_authenticated %}

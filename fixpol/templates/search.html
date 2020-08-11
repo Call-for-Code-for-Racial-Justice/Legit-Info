@@ -4,9 +4,6 @@
 Search legislation
 {% endblock page_header %}
 
-
-
-
 {% block content %}
 <div class="signin-register-search">
 
@@ -21,8 +18,10 @@ ul {
     <form action="{% url 'fixpol:search' %}" method='post'>
         {% csrf_token %}
         {{ form.as_p }}
-      <button id="submit" name="submit" class="btn btn-lg btn-success"
+    <div class="row mx-auto">
+      <button id="submit" name="submit" class="btn btn-lg btn-success mx-auto"
           value="1">Search Legislation</button>
+    </div>
     </form>
 </div>
 

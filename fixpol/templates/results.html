@@ -29,31 +29,32 @@
     </div>
 </div>
 
-<div class="btn-toolbar float-right d-print-none">
-    <a class="btn btn-lg btn-warning mr-3 mb-3" 
+<div class="btn-toolbar d-print-none">
+<div class="mx-auto">
+    <a class="btn btn-lg btn-warning m-3" 
             href="{% url 'fixpol:search' %}"
             role="button"> &laquo; Search Again</a>
 
 {% if numlaws > 0 %}
 
-    <button class="btn btn-lg btn-success mr-3 mb-3 float-right" 
+    <button class="btn btn-lg btn-success m-3" 
     onclick="javascript:window.print()" role="button">
     <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
     Print
     </button>
 
-    <a class="btn btn-lg btn-success float-right mr-3 mb-3" 
+    <a class="btn btn-lg btn-success float-right m-3" 
             href="{% url 'fixpol:download' search_id %}"
             role="button">Download CSV &raquo;</a>
 
     {% if user.is_authenticated %}
-    <a class="btn btn-lg btn-primary float-right mr-3 mb-3" 
+    <a class="btn btn-lg btn-primary float-right m-3" 
             href="{% url 'fixpol:sendmail' search_id %}"
             role="button">Send Results &raquo;</a>
     {% endif %}
 
 {% endif %}
-</div>
+</div></div>
 {% endblock content %}
 
 
