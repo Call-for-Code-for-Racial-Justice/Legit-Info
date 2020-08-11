@@ -36,8 +36,8 @@ urlpatterns = [
     # Page for sending saved search critera via email
     path('download/<int:search_id>/', views.download, name='download'),
 
-    # Page for saving or sharing results
-    path('share/', views.share, name='share'),
+    # Page for dumping curated laws into CSV file
+    path('lawdump/', views.lawdump, name='lawdump'),
 
     ]
 

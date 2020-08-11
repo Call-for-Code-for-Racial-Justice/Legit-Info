@@ -250,11 +250,7 @@ def sendmail(request, search_id):
                 'search_id': search_id}
     return render(request, 'email_sent.html', context)
 
-
-def share(request):
-    return render(request, 'share.html')
-
-   
+  
 def download(request, search_id):
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(content_type='text/csv')
@@ -262,9 +258,30 @@ def download(request, search_id):
     disp = 'attachment; filename="{}"'.format(basename)
     response['Content-Disposition'] = disp
     writer = csv.writer(response)
+
     with open(results_filename(search_id), newline="") as in_file:
         reader = csv.reader(in_file)
         for row in reader:
             writer.writerow(row)
     return response
+
+
+def lawdump(request):
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    basename = 'lawdump.csv'
+    disp = 'attachment; filename="{}"'.format(basename)
+    response['Content-Disposition'] = disp
+    writer = csv.writer(response)
+    writer.writerow(['key','location','impact','title','summary'])
+    for law in Law.objects.all():
+        writer.writerow([law.key, law.location.desc, law.impact.text, 
+                         law.title, law.summary])
+    return response
+
+
+
+
+
+
 
