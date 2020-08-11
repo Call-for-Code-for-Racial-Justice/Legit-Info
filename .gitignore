@@ -8,4 +8,7 @@ localdev-config.json
 server/localdev-config.json
 venv/
 
-
+# misc
+**/*DONOT_SAVE*.*
+**/*DONOT_SAVE*
+**/Thumbs.db

@@ -105,7 +105,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('POSTGRESQL_DATABASE', 'NOT_SET'),
+            'NAME': os.getenv('POSTGRESQL_DATABASE', 'fixpoldb'),
             'USER': os.getenv('POSTGRESQL_USER', 'NOT_SET'),
             'PASSWORD': os.getenv('POSTGRESQL_PASSWORD', 'NOT_SET'),
             'HOST': os.getenv('POSTGRESQL_HOSTNAME', 'localhost'),

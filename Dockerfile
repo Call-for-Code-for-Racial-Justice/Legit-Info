@@ -14,9 +14,28 @@ RUN pip3 install --upgrade pip \
   && pipenv install --system --deploy
 
 USER 1001
-
 COPY . /app
+
+USER root
+RUN mkdir -p /app/results && \
+  chmod ugo+w /app/results
+
+USER 1001
+ENV USE_SQLITE3="False"
+ENV POSTGRESQL_DATABASE="fixpoldb"
+ENV POSTGRESQL_USER="NOT_SET"
+ENV POSTGRESQL_PASSWORD="NOT_SET"
+ENV POSTGRESQL_HOSTNAME="host.docker.internal"
+ENV POSTGRESQL_PORT=5432
+
+
+ENV EMAIL_HOST="NOT_SET"
+ENV EMAIL_PORT="NOT_SET"
+ENV EMAIL_HOST_USER="NOT_SET"
+ENV EMAIL_HOST_PASSWORD="NOT_SET"
+
+
 
 EXPOSE 3000
 
-CMD ["gunicorn", "-b", "0.0.0.0:3000", "--env", "DJANGO_SETTINGS_MODULE=pythondjangoapp.settings.production", "pythondjangoapp.wsgi", "--timeout 120"]
+CMD ["gunicorn", "-b", "0.0.0.0:3000",  "cfc_project.wsgi", "--timeout 120"]

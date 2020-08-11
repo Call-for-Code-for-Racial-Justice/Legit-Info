@@ -9,7 +9,37 @@ if [[ -z "${IMAGE_NAME}" ]] || [[ -z "${IMAGE_VER}" ]]; then
    exit 1
 fi
 
-echo "Building ${IMAGE_NAME}:${IMAGE_VER}"
+if [[ -z "${POSTGRESQL_USER}" ]] || [[ -z "${POSTGRESQL_PASSWORD}" ]]; then
+   echo "Required input is missing"
+   echo "export POSTGRESQL_USER=<PostgreSQL DB User>"
+   echo "export POSTGRESQL_PASSWORD=<PostgreSQL DB Password>"
+   echo "return script"
+   exit 1
+fi
 
-docker run -d -p 3000:3000 --env PORT=3000 --env APP_ROOT='sandbox' ${IMAGE_NAME}:${IMAGE_VER}
+if [[ -z "${EMAIL_HOST}" ]] || [[ -z "${EMAIL_PORT}" ]]; then
+   echo "Required input is missing"
+   echo "export EMAIL_HOST=<Email SMTP Host>"
+   echo "export EMAIL_PORT=<Email SMTP Port>"
+   echo "return script"
+   exit 1
+fi
 
+if [[ -z "${EMAIL_HOST_USER}" ]] || [[ -z "${EMAIL_HOST_PASSWORD}" ]]; then
+   echo "Required input is missing"
+   echo "export EMAIL_HOST_USER=<Email Host user>"
+   echo "export EMAIL_HOST_PASSWORD=<Email Host user password>"
+   echo "return script"
+   exit 1
+fi
+
+echo "Running ${IMAGE_NAME}:${IMAGE_VER}"
+
+docker run -d -p 3000:3000 --env PORT=3000 --env APP_ROOT='sandbox' \
+ --env POSTGRESQL_USER=${POSTGRESQL_USER}  \
+ --env POSTGRESQL_PASSWORD=${POSTGRESQL_PASSWORD} \
+ --env EMAIL_HOST=${EMAIL_HOST} \
+ --env EMAIL_PORT=${EMAIL_PORT} \
+ --env EMAIL_HOST_USER=${EMAIL_HOST_USER} \
+ --env EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD} \
+ ${IMAGE_NAME}:${IMAGE_VER}
