@@ -25,12 +25,7 @@ spec:
             - secretRef:
                 name: smtp-mailtrap
             - secretRef:
-                name: fixpolsvc                          
-          env:
-             - name: POSTGRESQL_HOSTNAME
-               value: fixpolsvc
-             - name: POSTGRESQL_PORT
-               value: '5432'
+                name: db-fix-politics
           ports:
             - containerPort: 3000
               name: http
