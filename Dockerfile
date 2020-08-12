@@ -38,4 +38,4 @@ ENV EMAIL_HOST_PASSWORD="NOT_SET"
 
 EXPOSE 3000
 
-CMD ["gunicorn", "-b", "0.0.0.0:3000",  "cfc_project.wsgi", "--timeout 120"]
+CMD ["gunicorn", "-b", "0.0.0.0:3000",  "--env", "DJANGO_SETTINGS_MODULE=cfc_project.settings", "cfc_project.wsgi", "--timeout 120"]
