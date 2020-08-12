@@ -104,10 +104,10 @@ use_SQLite3 = os.getenv('USE_SQLITE3', 'True')
 if use_SQLite3 == 'True':
     print('**Using SQLite3**')
     DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-      }
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
 else:
     print('**Using PostgreSQL**')
@@ -122,15 +122,6 @@ else:
             'CHARSET': 'utf8'
         }
     }
-else:
-    DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-      }
-    }
-
-
 
 
 # Password validation
@@ -164,7 +155,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 
 # Static files (CSS, JavaScript, Images)
