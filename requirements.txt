@@ -23,8 +23,7 @@ pexpect==4.8.0; sys_platform != 'win32'
 pickleshare==0.7.5
 ply==3.11
 prompt-toolkit==3.0.6; python_full_version >= '3.6.1'
-psycopg2-binary==2.8.3
-psycopg2==2.8.3
+psycopg2-binary==2.8.5
 ptyprocess==0.6.0
 pygments==2.6.1; python_version >= '3.5'
 pytz==2020.1
