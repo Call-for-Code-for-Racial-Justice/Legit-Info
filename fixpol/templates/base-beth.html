@@ -1,0 +1,302 @@
+{% load bootstrap4 %}
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,
+       shrink-to-fit=no">
+<title>Fix Politics</title>
+
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-md mb-4">
+
+<a class="navbar-brand" href="{% url 'fixpol:index'%}">
+           Fix Politics</a>
+
+<button class="navbar-toggler" type="button" data-toggle="collapse"
+           data-target="#navbarCollapse" aria-controls="navbarCollapse"
+           aria-expanded="false" aria-label="Toggle navigation">
+         
+<span class="navbar-toggler-icon"></span></button>
+<div class="collapse navbar-collapse" id="navbarCollapse">
+<ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+    <a class="nav-link" href="{% url 'fixpol:locations'%}">
+               Locations</a></li>
+
+    <li class="nav-item">
+    <a class="nav-link" href="{% url 'fixpol:impacts'%}">
+               Impacts</a></li>
+    <li class="nav-item">
+    <a class="nav-link" href="{% url 'fixpol:search'%}">
+                Search</a></li>
+               
+</ul>
+
+<ul class="navbar-nav ml-auto">
+{% if user.is_authenticated %}
+<li class="nav-item">
+    <span class="navbar-text">Hello, <span class="users-name">{{ user.username }}.</span></span>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'users:profile' %}">Profile</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'users:logout' %}">Sign out</a>
+</li>
+{% else %}
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'users:register' %}">Register</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'users:login' %}">Sign in</a></li>
+{% endif %}
+</ul>
+</div>
+
+</nav>
+
+<main role="main" >
+<div class="pb-2 mb-2 border-bottom">
+       {% block page_header %}{% endblock page_header %}
+       </div>
+<div>
+       {% block content %}{% endblock content %}
+       </div>
+    </main>
+
+</body>
+
+</html>
+
+<style type="text/css">
+    body {
+        margin: 0;
+        background-color: #fff;
+    }
+    .navbar {
+        overflow: hidden;
+        background-color: #6F2F2C;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-variant: small-caps;
+    }
+    .navbar a {
+        float: left;
+        display: block;
+        color: #ffffff;
+        text-align: center;
+        padding: 15px 18px;
+        text-decoration: none;
+        font-size: 18px;
+    }
+    .navbar-text {
+        float: left;
+        display: block;
+        color: #ffffff;
+        text-align: center;
+        padding: 15px 18px;
+        text-decoration: none;
+        background-color: #6F2F2C;
+        font-size: 18px;
+    }
+    .users-name {
+        font-style: italic;
+    }
+    .navbar a:hover {
+        color: #eeeeee;
+        background-color: #6F2F2C;
+    }
+    .page-header-title {
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        text-align: center;
+        font-size: 100px;
+        padding-bottom: 2%;
+        font-variant: small-caps;
+        color: #fff;
+    }
+    .title-banner-home{
+        background-color: #7B312D;
+        top: 0;
+        width: 100%;
+        margin-top: 73px;
+        overflow: scroll;
+        position: absolute;
+        align-items: center;
+    }
+    .title-banner-content {
+        padding-top: 300px;
+        padding-left: 25%;
+        padding-right: 25%;
+        padding-bottom: 2.5%;
+        color: #fff;
+        font-size: 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+    }
+    .register-button {
+        width: 200px;
+        height: 50px;
+        margin: auto;
+        background-color: #2F8E92;
+        overflow: hidden;
+        position: relative;
+        text-align: center;
+        top: 700px;
+        left: 50%;
+        margin-left: -100px;
+        border-radius: 10px;
+    }
+    .button-link {
+        color: #fff;
+        font-size: 30px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-variant: small-caps;
+    }
+    .button-link:hover {
+        color: #eeeeee;
+        background-color: #2F8E92;
+        text-decoration: none;
+        
+    }
+    .title-banner-standard {
+        background-color: #7B312D;
+        top: 0;
+        width: 100%;
+        margin-top: 73px;
+        padding-top: 150px;
+        overflow: hidden;
+        position: absolute;
+    }
+    .page-content-standard {
+        padding-top: 400px;
+        padding-bottom: 2.5%;
+        color: #6F2F2C;
+        font-size: 20px;
+        width: 500px;
+        position: absolute;
+        overflow: hidden;
+        left: 50%;
+        margin-left: -250px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-align: center;
+    }
+    ul {
+        list-style: none;
+        
+    }
+    li:hover {
+        background-color: #eeeeee;
+    }
+    .signin-register-search {
+        padding-top: 400px;
+        left: 50%;
+        width: 700px;
+        margin-left: -350px;
+        position: relative;
+        color: #6F2F2C;
+        
+    }
+    .signin-register-search li:hover {
+        background-color: #fff;
+    }
+    .button-submit {
+        background-color: #2F8E92;
+        height: 50px;
+        border: none;
+        width: 150px;
+        color: #fff;
+        border-radius: 10px;
+    }
+    .button-submit:hover {
+        color: #eeeeee;
+    }
+    .button-cancel {
+        background-color: #7B312D;
+        height: 50px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        width: 150px;
+        padding-left: 50px;
+        padding-right: 50px;
+        color: #fff;
+        border-radius: 10px;
+    }
+    .button-cancel:hover {
+        text-decoration: none;
+        color: #eeeeee;
+    }
+    .signed-out {
+        color: #6F2F2C;
+        padding-top: 250px;
+        text-align: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 30px;
+    }
+    .profile-details {
+        color: #6F2F2C;
+        padding-top: 400px;
+        width: 500px;
+        position: relative;
+        margin-left: -250px;
+        left: 50%;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 20px;
+    }
+    .profile-details li:hover {
+        background-color: #fff;
+    }
+    .small-header-title {
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        text-align: center;
+        font-size: 50px;
+        padding-bottom: 2%;
+        font-variant: small-caps;
+        color: #fff;
+    }
+    .update-profile-button {
+        width: 200px;
+        height: 50px;
+        margin: auto;
+        background-color: #7B312D;
+        overflow: hidden;
+        position: relative;
+        text-align: center;
+        top: 100px;
+        left: 50%;
+        margin-left: -100px;
+        border-radius: 10px;
+        padding-top: 10px;
+        font-size: 20px;
+    }
+    .update-profile-button a {
+        color: #fff;
+        font-variant: small-caps;
+    }
+    .update-profile-button a:hover {
+        color: #eee;
+        text-decoration: none;
+    }
+    .button-submit-update {
+        position: relative;
+        left: 50%;
+        margin-left: -75px;
+    }
+    .results {
+        width: 90%;
+        padding-top: 200px;
+        padding-left: 30px;
+        padding-right: 30px;
+        text-align: left;
+        position: relative;
+        color: #6F2F2C;
+    }
+</style>

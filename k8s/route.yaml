@@ -1,0 +1,14 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: fix-politics-app
+  labels:
+    app: fix-politics-app
+spec:
+  to:
+    kind: Service
+    name: fix-politics-app
+    weight: 100
+  port:
+    targetPort: http
+

@@ -1,0 +1,10 @@
+Dear {{ request.user.first_name }},
+Here is the list of legislation you requested.
+
+{% for law in laws_found %}
+{{ law.key|safe }} Location:{{ law.location|safe }} Impact:{{ law.impact|safe }} 
+TITLE: {{ law.title|safe }}
+SUMMARY: {{ law.summary|safe }} 
+
+{% endfor %} 
+

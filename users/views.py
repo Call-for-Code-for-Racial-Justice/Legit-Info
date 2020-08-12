@@ -4,7 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.contrib.auth.forms import UserCreationForm
 from .forms import UserForm, ProfileForm
+from django.contrib.auth.models import User
 from .models import Profile
+from fixpol.models import Criteria
 
 # Create your views here.
 
@@ -44,16 +46,22 @@ def show_profile(request):
 @login_required
 @transaction.atomic
 def update_profile(request):
-    if request.method == 'POST':
+
+    if request.method != 'POST':
+        user_form = UserForm(instance=request.user)
+        profile_form = ProfileForm(instance=request.user.profile)
+
+    else:
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = ProfileForm(request.POST, instance=request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            # import pdb; pdb.set_trace() # DEBUG
+            user = request.user
+            user.profile.set_criteria()
             return redirect('fixpol:index')
-    else:
-        user_form = UserForm(instance=request.user)
-        profile_form = ProfileForm(instance=request.user.profile)
+
 
     context = { 'user_form': user_form,
                 'profile_form': profile_form}

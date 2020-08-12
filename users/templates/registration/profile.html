@@ -1,20 +1,35 @@
 {% extends "base.html" %}
 
+
+{% block page_header %}
+Profile
+{% endblock page_header %}
+
+
+
 {% block content %}
+</div>
 
-<h2>{{ user.get_full_name }}</h2>
-<ul>
-  <li>Username: {{ user.username }}</li>
-  <li>Location: {{ location }}</li>
-  <li>Impacts selected:</li>
-<ol>
-{% for impact in impacts %}
-    <li>{{ impact }}</li>
-    {% empty %}
-    <li>There are no impacts for this profile.</li>
-{% endfor %}
-</ol>
+<div class="profile-details">
 
-</ul>
+  <h2>{{ user.get_full_name }}</h2>
+  <ul>
+    <li>Username: {{ user.username }}</li>
+    <li>Location: {{ location }}</li>
+    <li>Impacts selected:</li>
+  <ol>
+  {% for impact in impacts %}
+      <li>{{ impact }}</li>
+      {% empty %}
+      <li>There are no impacts for this profile.</li>
+  {% endfor %}
+  </ol>
+
+  </ul>
+
+        <a class="btn btn-lg btn-primary" id="cancel" name="cancel" 
+            href="{% url 'users:update' %}"
+           role="button">Update Profile &raquo;</a>
+
 
 {% endblock content %}

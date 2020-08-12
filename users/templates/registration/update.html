@@ -1,12 +1,30 @@
 {% extends "base.html" %}
 
-{% block content %}
 
-<form method="post">
-  {% csrf_token %}
-  {{ user_form.as_p }}
-  {{ profile_form.as_p }}
-  <button type="submit">Save changes</button>
-</form>
+{% block page_header %}
+Update Profile
+{% endblock page_header %}
+
+
+{% block content %}
+<style>
+ul {
+    list-style-type: none;
+}
+</style>
+
+<div class="profile-details">
+
+  <form method="post">
+    {% csrf_token %}
+    {{ user_form.as_p }}
+    {{ profile_form.as_p }}
+    <div class="row mx-auto">
+      <button id="submit" name="submit" class="btn btn-lg btn-success"
+          value="1">Save changes</button>
+    </div>
+  </form>
+
+</div>
 
 {% endblock content %}

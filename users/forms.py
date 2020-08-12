@@ -13,4 +13,14 @@ class ProfileForm(forms.ModelForm):
         model = Profile
         fields = ('location', 'impacts')
 
+    location = forms.ModelChoiceField(
+                queryset = Location.objects.all(),
+                empty_label='Please select a location'
+                )
+
+    impacts = forms.ModelMultipleChoiceField(
+                       widget = forms.CheckboxSelectMultiple,
+                       queryset = Impact.objects.all()
+                       )
+
 

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<p>{{ status_message }}<p>
+
+<ul>
+{% for recipient in recipients %}
+<li>{{ recipient }}</li>
+{% endfor %}
+</ul>
+
+<a class="btn btn-lg btn-success" 
+            href="{% url 'fixpol:results' search_id %}"
+            role="button"> &laquo; Return to Results Page</a>
+
+{% endblock content %}

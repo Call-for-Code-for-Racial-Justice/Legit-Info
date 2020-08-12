@@ -1,15 +1,22 @@
 {% extends "base.html" %}
 
+{% block page_header %}
+<h5>Locations</h5>
+{% endblock page_header %}
+
+
 {% block content %}
 
-<p>Locations</p>
 
-<ul>
-{% for location in locations %}
- <li>{{ location }}</li>
- {% empty %}
- <li>No locations have been added yet.</li>
- {% endfor %}
-</ul>
+    <div class="page-content-standard">
+        <ul>
+        {% for location in locations %}
+        <li>{{ location }}</li>
+        {% empty %}
+        <li>No locations have been added yet.</li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
 
 {% endblock content %}

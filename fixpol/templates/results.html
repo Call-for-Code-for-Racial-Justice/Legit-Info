@@ -1,17 +1,62 @@
 {% extends "base.html" %}
 
-
 {% block page_header %}
-Results
+<div class="d-none d-print-block">
+<h1>Fix Politics</h1>
+</div>
+
+<h4>Search Results for {{ gen_date }}</h4>
 {% endblock page_header %}
 
+
 {% block content %}
+<!--
+<p>Search Criteria: {{ heading|safe }}</p>
+-->
 
-<p>Searching Location: {{ location }}</p>
-<p>Impact: {{ impact }}</p>
+<div class="results">
+  
+    <div class="page-content-standard">
+        <dl>
+        {% for law in laws %}
+        <dt>{{ law.title }}  
+        [{{ law.key }} | {{ law.location.desc }} | {{ law.impact.text }}]</dt>
+        <dd><p>{{ law.summary }}</p></dt>
+        {% empty %}
+        <p>No legislation found.</p>
+        {% endfor %}
+        </dl>
+    </div>
+</div>
 
-<p>put results here</p>
+<div class="btn-toolbar d-print-none">
+<div class="mx-auto">
+    <a class="btn btn-lg btn-warning m-3" 
+            href="{% url 'fixpol:search' %}"
+            role="button"> &laquo; Search Again</a>
 
+{% if numlaws > 0 %}
+
+    <button class="btn btn-lg btn-success m-3" 
+    onclick="javascript:window.print()" role="button">
+    <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
+    Print
+    </button>
+
+    <a class="btn btn-lg btn-success float-right m-3" 
+            href="{% url 'fixpol:download' search_id %}"
+            role="button">Download CSV &raquo;</a>
+
+{{ settings.EMAIL_HOST }}
+
+    {% if user.is_authenticated %}
+    <a class="btn btn-lg btn-primary float-right m-3" 
+            href="{% url 'fixpol:sendmail' search_id %}"
+            role="button">Send Results &raquo;</a>
+    {% endif %}
+
+{% endif %}
+</div></div>
 {% endblock content %}
 
 

@@ -1,15 +1,34 @@
 {% extends "base.html" %}
 
+{% block page_header %}
+Search legislation
+{% endblock page_header %}
+
 {% block content %}
+<div class="signin-register-search">
 
-<form method="POST">
-<form action="{% url 'user:results' loc_id impact_id %}" method='post'>
-    {% csrf_token %}
-    {{form.as_p}}
+    <p>Select your location and the impacts are you are concerned about:</p>
 
-  <button type="submit">Search</button>
-</form>
+<style>
+ul {
+    list-style-type: none;
+}
+</style>
 
-</form>
+    <form action="{% url 'fixpol:search' %}" method='post'>
+        {% csrf_token %}
+        {{ form.as_p }}
+    <div class="row mx-auto">
+      <button id="submit" name="submit" class="btn btn-lg btn-success mx-auto"
+          value="1">Search Legislation</button>
+    </div>
+    </form>
+</div>
 
 {% endblock content %}
+
+
+
+
+
+

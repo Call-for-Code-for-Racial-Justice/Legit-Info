@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-python manage.py runserver localhost:2000
+USE_SQLITE3='True' python manage.py runserver localhost:3000

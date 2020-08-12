@@ -1,0 +1,9 @@
+Fix Politics -- Search Results -- {{ gen_date }}
+
+{% for law in laws %}
+{{ law.title }}  [{{ law.key }} | {{ law.location.desc }} | {{ law.impact.text }}]
+{{ law.summary }}
+{% empty %}
+No legislation found.
+{% endfor %}
+

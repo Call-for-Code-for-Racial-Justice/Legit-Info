@@ -1,15 +1,19 @@
 {% extends "base.html" %}
 
+{% block page_header %}
+<h5>Impacts</h5>
+{% endblock page_header %}
+
 {% block content %}
 
-<p>Impact areas</p>
-
-<ul>
-{% for impact in impacts %}
- <li>{{ impact }}</li>
- {% empty %}
- <li>No impacts have been added yet.</li>
- {% endfor %}
-</ul>
+<div class="page-content-standard">
+    <ul>
+    {% for impact in impacts %}
+    <li>{{ impact }}</li>
+    {% empty %}
+    <li>No impacts have been added yet.</li>
+    {% endfor %}
+    </ul>
+</div>
 
 {% endblock content %}

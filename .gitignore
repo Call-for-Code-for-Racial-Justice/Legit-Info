@@ -7,4 +7,10 @@ credentials.json
 localdev-config.json
 server/localdev-config.json
 venv/
+secret-smtp-mailtrap.env
 
+# misc
+**/*DONOT_SAVE*.*
+**/*DONOT_SAVE*
+**/Thumbs.db
+secret-db-fix-politics.env
