@@ -100,15 +100,26 @@ WSGI_APPLICATION = 'cfc_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-if 'FIXADMIN_PASSWORD' in os.environ:
+use_SQLite3 = os.getenv('USE_SQLITE3', 'True')
+if use_SQLite3 == 'True':
+    print('**Using SQLite3**')
+    DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+      }
+    }
+else:
+    print('**Using PostgreSQL**')
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'fixdb',
-            'USER': 'fixadmin',
-            'PASSWORD': os.environ['FIXADMIN_PASSWORD'],
-            'HOST': 'mariadb',
-            'PORT': '3306',
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('POSTGRESQL_DATABASE', 'fixpoldb'),
+            'USER': os.getenv('POSTGRESQL_USER', 'NOT_SET'),
+            'PASSWORD': os.getenv('POSTGRESQL_PASSWORD', 'NOT_SET'),
+            'HOST': os.getenv('POSTGRESQL_HOSTNAME', 'localhost'),
+            'PORT': os.getenv('POSTGRESQL_PORT', '5432'),
+            'CHARSET': 'utf8'
         }
     }
 else:

@@ -39,6 +39,9 @@ urlpatterns = [
     # Page for dumping curated laws into CSV file
     path('lawdump/', views.lawdump, name='lawdump'),
 
+    # health endpoint
+    path('health', views.health, name='health'),
+
     ]
 
 

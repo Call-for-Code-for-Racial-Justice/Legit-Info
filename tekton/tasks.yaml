@@ -1,0 +1,55 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: apply-manifests
+spec:
+  inputs:
+    resources:
+      - {type: git, name: source}
+    params:
+      - name: manifest_dir
+        description: The directory in source that contains yaml manifests
+        type: string
+        default: "k8s"
+  steps:
+    - name: apply
+      image: quay.io/openshift/origin-cli:latest
+      workingDir: /workspace/source
+      command: ["/bin/bash", "-c"]
+      args:
+        - |-
+          echo Applying manifests in $(inputs.params.manifest_dir) directory
+          oc apply -f $(inputs.params.manifest_dir)
+          echo -----------------------------------
+---
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: update-deployment
+spec:
+  inputs:
+    resources:
+      - {type: image, name: image}
+    params:
+      - name: deployment
+        description: The name of the deployment patch the image
+        type: string
+  steps:
+    - name: patch
+      image: quay.io/openshift/origin-cli:latest
+      command: ["/bin/bash", "-c"]
+      args:
+        - |-
+          oc patch deployment $(inputs.params.deployment) --patch "{\"spec\":
+            {\"template\": {
+              \"metadata\": { 
+                \"labels\": { \"redeploy\": \"$(date +%s)\" }
+              },
+              \"spec\": {
+                \"containers\": [{
+                  \"name\": \"$(inputs.params.deployment)\",
+                  \"image\": \"$(inputs.resources.image.url)\"
+                }]
+              }
+            }}
+          }"          

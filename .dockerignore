@@ -1,2 +1,19 @@
 Dockerfile
 Dockerfile-tools
+k8s
+.vscode
+.github
+.git
+.idea
+tekton
+.cfignore
+.gitignore
+build-docker
+DONOT_SAVE_git_secret.yaml
+TEMPLATE_GIT_SECRET.yaml
+secret
+
+# misc
+**/*DONOT_SAVE*.*
+**/*DONOT_SAVE*
+**/Thumbs.db
