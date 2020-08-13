@@ -23,13 +23,9 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 RESULTSDIR = 'results'
 
-# Create your views here.
-
-def criteria(request, search_id):
-    """Show search criteria."""
-    criteria = Criteria.objects.get(id=search_id)
-    context = {'criteria': criteria}
-    return render(request, 'criteria.html', context)
+#########################
+# Support functions here
+#########################
 
 def cte_query(loc):
     loc_list = [loc]
@@ -43,26 +39,6 @@ def cte_query(loc):
         else:
             break
     return loc_list
-
-def impacts(request):
-    """Show all impacts."""
-    impacts = Impact.objects.order_by('date_added')
-    context = {'impacts': impacts}
-    return render(request, 'impacts.html', context)
-
-
-def index(request):
-    """The home page for Fix Politics."""
-    
-    return render(request, 'index.html')
-
-
-def locations(request):
-    """Show all locations."""
-    locations = Location.objects.order_by('hierarchy')
-    locations = locations.exclude(shortname='world')
-    context = {'locations': locations}
-    return render(request, 'locations.html', context)
 
 
 def make_csv(search_id, laws):
@@ -85,6 +61,7 @@ def make_csv(search_id, laws):
     return None
 
 
+
 def results_basename(search_id):
     basename = 'fixpol-results-{}.csv'.format(search_id)   
     return basename    
@@ -93,7 +70,59 @@ def results_basename(search_id):
 def results_filename(search_id):
     basename = results_basename(search_id)
     filename = os.path.join(settings.MEDIA_ROOT, basename) 
-    return filename       
+    return filename      
+
+#########################
+# Create your views here.
+#########################
+
+def criteria(request, search_id):
+    """Show search criteria."""
+    criteria = Criteria.objects.get(id=search_id)
+    context = {'criteria': criteria}
+    return render(request, 'criteria.html', context)
+
+
+
+def download(request, search_id):
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    basename = results_basename(search_id)
+    disp = 'attachment; filename="{}"'.format(basename)
+    response['Content-Disposition'] = disp
+    writer = csv.writer(response)
+
+    with open(results_filename(search_id), newline="") as in_file:
+        reader = csv.reader(in_file)
+        for row in reader:
+            writer.writerow(row)
+    return response
+
+
+def health(request):
+    state = {"status": "UP"}
+    return JsonResponse(state)
+
+
+def impacts(request):
+    """Show all impacts."""
+    impacts = Impact.objects.order_by('date_added')
+    context = {'impacts': impacts}
+    return render(request, 'impacts.html', context)
+
+
+def index(request):
+    """The home page for Fix Politics."""
+    return render(request, 'index.html')
+
+
+def locations(request):
+    """Show all locations."""
+    locations = Location.objects.order_by('hierarchy')
+    locations = locations.exclude(shortname='world')
+    context = {'locations': locations}
+    return render(request, 'locations.html', context)
+
 
 def search(request):
     """Show search form to specify criteria."""
@@ -114,11 +143,11 @@ def search(request):
         if form.is_valid():
             criteria = form.save()
             crit_text = criteria.set_text()
-            crit_id = find_criteria_id(crit_text)
-            print(crit_id, crit_text)
-            if crit_id == 0:
-                criteria.save()
-                crit_id = criteria.id
+            #crit_id = find_criteria_id(crit_text)
+            #print(crit_id, crit_text)
+            #if crit_id == 0:
+            criteria.save()
+            crit_id = criteria.id
             return redirect('fixpol:results', search_id=crit_id)
 
     context = { 'form': form }
@@ -153,17 +182,6 @@ def results(request, search_id):
     make_csv(search_id, laws)
     return render(request, 'results.html', context)
 
-
-
-
-
-def zero_if_none(item):
-    """If item exists, return id, otherwise return 0."""
-    result_id = 0
-    #import pdb; pdb.set_trace()
-    if item:
-        result_id = item.id
-    return result_id
 
 # @staff_member_required
 def criterias(request):
@@ -261,21 +279,10 @@ def sendmail(request, search_id):
     return render(request, 'email_sent.html', context)
 
   
-def download(request, search_id):
-    # Create the HttpResponse object with the appropriate CSV header.
-    response = HttpResponse(content_type='text/csv')
-    basename = results_basename(search_id)
-    disp = 'attachment; filename="{}"'.format(basename)
-    response['Content-Disposition'] = disp
-    writer = csv.writer(response)
-
-    with open(results_filename(search_id), newline="") as in_file:
-        reader = csv.reader(in_file)
-        for row in reader:
-            writer.writerow(row)
-    return response
 
 
+
+# @staff_member_required
 def lawdump(request):
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(content_type='text/csv')
@@ -290,7 +297,11 @@ def lawdump(request):
     return response
 
 
-def health(request):
-    state = {"status": "UP"}
-    return JsonResponse(state)
 
+def zero_if_none(item):
+    """If item exists, return id, otherwise return 0."""
+    result_id = 0
+    #import pdb; pdb.set_trace()
+    if item:
+        result_id = item.id
+    return result_id

@@ -66,7 +66,7 @@ class Criteria(models.Model):
         app_label = 'fixpol'
         verbose_name_plural = "criteria"  # plural of criteria
 
-    text = models.CharField(max_length=200, unique=True, null=True, blank=True)
+    text = models.CharField(max_length=200, null=True, blank=True)
 
     location = models.ForeignKey('fixpol.Location', null=True,
         related_name='criteria', on_delete=models.CASCADE)
