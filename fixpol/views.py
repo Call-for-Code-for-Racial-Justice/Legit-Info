@@ -13,6 +13,7 @@ from django.core.mail import send_mail, EmailMessage
 from django.template.loader import render_to_string
 from datetime import datetime
 from django.conf import settings
+from django.contrib.admin.views.decorators import staff_member_required
 
 # Debugging options
 # return HttpResponse({variable to inspect})
@@ -23,6 +24,33 @@ from django.conf import settings
 RESULTSDIR = 'results'
 
 # Create your views here.
+
+def criteria(request, search_id):
+    """Show search criteria."""
+    criteria = Criteria.objects.get(id=search_id)
+    context = {'criteria': criteria}
+    return render(request, 'criteria.html', context)
+
+def cte_query(loc):
+    loc_list = [loc]
+    base = loc.hierarchy
+    for n in range(10):
+        loc = loc.parent
+        if loc:
+            loc_list.append(loc)
+            if loc.shortname == 'world':
+                break
+        else:
+            break
+    return loc_list
+
+def impacts(request):
+    """Show all impacts."""
+    impacts = Impact.objects.order_by('date_added')
+    context = {'impacts': impacts}
+    return render(request, 'impacts.html', context)
+
+
 def index(request):
     """The home page for Fix Politics."""
     
@@ -37,12 +65,35 @@ def locations(request):
     return render(request, 'locations.html', context)
 
 
-def impacts(request):
-    """Show all impacts."""
-    impacts = Impact.objects.order_by('date_added')
-    context = {'impacts': impacts}
-    return render(request, 'impacts.html', context)
+def make_csv(search_id, laws):
+    laws_table = []
+    for law in laws:
+        laws_table.append({'key': law.key,
+                        'location': law.location.desc, 
+                        'impact': law.impact.text, 
+                        'title': law.title, 
+                        'summary': law.summary})
 
+    filename = results_filename(search_id)       
+    with open(filename, 'w', newline='') as csvfile:
+        fieldnames = ['key', 'location', 'impact', 'title', 'summary']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+        writer.writeheader()
+        for law in laws_table:
+            writer.writerow(law)
+    return None
+
+
+def results_basename(search_id):
+    basename = 'fixpol-results-{}.csv'.format(search_id)   
+    return basename    
+
+
+def results_filename(search_id):
+    basename = results_basename(search_id)
+    filename = os.path.join(settings.MEDIA_ROOT, basename) 
+    return filename       
 
 def search(request):
     """Show search form to specify criteria."""
@@ -73,49 +124,10 @@ def search(request):
     context = { 'form': form }
     return render(request, 'search.html', context)
 
-def results_basename(search_id):
-    basename = 'fixpol-results-{}.csv'.format(search_id)   
-    return basename    
 
 
-def results_filename(search_id):
-    basename = results_basename(search_id)
-    filename = os.path.join(settings.MEDIA_ROOT, basename) 
-    return filename       
 
 
-def make_csv(search_id, laws):
-    laws_table = []
-    for law in laws:
-        laws_table.append({'key': law.key,
-                        'location': law.location.desc, 
-                        'impact': law.impact.text, 
-                        'title': law.title, 
-                        'summary': law.summary})
-
-    filename = results_filename(search_id)       
-    with open(filename, 'w', newline='') as csvfile:
-        fieldnames = ['key', 'location', 'impact', 'title', 'summary']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
-        writer.writeheader()
-        for law in laws_table:
-            writer.writerow(law)
-    return None
-
-
-def cte_query(loc):
-    loc_list = [loc]
-    base = loc.hierarchy
-    for n in range(10):
-        loc = loc.parent
-        if loc:
-            loc_list.append(loc)
-            if loc.shortname == 'world':
-                break
-        else:
-            break
-    return loc_list
 
 
 def results(request, search_id):
@@ -142,11 +154,7 @@ def results(request, search_id):
     return render(request, 'results.html', context)
 
 
-def criteria(request, search_id):
-    """Show search criteria."""
-    criteria = Criteria.objects.get(id=search_id)
-    context = {'criteria': criteria}
-    return render(request, 'criteria.html', context)
+
 
 
 def zero_if_none(item):
@@ -157,7 +165,7 @@ def zero_if_none(item):
         result_id = item.id
     return result_id
 
-
+# @staff_member_required
 def criterias(request):
     """Show all saved search criterias."""
     
@@ -228,7 +236,8 @@ def sendmail(request, search_id):
     
     
     if settings.EMAIL_HOST:
-        context = {'laws_found': laws_found}
+        context = {'laws_found': laws_found,
+                    'gen_date': gen_date }
         text_version = render_to_string(
                 template_name='email-results.txt', 
                 context=context, request=request)

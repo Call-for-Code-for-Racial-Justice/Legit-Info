@@ -52,6 +52,13 @@
 <li class="nav-item">
 <span class="nav-link active">Hello, {{ user.username }}.</span>
 </li>
+
+{% if user.is_active and user.is_staff %}
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+</li>
+{% endif %}
+
 <li class="nav-item">
     <a class="nav-link" href="{% url 'users:profile' %}">Profile</a>
 </li>
