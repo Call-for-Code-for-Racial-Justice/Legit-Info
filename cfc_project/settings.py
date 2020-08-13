@@ -22,10 +22,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'results')
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-if 'SECRET_KEY' in os.environ:
-    SECRET_KEY = os.environ['SECRET_KEY']
-else:
-    SECRET_KEY = 'ry()%j23$u$c7q$m2o0vo1w(u^eut8b3c0ylpy+)((6f7j08a4'
+SECRET_KEY = os.environ.get('SECRET_KEY', 
+            'ry()%j23$u$c7q$m2o0vo1w(u^eut8b3c0ylpy+)((6f7j08a4')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -85,16 +83,10 @@ TEMPLATES = [
     },
 ]
 
-if 'EMAIL_HOST' in os.environ:
-    EMAIL_HOST = os.environ['EMAIL_HOST']
-    EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
-    EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
-    EMAIL_PORT = os.environ['EMAIL_PORT']
-else:
-    EMAIL_HOST = ''
-    EMAIL_HOST_USER = ''
-    EMAIL_HOST_PASSWORD = ''
-    EMAIL_PORT = ''
+EMAIL_HOST = os.environ.get('EMAIL_HOST', '')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_PORT = os.environ.get('EMAIL_PORT', '')
 
 WSGI_APPLICATION = 'cfc_project.wsgi.application'
 
@@ -115,11 +107,11 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('POSTGRESQL_DATABASE', 'fixpoldb'),
-            'USER': os.getenv('POSTGRESQL_USER', 'NOT_SET'),
-            'PASSWORD': os.getenv('POSTGRESQL_PASSWORD', 'NOT_SET'),
-            'HOST': os.getenv('POSTGRESQL_HOSTNAME', 'localhost'),
-            'PORT': os.getenv('POSTGRESQL_PORT', '5432'),
+            'NAME': os.environ.get('POSTGRESQL_DATABASE', 'fixpoldb'),
+            'USER': os.environ.get('POSTGRESQL_USER', 'NOT_SET'),
+            'PASSWORD': os.environ.get('POSTGRESQL_PASSWORD', 'NOT_SET'),
+            'HOST': os.environ.get('POSTGRESQL_HOSTNAME', 'localhost'),
+            'PORT': os.environ.get('POSTGRESQL_PORT', '5432'),
             'CHARSET': 'utf8'
         }
     }

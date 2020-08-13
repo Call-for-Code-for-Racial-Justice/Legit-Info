@@ -31,8 +31,8 @@ def index(request):
 
 def locations(request):
     """Show all locations."""
-    locations = Location.objects.order_by('date_added')
-    locations = locations.exclude(desc='world')
+    locations = Location.objects.order_by('hierarchy')
+    locations = locations.exclude(shortname='world')
     context = {'locations': locations}
     return render(request, 'locations.html', context)
 

@@ -17,6 +17,7 @@ class Location(models.Model):
 
     class Meta:
         app_label = 'fixpol'
+        ordering = ['hierarchy']
 
     desc = models.CharField(max_length=80)
     shortname = models.CharField(max_length=20)
@@ -28,7 +29,7 @@ class Location(models.Model):
 
     def __str__(self):
         """Return a string representation of the model."""
-        return self.desc
+        return self.hierarchy + " - " + self.desc
 
 class Impact(models.Model):
     """A location helps filter which legislation to look at."""

@@ -11,7 +11,7 @@
     <div class="page-content-standard">
         <ul>
         {% for location in locations %}
-        <li>{{ location }}</li>
+        <li>{{ location.desc }}</li>
         {% empty %}
         <li>No locations have been added yet.</li>
         {% endfor %}
