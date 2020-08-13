@@ -5,6 +5,9 @@ from django.dispatch import receiver
 
 from datetime import datetime
 
+LEFT_CORNER = u"\u2514\u2500\u2002"
+LEFT_PAD = u"\u2002\u2002\u2002\u2002"
+
 # default to 1 day from now
 def get_default_law_key():
     x = str(datetime.now())
@@ -27,9 +30,20 @@ class Location(models.Model):
             related_name='locations', on_delete=models.PROTECT)
     date_added = models.DateTimeField(auto_now_add=True)
 
+    def padding(self):
+        """Return a string representation of the model."""
+        level = self.hierarchy.count(".")
+        padding = ''
+        if level > 1:
+            padding = LEFT_PAD*(level-2) + LEFT_CORNER
+        return padding
+
+
     def __str__(self):
         """Return a string representation of the model."""
-        return self.hierarchy + " - " + self.desc
+        loc_string = self.padding() + self.desc
+        return loc_string
+
 
 class Impact(models.Model):
     """A location helps filter which legislation to look at."""

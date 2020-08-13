@@ -244,7 +244,7 @@ def sendmail(request, search_id):
         else:
             status_message = 'ERROR: Unable to deliver email' 
     else:
-        status_message = 'ERROR: EMAIL_HOST envionment variable not defined'
+        status_message = 'ERROR: EMAIL_HOST environment variable not defined'
 
     context = { 'status_message': status_message,
                 'recipients': recipients, 
