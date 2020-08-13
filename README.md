@@ -1,118 +1,128 @@
-<p align="center">
-    <a href="https://cloud.ibm.com">
-        <img src="https://my1.digitalexperience.ibm.com/8304c341-f896-4e04-add0-0a9ae02473ba/dxdam/2d/2d559197-6763-4e47-a2cb-8f54c449ff26/ibm-cloud.svg" height="100" alt="IBM Cloud">
-    </a>
-</p>
+# Emb(race): Policy and Legislation Reform
 
+Technology has the power to drive action. And right now, a call to action is
+needed to eradicate racism. **Black lives matter.**
 
-<p align="center">
-    <a href="https://cloud.ibm.com">
-    <img src="https://img.shields.io/badge/IBM%20Cloud-powered-blue.svg" alt="IBM Cloud">
-    </a>
-    <img src="https://img.shields.io/badge/platform-django-lightgrey.svg?style=flat" alt="platform">
-    <img src="https://img.shields.io/badge/license-Apache2-blue.svg?style=flat" alt="Apache 2">
-</p>
+We recognize technology alone cannot fix hundreds of years of racial injustice
+and inequality, but when we put it in the hands of the Black community and
+their supporters, technology can begin to bridge a gap. To start a dialogue.
+To identify areas where technology can help pave a road to progress.
 
+This project is an effort to utilize technology to analyze, inform, and
+develop policy to reform the workplace, products, public safety, and
+legislation.
 
-# Create and deploy a Python Django application
+This is one of three open source projects underway as part of the [Call for 
+Code Emb(race) Spot Challenge](https://github.com/topics/embrace-call-for-code) 
+led by contributors from IBM and Red Hat.
 
-> We have applications available for [Node.js Express](https://github.com/IBM/node-express-app), [Go Gin](https://github.com/IBM/go-gin-app), [Python Flask](https://github.com/IBM/python-flask-app), [Python Django](https://github.com/IBM/python-django-app), [Java Spring](https://github.com/IBM/java-spring-app), [Java Liberty](https://github.com/IBM/java-liberty-app), [Swift Kitura](https://github.com/IBM/swift-kitura-app), [Android](https://github.com/IBM/android-app), and [iOS](https://github.com/IBM/ios-app).
+## Problem statement
 
-In this sample application, you will create a web application using Django to serve web pages in Python, complete with standard best practices, including a health check.
+Concerned and impacted citizens don't have a straightforward way of knowing
+what or how policies and regulations impact them or what they can do in
+response.
 
-This app contains an opinionated set of files for web serving:
+### Hills (who, what, and wow)
 
-- `app/templates/index.html`
-- `staticfiles/js/bundle.js`
-- `staticfiles/css/default.css`
+1. Citizens are aware of policy that is being considered that is highly
+impactful to them, without needing to follow every vote.
 
-## Steps
+2. Citizens are able to understand the specific impact of proposed policy on
+them without being a legal expert.
 
-You can [deploy this application to IBM Cloud](https://cloud.ibm.com/developer/appservice/starter-kits/python-django-app) or [build it locally](#building-locally) by cloning this repo first. Once your app is live, you can access the `/health` endpoint to build out your cloud native application.
+3. Citizens are able to share opinions so they can influence policy decisions
+before they are finalized.
 
-### Deploying to IBM Cloud
+4. Citizens can easily ascertain the voting record themes or trend of their
+elected officials and political candidates without prior knowledge of who
+they are.
 
-<p align="center">
-    <a href="https://cloud.ibm.com/developer/appservice/starter-kits/python-django-app">
-    <img src="https://cloud.ibm.com/devops/setup/deploy/button_x2.png" alt="Deploy to IBM Cloud">
-    </a>
-</p>
+5. Policy makers have visibility into how diverse citizenry will be impacted
+by multiple variations of a proposed policy.
 
-Click **Deploy to IBM Cloud** to deploy this same application to IBM Cloud. This option creates a deployment pipeline, complete with a hosted GitLab project and a DevOps toolchain. You can deploy your app to Cloud Foundry, a Kubernetes cluster, or a Red Hat OpenShift cluster. OpenShift is available only through a standard cluster, which requires you to have a billable account.
+# Our Solution - Fix Politics App
 
-[IBM Cloud DevOps](https://www.ibm.com/cloud/devops) services provides toolchains as a set of tool integrations that support development, deployment, and operations tasks inside IBM Cloud.
+Fix Politics is a web-based application developed with Python and Django. Its primary goal is to find, classify, and summarize legislation based on a user's preferences for impacted subject areas and geographical location. Natural Language Processing and Machine Learning allow Fix Politics to interpret complex legislation that is often difficult for the average citizen to understand. By classifying legislation into Impact areas, we hope to increase citizen awareness of current and pending legislation and their ability to affect change through voting.
 
-### Building Locally
-
-To get started building this application locally, you can either run the application natively or use the [IBM Cloud Developer Tools](https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started) for containerization and easy deployment to IBM Cloud.
+## Steps to deploy the Fix Politics application
 
 #### Native Application Development
 
-* Install [Python](https://www.python.org/downloads/)
-* Install [pipenv](https://pypi.org/project/pipenv/)
+1. Download and install the following modules.
 
-Running Django applications has been simplified with a `manage.py` file to avoid dealing with configuring environment variables to run your app. From your project root, you can download the project dependencies with:
+* [Python](https://www.python.org/downloads/)
+* [Pipenv](https://pypi.org/project/pipenv/)
+* [Gunicorn](https://docs.gunicorn.org/en/stable/index.html)
+
+2. Clone this GitHub repo to your local environment.
+
+```bash
+git clone https://github.com/Call-for-Code/Embrace-Policy-Reform.git
+```
+
+3. Running Django applications has been simplified with a `manage.py` file to avoid dealing with configuring environment variables to run your app. From your project root, you can download the project dependencies with:
 
 ```bash
 pipenv install
 ```
 
-Activate your project's virtual environment with:
+4. Activate your project's virtual environment with:
 
 ```bash
 pipenv shell
 ```
 
-To run your application locally:
+5. Run the application locally in one of the following two ways:
+
+To run as a Development server (py and HTML changes will automatically be picked up):
 
 ```bash
-python manage.py runserver
+./run
 ```
 
-Your application will be running at `http://localhost:8000`.  You can access the `/health` endpoint at the host. You can also verify the state of your locally running application using the Selenium UI test script included in the `scripts` directory.
+To run as a Production server (shut down and restart required to pick up changes):
+
+```bash
+./app.sh
+```
+
+6. Your application will be running at `http://localhost:3000`.  You can access the `/health` endpoint at the host to verify server and app health.
 
 ##### Debugging locally
-To debug a `django` project run `python manage.py runserver` with DEBUG set to True in `settings.py` to start a native django development server. This comes with the Django's stack-trace debugger, which will present runtime failure stack-traces. For more information, see [Django's documentation](https://docs.djangoproject.com/en/2.0/ref/settings/).
+To debug a Django project run `python manage.py runserver 3000` with DEBUG set to True in `settings.py` to start a native Django development server. This comes with the Django's stack-trace debugger, which will present runtime failure stack-traces. For more information, see [Django's documentation](https://docs.djangoproject.com/en/2.0/ref/settings/).
 
-#### IBM Cloud Developer Tools
+##### Setting up a Mailtrap account
+To test the Send Results e-mail functionality, you can set up a free Mailtrap account using the steps below.
 
-Install [IBM Cloud Developer Tools](https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started) on your machine by running the following command:
-```
-curl -sL https://ibm.biz/idt-installer | bash
-```
+1. Go to [Mailtrap](https://mailtrap.io/) and sign up for a free account.
 
-Create an application on IBM Cloud by running:
-
+2. Go to your Demo Inbox and copy your credentials:
 ```bash
-ibmcloud dev create
+user_name => 'your_username',
+password => 'your_password',
+address => 'smtp.mailtrap.io',
+domain => 'smtp.mailtrap.io',
+port => '2525',
 ```
 
-This will create and download a starter application with the necessary files needed for local development and deployment.
-
-Your application will be compiled with Docker containers. To compile and run your app, run:
-
+3. In your virtual environment, export your credentials:
 ```bash
-ibmcloud dev build
-ibmcloud dev run
+export EMAIL_HOST='smtp.mailtrap.io'
+export EMAIL_HOST_USER='your_username'
+export EMAIL_HOST_PASSWORD='your_password'
+export EMAIL_PORT='2525'
 ```
 
-This will launch your application locally. When you are ready to deploy to IBM Cloud on Cloud Foundry or Kubernetes, run one of the commands:
-
+4. Start the app:
 ```bash
-ibmcloud dev deploy -t buildpack // to Cloud Foundry
-ibmcloud dev deploy -t container // to K8s cluster
+./run
+
+or
+
+./app.sh
 ```
 
-You can build and debug your app locally with:
-
-```bash
-ibmcloud dev build --debug
-ibmcloud dev debug
-```
-
-## Next Steps
-* Learn more about [IBM Cloud](https://cloud.ibm.com) and how to incorporate its services in your application.
-* Explore other [sample applications](https://cloud.ibm.com/developer/appservice/starter-kits) on IBM Cloud.
+5. When you click "Send Results" from the app, your results should be e-mailed to your Mailtrap inbox.
 
 ## License
 
