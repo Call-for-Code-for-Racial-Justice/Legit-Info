@@ -27,6 +27,7 @@ RESULTSDIR = 'results'
 # Support functions here
 #########################
 
+
 def cte_query(loc):
     loc_list = [loc]
     base = loc.hierarchy
@@ -45,12 +46,12 @@ def make_csv(search_id, laws):
     laws_table = []
     for law in laws:
         laws_table.append({'key': law.key,
-                        'location': law.location.desc, 
-                        'impact': law.impact.text, 
-                        'title': law.title, 
-                        'summary': law.summary})
+                           'location': law.location.desc,
+                           'impact': law.impact.text,
+                           'title': law.title,
+                           'summary': law.summary})
 
-    filename = results_filename(search_id)       
+    filename = results_filename(search_id)
     with open(filename, 'w', newline='') as csvfile:
         fieldnames = ['key', 'location', 'impact', 'title', 'summary']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -61,20 +62,33 @@ def make_csv(search_id, laws):
     return None
 
 
+def recipient_format(first, last, addr):
+    if first == '' and last == '':
+        rec = addr
+    else:
+        rec = first+' '+last+' <'+addr+'>'
+    return rec
 
 def results_basename(search_id):
-    basename = 'fixpol-results-{}.csv'.format(search_id)   
-    return basename    
+    basename = 'fixpol-results-{}.csv'.format(search_id)
+    return basename
 
 
 def results_filename(search_id):
     basename = results_basename(search_id)
-    filename = os.path.join(settings.MEDIA_ROOT, basename) 
-    return filename      
+    filename = os.path.join(settings.MEDIA_ROOT, basename)
+    return filename
+
+def strip_double_quotes(item):
+    new_item = item
+    if item.startswith('"') and item.endswith('"'):
+        new_item = item[1:-1]
+    return new_item
 
 #########################
 # Create your views here.
 #########################
+
 
 def criteria(request, search_id):
     """Show search criteria."""
@@ -82,6 +96,30 @@ def criteria(request, search_id):
     context = {'criteria': criteria}
     return render(request, 'criteria.html', context)
 
+
+# @staff_member_required
+def criterias(request):
+    """Show all saved search criterias."""
+
+    users = User.objects.order_by('id')
+    profiles = Profile.objects.order_by('id')
+    prof = []
+    for profile in profiles:
+        impact_string2 = impact_seq(profile.impacts.all())
+        prof.append([profile.id, profile.location,
+                     impact_string2, zero_if_none(profile.criteria)])
+
+    criterias = Criteria.objects.order_by('id')
+    crit = []
+    for criteria in criterias:
+        impact_string3 = impact_seq(criteria.impacts.all())
+        crit.append([criteria.id, criteria.text,
+                     criteria.location, impact_string3])
+
+    context = {'users': users,
+               'prof': prof,
+               'crit': crit}
+    return render(request, 'criterias.html', context)
 
 
 def download(request, search_id):
@@ -116,6 +154,21 @@ def index(request):
     return render(request, 'index.html')
 
 
+# @staff_member_required
+def lawdump(request):
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    basename = 'lawdump.csv'
+    disp = 'attachment; filename="{}"'.format(basename)
+    response['Content-Disposition'] = disp
+    writer = csv.writer(response)
+    writer.writerow(['key', 'location', 'impact', 'title', 'summary'])
+    for law in Law.objects.all():
+        writer.writerow([law.key, law.location.desc, law.impact.text,
+                         law.title, law.summary])
+    return response
+
+
 def locations(request):
     """Show all locations."""
     locations = Location.objects.order_by('hierarchy')
@@ -124,44 +177,9 @@ def locations(request):
     return render(request, 'locations.html', context)
 
 
-def search(request):
-    """Show search form to specify criteria."""
-    crit = None
-    
-    if request.method != 'POST':
-        # Initial request; pre-fill form with the current entry.
-        if request.user.is_anonymous:
-            form = SearchForm()             # blank search form
-        else:
-            crit = request.user.profile.criteria
-            form = SearchForm(instance=crit)  # pre-filled with profile
-
-    else:
-        # POST data submitted; process data.
-        
-        form = SearchForm(data=request.POST)      
-        if form.is_valid():
-            criteria = form.save()
-            crit_text = criteria.set_text()
-            #crit_id = find_criteria_id(crit_text)
-            #print(crit_id, crit_text)
-            #if crit_id == 0:
-            criteria.save()
-            crit_id = criteria.id
-            return redirect('fixpol:results', search_id=crit_id)
-
-    context = { 'form': form }
-    return render(request, 'search.html', context)
-
-
-
-
-
-
-
 def results(request, search_id):
     """Show search results."""
-    
+
     criteria = Criteria.objects.get(id=search_id)
     loc = criteria.location
     #import pdb; pdb.set_trace()
@@ -173,54 +191,45 @@ def results(request, search_id):
 
     gen_date = datetime.now().strftime("%B %-d, %Y")
 
-    context = { 'heading': criteria.text,
-                'laws' : laws,
-                'numlaws': len(laws),
-                'search_id': search_id, 
-                'gen_date': gen_date} 
+    context = {'heading': criteria.text,
+               'laws': laws,
+               'numlaws': len(laws),
+               'search_id': search_id,
+               'gen_date': gen_date}
 
     make_csv(search_id, laws)
     return render(request, 'results.html', context)
 
 
-# @staff_member_required
-def criterias(request):
-    """Show all saved search criterias."""
-    
-    users = User.objects.order_by('id')
-    profiles = Profile.objects.order_by('id')
-    prof = []
-    for profile in profiles:
-        impact_string2 = impact_seq(profile.impacts.all())
-        prof.append([profile.id, profile.location, 
-                    impact_string2, zero_if_none(profile.criteria)])
+def search(request):
+    """Show search form to specify criteria."""
+    crit = None
 
-    criterias = Criteria.objects.order_by('id')
-    crit = []
-    for criteria in criterias:
-        impact_string3 = impact_seq(criteria.impacts.all())
-        crit.append([criteria.id, criteria.text, 
-                    criteria.location, impact_string3])
+    if request.method != 'POST':
+        # Initial request; pre-fill form with the current entry.
+        if request.user.is_anonymous:
+            form = SearchForm()             # blank search form
+        else:
+            crit = request.user.profile.criteria
+            form = SearchForm(instance=crit)  # pre-filled with profile
 
-    context = { 'users': users,
-                'prof': prof,
-                'crit': crit}
-    return render(request, 'criterias.html', context)
-
-
-def strip_double_quotes(item):
-    new_item = item
-    if item.startswith('"') and item.endswith('"'):
-        new_item = item[1:-1]
-    return new_item
-
-
-def recipient_format(first,last,addr):
-    if first=='' and last=='':
-        rec = addr
     else:
-        rec = first+' '+last+' <'+addr+'>'
-    return rec
+        # POST data submitted; process data.
+
+        form = SearchForm(data=request.POST)
+        if form.is_valid():
+            criteria = form.save()
+            crit_text = criteria.set_text()
+            #crit_id = find_criteria_id(crit_text)
+            #print(crit_id, crit_text)
+            # if crit_id == 0:
+            criteria.save()
+            crit_id = criteria.id
+            return redirect('fixpol:results', search_id=crit_id)
+
+    context = {'form': form}
+    return render(request, 'search.html', context)
+
 
 def sendmail(request, search_id):
     """ send results to profile user """
@@ -235,7 +244,6 @@ def sendmail(request, search_id):
 # connection: The optional email backend to use to send the mail;
 # html_message: An optional string containg the messsage in HTML format.
 
-    
     today = datetime.now()
     gen_date = today.strftime("%B %d, %Y")
 
@@ -248,53 +256,36 @@ def sendmail(request, search_id):
     subject = 'Fix Politics -- Legislation Search Results -- ' + gen_date
     sender_email = 'fix-politics-cfc@ibm.com'
     user = request.user
-    recipients = [ recipient_format(user.first_name,
-                                    user.last_name,
-                                    user.email)]
-    
-    
+    recipients = [recipient_format(user.first_name,
+                                   user.last_name,
+                                   user.email)]
+
     if settings.EMAIL_HOST:
         context = {'laws_found': laws_found,
-                    'gen_date': gen_date }
+                   'gen_date': gen_date}
         text_version = render_to_string(
-                template_name='email-results.txt', 
-                context=context, request=request)
+            template_name='email-results.txt',
+            context=context, request=request)
         html_version = render_to_string(
-                template_name='email-results.html', 
-                context=context, request=request)
+            template_name='email-results.html',
+            context=context, request=request)
 
-        sent =  send_mail(subject, text_version, sender_email, recipients, 
-                fail_silently=True, html_message=html_version)
+        sent = send_mail(subject, text_version, sender_email, recipients,
+                         fail_silently=True, html_message=html_version)
 
-        if sent > 0:    
+        if sent > 0:
             status_message = 'Mail successfully sent to:'
         else:
-            status_message = 'ERROR: Unable to deliver email' 
+            status_message = 'ERROR: Unable to deliver email'
     else:
         status_message = 'ERROR: EMAIL_HOST environment variable not defined'
 
-    context = { 'status_message': status_message,
-                'recipients': recipients, 
-                'search_id': search_id}
+    context = {'status_message': status_message,
+               'recipients': recipients,
+               'search_id': search_id}
     return render(request, 'email_sent.html', context)
 
-  
 
-
-
-# @staff_member_required
-def lawdump(request):
-    # Create the HttpResponse object with the appropriate CSV header.
-    response = HttpResponse(content_type='text/csv')
-    basename = 'lawdump.csv'
-    disp = 'attachment; filename="{}"'.format(basename)
-    response['Content-Disposition'] = disp
-    writer = csv.writer(response)
-    writer.writerow(['key','location','impact','title','summary'])
-    for law in Law.objects.all():
-        writer.writerow([law.key, law.location.desc, law.impact.text, 
-                         law.title, law.summary])
-    return response
 
 
 

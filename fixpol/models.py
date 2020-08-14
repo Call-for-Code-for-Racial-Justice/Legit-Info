@@ -24,7 +24,7 @@ class Location(models.Model):
 
     desc = models.CharField(max_length=80)
     shortname = models.CharField(max_length=20)
-    hierarchy = models.CharField(max_length=200,unique=True)
+    hierarchy = models.CharField(max_length=200)
     govlevel = models.CharField(max_length=80)
     parent = models.ForeignKey('self', null=True, 
             related_name='locations', on_delete=models.PROTECT)
