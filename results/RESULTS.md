@@ -1,1 +1,1 @@
-# Search results in tihs sub-directory for debugging purposes
+# Search results in this sub-directory for debugging purposes
