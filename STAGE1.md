@@ -87,33 +87,44 @@ Run the git command in your Development workspace directory.
 your project root, you can download the project dependencies with:
 
 ```bash
-pipenv install
+[Grady Dev]$ cd fix-politics
+[Grady fix-politics]$ pipenv install
 ```
 
-4. Activate your project's virtual environment with:
+5. Develop and test in this virtual environment.  While you are in the
+virtual environment, there will be an indicator such as "(fix)" in front
+of your normal shell prompt.  Use "exit" to leave the virtual environment.
+We have created "run" script as a shortcut for 
+the `python manage.py runserver localhost:3000` command.
+
+Note that 
 
 ```bash
-pipenv shell
+[Grady fix-politics]$ pipenv shell
+Launching subshell in virtual environment…
+
+(fix) [Grady fix-politics]$ ./run
+**Using SQLite3**
+Performing system checks...
+Django version 3.0.8, using settings 'cfc_project.settings'
+Starting development server at [http://localhost:3000/](http://localhost:3000/)
+Quit the server with CONTROL-C.
+
+^C (fix) [Grady fix-politics]$ exit
+[Grady fix-politics]$
+
 ```
 
-5. Run the application locally in one of the following two ways:
+6. Your application will be running at `http://localhost:3000` which
+you can launch in your favorite browser (Chrome, Firefox, Safari, etc.)
 
-To run as a Development server (py and HTML changes will automatically be picked up):
-
-```bash
-./run
-```
-
-To run as a Production server (shut down and restart required to pick up changes):
-
-```bash
-./app.sh
-```
-
-6. Your application will be running at `http://localhost:3000`.  You can access the `/health` endpoint at the host to verify server and app health.
 
 ##### Debugging locally
-To debug a Django project run `python manage.py runserver 3000` with DEBUG set to True in `settings.py` to start a native Django development server. This comes with the Django's stack-trace debugger, which will present runtime failure stack-traces. For more information, see [Django's documentation](https://docs.djangoproject.com/en/2.0/ref/settings/).
+To debug a Django project run with DEBUG set to True in `settings.py` to 
+start a native Django development server. This comes with the Django's 
+stack-trace debugger, which will present runtime failure stack-traces. For 
+more information, see [Django's 
+documentation](https://docs.djangoproject.com/en/2.0/ref/settings/).
 
 
 
