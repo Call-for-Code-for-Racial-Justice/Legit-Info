@@ -18,22 +18,23 @@ led by contributors from IBM and Red Hat.
 
 ## Problem statement
 
-Concerned and impacted citizens don't have a straightforward way of knowing
-what or how policies and regulations impact them or what they can do in
-response.
+Concerned citizens and impacted residents don't have a straightforward way of 
+knowing what or how policies and regulations impact them or what they can do 
+in response.  A community leader could use this tool to help motivate their
+social followers.  Our target user will be referred to as "advocate".
 
 ### Hills (who, what, and wow)
 
-1. Citizens are aware of policy that is being considered that is highly
-impactful to them, without needing to follow every vote.
+1. Advocates are aware of policy that is being considered that is 
+highly impactful to them, without needing to follow every vote.
 
-2. Citizens are able to understand the specific impact of proposed policy on
-them without being a legal expert.
+2. Advocates are able to understand the specific impact of proposed 
+policy on them without being a legal expert.
 
-3. Citizens are able to share opinions so they can influence policy decisions
-before they are finalized.
+3. Advocates are able to share opinions so they can influence policy 
+decisions before they are finalized.
 
-4. Citizens can easily ascertain the voting record themes or trend of their
+4. Advocates can easily ascertain the voting record themes or trend of their
 elected officials and political candidates without prior knowledge of who
 they are.
 
@@ -42,11 +43,32 @@ by multiple variations of a proposed policy.
 
 # Our Solution - Fix Politics App
 
-Fix Politics is a web-based application developed with Python and Django. Its primary goal is to find, classify, and summarize legislation based on a user's preferences for impacted subject areas and geographical location. Natural Language Processing and Machine Learning allow Fix Politics to interpret complex legislation that is often difficult for the average citizen to understand. By classifying legislation into Impact areas, we hope to increase citizen awareness of current and pending legislation and their ability to affect change through voting.
+Fix Politics is a web-based application written in Python programming
+language, using the Django framework and Bootstrap user interface styling. Its 
+primary goal is to help advocates find and summarize legislation based on an
+advocate's preferences for impact areas and geographical location. 
+
+The application is customizable, allowing application maintainers to specify
+the location hierarchy and impact categories.  Complex legislation is curated, 
+resulting in classifying the location scope and impact area, with a brief 
+laymen-readable title and summary.
+
+By classifying legislation by impact and location, we hope to increase 
+awareness of current and pending legislation and their ability to affect change 
+through voting or other activism.
 
 ## Steps to deploy the Fix Politics application
 
-#### Native Application Development
+### Staged Deployment
+
+This project is designed for three deployment stages.
+
+1. Development
+2. Pre-Production
+3. Production
+
+
+#### Stage 1: Development
 
 1. Download and install the following modules.
 
