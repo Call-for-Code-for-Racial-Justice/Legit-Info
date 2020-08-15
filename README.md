@@ -84,9 +84,10 @@ Postgresql running in the IBM Cloud from pre-production.  Updates to the
 code are deployed using a Tekton pipeline.
 
 
-##### Setting up a Mailtrap account
+### Setting up a Mailtrap account
+
 To test the Send Results e-mail functionality, you can set up a free Mailtrap 
-account using the steps below.
+account using the steps below.  This can be used in all stages of deployment.
 
 1. Go to [Mailtrap](https://mailtrap.io/) and sign up for a free account.
 
