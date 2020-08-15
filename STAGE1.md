@@ -53,6 +53,13 @@ environment that may be different than their laptop deployment.  In this
 manner, each Python application project can have its own set of python
 package dependencies at different levels.
 
+You can verify your level of pipenv with this command:
+
+```bash
+[Yoga fix-politics]$ pipenv --version
+pipenv, version 2020.6.2
+```
+
 
 2. Create Development workspace directory
 
