@@ -4,7 +4,7 @@
 
 Follow these steps to start development and testing on your local machine.
 
-1. Download and install the following modules.
+1. Download and install the following software:
 
 * [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
@@ -101,10 +101,9 @@ your project root, you can download the project dependencies with:
 5. Develop and test in this virtual environment.  While you are in the
 virtual environment, there will be an indicator such as "(fix)" in front
 of your normal shell prompt.  Use "exit" to leave the virtual environment.
-We have created "run" script as a shortcut for 
-the `python manage.py runserver localhost:3000` command.
 
-Note that 
+We have created "run" script as a shortcut for 
+the `python manage.py runserver localhost:3000` command. 
 
 ```bash
 [Grady fix-politics]$ pipenv shell
@@ -114,7 +113,7 @@ Launching subshell in virtual environment…
 **Using SQLite3**
 Performing system checks...
 Django version 3.0.8, using settings 'cfc_project.settings'
-Starting development server at [http://localhost:3000/](http://localhost:3000/)
+Starting development server at http://localhost:3000/
 Quit the server with CONTROL-C.
 
 ^C (fix) [Grady fix-politics]$ exit
@@ -127,7 +126,7 @@ you can launch in your favorite browser (Chrome, Firefox, Safari, etc.)
 
 
 ##### Debugging locally
-To debug a Django project run with DEBUG set to True in `settings.py` to 
+To debug a Django project, run with DEBUG set to True in `settings.py` to 
 start a native Django development server. This comes with the Django's 
 stack-trace debugger, which will present runtime failure stack-traces. For 
 more information, see [Django's 
