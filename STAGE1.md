@@ -115,40 +115,6 @@ To run as a Production server (shut down and restart required to pick up changes
 ##### Debugging locally
 To debug a Django project run `python manage.py runserver 3000` with DEBUG set to True in `settings.py` to start a native Django development server. This comes with the Django's stack-trace debugger, which will present runtime failure stack-traces. For more information, see [Django's documentation](https://docs.djangoproject.com/en/2.0/ref/settings/).
 
-##### Setting up a Mailtrap account
-To test the Send Results e-mail functionality, you can set up a free Mailtrap 
-account using the steps below.
-
-1. Go to [Mailtrap](https://mailtrap.io/) and sign up for a free account.
-
-2. Go to your Demo Inbox and copy your credentials:
-```bash
-user_name => 'your_username',
-password => 'your_password',
-address => 'smtp.mailtrap.io',
-domain => 'smtp.mailtrap.io',
-port => '2525',
-```
-
-3. In your virtual environment, export your credentials:
-```bash
-export EMAIL_HOST='smtp.mailtrap.io'
-export EMAIL_HOST_USER='your_username'
-export EMAIL_HOST_PASSWORD='your_password'
-export EMAIL_PORT='2525'
-```
-
-4. Start the app:
-```bash
-./run
-
-or
-
-./app.sh
-```
-
-5. When you click "Send Results" from the app, your results should be e-mailed
-to your Mailtrap inbox.
 
 
 
