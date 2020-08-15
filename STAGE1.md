@@ -63,7 +63,7 @@ through voting or other activism.
 
 This project is designed for three deployment stages.
 
-1. [Development](STAGE1.md)
+1. Development
 
 In stage 1, each developer has their own copy of application code and
 data, using SQLite3 that stores the entire database in a single file.
