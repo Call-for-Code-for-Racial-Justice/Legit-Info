@@ -82,25 +82,43 @@ C:\Users\Grady> mkdir Dev
 
 3. Clone this GitHub repo to your local environment.
 
-Run the git command in your Development workspace directory.
+Run the git command in your Development workspace directory.  This will create
+a new directory `/Dev/fix-politics` which we will refer to as "project root" 
 
 ```bash
 [Grady ~]$ cd Dev
 [Grady Dev]$ git clone https://github.com/Call-for-Code/Embrace-Policy-Reform.git
 ```
 
-4. Running Django applications has been simplified with a `manage.py` file to
- avoid dealing with configuring environment variables to run your app. From 
-your project root, you can download the project dependencies with:
+IBM encourages everyone to use two-factor authorization for Github.  Generate
+an ssh key and install it in your github account.  See [Connecting to Github with 
+SSH]](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh)
+
+You can do git clone via SSH with these commands:
+
+```bash
+[Grady ~]$ cd Dev
+[Grady Dev]$ git clone git@github.com/Call-for-Code/Embrace-Policy-Reform.git
+```
+
+4. The list of python dependencies needed for Djangjo, Bootstrap, and the
+rest of the Fix Politics application are recorded in `Pipfile.lock` file.
+From your project root, you can download and install the project 
+dependencies into your virtual environment (virtualenv) with:
 
 ```bash
 [Grady Dev]$ cd fix-politics
 [Grady fix-politics]$ pipenv install
 ```
 
-5. Develop and test in this virtual environment.  While you are in the
-virtual environment, there will be an indicator such as "(fix)" in front
-of your normal shell prompt.  Use "exit" to leave the virtual environment.
+5. Develop and test in this virtual environment.  Running Django applications
+has been simplified with a `manage.py` program to avoid dealing with 
+configuring environment variables to run your app. 
+
+While you are in the virtual environment, there will be an indicator such as 
+"(fix)" in front of your normal shell prompt.  Use "exit" to leave the 
+virtual environment.  If you were using "python3" in your normal shell,
+you only need to use "python" within your virtualenv.
 
 We have created "run" script as a shortcut for 
 the `python manage.py runserver localhost:3000` command. 
@@ -123,7 +141,6 @@ Quit the server with CONTROL-C.
 
 6. Your application will be running at `http://localhost:3000` which
 you can launch in your favorite browser (Chrome, Firefox, Safari, etc.)
-
 
 ##### Debugging locally
 To debug a Django project, run with DEBUG set to True in `settings.py` to 
