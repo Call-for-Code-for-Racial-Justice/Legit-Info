@@ -101,13 +101,13 @@ through voting or other activism.
 
 This project is designed for three deployment stages.
 
-1. [Development](STAGE1.md)
+1. [Development](docs/STAGE1.md)
 
 In stage 1, each developer has their own copy of application code and
 data, using SQLite3 that stores the entire database in a single file.
 Django provides a development webserver to allow local testing.
 
-2. [Pre-Production](STAGE2.md)
+2. [Pre-Production](docs/STAGE2.md)
 
 In stage 2, each developer has their own copy of application code, but
 a shared database, using Postgresql running in the IBM Cloud.  The
@@ -115,7 +115,7 @@ developer can choose to use the Django development webserver, or try out
 the production server called Gunicorn.  The difference is that Django
 is designed for single-user, and Gunicorn for concurrent multiple users.
 
-3. [Production](STAGE3.md)
+3. [Production](docs/STAGE3.md)
 
 In stage 3, the application is running in the IBM Cloud in one pod, using the
 Postgresql running in the IBM Cloud from pre-production.  Updates to the
