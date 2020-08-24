@@ -129,8 +129,12 @@ the upper right navigation bar, or the button at the bottom of screen.
 
 Select the location, and one or more impact areas you are concerned about.
 
-Press the "Search Legislation" button.
-
+Press the "Search Legislation" button.  The process is called an 
+"ancestor search" in that not only will it find legislation related to the
+location specified, but also all legislation in parent governments.  For
+example, if you specify "Frankin County", you would get laws from Franklin,
+as well as laws that relate to Ohio overall, and USA as well, but not any
+from Columbus OH as that is more specific.
 
 ### Subsection 2.2 Results Page
 
