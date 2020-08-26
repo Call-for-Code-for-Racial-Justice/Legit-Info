@@ -130,19 +130,28 @@ Postgresql running in the IBM Cloud from pre-production.  Updates to the
 code are deployed using a Tekton pipeline.
 
 
-## Built with
+## Built with IBM and Open Source technologies
 
-* [Python](https://www.python.org/) - The programming language
+* [Python](https://www.python.org/) - The programming language, along with
+pip and pipenv supporting tools
 * [Django](https://www.djangoproject.com/) - A framework for web applications
-* [Bootstrap](https://getbootstrap.com/) - A popular front-end toolkit
+* [Bootstrap](https://getbootstrap.com/) - A popular User Interface toolkit
 * [SQlite](https://www.sqlite.org/index.html) - A simple, local database
 * [Postgresql](https://www.postgresql.org/) - A robust, relational database
 * [Gunicorn](https://gunicorn.org/) - A WSGI HTTP server for Python
+* [Red Hat UBI](https://catalog.redhat.com/software/containers/ubi8)  - Red Hat
+  Universal Base Image, based on Red Hat Enterprise Linux (RHEL) 8.2
+* [Docker](https://www.docker.com/) - A container platform
+* [Kubernetes](https://kubernetes.io/) - An orchestration layer for Docker
+* [Red Hat OpenShift](https://www.openshift.com/) - Red Hat container platform
+  based on Kubernetes
+* [Tekton](https://www.openshift.com/learn/topics/pipelines) - A Continuous 
+  Integration (CI) pipeline
 
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of 
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on the code of 
 conduct, and the process for submitting pull requests to the project.
 
 
