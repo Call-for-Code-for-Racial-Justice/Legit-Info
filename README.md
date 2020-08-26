@@ -68,15 +68,16 @@ by multiple variations of a proposed policy.
 
 Searching for legislation can be complicated by the fact that each government
 level has their own repository, their own numbering convention, and different
-formats.  Technology can assist by allowing curated content to be readily
-accessible to advocates that need simple-to-read information.
+formats.  Technology can assist by allowing curated content to be centralized
+into a single database, readily accessible to advocates that need 
+simple-to-read information.
 
 
 ### The idea  - Fix Politics App
 
 Fix Politics is a web-based application written in Python programming
 language, using the Django framework and Bootstrap user interface styling. Its 
-primary goal is to help advocates find and summarize legislation based on an
+primary goal is to help advocates find legislation of interest based on an
 advocate's preferences for impact areas and geographical location. 
 
 The application is customizable, allowing application staff to specify
@@ -90,6 +91,8 @@ through voting or other activism.
 
 
 ## The architecture
+
+![architecture](docs/Architecture-Fix-Politics-2020-08-26.png)
 
 ## Long description
 
@@ -127,25 +130,29 @@ Postgresql running in the IBM Cloud from pre-production.  Updates to the
 code are deployed using a Tekton pipeline.
 
 
-
 ## Built with
 
 * [Python](https://www.python.org/) - The programming language
 * [Django](https://www.djangoproject.com/) - A framework for web applications
 * [Bootstrap](https://getbootstrap.com/) - A popular front-end toolkit
+* [SQlite](https://www.sqlite.org/index.html) - A simple, local database
+* [Postgresql](https://www.postgresql.org/) - A robust, relational database
+* [Gunicorn](https://gunicorn.org/) - A WSGI HTTP server for Python
 
 
 ## Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of 
-conduct, and the process for submitting pull requests to us.
+conduct, and the process for submitting pull requests to the project.
 
 
 ## Authors
 
 * **Tony Pearson** - *Lead developer*
 * **Tommy Adams** - *Tester*
-* **Beth Morgan** - *UI Design*
+* **Beth Morgan** - *UI Designer*
+* **Nikhil Raja** - *Project Manager*
+* **Mao Vang Corne** - *Content Curator*
 
 
 ## License
