@@ -3,13 +3,13 @@ import csv
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from .models import Location, Impact, Criteria, Law
-from .models import impact_seq, find_criteria_id
+from .models import impact_seq
 from .forms import SearchForm
 from django.contrib.auth.models import User
 from users.models import Profile
 
 from django.http import HttpResponse
-from django.core.mail import send_mail, EmailMessage
+from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from datetime import datetime
 from django.conf import settings
@@ -30,7 +30,6 @@ RESULTSDIR = 'results'
 
 def cte_query(loc):
     loc_list = [loc]
-    base = loc.hierarchy
     for n in range(10):
         loc = loc.parent
         if loc:
@@ -69,6 +68,7 @@ def recipient_format(first, last, addr):
         rec = first+' '+last+' <'+addr+'>'
     return rec
 
+
 def results_basename(search_id):
     basename = 'fixpol-results-{}.csv'.format(search_id)
     return basename
@@ -79,11 +79,21 @@ def results_filename(search_id):
     filename = os.path.join(settings.MEDIA_ROOT, basename)
     return filename
 
+
 def strip_double_quotes(item):
     new_item = item
     if item.startswith('"') and item.endswith('"'):
         new_item = item[1:-1]
     return new_item
+
+
+def zero_if_none(item):
+    """If item exists, return id, otherwise return 0."""
+    result_id = 0
+    # import pdb; pdb.set_trace()
+    if item:
+        result_id = item.id
+    return result_id
 
 #########################
 # Create your views here.
@@ -97,7 +107,7 @@ def criteria(request, search_id):
     return render(request, 'criteria.html', context)
 
 
-# @staff_member_required
+@staff_member_required
 def criterias(request):
     """Show all saved search criterias."""
 
@@ -154,7 +164,7 @@ def index(request):
     return render(request, 'index.html')
 
 
-# @staff_member_required
+@staff_member_required
 def lawdump(request):
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(content_type='text/csv')
@@ -182,7 +192,7 @@ def results(request, search_id):
 
     criteria = Criteria.objects.get(id=search_id)
     loc = criteria.location
-    #import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     loc_list = cte_query(loc)
     impact_list = criteria.impacts.all()
 
@@ -219,10 +229,7 @@ def search(request):
         form = SearchForm(data=request.POST)
         if form.is_valid():
             criteria = form.save()
-            crit_text = criteria.set_text()
-            #crit_id = find_criteria_id(crit_text)
-            #print(crit_id, crit_text)
-            # if crit_id == 0:
+            criteria.set_text()
             criteria.save()
             crit_id = criteria.id
             return redirect('fixpol:results', search_id=crit_id)
@@ -240,7 +247,7 @@ def sendmail(request, search_id):
 # recipient_list: A list of strings;
 # fail_silently: A boolean;
 # auth_user: The optional username to use to authenticate to the SMTP server;
-# auth_password: The optional password to use to authenticate to the SMTP server;
+# auth_password: optional password to use to authenticate to the SMTP server;
 # connection: The optional email backend to use to send the mail;
 # html_message: An optional string containg the messsage in HTML format.
 
@@ -251,7 +258,7 @@ def sendmail(request, search_id):
     with open(filename, 'rt') as res_file:
         resultsReader = csv.DictReader(res_file)
         laws_found = list(resultsReader)
-        #import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
 
     subject = 'Fix Politics -- Legislation Search Results -- ' + gen_date
     sender_email = 'fix-politics-cfc@ibm.com'
@@ -284,15 +291,3 @@ def sendmail(request, search_id):
                'recipients': recipients,
                'search_id': search_id}
     return render(request, 'email_sent.html', context)
-
-
-
-
-
-def zero_if_none(item):
-    """If item exists, return id, otherwise return 0."""
-    result_id = 0
-    #import pdb; pdb.set_trace()
-    if item:
-        result_id = item.id
-    return result_id

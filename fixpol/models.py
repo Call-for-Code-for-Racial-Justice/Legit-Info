@@ -1,20 +1,21 @@
 from django.db import models
-from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-
 from datetime import datetime
 
 LEFT_CORNER = u"\u2514\u2500\u2002"
 LEFT_PAD = u"\u2002\u2002\u2002\u2002"
 
 # default to 1 day from now
+# import pdb; pdb.set_trace()  -- use this for debugging
+
+
 def get_default_law_key():
     x = str(datetime.now())
     key = x[5:25]
     return key
 
 # Create your models here.
+
+
 class Location(models.Model):
     """A location helps filter which legislation to look at."""
 
@@ -26,8 +27,9 @@ class Location(models.Model):
     shortname = models.CharField(max_length=20)
     hierarchy = models.CharField(max_length=200)
     govlevel = models.CharField(max_length=80)
-    parent = models.ForeignKey('self', null=True, 
-            related_name='locations', on_delete=models.PROTECT)
+    parent = models.ForeignKey('self', null=True,
+                               related_name='locations',
+                               on_delete=models.PROTECT)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def padding(self):
@@ -37,7 +39,6 @@ class Location(models.Model):
         if level > 1:
             padding = LEFT_PAD*(level-2) + LEFT_CORNER
         return padding
-
 
     def __str__(self):
         """Return a string representation of the model."""
@@ -69,10 +70,10 @@ class Criteria(models.Model):
     text = models.CharField(max_length=200, null=True, blank=True)
 
     location = models.ForeignKey('fixpol.Location', null=True,
-        related_name='criteria', on_delete=models.CASCADE)
+                                 related_name='criteria',
+                                 on_delete=models.CASCADE)
 
     impacts = models.ManyToManyField(Impact)
-
 
     def __str__(self):
         """Return a string representation of the model."""
@@ -80,7 +81,6 @@ class Criteria(models.Model):
         if self.text:
             key += ':' + self.text
         return key
-
 
     def set_text(self):
         crit_text = criteria_string(self.location, self.impacts.all())
@@ -97,12 +97,11 @@ def criteria_string(location, impact_list):
 
 def find_criteria_id(crit_text):
     crit_id = 0
-    #import pdb; pdb.set_trace()
     crits = Criteria.objects.all()
     if crits:
         for crit in crits:
-            crit_string=criteria_string(crit.location,
-                            crit.impacts.all())
+            crit_string = criteria_string(crit.location,
+                                          crit.impacts.all())
             if crit_string == crit_text:
                 crit_id = crit.id
                 break
@@ -127,18 +126,18 @@ class Law(models.Model):
         app_label = 'fixpol'
         verbose_name_plural = "laws"  # plural of legislation
 
-    key = models.CharField(max_length=20, null=False, 
-                    unique=True, default=get_default_law_key)
+    key = models.CharField(max_length=20, null=False,
+                           unique=True, default=get_default_law_key)
 
     title = models.CharField(max_length=200)
 
     summary = models.CharField(max_length=1000)
 
     location = models.ForeignKey('fixpol.Location', null=True,
-        related_name='laws', on_delete=models.CASCADE)
+                                 related_name='laws', on_delete=models.CASCADE)
 
     impact = models.ForeignKey('fixpol.Impact', null=True,
-        related_name='laws', on_delete=models.CASCADE)
+                               related_name='laws', on_delete=models.CASCADE)
 
     def __str__(self):
         """Return a string representation of the model."""
@@ -151,11 +150,3 @@ class Law(models.Model):
                 law_string += " ..."
         law_string = self.key + ' ' + law_string
         return law_string
-
-
-
-
-
-
-
-

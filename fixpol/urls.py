@@ -1,6 +1,6 @@
 """Defines URL patterns for fixpol application"""
 
-from django.urls import path, include
+from django.urls import path
 from . import views
 
 
@@ -20,12 +20,12 @@ urlpatterns = [
     path('search', views.search, name='search'),
 
     # Page for showing search results
-    path('results/<int:search_id>/', 
-            views.results, name='results'),
+    path('results/<int:search_id>/',
+         views.results, name='results'),
 
     # Page for showing search criteria
-    path('criteria/<int:search_id>/', 
-            views.criteria, name='criteria'),  
+    path('criteria/<int:search_id>/',
+         views.criteria, name='criteria'),
 
     # Page for showing saved search critera
     path('criterias', views.criterias, name='criterias'),
@@ -42,6 +42,4 @@ urlpatterns = [
     # health endpoint
     path('health', views.health, name='health'),
 
-    ]
-
-
+]
