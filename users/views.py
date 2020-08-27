@@ -4,9 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.contrib.auth.forms import UserCreationForm
 from .forms import UserForm, ProfileForm
-from django.contrib.auth.models import User
-from .models import Profile
-from fixpol.models import Criteria
 
 # Create your views here.
 
@@ -36,10 +33,10 @@ def show_profile(request):
     user = request.user
     location = user.profile.location
     impacts = user.profile.impacts.all()
-       
-    context = {'user': user, 
-               'location': location, 
-                'impacts': impacts}
+
+    context = {'user': user,
+               'location': location,
+               'impacts': impacts}
     return render(request, 'registration/profile.html', context)
 
 
@@ -62,11 +59,7 @@ def update_profile(request):
             user.profile.set_criteria()
             return redirect('fixpol:index')
 
-
-    context = { 'user_form': user_form,
-                'profile_form': profile_form}
+    context = {'user_form': user_form,
+               'profile_form': profile_form}
 
     return render(request, 'registration/update.html', context)
-
-
-
