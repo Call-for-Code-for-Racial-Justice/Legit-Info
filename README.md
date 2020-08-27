@@ -157,7 +157,7 @@ conduct, and the process for submitting pull requests to the project.
 
 ## Authors
 
-* **Tony Pearson** - *Lead developer*
+* **Tony Pearson** - *Developer*
 * **Tommy Adams** - *Tester*
 * **Beth Morgan** - *UI Designer*
 * **Nikhil Raja** - *Project Manager*

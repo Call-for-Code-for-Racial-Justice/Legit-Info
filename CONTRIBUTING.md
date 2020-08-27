@@ -1,16 +1,31 @@
 # Contributing
 
-When contributing a major change to this repository, please first discuss the change you wish to make via an [issue](contributing/ISSUES.md) or via
-[Slack in the #droneaid channel](https://code-and-response.slack.com/join/shared_invite/enQtNzUzOTAzNDE3MTM4LWM4M2VlOTA3OWNjMjY0ZTI4MjQ2OTBjYjYwNmQ1NTdhYjZhODE5NjFkN2QyNmRkNDI5OTFlZmVjYTFhMmMwYmU). Minor issues can simply be addressed by sending by a pull request.
+When contributing a major change to this repository, please first discuss the 
+change you wish to make via an [issue](contributing/ISSUES.md) or via
+[Slack in the #droneaid 
+channel](https://code-and-response.slack.com/join/shared_invite/enQtNzUzOTAzNDE3MTM4LWM4M2VlOTA3OWNjMjY0ZTI4MjQ2OTBjYjYwNmQ1NTdhYjZhODE5NjFkN2QyNmRkNDI5OTFlZmVjYTFhMmMwYmU). 
+Minor issues can simply be addressed by sending by a pull request.
 
-All [pull requests](contributing/PULL-REQUESTS.md) will require you to ensure the change is certified via the [Developer Certificate of Origin (DCO)](https://github.com/apps/dco/). The DCO is a lightweight way for contributors to certify that they wrote or otherwise have the right to submit the code they are contributing to the project.
+All [pull requests](contributing/PULL-REQUESTS.md) will require you to ensure 
+the change is certified via the [Developer Certificate of Origin 
+(DCO)](https://github.com/apps/dco/). The DCO is a lightweight way for 
+contributors to certify that they wrote or otherwise have the right to submit 
+the code they are contributing to the project.
 
-Please note we have a [Code of Conduct](#code-of-conduct), please follow it in all your interactions with the project and its community.
+Please note we have a [Code of Conduct](#code-of-conduct), please follow it 
+in all your interactions with the project and its community.
+
+## Code Structure
+
+Django can be new for some people.  Please understand the structure before
+making major changes.
+
+[code structure](contributing/STRUCTURE.md)
 
 ## Pull Request Process
 
-1. Fork the repository. 
-2. Commit your changes to your fork. 
+1. Create a branch the repository. 
+2. Commit your changes to your new branch. 
 3. Submit a pull request.
 4. Handle any feedback before the request is merged.
 5. Accept our sincere Thank You!
@@ -21,7 +36,10 @@ Please note we have a [Code of Conduct](#code-of-conduct), please follow it in a
 
 In the interest of fostering an open and welcoming environment, we as
 contributors and maintainers pledge to making participation in our project and
-our community a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.
+our community a harassment-free experience for everyone, regardless of age, 
+body size, disability, ethnicity, gender identity and expression, level of 
+experience, nationality, personal appearance, race, religion, or sexual 
+identity and orientation.
 
 ### Our Standards
 
@@ -69,9 +87,14 @@ further defined and clarified by project maintainers.
 ### Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported by contacting the project team on [Slack in the #droneaid channel](https://code-and-response.slack.com/join/shared_invite/enQtNzUzOTAzNDE3MTM4LWM4M2VlOTA3OWNjMjY0ZTI4MjQ2OTBjYjYwNmQ1NTdhYjZhODE5NjFkN2QyNmRkNDI5OTFlZmVjYTFhMmMwYmU). 
+reported by contacting the project team on [Slack in the #droneaid 
+channel](https://code-and-response.slack.com/join/shared_invite/enQtNzUzOTAzNDE3MTM4LWM4M2VlOTA3OWNjMjY0ZTI4MjQ2OTBjYjYwNmQ1NTdhYjZhODE5NjFkN2QyNmRkNDI5OTFlZmVjYTFhMmMwYmU). 
 
-All complaints will be reviewed and investigated and will result in a response that is deemed necessary and appropriate to the circumstances. The project team is obligated to maintain confidentiality with regard to the reporter of an incident.Further details of specific enforcement policies may be posted separately.
+All complaints will be reviewed and investigated and will result in a response 
+that is deemed necessary and appropriate to the circumstances. The project 
+team is obligated to maintain confidentiality with regard to the reporter of 
+an incident.Further details of specific enforcement policies may be posted 
+separately.
 
 Project maintainers who do not follow or enforce the Code of Conduct in good
 faith may face temporary or permanent repercussions as determined by other
@@ -79,7 +102,9 @@ members of the project's leadership.
 
 ### Attribution
 
-This Code of Conduct is adapted from the [Contributor Covenant][homepage], version 1.4, available at [http://contributor-covenant.org/version/1/4][version]
+This Code of Conduct is adapted from the [Contributor Covenant][homepage], 
+version 1.4, available 
+at [http://contributor-covenant.org/version/1/4][version]
 
 [homepage]: http://contributor-covenant.org
 [version]: http://contributor-covenant.org/version/1/4/

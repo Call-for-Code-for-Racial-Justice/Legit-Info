@@ -1,1 +1,0 @@
-oc port-forward service/fixpolsvc 5532:5432
