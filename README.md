@@ -94,9 +94,65 @@ through voting or other activism.
 
 ![architecture](docs/Architecture-Fix-Politics-2020-08-26.png)
 
+
 ## Long description
 
 [More detail is available here](DESCRIPTION.md)
+
+
+## Suggestions on how to take this idea in other directions
+
+This starter kit can be taken in a variety of directions.
+
+1. **Email:**
+
+Without an email SMTP server, we used instead `Mailtrap.io`
+which allowed testing of the HTML and TEXT formats.  Considering adding
+an SMTP server to send out email.
+
+2. **Currated Data Entry:**
+
+Currently, locations, impacts and laws are 
+entered manually via the standard Django /admin panels.  These could
+be improved, with bigger and wider text boxes.
+
+3. **Permission Levels:**
+
+The Superuser can grant privileges to other users, and
+this could be implemented as a "upgrade user to Staff" button option with
+specific privilege levels pre-set.
+
+4. **Share options:**
+
+The advocate can share results three ways: (a) print
+out the results on paper or PDF file; (b) email to self then forward that
+email to others from their regular email system, and (c) download CSV file
+to send out to others or perform other analyses.  Additional options could
+be to send out tweets on Twitter, post to a Blog, or send out to other 
+social media outlets like Facebook.
+
+5. **Feedback options:**
+
+Add information to each law related to the proponents
+or opponents, these could be elected officials or activists that are actively
+involved with the legislation.  Feedback options can be to send opinions
+directly to those people, or to allow those elected officials to easily see the
+collection of opinions directly from the website.
+
+6. **Automate Collection:**
+
+The effort to review laws, determine if they apply to the desired impact
+areas for the locations involved, and then classify and summarize them in
+laymen terms, was manually intensive.  This could be improved by having a
+system that does web crawling, web page scraping, or invokes publicly APIs
+to gether the data, do some initial filtering, and present suject matter
+experts with a refined list to review.
+
+7. **Automate Classification**
+
+It is not obvious that policies and regulations have certain impacts.
+An improvement would be to use supervised training of AI models with a
+set of already classified laws to determine which impact area involved.
 
 
 ## Getting started
@@ -139,6 +195,11 @@ pip and pipenv supporting tools
 * [SQlite](https://www.sqlite.org/index.html) - A simple, local database
 * [Postgresql](https://www.postgresql.org/) - A robust, relational database
 * [Gunicorn](https://gunicorn.org/) - A WSGI HTTP server for Python
+
+The following technologies were used to demonstrate the MVP.  Certainly,
+they are optional, as the above application can run on a traditional 
+LAMP stack bare-metal server.
+
 * [Red Hat UBI](https://catalog.redhat.com/software/containers/ubi8)  - Red Hat
   Universal Base Image, based on Red Hat Enterprise Linux (RHEL) 8.2
 * [Docker](https://www.docker.com/) - A container platform

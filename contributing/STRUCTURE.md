@@ -4,11 +4,48 @@
 
 ![Django](basic-django.png)
 
-Django provides a framework for Python applications.  Our application
-has three main directories.  `cfc_project` for the entire project, 
-`fixpol` for the main application, and `users` for user access management.
-The `manage.py` is Python's administration program.  Output CSV files are
-stored in `results` directory.
+Django provides a framework for Python applications.
+
+The application has three main directories.  `cfc_project` for the entire 
+project, `fixpol` for the main application, and `users` for user access 
+management. The `manage.py` is Python's administration program.  Output CSV 
+files are stored in `results` directory.
+
+All of the major settings are in the `cfc_project/settings.py` file.
+
+The `urls` (sometimes called `routes` in other frameworks) indicate how
+to redirect URLS to the respective views.
+
+```
+* website           --> home page
+* website/admin     --> admin page (used to enter locations, impacts, laws)
+* website/search    --> search page
+* website/locations --> list of locations page
+* website/impatcs   --> list of impacts
+* website/results/nn/   --> results page (for criteria nn)
+* website/criteria/nn/  --> criteria display
+* website/criterias     --> list of all criterias
+* website/health        --> used with Docker/Tekton build/deploy activities
+* website/lawdump       --. Dump all laws to CSV file (for export)
+* website/users/register    --> Register profile for user
+* website/users/update      --> Update profile of user
+* website/users/profile     --> Display user profile
+```
+
+The views are contained in `fixpol/views.py` and `users/views.py` that
+perform all of the business logic, then render the results as an HTML,
+CSV file, or HTTP Response.
+
+The models are the object representation of database tables.  This is often
+referred to as an "Object Relationship Model" (ORM).  The advantage is that
+changing from SQLite3 (Stage 1) to Postgresql (Stage 2 and 3) is simply an
+if-then-else statement in one section of the `cfc_project/settings.py` file.
+
+Templates represent the HTML, CSS and JavaScript to display the data.
+They are also used to create email in HTML and TEXT formats, as well as
+CSV output files.
+
+Here is the main code structure directory:
 
 
 ```bash
@@ -314,7 +351,6 @@ As needed, we have created a few scripts to help with common tasks.
 ├── icc
 ├── port-forward.sh
 ├── run
-
 ├── run-pg
 ```
 
@@ -350,6 +386,9 @@ stored here.
 
 ```bash
 .
+├── backups
+│   ├── db-pg.json
+│   ├── db-sqlite3.json
 │   ├── fixpol_law.sql
 │   ├── fixpol_location.sql
 │   ├── impact.sql
@@ -357,6 +396,7 @@ stored here.
 │   ├── law.sql
 │   ├── loc.sql
 │   ├── london.csv
+  
 ```
 
 ### Documentation
