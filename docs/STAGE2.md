@@ -130,8 +130,8 @@ to remove this line.
 Step 6b: Ensure Postgresql database is empty
 
 ```
-(fix) [Grady fix-politics]$ USE_SQLITE3='True' python manage.py migrate
-(fix) [Grady fix-politics]$ USE_SQLITE3='True' python manage.py shell
+(fix) [Grady fix-politics]$ USE_SQLITE3='False' python manage.py migrate
+(fix) [Grady fix-politics]$ USE_SQLITE3='False' python manage.py shell
 **Using PostgreSQL**
 Python 3.6.8 (default, Sep 26 2019, 11:57:09) 
 Type 'copyright', 'credits' or 'license' for more information
@@ -144,7 +144,7 @@ In[3]: quit()
 Step 6c: Load JSON file into Postgresql
 
 ```
-(fix) [Grady fix-politics]$ USE_SQLITE3='True' python manage.py loaddata db.json
+(fix) [Grady fix-politics]$ USE_SQLITE3='False' python manage.py loaddata db.json
 ```
 
 
