@@ -11,9 +11,9 @@ urlpatterns = [
     # Registration page.
     path('register/', views.register, name='register'),
 
-    # Profile page.
+    # Profile display page.
     path('profile/', views.show_profile, name='profile'),
 
-    # Profile page.
+    # Profile update page.
     path('update/', views.update_profile, name='update'),
     ]

@@ -29,6 +29,7 @@ RESULTSDIR = 'results'
 
 
 def cte_query(loc):
+    """ Ancestor-search, find all parents to specified location"""
     loc_list = [loc]
     for n in range(10):
         loc = loc.parent
@@ -42,6 +43,7 @@ def cte_query(loc):
 
 
 def make_csv(search_id, laws):
+    """ Make Comma-Separated-Value (CSV) format file"""
     laws_table = []
     for law in laws:
         laws_table.append({'key': law.key,
@@ -62,6 +64,7 @@ def make_csv(search_id, laws):
 
 
 def recipient_format(first, last, addr):
+    """ Format receiption with email address and name if available """
     if first == '' and last == '':
         rec = addr
     else:
@@ -70,17 +73,20 @@ def recipient_format(first, last, addr):
 
 
 def results_basename(search_id):
+    """ Generate the base name for the download file """
     basename = 'fixpol-results-{}.csv'.format(search_id)
     return basename
 
 
 def results_filename(search_id):
+    """ Generate the fully qualified name for results file """
     basename = results_basename(search_id)
     filename = os.path.join(settings.MEDIA_ROOT, basename)
     return filename
 
 
 def strip_double_quotes(item):
+    """ Remove double quotes and the beginning and end of string """
     new_item = item
     if item.startswith('"') and item.endswith('"'):
         new_item = item[1:-1]
@@ -133,6 +139,8 @@ def criterias(request):
 
 
 def download(request, search_id):
+    """ Download results as CSV file """
+
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(content_type='text/csv')
     basename = results_basename(search_id)
@@ -148,6 +156,8 @@ def download(request, search_id):
 
 
 def health(request):
+    """ Used by Docker/Tekton to confirm status """
+
     state = {"status": "UP"}
     return JsonResponse(state)
 
@@ -166,6 +176,8 @@ def index(request):
 
 @staff_member_required
 def lawdump(request):
+    """ Download all legislation as CSV file, for staff use only """
+
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(content_type='text/csv')
     basename = 'lawdump.csv'
@@ -254,12 +266,14 @@ def sendmail(request, search_id):
     today = datetime.now()
     gen_date = today.strftime("%B %d, %Y")
 
+    # Read the results set
     filename = results_filename(search_id)
     with open(filename, 'rt') as res_file:
         resultsReader = csv.DictReader(res_file)
         laws_found = list(resultsReader)
         # import pdb; pdb.set_trace()
 
+    # Specify email headers
     subject = 'Fix Politics -- Legislation Search Results -- ' + gen_date
     sender_email = 'fix-politics-cfc@ibm.com'
     user = request.user
@@ -267,6 +281,7 @@ def sendmail(request, search_id):
                                    user.last_name,
                                    user.email)]
 
+    # If the EMAIL_HOST is configured in cfc_project/settings.py
     if settings.EMAIL_HOST:
         context = {'laws_found': laws_found,
                    'gen_date': gen_date}
@@ -280,6 +295,8 @@ def sendmail(request, search_id):
         sent = send_mail(subject, text_version, sender_email, recipients,
                          fail_silently=True, html_message=html_version)
 
+        # the variable "sent" represents the number of emails successfully
+        # sent.  Thus, 0=none sent, and 1=one sent successfull
         if sent > 0:
             status_message = 'Mail successfully sent to:'
         else:

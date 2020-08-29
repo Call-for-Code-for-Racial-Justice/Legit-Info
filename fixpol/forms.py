@@ -19,6 +19,7 @@ class SearchForm(forms.ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
+        """Specify location and impact pull down menus """
         super(SearchForm, self).__init__(*args, **kwargs)
 
         # if you want to do just one

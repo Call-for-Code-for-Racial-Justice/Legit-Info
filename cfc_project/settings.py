@@ -26,9 +26,8 @@ SECRET_KEY = os.environ.get(
     'SECRET_KEY', 'ry()%j23$u$c7q$m2o0vo1w(u^eut8b3c0ylpy+)((6f7j08a4')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -36,7 +35,6 @@ INSTALLED_APPS = [
     # My apps
     'fixpol',
     'users',
-
 
     # Third party apps.
     'bootstrap4',
@@ -61,8 +59,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    # 'django_pdb.middleware.PdbMiddleware',
 ]
 
 ROOT_URLCONF = 'cfc_project.urls'
@@ -83,6 +79,9 @@ TEMPLATES = [
     },
 ]
 
+# The email host settings are optional, needed for the "email to self"
+# Feature.  The project team used 'Mailtrap.IO' for testing.
+
 EMAIL_HOST = os.environ.get('EMAIL_HOST', '')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
@@ -92,6 +91,9 @@ WSGI_APPLICATION = 'cfc_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+
+# SQLite3 is used in Stage 1 for local test and development
+# Postgresql is used in Stage 2 and Stage 3.  See /docs for details
 
 use_SQLite3 = os.getenv('USE_SQLITE3', 'True')
 if use_SQLite3 == 'True':

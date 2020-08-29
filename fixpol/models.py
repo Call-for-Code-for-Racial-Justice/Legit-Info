@@ -9,6 +9,7 @@ LEFT_PAD = u"\u2002\u2002\u2002\u2002"
 
 
 def get_default_law_key():
+    """ Default key needs to be unique timestamp until changed """
     x = str(datetime.now())
     key = x[5:25]
     return key
@@ -83,12 +84,14 @@ class Criteria(models.Model):
         return key
 
     def set_text(self):
+        """ Combine location and impacts into a single text string """
         crit_text = criteria_string(self.location, self.impacts.all())
         self.text = crit_text
         return self.text
 
 
 def criteria_string(location, impact_list):
+    """ Combine location and impacts into a single text string """
     loc_text = location.hierarchy
     impact_string = impact_seq(impact_list)
     crit_text = loc_text + impact_string
@@ -96,6 +99,7 @@ def criteria_string(location, impact_list):
 
 
 def find_criteria_id(crit_text):
+    """ Find criteria entry that matches location and impacts """
     crit_id = 0
     crits = Criteria.objects.all()
     if crits:

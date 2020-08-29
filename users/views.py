@@ -30,7 +30,9 @@ def register(request):
 
 @login_required
 def show_profile(request):
+    """Display user profile information."""
     user = request.user
+    # Display the location and impact preferences
     location = user.profile.location
     impacts = user.profile.impacts.all()
 
@@ -43,14 +45,17 @@ def show_profile(request):
 @login_required
 @transaction.atomic
 def update_profile(request):
-
+    """Update user profile information."""
     if request.method != 'POST':
+        # Pre-populate forms with previous information
         user_form = UserForm(instance=request.user)
         profile_form = ProfileForm(instance=request.user.profile)
 
     else:
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = ProfileForm(request.POST, instance=request.user.profile)
+
+        # Check updates to profile for validity
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
