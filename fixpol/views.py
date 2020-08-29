@@ -1,27 +1,27 @@
-import os
+# views.py
 import csv
+from datetime import datetime
+import os
+
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from .models import Location, Impact, Criteria, Law
-from .models import impact_seq
-from .forms import SearchForm
 from django.contrib.auth.models import User
-from users.models import Profile
-
 from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from datetime import datetime
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
+
+from users.models import Profile
+from .models import Location, Impact, Criteria, Law
+from .models import impact_seq
+from .forms import SearchForm
 
 # Debugging options
 # return HttpResponse({variable to inspect})
 # print {variable to inspect}
 # raise Exception({variable to inspect})
 # import pdb; pdb.set_trace()
-
-RESULTSDIR = 'results'
 
 #########################
 # Support functions here
