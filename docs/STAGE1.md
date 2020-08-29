@@ -115,6 +115,23 @@ dependencies into your virtual environment (virtualenv) with:
 has been simplified with a `manage.py` program to avoid dealing with 
 configuring environment variables to run your app. 
 
+Several values are considered "secret" and should be stored in your 
+Operating System environment variables.  For Linux, these can be put
+in your `~/.bashrc` or `/etc/bashrc` files.
+
+```bash
+SECRET_KEY
+EMAIL_HOST
+EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD
+EMAIL_PORT
+POSTGRESQL_DATABASE
+POSTGRESQL_USER
+POSTGRESQL_PASSWORD
+POSTGRESQL_HOSTNAME
+POSTGRESQL_PORT
+```
+
 While you are in the virtual environment, there will be an indicator such as 
 "(fix)" in front of your normal shell prompt.  Use "exit" to leave the 
 virtual environment.  If you were using "python3" in your normal shell,
