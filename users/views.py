@@ -4,9 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.contrib.auth.forms import UserCreationForm
 from .forms import UserForm, ProfileForm
-from django.contrib.auth.models import User
-from .models import Profile
-from fixpol.models import Criteria
 
 # Create your views here.
 
@@ -33,27 +30,32 @@ def register(request):
 
 @login_required
 def show_profile(request):
+    """Display user profile information."""
     user = request.user
+    # Display the location and impact preferences
     location = user.profile.location
     impacts = user.profile.impacts.all()
-       
-    context = {'user': user, 
-               'location': location, 
-                'impacts': impacts}
+
+    context = {'user': user,
+               'location': location,
+               'impacts': impacts}
     return render(request, 'registration/profile.html', context)
 
 
 @login_required
 @transaction.atomic
 def update_profile(request):
-
+    """Update user profile information."""
     if request.method != 'POST':
+        # Pre-populate forms with previous information
         user_form = UserForm(instance=request.user)
         profile_form = ProfileForm(instance=request.user.profile)
 
     else:
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = ProfileForm(request.POST, instance=request.user.profile)
+
+        # Check updates to profile for validity
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
@@ -62,11 +64,7 @@ def update_profile(request):
             user.profile.set_criteria()
             return redirect('fixpol:index')
 
-
-    context = { 'user_form': user_form,
-                'profile_form': profile_form}
+    context = {'user_form': user_form,
+               'profile_form': profile_form}
 
     return render(request, 'registration/update.html', context)
-
-
-
