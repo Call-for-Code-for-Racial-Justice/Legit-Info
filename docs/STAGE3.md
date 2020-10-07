@@ -285,5 +285,5 @@ CONTAINER ID        IMAGE                COMMAND                  CREATED       
 Now that you have validated the "Dockerfile" locally, we can use this to
 build the application pod in the IBM Cloud.
 
-
+Set "DEBUG = False" in cfc_project/settings.py
 
