@@ -230,6 +230,8 @@ conduct, and the process for submitting pull requests to the project.
 This project is licensed under the Apache 2 License - 
 see the [LICENSE](LICENSE) file for details
 
+Please also read the [BSD Copyright Notice](BSD-NOTICE)
+
 ## Acknowledgments
 
 * Based on [Billie Thompson's README 
