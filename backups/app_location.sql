@@ -1,7 +1,7 @@
 --PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
---CREATE TABLE IF NOT EXISTS "fixpol_location" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "desc" varchar(80) NOT NULL, "date_added" datetime NOT NULL, "govlevel" varchar(80) NOT NULL, "shortname" varchar(20) NOT NULL, "hierarchy" varchar(200) NOT NULL UNIQUE, "parent_id" integer NULL REFERENCES "fixpol_location" ("id") DEFERRABLE INITIALLY DEFERRED);
-INSERT INTO fixpol_location (
+--CREATE TABLE IF NOT EXISTS "cfc_app_location" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "desc" varchar(80) NOT NULL, "date_added" datetime NOT NULL, "govlevel" varchar(80) NOT NULL, "shortname" varchar(20) NOT NULL, "hierarchy" varchar(200) NOT NULL UNIQUE, "parent_id" integer NULL REFERENCES "cfc_app_location" ("id") DEFERRABLE INITIALLY DEFERRED);
+INSERT INTO cfc_app_location (
     id,
     "desc",
     date_added,
@@ -11,7 +11,7 @@ INSERT INTO fixpol_location (
     parent_id
   )
 VALUES (3,'world','2020-08-03 05:07:12.060299','global','tucson','world',NULL);
-INSERT INTO fixpol_location (
+INSERT INTO cfc_app_location (
     id,
     "desc",
     date_added,
@@ -21,7 +21,7 @@ INSERT INTO fixpol_location (
     parent_id
   )
 VALUES (4,'United States','2020-08-03 05:07:36.507308','country','tucson','world.usa',3);
-INSERT INTO fixpol_location (
+INSERT INTO cfc_app_location (
     id,
     "desc",
     date_added,
@@ -31,7 +31,7 @@ INSERT INTO fixpol_location (
     parent_id
   )
 VALUES (5,'Arizona, USA','2020-08-03 05:07:52.073199','state','tucson','world.usa.arizona',4);
-INSERT INTO fixpol_location (
+INSERT INTO cfc_app_location (
     id,
     "desc",
     date_added,
@@ -41,7 +41,7 @@ INSERT INTO fixpol_location (
     parent_id
   )
 VALUES (6,'Pima County, AZ','2020-08-03 05:08:13.831021','county','tucson','world.usa.arizona.pima',5);
-INSERT INTO fixpol_location (
+INSERT INTO cfc_app_location (
     id,
     "desc",
     date_added,

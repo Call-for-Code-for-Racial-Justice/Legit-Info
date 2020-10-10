@@ -7,7 +7,7 @@
 Django provides a framework for Python applications.
 
 The application has three main directories.  `cfc_project` for the entire 
-project, `fixpol` for the main application, and `users` for user access 
+project, `cfc_app` for the main application, and `users` for user access 
 management. The `manage.py` is Python's administration program.  Output CSV 
 files are stored in `results` directory.
 
@@ -32,7 +32,7 @@ to redirect URLS to the respective views.
 * website/users/profile     --> Display user profile
 ```
 
-The views are contained in `fixpol/views.py` and `users/views.py` that
+The views are contained in `cfc_app/views.py` and `users/views.py` that
 perform all of the business logic, then render the results as an HTML,
 CSV file, or HTTP Response.
 
@@ -56,7 +56,7 @@ Here is the main code structure directory:
 │   ├── settings.py
 │   ├── urls.py
 │   └── wsgi.py
-├── fixpol
+├── cfc_app
 │   ├── admin.py
 │   ├── apps.py
 │   ├── forms.py
@@ -389,13 +389,12 @@ stored here.
 ├── backups
 │   ├── db-pg.json
 │   ├── db-sqlite3.json
-│   ├── fixpol_law.sql
-│   ├── fixpol_location.sql
-│   ├── impact.sql
+│   ├── app_law.sql
+│   ├── app_location.sql
+│   ├── app_impact.sql
 │   ├── lawdump.csv
 │   ├── law.sql
 │   ├── loc.sql
-│   ├── london.csv
   
 ```
 
@@ -420,7 +419,6 @@ some URLs extend beyond that.
 ├── docs
 │   ├── Architecture-Fix-Politics-2020-08-26.png
 │   ├── Final_presentation_-_fix_politics2.pptx
-│   ├── fixpol_impact.sql
 │   ├── Fix-Politics-Architecture-Aug11.pptx
 │   ├── Fix-Politics-Architecture-Aug12.pptx
 │   ├── Fix-Politics-Architecture-Aug16.pptx
