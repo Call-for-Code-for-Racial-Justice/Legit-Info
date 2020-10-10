@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from fixpol.models import Location, Impact
+from cfc_app.models import Location, Impact
 from .models import Profile
 
 

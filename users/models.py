@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from fixpol.models import Impact, Criteria
+from cfc_app.models import Impact, Criteria
 
 # Create your models here.
 
@@ -15,12 +15,12 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,
                                 related_name='profile')
 
-    location = models.ForeignKey('fixpol.Location', null=True,
+    location = models.ForeignKey('cfc_app.Location', null=True,
                                  related_name='profiles', on_delete=models.SET_NULL)
 
     impacts = models.ManyToManyField(Impact)
 
-    criteria = models.ForeignKey('fixpol.Criteria', null=True,
+    criteria = models.ForeignKey('cfc_app.Criteria', null=True,
                                  related_name='profiles', on_delete=models.SET_NULL)
 
     def __str__(self):

@@ -62,7 +62,7 @@ def update_profile(request):
             # import pdb; pdb.set_trace() # DEBUG
             user = request.user
             user.profile.set_criteria()
-            return redirect('fixpol:index')
+            return redirect('cfc_app:index')
 
     context = {'user_form': user_form,
                'profile_form': profile_form}

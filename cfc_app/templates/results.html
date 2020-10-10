@@ -1,8 +1,9 @@
 {% extends "base.html" %}
+{% load cfc_tags %}
 
 {% block page_header %}
 <div class="d-none d-print-block">
-<h1>Fix Politics</h1>
+<h1>{% app_name register %}</h1>
 </div>
 
 <h4>Search Results for {{ gen_date }}</h4>
@@ -32,7 +33,7 @@
 <div class="btn-toolbar d-print-none">
 <div class="mx-auto">
     <a class="btn btn-lg btn-warning m-3" 
-            href="{% url 'fixpol:search' %}"
+            href="{% url 'cfc_app:search' %}"
             role="button"> &laquo; Search Again</a>
 
 {% if numlaws > 0 %}
@@ -44,14 +45,14 @@
     </button>
 
     <a class="btn btn-lg btn-success float-right m-3" 
-            href="{% url 'fixpol:download' search_id %}"
+            href="{% url 'cfc_app:download' search_id %}"
             role="button">Download CSV &raquo;</a>
 
 {{ settings.EMAIL_HOST }}
 
     {% if user.is_authenticated %}
     <a class="btn btn-lg btn-primary float-right m-3" 
-            href="{% url 'fixpol:sendmail' search_id %}"
+            href="{% url 'cfc_app:sendmail' search_id %}"
             role="button">Send Results &raquo;</a>
     {% endif %}
 

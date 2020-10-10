@@ -74,7 +74,7 @@ def recipient_format(first, last, addr):
 
 def results_basename(search_id):
     """ Generate the base name for the download file """
-    basename = 'fixpol-results-{}.csv'.format(search_id)
+    basename = 'results-{}.csv'.format(search_id)
     return basename
 
 
@@ -170,7 +170,7 @@ def impacts(request):
 
 
 def index(request):
-    """The home page for Fix Politics."""
+    """The home page for this application."""
     return render(request, 'index.html')
 
 
@@ -244,7 +244,7 @@ def search(request):
             criteria.set_text()
             criteria.save()
             crit_id = criteria.id
-            return redirect('fixpol:results', search_id=crit_id)
+            return redirect('cfc_app:results', search_id=crit_id)
 
     context = {'form': form}
     return render(request, 'search.html', context)
@@ -274,8 +274,8 @@ def sendmail(request, search_id):
         # import pdb; pdb.set_trace()
 
     # Specify email headers
-    subject = 'Fix Politics -- Legislation Search Results -- ' + gen_date
-    sender_email = 'fix-politics-cfc@ibm.com'
+    subject = settings.APP_NAME + ' -- Legislation Search Results -- ' + gen_date
+    sender_email = 'CFCapp@ibm.com'
     user = request.user
     recipients = [recipient_format(user.first_name,
                                    user.last_name,

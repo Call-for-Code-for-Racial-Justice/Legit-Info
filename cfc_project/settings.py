@@ -17,6 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 MEDIA_URL = '/results/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'results')
+APP_NAME = 'CFC App'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -26,14 +27,14 @@ SECRET_KEY = os.environ.get(
     'SECRET_KEY', 'ry()%j23$u$c7q$m2o0vo1w(u^eut8b3c0ylpy+)((6f7j08a4')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-ALLOWED_HOSTS = ['*']
+DEBUG = True
+ALLOWED_HOSTS = ['*', '127.0.0.1', 'localhost']
 
 # Application definition
 
 INSTALLED_APPS = [
     # My apps
-    'fixpol',
+    'cfc_app',
     'users',
 
     # Third party apps.

@@ -21,7 +21,7 @@ class Location(models.Model):
     """A location helps filter which legislation to look at."""
 
     class Meta:
-        app_label = 'fixpol'
+        app_label = 'cfc_app'
         ordering = ['hierarchy']
 
     desc = models.CharField(max_length=80)
@@ -51,7 +51,7 @@ class Impact(models.Model):
     """A location helps filter which legislation to look at."""
 
     class Meta:
-        app_label = 'fixpol'
+        app_label = 'cfc_app'
 
     text = models.CharField(max_length=80, unique=True)
     date_added = models.DateTimeField(auto_now_add=True)
@@ -65,12 +65,12 @@ class Criteria(models.Model):
     """ Criteria of anonymous or user-profile search """
 
     class Meta:
-        app_label = 'fixpol'
+        app_label = 'cfc_app'
         verbose_name_plural = "criteria"  # plural of criteria
 
     text = models.CharField(max_length=200, null=True, blank=True)
 
-    location = models.ForeignKey('fixpol.Location', null=True,
+    location = models.ForeignKey('cfc_app.Location', null=True,
                                  related_name='criteria',
                                  on_delete=models.CASCADE)
 
@@ -127,7 +127,7 @@ class Law(models.Model):
     """Summary of legislation resulting from Machine Learning"""
 
     class Meta:
-        app_label = 'fixpol'
+        app_label = 'cfc_app'
         verbose_name_plural = "laws"  # plural of legislation
 
     key = models.CharField(max_length=20, null=False,
@@ -137,10 +137,10 @@ class Law(models.Model):
 
     summary = models.CharField(max_length=1000)
 
-    location = models.ForeignKey('fixpol.Location', null=True,
+    location = models.ForeignKey('cfc_app.Location', null=True,
                                  related_name='laws', on_delete=models.CASCADE)
 
-    impact = models.ForeignKey('fixpol.Impact', null=True,
+    impact = models.ForeignKey('cfc_app.Impact', null=True,
                                related_name='laws', on_delete=models.CASCADE)
 
     def __str__(self):

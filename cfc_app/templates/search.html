@@ -15,7 +15,7 @@ ul {
 }
 </style>
 
-    <form action="{% url 'fixpol:search' %}" method='post'>
+    <form action="{% url 'cfc_app:search' %}" method='post'>
         {% csrf_token %}
         {{ form.as_p }}
     <div class="row mx-auto">

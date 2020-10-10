@@ -1,5 +1,5 @@
 from django import forms
-from fixpol.models import Location, Impact
+from cfc_app.models import Location, Impact
 from .models import Criteria
 
 

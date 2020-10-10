@@ -1,4 +1,5 @@
-Fix Politics -- Search Results -- {{ gen_date }}
+{% load cfc_tags %}
+{% app_name register %} -- Search Results -- {{ gen_date }}
 
 {% for law in laws %}
 {{ law.title }}  [{{ law.key }} | {{ law.location.desc }} | {{ law.impact.text }}]

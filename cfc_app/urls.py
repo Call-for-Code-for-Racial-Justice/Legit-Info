@@ -1,10 +1,10 @@
-"""Defines URL patterns for fixpol application"""
+"""Defines URL patterns for this application"""
 
 from django.urls import path
 from . import views
 
 
-app_name = 'fixpol'
+app_name = 'cfc_app'
 
 urlpatterns = [
     # Home page
