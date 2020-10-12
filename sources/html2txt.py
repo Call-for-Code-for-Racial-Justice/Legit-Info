@@ -7,11 +7,33 @@ from bs4 import BeautifulSoup
 PARSER = "lxml"
 
 
+class Oneline():
+    """
+    Class to maintain one long line
+
+    """
+
+    def __init__(self, dotchar="."):
+        """ Set characters to use for showing progress"""
+        self.oneline = ''
+        return None
+
+    def add_text(self, line):
+        newline = line.replace("'", " ").replace('"', ' ').splitlines()
+        newline2 = ' '.join(newline)
+        self.oneline += newline2
+        return self
+
+    def write_file(self, outfile):
+        print(self.oneline, file=outfile)
+        return self
+
+
 def parse_html(htmlname):
     page = open(htmlname, "rb").read().decode('utf-8', 'ignore')
     soup = BeautifulSoup(page, PARSER)
     title = soup.find('title')
-    print('Legislation: {}'.format(title.string), file=outfile)
+    output_line.add_text('Legislation: {}'.format(title.string))
 
     sections = soup.findAll("span", {"class": "SECHEAD"})
     for section in sections:
@@ -19,13 +41,13 @@ def parse_html(htmlname):
         if rawtext:
             lines = rawtext.splitlines()
             header = " ".join(lines)
-            print('Header: {}'.format(header), file=outfile)
+            output_line.add_text('Header: {}'.format(header))
 
     paragraphs = soup.findAll("p", {"class": "P06-00"})
     for paragraph in paragraphs:
         pg = paragraph.string
         if pg:
-            print(pg, file=outfile)
+            output_line.add_text(pg)
 
     return None
 
@@ -52,9 +74,12 @@ def get_parms(argv):
 if __name__ == "__main__":
     # Check proper input syntax
     display_help, htmlname = get_parms(sys.argv)
+
+    output_line = Oneline()
     if not display_help:
         outname = htmlname.replace('.html', '.txt')
         with open(outname, "w") as outfile:
             parse_html(htmlname)
+            output_line.write_file(outfile)
 
     print("File {} created".format(outname))

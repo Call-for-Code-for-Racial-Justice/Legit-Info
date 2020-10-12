@@ -1,0 +1,2 @@
+#!/bin/bash
+find . -iname "*.html" -exec python3 html2txt.py {} \;
