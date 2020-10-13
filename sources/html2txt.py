@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 # html2txt.py -- Convert Legiscan.com HTML to TXT file
 # By Tony Pearson, IBM, 2020
 #
@@ -21,11 +21,11 @@ class Oneline():
     def add_text(self, line):
         newline = line.replace("'", " ").replace('"', ' ').splitlines()
         newline2 = ' '.join(newline)
-        self.oneline += newline2
+        self.oneline += newline2 + ' '
         return self
 
     def write_file(self, outfile):
-        print(self.oneline, file=outfile)
+        print(self.oneline, end='', file=outfile)
         return self
 
 
@@ -33,7 +33,8 @@ def parse_html(htmlname):
     page = open(htmlname, "rb").read().decode('utf-8', 'ignore')
     soup = BeautifulSoup(page, PARSER)
     title = soup.find('title')
-    output_line.add_text('Legislation: {}'.format(title.string))
+    if title:
+        output_line.add_text(title.string)
 
     sections = soup.findAll("span", {"class": "SECHEAD"})
     for section in sections:
@@ -41,7 +42,7 @@ def parse_html(htmlname):
         if rawtext:
             lines = rawtext.splitlines()
             header = " ".join(lines)
-            output_line.add_text('Header: {}'.format(header))
+            output_line.add_text(header)
 
     paragraphs = soup.findAll("p", {"class": "P06-00"})
     for paragraph in paragraphs:
@@ -54,6 +55,7 @@ def parse_html(htmlname):
 
 def get_parms(argv):
     display_help = False
+    htmlname = ''
     if len(sys.argv) == 2:
         htmlname = sys.argv[1]
         if htmlname == '--help' or htmlname == '-h':

@@ -1,0 +1,5 @@
+#!/bin/bash
+pdfname="$1"
+fbname=$(basename "$pdfname" .pdf)
+echo "${pdfname}" "$fbname"
+python3 pdf2txt.py "$pdfname" | python3 in2bill.py - "${fbname}.txt"

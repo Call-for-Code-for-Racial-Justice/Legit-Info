@@ -9,6 +9,7 @@ def is_venv():
 
 if __name__ == '__main__':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cfc_project.settings')
+    os.environ.setdefault('LD_LIBRARY_PATH', '/usr/local/lib')
 
     if not is_venv():
         print('Virtual Environment: ERROR **NOT FOUND**')

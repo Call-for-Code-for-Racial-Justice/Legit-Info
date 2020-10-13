@@ -18,6 +18,16 @@ this command:
 git version 2.28.0
 ```
 
+* [Sqlite](https://www.djaodjin.com/blog/django-2-2-with-sqlite-3-on-centos-7.blog.html)
+Stage 1 uses a local database called Sqlite3.  Tihs is popular because it
+is a single file that works well with git repositories.  However, Django
+requires Sqlite3 to be 3.8.3 to 3.25 (3.26 or higher causes problems).  The
+default level of Sqlite3 on many Linux distributions is 3.7.17 and is used
+by critical applications like YUM.  DO NOT UNINSTALL Sqlite 3.7.17, but rather
+install Sqlite3 in /usr/local, and set LD_LIBRARY_PATH to /usr/local/lib
+so that Django can use the updated level.  This app was tested with 3.24 level.
+
+
 * [Python](https://www.python.org/downloads/)
 
 This application requires Python 3.6.1 or higher.  There are two levels
