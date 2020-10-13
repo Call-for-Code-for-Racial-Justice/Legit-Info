@@ -9,7 +9,7 @@ delivers curated content to users.
 Administration allows authorized staff to create and maintain the list of
 locations, impact areas, and curated policy legislation.
 
-### Subsection 1.1 Superuser: fixadmin
+### Subsection 1.1 Superuser: cfcadmin
 
 Use the Django `createsuperuser` to create the first user.
 
@@ -19,12 +19,12 @@ $ pipenv shell
 (fix) $ python manage.py createsuperuser
 ```
 
-For example, create username "fixadmin".
+For example, create username "cfcadmin".
 
 To access admin panels, add "/admin" to the main website.  For local
 testing, use:  `http://localhost:3000/admin`
 
-Alternatively, launch `http://localhost:3000` and sign in as "fixadmin",
+Alternatively, launch `http://localhost:3000` and sign in as "cfcadmin",
 you will find an "Admin" tab on the upper right of the navigation bar.
 
 ### Subsection 1.2 Impact Areas
@@ -111,7 +111,7 @@ within four(24) hours after making the determination.
 
 ### Subsection 1.5 Staff
 
-The fixadmin can create additional users, referred to as `staff` that have 
+The cfcadmin can create additional users, referred to as `staff` that have 
 selected permissions to add, modify or delete locations, impact areas, or 
 curated legislation content.
 

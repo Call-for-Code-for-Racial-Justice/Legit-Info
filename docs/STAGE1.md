@@ -160,6 +160,17 @@ While you are in the virtual environment, there will be an indicator such as
 virtual environment.  If you were using "python3" in your normal shell,
 you only need to use "python" within your virtualenv.
 
+You will need to see the "cfc_app_location" table with the first entry,
+using this SQL statement.
+
+```
+(fix) [Grady fix-politics]$ python manage.py dbshell
+**Using SQLite3**
+insert into cfc_app_location values(1,'world','world','world', 'world', clock_timestamp(), 1);
+.quit
+```
+
+
 We have created "run" script as a shortcut for 
 the `python manage.py runserver localhost:3000` command. 
 

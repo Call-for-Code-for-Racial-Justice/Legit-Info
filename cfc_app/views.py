@@ -312,7 +312,6 @@ def sendmail(request, search_id):
 
 def sources(request):
     path = os.path.join(settings.BASE_DIR, 'sources/')
-    import pdb; pdb.set_trace()
     file_list = os.listdir(path)
     nf = len(file_list)
     for filename in file_list:

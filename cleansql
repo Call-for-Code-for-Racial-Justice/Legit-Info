@@ -1,0 +1,6 @@
+#!/bin/bash
+sqlname="$1"
+fbname=$(basename "$sqlname" .sql)
+outname="${fbname}-clean.sql"
+sed -n '/^INSERT /p' $sqlname > $outname
+echo "File $outname created"

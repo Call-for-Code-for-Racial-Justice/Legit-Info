@@ -198,7 +198,7 @@ Step 13/24 : ENV USE_SQLITE3 "False"
  ---> Running in 72d00c43eb54
  ---> bd8e2457e4bb
 Removing intermediate container 72d00c43eb54
-Step 14/24 : ENV POSTGRESQL_DATABASE "fixpoldb"
+Step 14/24 : ENV POSTGRESQL_DATABASE "cfcappdb"
  ---> Running in 6429f7a719e0
  ---> 3e4e34458d82
 Removing intermediate container 6429f7a719e0

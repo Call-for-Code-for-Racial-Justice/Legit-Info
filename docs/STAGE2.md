@@ -36,7 +36,7 @@ Logging into OpenShift cluster: embrace-dev-ocp43-vpc
 the following:
 
 ```bash
-Database name:  fixpoldb
+Database name:  cfcappdb
 Postgresql username:  pguser
 Postgresql password:  <provide an appropriate password>
 ```
@@ -76,7 +76,7 @@ Forwarding from [::1]:5432 -> 5432
 You can define an alias command as follows:
 
 ```bash
-alias fixdb='psql -h localhost -p 5432 -d fixpoldb -U pguser -w '
+alias fixdb='psql -h localhost -p 5432 -d cfcappdb -U pguser -w '
 ```
 
 Explanation:
@@ -84,7 +84,7 @@ Explanation:
 ```
 -h localhost --- this goes to the localhost, which port forwards to IBM Cloud
 -p 5432      --- this is the port that Postgresql listens to
--d fixpoldb  --- this is the database name
+-d cfcappdb  --- this is the database name
 -U pguser    --- this is the username 
 -w           --- tells system to use PGPASSWORD environment variable
 ```
@@ -96,55 +96,40 @@ Now you can access the Postgresql database as follows:
 psql (10.14, server 10.12)
 Type "help" for help.
 
-fixpoldb=> help
+cfcappdb=> help
 You are using psql, the command-line interface to PostgreSQL.
 Type:  \copyright for distribution terms
        \h for help with SQL commands
        \? for help with psql commands
        \g or terminate with semicolon to execute query
        \q to quit
-fixpoldb=> \q
+cfcappdb=> \q
 ```
 
-6. Copy data from SQLite3 to Postgresql.  This application involves a
-database with 17 tables.  If you want to populate the Postgresql data
-in the IBM Cloud with the locations, impacts, and laws entered locally,
-you must copy ALL data the from ALL 17 tables.
+6. Pre-populate the Postgresql database tables.
 
-Environment variable "USE_SQLITE3" is available to choose between the local
-SQLite3 database and the remote Postgresql database.
-
-Here is the process:
-
-Step 6a: Dump SQLite3 as JSON file.  Note that ** Using SQLite3 ** 
-or **Using Postgresql **" is displayed, so the `sed` command is used
-to remove this line.
+Create Superuser on Postgresql.  Since we cannot copy data over from
+SQlite3 to Postgresql, we will have to re-enter all the data using the 
+application.  To get us started, we need to re-create the superuser 'cfcadmin'
 
 ```
-[Grady Dev]$ cd fix-politics
-[Grady fix-politics]$ pipenv shell
-(fix) [Grady fix-politics]$ USE_SQLITE3='True' python manage.py dumpdata > db.json
-(fix) [Grady fix-politics]$ sed -i '/..Using/d' db.json
+(fix) [Grady fix-politics]$ USE_SQLITE3='False' python manage.py createsuperuser
+**Using Postgresql**
+Username (leave blank to use 'tpearson'): cfcadmin
+Email address: tpearson@us.ibm.com
+Password: <password here>
+Password (again): <password here>
+Superuser created successfully.
 ```
 
-Step 6b: Ensure Postgresql database is empty
+You will also need to see the "cfc_app_location" table with the first entry,
+using this SQL statement.
 
 ```
-(fix) [Grady fix-politics]$ USE_SQLITE3='False' python manage.py migrate
-(fix) [Grady fix-politics]$ USE_SQLITE3='False' python manage.py shell
-**Using PostgreSQL**
-Python 3.6.8 (default, Sep 26 2019, 11:57:09) 
-Type 'copyright', 'credits' or 'license' for more information
-IPython 7.16.1 -- An enhanced Interactive Python. Type '?' for help.
-In[1]: from django.contrib.contenttypes.models import ContentType
-In[2]: ContentType.objects.all().delete()
-In[3]: quit()
-```
-
-Step 6c: Load JSON file into Postgresql
-
-```
-(fix) [Grady fix-politics]$ USE_SQLITE3='False' python manage.py loaddata db.json
+(fix) [Grady fix-politics]$ python manage.py dbshell
+**Using SQLite3**
+insert into cfc_app_location values(1,'world','world','world', 'world', clock_timestamp(), 1);
+.quit
 ```
 
 
