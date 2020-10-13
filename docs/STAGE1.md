@@ -19,6 +19,7 @@ git version 2.28.0
 ```
 
 * [Sqlite](https://www.djaodjin.com/blog/django-2-2-with-sqlite-3-on-centos-7.blog.html)
+
 Stage 1 uses a local database called Sqlite3.  Tihs is popular because it
 is a single file that works well with git repositories.  However, Django
 requires Sqlite3 to be 3.8.3 to 3.25 (3.26 or higher causes problems).  The
@@ -141,6 +142,18 @@ POSTGRESQL_PASSWORD
 POSTGRESQL_HOSTNAME
 POSTGRESQL_PORT
 ```
+
+To generate SECRET_KEY, use this command:
+```
+$ python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
+```
+
+For EMAIL settings, you can use Mailtrap.IO for testing.  When you sign up
+for a free account, the SMTP Settings will give you the values you need to
+set in your environment variables.
+
+Contact your Postgresql Administrator for the database name, user, password,
+and port used.
 
 While you are in the virtual environment, there will be an indicator such as 
 "(fix)" in front of your normal shell prompt.  Use "exit" to leave the 
