@@ -308,3 +308,14 @@ def sendmail(request, search_id):
                'recipients': recipients,
                'search_id': search_id}
     return render(request, 'email_sent.html', context)
+
+
+def sources(request):
+    path = os.path.join(settings.BASE_DIR, 'sources/')
+    import pdb; pdb.set_trace()
+    file_list = os.listdir(path)
+    nf = len(file_list)
+    for filename in file_list:
+        x = len(filename)
+    context = { 'flie_list': file_list }
+    return render(request, 'gallery.html', context)

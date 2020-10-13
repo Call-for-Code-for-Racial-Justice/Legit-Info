@@ -110,7 +110,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('POSTGRESQL_DATABASE', 'fixpoldb'),
+            'NAME': os.environ.get('POSTGRESQL_DATABASE', 'cfcappdb'),
             'USER': os.environ.get('POSTGRESQL_USER', 'NOT_SET'),
             'PASSWORD': os.environ.get('POSTGRESQL_PASSWORD', 'NOT_SET'),
             'HOST': os.environ.get('POSTGRESQL_HOSTNAME', 'localhost'),

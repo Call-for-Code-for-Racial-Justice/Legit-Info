@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load cfc_tags %}
+
+{% block page_header %}
+<div class="d-none d-print-block">
+<h1>{% app_name register %}</h1>
+</div>
+
+<h4>Sources</h4>
+{% endblock page_header %}
+
+
+{% block content %}
+<ul>
+{% for file in file_list %}
+    <li>{{file}}</li><br>
+{% endfor %}
+</ul>
+
+<div class="results">
+  
+    <div class="page-content-standard">
+        <ul>
+        {% for filename in file_list %}
+        <li>{{ filename }}</li>
+        {% empty %}
+        <li>No files found.</li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+
