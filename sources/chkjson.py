@@ -2,7 +2,6 @@
 # scanjson.py -- Scan JSON from Legiscan API
 # By Tony Pearson, IBM, 2020
 #
-import base64
 import codecs
 import json
 import re
@@ -26,7 +25,8 @@ class Stats():
         self.total = 0
         self.count = 0
         self.overlim = 0
-        self.ShowForm = "{} Min: {}  Average: {}   Maximum {}  Count {}  Over {}"
+        self.ShowForm = "{} Min: {}  Average: {}  "
+        self.ShowForm += "Maximum {}  Count {}  Over {}"
         return None
 
     def add_stat(self, num):
@@ -48,13 +48,14 @@ class Stats():
         result = self.id + " No statistics"
         if self.count > 0:
             avg = self.total // self.count
-            result = self.ShowForm.format(self.id, self.min, avg, 
+            result = self.ShowForm.format(self.id, self.min, avg,
                                           self.max, self.count, self.overlim)
         return result
 
+
 def remove_section_numbers(line):
     newline = re.sub(r'and [0-9]+[.][0-9]+\b\s*', '', line)
-    newline = re.sub(r'\([0-9]+[.][0-9]+\)[,]?\s*', '', newline)  
+    newline = re.sub(r'\([0-9]+[.][0-9]+\)[,]?\s*', '', newline)
     newline = re.sub(r'\b[0-9]+[.][0-9]+\b[,]?\s*', '', newline)
     newline = re.sub(r'section[s]? and section[s]?\s*', 'sections', newline)
     newline = re.sub(r'section[s]?\s*;\s*', '; ', newline)
@@ -92,10 +93,10 @@ def get_parms(argv):
 
 def custom_character_handler(exception):
     print(charForm.format(exception.reason,
-            exception.object[exception.start:exception.end],
-            exception.encoding,
-            exception.start,
-            exception.end ))
+                          exception.object[exception.start:exception.end],
+                          exception.encoding,
+                          exception.start,
+                          exception.end))
     return ("?", exception.end)
 
 
@@ -123,12 +124,12 @@ if __name__ == "__main__":
                 # print('TITLE: ', title)
                 # print('SUMMARY: ', summary)
 
-                if len(title)>200:
+                if len(title) > 200:
                     revised = shrink_line(title, 200)
 
-                if len(summary)>1000:
+                if len(summary) > 1000:
                     revised = shrink_line(summary, 1000)
-                
+
                 keystats.add_stat(len(key))
                 titlestats.add_stat(len(title))
                 summarystats.add_stat(len(summary))

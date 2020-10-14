@@ -2,7 +2,6 @@
 # scanjson.py -- Scan JSON from Legiscan API
 # By Tony Pearson, IBM, 2020
 #
-import base64
 import codecs
 import json
 import sys
@@ -25,7 +24,8 @@ class Stats():
         self.total = 0
         self.count = 0
         self.overlim = 0
-        self.ShowForm = "{} Min: {}  Average: {}   Maximum {}  Count {}  Over {}"
+        self.ShowForm = "{} Min: {}  Average: {}  "
+        self.ShowForm += "Maximum {}  Count {}  Over {}"
         return None
 
     def add_stat(self, num):
@@ -47,7 +47,7 @@ class Stats():
         result = self.id + " No statistics"
         if self.count > 0:
             avg = self.total // self.count
-            result = self.ShowForm.format(self.id, self.min, avg, 
+            result = self.ShowForm.format(self.id, self.min, avg,
                                           self.max, self.count, self.overlim)
         return result
 
@@ -74,10 +74,10 @@ def get_parms(argv):
 
 def custom_character_handler(exception):
     print(charForm.format(exception.reason,
-            exception.object[exception.start:exception.end],
-            exception.encoding,
-            exception.start,
-            exception.end ))
+                          exception.object[exception.start:exception.end],
+                          exception.encoding,
+                          exception.start,
+                          exception.end))
     return ("?", exception.end)
 
 
@@ -106,7 +106,7 @@ if __name__ == "__main__":
                 print('KEY: ', key)
                 print('TITLE: ', title)
                 print('SUMMARY: ', summary)
-              
+
                 keystats.add_stat(len(key))
                 titlestats.add_stat(len(title))
                 summarystats.add_stat(len(summary))

@@ -33,7 +33,7 @@ def get_parms(argv):
 
 def remove_section_numbers(line):
     newline = re.sub(r'and [0-9]+[.][0-9]+\b\s*', '', line)
-    newline = re.sub(r'\([0-9]+[.][0-9]+\)[,]?\s*', '', newline)  
+    newline = re.sub(r'\([0-9]+[.][0-9]+\)[,]?\s*', '', newline)
     newline = re.sub(r'\b[0-9]+[.][0-9]+\b[,]?\s*', '', newline)
     newline = re.sub(r'section[s]? and section[s]?\s*', 'sections', newline)
     newline = re.sub(r'section[s]?\s*;\s*', '; ', newline)
@@ -64,7 +64,6 @@ def determine_mime_type(line):
 
 
 def custom_character_handler(exception):
-    errors_found = False
     # print(charForm.format(exception.reason,
     #        exception.object[exception.start:exception.end],
     #        exception.encoding,
@@ -93,35 +92,31 @@ if __name__ == "__main__":
                 title = remove_section_numbers(bill['title'])
                 summary = remove_section_numbers(bill['description'])
 
-                if len(title)>200:
+                if len(title) > 200:
                     revised = shrink_line(title, 200)
 
-                if len(summary)>1000:
+                if len(summary) > 1000:
                     revised = shrink_line(summary, 1000)
 
-
-                mimedata = bill['bill_text'].encode('utf-8')
+                mimedata = bill['bill_text'].encode('latin-1')
                 msg_bytes = base64.b64decode(mimedata)
-                errors_found = False
                 try:
-                    billtext = msg_bytes.decode('utf-8')
-                except:
-                    errors_found = True
+                    billtext = msg_bytes.decode('latin-1')
+                except TypeError:
+                    print('Error')
 
                 mime_type = determine_mime_type(billtext)
-                print(key, mime_type, errors_found)
+                print(key, mime_type)
                 billname = '{}.{}'.format(key, mime_type)
-       #        if mime_type == 'HTML':
-       #             with open(billname, "w") as billfile:
-       #                 print(billtext, file=billfile)
-       #         elif mime_type == 'PDF':
-       #             with open(billname, "wb") as billfile:
-       #                 billfile.write(msg_bytes)
-       #         else:
-       #             print(key, 'Mime type: ', mime_type)
+#        if mime_type == 'HTML':
+#             with open(billname, "w") as billfile:
+#                 print(billtext, file=billfile)
+#         elif mime_type == 'PDF':
+#             with open(billname, "wb") as billfile:
+#       #                 billfile.write(msg_bytes)
+#       #         else:
+#       #             print(key, 'Mime type: ', mime_type)
 
-                if num >=10:
+                if num >= 10:
                     break
 print('Done.')
-        
-

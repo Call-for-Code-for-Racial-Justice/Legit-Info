@@ -49,7 +49,7 @@ def read_file(inputname):
 
 def get_parms(argv):
     display_help = False
-    filename = ''
+    inputname, outputname = '', ''
     if len(sys.argv) == 3:
         inputname = sys.argv[1]
         outputname = sys.argv[2]
@@ -62,7 +62,7 @@ def get_parms(argv):
 
     if display_help:
         print('Syntax:')
-        print('./PDF2TEXT.py input.pdf | ',sys.argv[0], '- output.txt')
+        print('./PDF2TEXT.py input.pdf | ', sys.argv[0], '- output.txt')
         print(sys.argv[0], 'input.file', 'output.txt')
         print(' ')
 
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     display_help, inputname, outname = get_parms(sys.argv)
 
     output_line = Oneline()
-    
+
     if not display_help:
         with open(outname, "w") as outfile:
             input_str = read_file(inputname)
