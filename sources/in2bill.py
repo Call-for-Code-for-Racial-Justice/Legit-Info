@@ -11,7 +11,7 @@ class Oneline():
 
     """
 
-    def __init__(self, dotchar="."):
+    def __init__(self):
         """ Set characters to use for showing progress"""
         self.oneline = ''
         return None
