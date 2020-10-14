@@ -14,4 +14,4 @@ results/*.csv
 **/*DONOT_SAVE*
 **/Thumbs.db
 secret-db-fix-politics.env
-
+cron/*.json
