@@ -15,3 +15,4 @@ results/*.csv
 **/Thumbs.db
 secret-db-fix-politics.env
 cron/*.json
+.vscode
