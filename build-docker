@@ -5,4 +5,4 @@ IMAGE_NAME="fix-politics"
 IMAGE_VER="1.0.0"
 
 echo "Building ${IMAGE_NAME}:${IMAGE_VER}"
-docker build -t ${IMAGE_NAME}:${IMAGE_VER} .
+docker build --no-cache -t ${IMAGE_NAME}:${IMAGE_VER} .
