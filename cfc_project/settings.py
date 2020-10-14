@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get(
     'SECRET_KEY', 'ry()%j23$u$c7q$m2o0vo1w(u^eut8b3c0ylpy+)((6f7j08a4')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ['*', '127.0.0.1', 'localhost']
 
 # Application definition
