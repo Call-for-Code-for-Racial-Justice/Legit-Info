@@ -5,7 +5,6 @@
 import base64
 import codecs
 import json
-import re
 import sys
 
 charForm = "{} for {} on {} from position {} to {}. Using '?' in-place of it!"
@@ -52,23 +51,6 @@ class Stats():
                                           self.max, self.count, self.overlim)
         return result
 
-def remove_section_numbers(line):
-    newline = re.sub(r'and [0-9]+[.][0-9]+\b\s*', '', line)
-    newline = re.sub(r'\([0-9]+[.][0-9]+\)[,]?\s*', '', newline)  
-    newline = re.sub(r'\b[0-9]+[.][0-9]+\b[,]?\s*', '', newline)
-    newline = re.sub(r'section[s]? and section[s]?\s*', 'sections', newline)
-    newline = re.sub(r'section[s]?\s*;\s*', '; ', newline)
-    newline = re.sub(r'amend; to amend,\s*', 'amend ', newline)
-    newline = newline.replace("'", " ").replace('"', ' ')
-    return newline
-
-
-def shrink_line(line, limit):
-    newline = re.sub(r'^\W*\w*\W*', '', line[-limit:])
-    newline = re.sub(r'^and ', '', newline)
-    newline = newline[0].upper() + newline[1:]
-    return newline
-
 
 def get_parms(argv):
     display_help = False
@@ -114,25 +96,23 @@ if __name__ == "__main__":
     if not display_help:
         with open(jsonname, "r") as jsonfile:
             data = json.load(jsonfile)
+            num = 0
             for entry in data:
+                num += 1
                 bill = data[entry]
                 key = "{}-{}.txt".format(state, bill['number'])
-                title = remove_section_numbers(bill['title'])
-                summary = remove_section_numbers(bill['description'])
-                # print('KEY: ', key)
-                # print('TITLE: ', title)
-                # print('SUMMARY: ', summary)
-
-                if len(title)>200:
-                    revised = shrink_line(title, 200)
-
-                if len(summary)>1000:
-                    revised = shrink_line(summary, 1000)
-                
+                title = bill['title']
+                summary = bill['description']
+                print('KEY: ', key)
+                print('TITLE: ', title)
+                print('SUMMARY: ', summary)
+              
                 keystats.add_stat(len(key))
                 titlestats.add_stat(len(title))
                 summarystats.add_stat(len(summary))
                 billstats.add_stat(len(bill['bill_text']))
+                if num >= 10:
+                    break
 
     print(' ')
     print('Statistics:')

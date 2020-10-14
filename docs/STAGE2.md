@@ -162,9 +162,3 @@ smartphone or table, specify:  `http://192.168.1.3:3000`
 If this does not work, you may need to change the settings in your network
 firewall.
 
-
-
-
-
-
-

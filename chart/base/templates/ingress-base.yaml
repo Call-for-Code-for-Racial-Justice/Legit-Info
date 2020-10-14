@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+ name: myingressresource
+spec:
+ tls:
+ - hosts:
+   - <ingress_subdomain>
+   secretName: <ingress_secret>
+ rules:
+ - host: <ingress_subdomain>
+   http:
+     paths:
+     - path: /<app_path>
+       backend:
+         serviceName: my-app-svc
+         servicePort: 80

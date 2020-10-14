@@ -1,1 +1,7 @@
-{"0": {"bill_id": 1263495, "number": "HB1", "title": "Modify intervention in lieu of conviction/sealing requirements", "description": "To amend sections 2951.041, 2953.31, and 2953.32 of the Revised Code to modify the requirements for intervention in lieu of conviction and for sealing records of conviction.", "bill_text": "DQo8bWV0YSBodHRwLWVxdWl2PSJDb250ZW50LVR5cGUiIGNvbnRlbnQ9InRleHQvaHRtbDsgY2hhcnNldD1VVEYtOCI+DQo8dGl0bGU+PC90aXRsZT4NCjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+DQo8IS0tDQouSW5zZXJ0IHsgIGNvbG9yOiAjMzM5OTMzOyB0ZXh0LWRlY29yYXRpb246IHVuZGVybGluZX0NCi5SZW1vdmUgeyAgY29sb3I6ICNGRjAwMDA7IHRleHQtZGVjb3JhdGlvbjogbGluZS10aHJvdWdofQ0KLS0+DQo8L3N0eWxlPg0KPHByZSBzdHlsZT0ibGluZS1oZWlnaHQ6IDEuNWVtOyBmb250LXNpemU6IDEycHgiPg0KICAgICAgIDxiPkZsb3JpZGEgU2VuYXRlPC9iPiAtIDxiPjIwMTY8L2I+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8Yj5TQiA5NDwvYj48Yj48L2I+DQogICAgICAgPGI+PC9iPg0KICAgICAgIA0KICAgICAgICANCiAgICAgICA8Yj5CeSA8L2I+U2VuYXRvciBHaWJzb24NCiAgICAgICANCiAgICAgICANCiAgICAgICANCiAgICAgICANCiA
+ 
+Statistics:
+Key Min: 10  Average: 11   Maximum 12  Count 2135  Over 0
+Title Min: 11  Average: 66   Maximum 478  Count 2135  Over 7
+Summary Min: 11  Average: 147   Maximum 1405  Count 2135  Over 7
+Billtext Min: 1208  Average: 99002   Maximum 3253520  Count 2135  Over 0
+Done.

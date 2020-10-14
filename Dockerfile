@@ -14,14 +14,10 @@ RUN yum -y install python3-pip wget
 #  && pipenv install --system --deploy
 
 RUN python3 -m pip install --user --upgrade pip
-RUN python3 -m pip install --upgrade pipenv setuptools wheel
+RUN python3 -m pip install --upgrade pipenv
 RUN pipenv install --system --deploy
 
 USER 1001
-#RUN pip3 install --user
-#RUN python3 -m pip install --upgrade pip
-#RUN python3 -m pip install --upgrade pipenv
-
 
 COPY . /app
 
