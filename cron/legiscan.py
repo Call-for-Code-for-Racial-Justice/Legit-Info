@@ -22,12 +22,12 @@ class LegiScan:
         """Return base64 encoded bill text based on given bill id."""
         try:
             billText = requests.get(self.url + "getBillText&id=" + billID)
-            return billText.json()['text']['doc']
+            return billText.json()['text'] 
         except Exception as e:
             logging.error("Error: error getting bill text. " + str(e))
 
     def getAllBills(self, state):
-        """Create a json file of all bill for a given state. Each object represents a bill and contains bill_id, number, title, description and bill_text."""
+        """Create a json file of all bill for a given state. Each object represents a bill and contains bill_id, number, title, description, mime, and bill_text."""
         try:
             stateBills = requests.get(self.url + "getMasterList&state=" + state)
             masterList = stateBills.json()["masterlist"]
@@ -45,7 +45,9 @@ class LegiScan:
                 if len(localDict) > 0:
                     bills[len(bills)] = localDict
             for i in bills:
-                bills[i]["bill_text"] = self.getBillText(str(bills[i]["bill_id"]))
+                response = self.getBillText(str(bills[i]["bill_id"]))
+                bills[i]["bill_text"] = response['doc']
+                bills[i]["mime"] = response['mime']
             with open("./" + state + ".json", 'w') as outfile:
                 json.dump(bills, outfile)
         except Exception as e:
