@@ -3,8 +3,13 @@ import os
 import logging
 import json
 
+"""
+    LegiScan class automates the retrival and curation of bill data for a particular US state. Before running this class, your LegiScan apikey needs to be an environmental variable with the key of "LEGISCAN_API_KEY". Visit https://legiscan.com/legiscan to create your own LegiScan apikey.
+"""
+
 class LegiScan:
     def __init__ (self):
+        """Constructor for LegiScan. Checks if a LegiScan apikey exists."""
         try:
             self.apiKey = os.environ['LEGISCAN_API_KEY']
             if not self.apiKey:
@@ -14,6 +19,7 @@ class LegiScan:
             logging.error("Error: no valid LegiScan api key detected.")
 
     def getBillText(self, billID):
+        """Return base64 encoded bill text based on given bill id."""
         try:
             billText = requests.get(self.url + "getBillText&id=" + billID)
             return billText.json()['text']['doc']
@@ -21,6 +27,7 @@ class LegiScan:
             logging.error("Error: error getting bill text. " + str(e))
 
     def getAllBills(self, state):
+        """Create a json file of all bill for a given state. Each object represents a bill and contains bill_id, number, title, description and bill_text."""
         try:
             stateBills = requests.get(self.url + "getMasterList&state=" + state)
             masterList = stateBills.json()["masterlist"]
@@ -43,6 +50,3 @@ class LegiScan:
                 json.dump(bills, outfile)
         except Exception as e:
             logging.error("Error: error getting state bills. " + str(e))
-
-leg1 = LegiScan()
-leg1.getAllBills("az")
