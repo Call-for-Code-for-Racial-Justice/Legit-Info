@@ -10,6 +10,42 @@ import sys
 charForm = "{} for {} on {} from position {} to {}. Using '?' in-place of it!"
 
 
+class Stats():
+    """
+    Class to identify minimum, maximum and average lenght of strings
+
+    """
+
+    def __init__(self, id):
+        """ Set characters to use for showing progress"""
+        self.id = id
+        self.min = None
+        self.max = None
+        self.total = 0
+        self.count = 0
+        self.ShowForm = "{} Min: {}  Average: {}   Maximum {}"
+        return None
+
+    def add_stat(self, num):
+        if self.count == 0:
+            self.min = num
+            self.max = num
+        elif num < self.min:
+            self.min = num
+        elif num > self.max:
+            self.max = num
+        self.total += num
+        self.count += 1
+        return self
+
+    def show_stat(self):
+        result = id + " None"
+        if self.count > 0:
+            avg = self.total / self.count
+            result = self.ShowForm.format(self.id, self.min, avg, self.max)
+        return result
+
+
 def get_parms(argv):
     display_help = False
     filename = ''
@@ -46,6 +82,11 @@ if __name__ == "__main__":
     display_help, jsonname = get_parms(sys.argv)
     state = jsonname[:2].upper()
 
+    keystats = Stats('Key')
+    titlestats = Stats('Title')
+    summarystats = Stats('Summery')
+    billstats = Stats('Billtext')
+
     if not display_help:
         print('Congratulations')
         with open(jsonname, "r") as jsonfile:
@@ -53,14 +94,21 @@ if __name__ == "__main__":
             for entry in data:
                 bill = data[entry]
                 key = "{}-{}.txt".format(state, bill['number'])
+                title = bill['title']
+                summary = bill['summary']
                 print('KEY: ', key)
-                print('TITLE: ', bill['title'])
-                print('SUMMARY: ', bill['description'])
-                mimedata = bill['bill_text'].encode('utf-8')
-                msg_bytes = base64.b64decode(mimedata)
-                billtext = msg_bytes.decode('utf-8', 'custom_character_handler')
-                print(len(billtext), billtext[:500])
-                break
+                print('TITLE: ', title)
+                print('SUMMARY: ', summary)
+                
+                keystats.add_stat(len(key))
+                titlestats.add_stat(len(title))
+                summarystats.add_stat(len(summary)
+                billstats.add_stat(len(bill['text'])
+
+print(keystats.show_stat())
+print(keystats.show_stat())
+print(keystats.show_stat())
+print(keystats.show_stat())
 print('Done.')
         
 

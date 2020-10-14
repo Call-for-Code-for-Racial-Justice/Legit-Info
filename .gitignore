@@ -8,6 +8,7 @@ localdev-config.json
 venv/
 secret-smtp-mailtrap.env
 results/*.csv
+sources/*.json
 
 # misc
 **/*DONOT_SAVE*.*
