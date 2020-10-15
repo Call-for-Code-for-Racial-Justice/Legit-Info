@@ -1,7 +1,0 @@
- 
-Statistics:
-Key Min: 10  Average: 11   Maximum 12  Count 2135  Over 0
-Title Min: 11  Average: 66   Maximum 478  Count 2135  Over 7
-Summary Min: 11  Average: 147   Maximum 1405  Count 2135  Over 7
-Billtext Min: 1208  Average: 99002   Maximum 3253520  Count 2135  Over 0
-Done.
