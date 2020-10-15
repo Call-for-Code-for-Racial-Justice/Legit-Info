@@ -7,8 +7,36 @@ import codecs
 import json
 import re
 import sys
+from bs4 import BeautifulSoup
+from ShowProgress import ShowProgress
+
+PARSER = "lxml"
 
 charForm = "{} for {} on {} from position {} to {}. Using '?' in-place of it!"
+
+
+class Oneline():
+    """ Class to maintain one long line  """
+
+    def __init__(self, dotchar="."):
+        """ Set characters to use for showing progress"""
+        self.oneline = ''
+        return None
+
+    def add_text(self, line):
+        newline = line.replace("'", " ").replace('"', ' ').splitlines()
+        newline2 = ' '.join(newline)
+        self.oneline += newline2 + ' '
+        return self
+
+    def write_file(self, outfile):
+        print(self.oneline, end='', file=outfile)
+        return self
+
+    def write_name(self, outname):
+        with open(outname, "w") as outfile:
+            self.write_file(outfile)
+        return self
 
 
 def get_parms(argv):
@@ -31,10 +59,45 @@ def get_parms(argv):
     return display_help, filename
 
 
+def parse_html(in_line, out_line):
+    soup = BeautifulSoup(in_line, PARSER)
+    title = soup.find('title')
+    if title:
+        out_line.add_text(title.string)
+
+    sections = soup.findAll("span", {"class": "SECHEAD"})
+    for section in sections:
+        rawtext = section.string
+        if rawtext:
+            lines = rawtext.splitlines()
+            header = " ".join(lines)
+            out_line.add_text(header)
+
+    paragraphs = soup.findAll("p")
+    for paragraph in paragraphs:
+        pg = paragraph.string
+        if pg:
+            out_line.add_text(pg)
+
+    return None
+
+
+def process_html(billname, title, summary, billtext, textname):
+    with open(billname, "w") as billfile:
+        print(billtext, file=billfile)
+    html_line = Oneline()
+    html_line.add_text(billname)
+    html_line.add_text(title)
+    html_line.add_text(summary)
+    parse_html(billtext, html_line)
+    html_line.write_name(textname)
+    return None
+
+
 def remove_section_numbers(line):
-    newline = re.sub(r'and [0-9]+[.][0-9]+\b\s*', '', line)
-    newline = re.sub(r'\([0-9]+[.][0-9]+\)[,]?\s*', '', newline)
-    newline = re.sub(r'\b[0-9]+[.][0-9]+\b[,]?\s*', '', newline)
+    newline = re.sub(r'and [-0-9]+[.][0-9]+\b\s*', '', line)
+    newline = re.sub(r'\([-0-9]+[.][0-9]+\)[,]?\s*', '', newline)
+    newline = re.sub(r'\b[-0-9]+[.][0-9]+\b[,]?\s*', '', newline)
     newline = re.sub(r'section[s]? and section[s]?\s*', 'sections', newline)
     newline = re.sub(r'section[s]?\s*;\s*', '; ', newline)
     newline = re.sub(r'amend; to amend,\s*', 'amend ', newline)
@@ -50,17 +113,16 @@ def shrink_line(line, limit):
     return newline
 
 
-def determine_mime_type(line):
-    mime_type = 'UNK'
-    if line[:4] == '%PDF':
-        mime_type = 'PDF'
-    elif ('<!--' in line or
-            '<pre>' in line or
-            '<style>' in line or
-            '<title>' in line or
-            '<html>' in line):
-        mime_type = 'HTML'
-    return mime_type
+def determine_extension(mime_type):
+    extension = 'unk'
+    if mime_type == 'text/html':
+        extension = 'html'
+    elif mime_type == 'application/pdf':
+        extension = 'pdf'
+    elif mime_type == 'application/doc':
+        extension = 'doc'
+
+    return extension
 
 
 def custom_character_handler(exception):
@@ -78,13 +140,15 @@ if __name__ == "__main__":
 
     display_help, jsonname = get_parms(sys.argv)
     state = jsonname[:2].upper()
-
+    dot = ShowProgress()
     if not display_help:
         with open(jsonname, "r") as jsonfile:
             data = json.load(jsonfile)
             num = 0
+
             for entry in data:
                 num += 1
+                dot.show()
                 bill = data[entry]
                 key = "{}-{}".format(state, bill['number'])
                 print('KEY: ', key)
@@ -98,6 +162,9 @@ if __name__ == "__main__":
                 if len(summary) > 1000:
                     revised = shrink_line(summary, 1000)
 
+                if 'mime' not in bill:
+                    continue
+                mime_type = bill['mime']
                 mimedata = bill['bill_text'].encode('latin-1')
                 msg_bytes = base64.b64decode(mimedata)
                 try:
@@ -105,18 +172,15 @@ if __name__ == "__main__":
                 except TypeError:
                     print('Error')
 
-                mime_type = determine_mime_type(billtext)
-                print(key, mime_type)
-                billname = '{}.{}'.format(key, mime_type)
-#        if mime_type == 'HTML':
-#             with open(billname, "w") as billfile:
-#                 print(billtext, file=billfile)
-#         elif mime_type == 'PDF':
-#             with open(billname, "wb") as billfile:
-#       #                 billfile.write(msg_bytes)
-#       #         else:
-#       #             print(key, 'Mime type: ', mime_type)
+                extension = determine_extension(mime_type)
+                print(key, mime_type, extension)
+                billname = '{}.{}'.format(key, extension)
+                textname = '{}.{}'.format(key, 'txt')
 
-                if num >= 10:
+                if extension == 'html':
+                    process_html(billname, title, summary, billtext, textname)
+
+                if num >= 50:
                     break
-print('Done.')
+    dot.end()
+    print('Done.')

@@ -9,9 +9,10 @@ venv/
 secret-smtp-mailtrap.env
 results/*.csv
 sources/*.json
-sources/*.HTML
-sources/*.PDF
+sources/*.html
+sources/*.pdf
 sources/*.txt
+sources/drafts/
 
 # misc
 **/*DONOT_SAVE*.*

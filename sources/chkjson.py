@@ -112,6 +112,8 @@ if __name__ == "__main__":
     summarystats = Stats('Summary', 1000)
     billstats = Stats('Billtext', 4000000)
 
+    types = {}
+
     if not display_help:
         with open(jsonname, "r") as jsonfile:
             data = json.load(jsonfile)
@@ -119,21 +121,32 @@ if __name__ == "__main__":
                 bill = data[entry]
                 key = "{}-{}.txt".format(state, bill['number'])
                 title = remove_section_numbers(bill['title'])
-                summary = remove_section_numbers(bill['description'])
-                # print('KEY: ', key)
-                # print('TITLE: ', title)
-                # print('SUMMARY: ', summary)
-
                 if len(title) > 200:
                     revised = shrink_line(title, 200)
 
+                summary = remove_section_numbers(bill['description'])
                 if len(summary) > 1000:
                     revised = shrink_line(summary, 1000)
+
+                if 'mime' in bill:
+                    mimetype = bill['mime']
+                    if mimetype in types:
+                        types[mimetype] += 1
+                    else:
+                        types[mimetype] = 1
+                else:
+                    continue
+
+                print(key, mimetype)
 
                 keystats.add_stat(len(key))
                 titlestats.add_stat(len(title))
                 summarystats.add_stat(len(summary))
                 billstats.add_stat(len(bill['bill_text']))
+
+    print(' ')
+    for mime in types:
+        print("Number of {} Bill Texts: {}".format(mime, types[mime]))
 
     print(' ')
     print('Statistics:')
