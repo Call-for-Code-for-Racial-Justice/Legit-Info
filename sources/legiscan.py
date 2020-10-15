@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # scanjson.py -- Pull data from Legiscan API
 # By Uchechukwu Uboh, IBM, 2020
+# Updated by Tony Pearson, IBM -- 2020-10-15
 #
 
 import requests
@@ -33,6 +34,7 @@ class LegiScan:
     def getBill(self, billID):
         """Return the document id (docID) for a given bill id."""
         docID = None
+        LastDate = "0000-00-00"
         try:
             billdetails = requests.get(self.url + "getBill&id=" + billID)
             billjson = billdetails.json()
@@ -40,14 +42,14 @@ class LegiScan:
             if billjson['status'] == 'OK':
                 billinfo = billjson['bill']
                 documents = billinfo['texts']
-            Last = "0000-00-00"
             for doc in documents:
                 docDate = doc['date']
-                if docDate > Last:
+                if docDate > LastDate:
                     docID = str(doc['doc_id'])
+                    LastDate = docDate
         except Exception as e:
             logging.error("Error: error getting document number. " + str(e))
-        return docID
+        return docID, LastDate
 
     def getBillText(self, docID):
         """Return base64 encoded bill text based on given document id."""
@@ -84,11 +86,12 @@ class LegiScan:
                     bills[len(bills)] = localDict
             for i in bills:
                 billID = str(bills[i]["bill_id"])
-                docID = self.getBill(billID)
+                docID, LastDate = self.getBill(billID)
                 if docID:
                     response = self.getBillText(docID)
-                    bills[i]["bill_text"] = response['doc']
+                    bills[i]["date"] = LastDate
                     bills[i]["mime"] = response['mime']
+                    bills[i]["bill_text"] = response['doc']
                     num += 1
                     dot.show()
             with open(state + ".json", 'w') as outfile:
@@ -107,4 +110,5 @@ if __name__ == "__main__":
 
     leg = LegiScan()
     for state in states:
+        print('Processing: ', state)   
         leg.getAllBills(state)

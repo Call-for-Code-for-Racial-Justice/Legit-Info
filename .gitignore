@@ -12,8 +12,12 @@ sources/*.json
 sources/*.html
 sources/*.pdf
 sources/*.txt
+sources/*.zip
+sources/*.file
 sources/drafts/
 sources/curated/
+sources/zipfiles/
+
 
 # misc
 **/*DONOT_SAVE*.*

@@ -165,6 +165,15 @@ def health(request):
 def impacts(request):
     """Show all impacts."""
     impacts = Impact.objects.order_by('date_added')
+    if len(impacts) == 0:
+        default_impacts = ['Healthcare', 'Safety', 'Environment',
+                    'Transportation', 'Jobs']
+        for entry in default_impacts:
+            new_impact = Impact()
+            new_impact.text = entry
+            new_impact.save()
+        impacts = Impact.objects.order_by('date_added')
+
     context = {'impacts': impacts}
     return render(request, 'impacts.html', context)
 
@@ -194,6 +203,12 @@ def lawdump(request):
 def locations(request):
     """Show all locations."""
     locations = Location.objects.order_by('hierarchy')
+    if len(locations) == 0:
+        world = Location()
+        
+        
+
+
     locations = locations.exclude(shortname='world')
     context = {'locations': locations}
     return render(request, 'locations.html', context)

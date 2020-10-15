@@ -9,11 +9,13 @@ import re
 import sys
 from bs4 import BeautifulSoup
 from ShowProgress import ShowProgress
+from PDFtoTEXT import PDFtoTEXT
 
 PARSER = "lxml"
+TITLE_LIMIT_CHARS = 200
+SUMMARY_LIMIT_CHARS = 1000
 
-charForm = "{} for {} on {} from position {} to {}. Using '?' in-place of it!"
-
+HeadForm = "{} _TITLE_ {} _SUMMARY_ {} _TEXT_"
 
 class Oneline():
     """ Class to maintain one long line  """
@@ -82,15 +84,42 @@ def parse_html(in_line, out_line):
     return None
 
 
-def process_html(billname, title, summary, billtext, textname):
+def process_html(key, title, summary, billtext):
+    billname = '{}.{}'.format(key, 'html')
+    textname = '{}.{}'.format(key, 'txt')
     with open(billname, "w") as billfile:
         print(billtext, file=billfile)
-    html_line = Oneline()
-    html_line.add_text(billname)
-    html_line.add_text(title)
-    html_line.add_text(summary)
-    parse_html(billtext, html_line)
-    html_line.write_name(textname)
+    text_line = Oneline()
+    text_line.add_text(HeadForm.format(billname, title, summary))
+    parse_html(billtext, text_line)
+    text_line.write_name(textname)
+    return None
+
+
+def parse_intermediate(input_string, output_line):
+    lines = input_string.splitlines()
+    for line in lines:
+        newline = line.replace('B I L L', 'BILL')
+        newline = newline.strip()
+        # Remove lines that only contain blanks or line numbers only
+        if newline != '' and not newline.isdigit():
+            output_line.add_text(newline)
+    return None
+
+
+def process_pdf(key, title, summary, msg_bytes):
+    billname = '{}.{}'.format(key, 'pdf')
+    intermediate = "intermediate.file"
+    textname = '{}.{}'.format(key, 'txt')
+    with open(billname, "wb") as billfile:
+        billfile.write(msg_bytes)
+    PDFtoTEXT(billname, intermediate)
+    text_line = Oneline()
+    text_line.add_text(HeadForm.format(billname, title, summary))
+    with open(intermediate, "r") as infile:
+        input_str = infile.read()
+        parse_intermediate(input_str, text_line)
+    text_line.write_name(textname)
     return None
 
 
@@ -125,18 +154,8 @@ def determine_extension(mime_type):
     return extension
 
 
-def custom_character_handler(exception):
-    # print(charForm.format(exception.reason,
-    #        exception.object[exception.start:exception.end],
-    #        exception.encoding,
-    #        exception.start,
-    #        exception.end ))
-    return ("?", exception.end)
-
-
 if __name__ == "__main__":
     # Check proper input syntax
-    codecs.register_error("custom_character_handler", custom_character_handler)
 
     display_help, jsonname = get_parms(sys.argv)
     state = jsonname[:2].upper()
@@ -151,16 +170,20 @@ if __name__ == "__main__":
                 dot.show()
                 bill = data[entry]
                 key = "{}-{}".format(state, bill['number'])
-                print('KEY: ', key)
+                if 'date' in bill:
+                    if len(key) < 15:
+                        key += '-Y' + bill['date'][:4]
+                    else:
+                        key += '-Y' + bill['date'][2:4]
 
                 title = remove_section_numbers(bill['title'])
                 summary = remove_section_numbers(bill['description'])
 
-                if len(title) > 200:
-                    revised = shrink_line(title, 200)
+                if len(title) > TITLE_LIMIT_CHARS:
+                    revised = shrink_line(title, TITLE_LIMIT_CHARS)
 
-                if len(summary) > 1000:
-                    revised = shrink_line(summary, 1000)
+                if len(summary) > SUMMARY_LIMIT_CHARS:
+                    revised = shrink_line(summary, SUMMARY_LIMIT_CHARS)
 
                 if 'mime' not in bill:
                     continue
@@ -173,14 +196,13 @@ if __name__ == "__main__":
                     print('Error')
 
                 extension = determine_extension(mime_type)
-                print(key, mime_type, extension)
                 billname = '{}.{}'.format(key, extension)
                 textname = '{}.{}'.format(key, 'txt')
 
                 if extension == 'html':
-                    process_html(billname, title, summary, billtext, textname)
+                    process_html(key, title, summary, billtext)
+                elif extension == 'pdf':
+                    process_pdf(key, title, summary, msg_bytes)
 
-                if num >= 50:
-                    break
     dot.end()
     print('Done.')
