@@ -9,6 +9,7 @@ import glob
 import re
 import ibm_boto3
 from ibm_botocore.client import Config, ClientError
+from ShowProgress import ShowProgress
 
 # Constants for IBM COS values
 COS_ENDPOINT_URL = os.environ['COS_ENDPOINT_URL']
@@ -18,8 +19,11 @@ COS_INSTANCE = os.environ['COS_INSTANCE']
 
 def upload_files(state, cos, bucket_name):
     globs = glob.glob(state + '*.txt')
+    dot = ShowProgress()
     for filename in globs:
         cos.upload_file(filename, bucket_name, filename)
+        dot.show()
+    dot.end()
     return None
 
 

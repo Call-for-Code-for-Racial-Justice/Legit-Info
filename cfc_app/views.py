@@ -204,12 +204,33 @@ def locations(request):
     """Show all locations."""
     locations = Location.objects.order_by('hierarchy')
     if len(locations) == 0:
+        import pdb; pdb.set_trace()
         world = Location()
-        
+        world.desc = 'world'
+        world.shortname = 'world'
+        world.hierarchy = 'world'
+        world.govlevel = 'world'
+        world.save()
+        world.parent_id = 1
+        world.save()
+
+        usa = Location(desc = 'United States', shortname = 'usa',
+                        hierarchy='world.usa', govlevel = 'country')
+        usa.parent = world
+        usa.save()
+
+        arizona = Location(desc = 'Arizona, USA', shortname = 'arizona',
+                        hierarchy='world.usa.arizona', govlevel = 'state')
+        arizona.parent = usa
+        arizona.save()
+
+        ohio = Location(desc = 'Ohio, USA', shortname = 'ohio',
+                        hierarchy='world.usa.ohio', govlevel = 'state')
+        ohio.parent = usa
+        ohio.save()
         
 
-
-    locations = locations.exclude(shortname='world')
+    locations = Location.objects.order_by('hierarchy')
     context = {'locations': locations}
     return render(request, 'locations.html', context)
 
