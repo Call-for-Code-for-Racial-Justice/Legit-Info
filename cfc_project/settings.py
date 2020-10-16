@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import djcelery
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_truncate',
     'djcelery', 
+    'django_celery_beat',
 
     # Default django apps
     'django.contrib.admin',
@@ -84,13 +86,14 @@ TEMPLATES = [
 
 
 # Celery for background tasks, such as to get api data for legislation
-BROKER_URL = 'amqp://'
-CELERY_ACCEPT_CONTENT = ['pickle']
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL')
+CELERY_ACCEPT_CONTENT = ['pickle', 'json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
-CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+CELERY_BEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+djcelery.setup_loader()
 
 
 # The email host settings are optional, needed for the "email to self"

@@ -11,4 +11,4 @@ parms="$@"
 if [ "$#" -eq 0 ]; 
     then parms="runserver localhost:3000"
 fi
-USE_SQLITE3='True' python manage.py "$parms"
+USE_SQLITE3='True' python manage.py $parms
