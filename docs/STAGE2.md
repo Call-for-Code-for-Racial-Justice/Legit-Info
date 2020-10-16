@@ -1,4 +1,4 @@
-# Fix Politics - Stage 2
+# Stage 2
 
 ## Stage 2: Pre-Production
 
@@ -12,9 +12,9 @@ a file in your home directory called `.ibmcloud.yaml' that will contain
 your IBM Cloud API token.
 
 ```bash
-[Yoga ~]$ cat .ibmcloud.yaml
+[ ~]$ cat .ibmcloud.yaml
 accounts:
-  sandbox: <your IBM Cloud token here>
+  sandbox: <your IBM Cloud API token here>
 clusters:
   embrace:
     region: us-east
@@ -27,7 +27,7 @@ With this in place, you can login to both IBM Cloud and OpenShift
 with a single command:
 
 ```bash
-[Grady fix-politics]$ icc embrace
+[ legit-info]$ icc embrace
 Logging into ibmcloud: us-east/emb-race-team
 Logging into OpenShift cluster: embrace-dev-ocp43-vpc
 ```
@@ -54,7 +54,7 @@ port for Postgresql.  Do not close this terminal, it will run indefinitely,
 so push it aside, and use other terminal windows for the other tasks.
 
 ```bash
-[Grady fix-politics]$ ./port-forward.sh
+[ legit-info]$ ./port-forward.sh
 Use 'icc embrace' to log into IBM Cloud and OpenShift
 API endpoint:      https://cloud.ibm.com
 Region:            us-east
@@ -64,7 +64,7 @@ Resource group:    emb-race-team
 CF API endpoint:
 Org:
 Space:
-Using project "fix-politics" on server
+Using project "legit-info" on server
       "https://c100-e.us-east.containers.cloud.ibm.com:31358".
 We will port forward 5432, do not close this terminal
 Forwarding from 127.0.0.1:5432 -> 5432
@@ -76,7 +76,7 @@ Forwarding from [::1]:5432 -> 5432
 You can define an alias command as follows:
 
 ```bash
-alias fixdb='psql -h localhost -p 5432 -d cfcappdb -U pguser -w '
+alias appdb='psql -h localhost -p 5432 -d cfcappdb -U pguser -w '
 ```
 
 Explanation:
@@ -92,7 +92,7 @@ Explanation:
 Now you can access the Postgresql database as follows:
 
 ```
-[Grady ~]$ fixdb
+[ ~]$ appdb
 psql (10.14, server 10.12)
 Type "help" for help.
 
@@ -113,24 +113,18 @@ SQlite3 to Postgresql, we will have to re-enter all the data using the
 application.  To get us started, we need to re-create the superuser 'cfcadmin'
 
 ```
-(fix) [Grady fix-politics]$ USE_SQLITE3='False' python manage.py createsuperuser
+(env) [ legit-info]$ ./stage2 createsuperuser
 **Using Postgresql**
-Username (leave blank to use 'tpearson'): cfcadmin
-Email address: tpearson@us.ibm.com
+Username (leave blank to use 'yourname'): cfcadmin
+Email address: yourname@us.ibm.com
 Password: <password here>
 Password (again): <password here>
 Superuser created successfully.
 ```
 
-You will also need to see the "cfc_app_location" table with the first entry,
-using this SQL statement.
-
-```
-(fix) [Grady fix-politics]$ python manage.py dbshell
-**Using SQLite3**
-insert into cfc_app_location values(1,'world','world','world', 'world', clock_timestamp(), 1);
-.quit
-```
+As with Stage 1, selecting the "Location" will pre-populate the 
+Locations with "world", "usa", "arizona" and "ohio".  Selecting
+the "Impacts" will pre-populate with five imact areas.
 
 
 Step 7: Run local version of Gunicorn.
@@ -141,7 +135,7 @@ a shortcut "app.sh" to run Gunicorn locally.  Gunicorn can be used with
 local SQLite3 or remoe Postgresql, by specifying USE_SQLITE3 accordingly.
 
 ```
-(fix) [Yoga fix-politics]$ USE_SQLITE3=False ./app.sh
+(env) [ legit-info]$ USE_SQLITE3=False ./app.sh
 [2020-08-26 14:24:42 -0700] [23322] [INFO] Starting gunicorn 20.0.4
 [2020-08-26 14:24:42 -0700] [23322] [INFO] Listening at: http://0.0.0.0:3000 (23322)
 [2020-08-26 14:24:42 -0700] [23322] [INFO] Using worker: sync

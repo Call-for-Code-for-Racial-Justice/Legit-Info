@@ -1,7 +1,7 @@
-# Fix Politics
+# Legit-Info
 
-Fix Politics is a simple `Content Management System`, or CMS for short, that
-delivers curated content to users.
+Legit-Info is a simple `Content Management System`, or CMS for short, that
+delivers legislation content to users.
 
 
 ## Section 1 Administration
@@ -14,9 +14,9 @@ locations, impact areas, and curated policy legislation.
 Use the Django `createsuperuser` to create the first user.
 
 ```bash
-$ cd fix-politics
+$ cd legit-info
 $ pipenv shell
-(fix) $ python manage.py createsuperuser
+(fix) $ ./stage1 createsuperuser
 ```
 
 For example, create username "cfcadmin".
@@ -46,10 +46,6 @@ testing, use:  `http://localhost:3000/admin`  From here, you can add
 or remove locations.  Here is an example:
 
 ```
-United Kingdom
-└─ England, UK
-    └─ London County
-        └─ London, England
 United States
 └─ Arizona, USA
     └─ Pima County, AZ
@@ -61,7 +57,9 @@ United States
 
 The first entry must be `world`, with a parent of `world`, in effect pointing
 to itself.  This is required for the "ancestor-search" algorithm.  For 
-location hierarchies, you must enter the parent before the child.
+location hierarchies, you must enter the parent before the child.  This
+application will detect if the database is empty, and populate it with the
+"world" entry for you to get started.
 
 In the above example, you must create
 `United States` before you can enter `Arizona` or `Ohio`.
@@ -81,7 +79,9 @@ To access admin panels, add "/admin" to the main website.  For local
 testing, use:  `http://localhost:3000/admin`  From here, you can add
 or remove laws, policies, regulations and other proposed legislation.
 
-For each piece of legislation, the curator must identify the following:
+A cron job will use the Legiscan API to fetch legislation texts. Watson
+Natural Language Understanding is used to classify the legislation to
+the appropriate impact area.
 
 * key -- a unique value that refers to the specific legislation
 * location -- the scope of location, specify the most narrow location,
@@ -93,6 +93,10 @@ a particular county, specify the county.
 * summary -- write two to four sentences that summarize the impact of this
 law for this location.  This can include statistics that support this 
 assessment.
+
+
+While the download is automatic, a curator may want to refined the
+wording of the title and summary to be more human-readable.
 
 Here is an example:
 
@@ -241,5 +245,5 @@ followers.
 
 ## Acknowledgments
 
-Team Fix Politics would like to acknowledge the assistance of Matt Perrins,
+Our team would like to acknowledge the assistance of Matt Perrins,
 Jermaine Edwards, Victor Brown and Tedd Ginsley.

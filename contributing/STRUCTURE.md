@@ -374,7 +374,7 @@ Red Hat OpenShift to run the demo.
 │   ├── pipeline.yaml
 │   ├── python-pipeline.yaml
 │   └── tasks.yaml
-├── template_secret-db-fix-politics.env
+├── template_secret-db-cfc-app.env
 ├── template_secret-smtp-mailtrap.env
 ```
 
@@ -417,34 +417,6 @@ some URLs extend beyond that.
 ├── CONTRIBUTING.md
 ├── DESCRIPTION.md
 ├── docs
-│   ├── Architecture-Fix-Politics-2020-08-26.png
-│   ├── Final_presentation_-_fix_politics2.pptx
-│   ├── Fix-Politics-Architecture-Aug11.pptx
-│   ├── Fix-Politics-Architecture-Aug12.pptx
-│   ├── Fix-Politics-Architecture-Aug16.pptx
-│   ├── Fix-Politics-Aug03.pptx
-│   ├── Fix-Politics-Aug04.pptx
-│   ├── Fix-Politics-Aug06a.pptx
-│   ├── Fix-Politics-Aug06.pptx
-│   ├── Fix-Politics-Aug10-a.png
-│   ├── Fix-Politics-Aug10.pptx
-│   ├── Screenshot\ from\ 2020-08-10\ 18-12-39.png
-│   ├── Screenshot\ from\ 2020-08-10\ 18-13-08.png
-│   ├── Screenshot\ from\ 2020-08-10\ 18-13-26.png
-│   ├── Screenshot\ from\ 2020-08-10\ 18-14-39.png
-│   ├── Screenshots-Aug04
-│   │   ├── page0002-Aug04.png
-│   │   ├── page0003-Aug04.png
-│   │   ├── page0004-Aug04.png
-│   │   ├── page0005-Aug04.png
-│   │   ├── page0006-Aug04.png
-│   │   ├── page0011-Aug04.png
-│   │   ├── page0012-Aug04.png
-│   │   ├── page0013-Aug04.png
-│   │   ├── page0014-Aug04.png
-│   │   ├── page0015-Aug04.png
-│   │   ├── page0021-Aug04.png
-│   │   └── page0030-Aug04.png
 │   ├── STAGE1.md
 │   ├── STAGE2.md
 │   ├── STAGE3.md

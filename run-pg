@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-USE_SQLITE3='False' python manage.py runserver localhost:3000

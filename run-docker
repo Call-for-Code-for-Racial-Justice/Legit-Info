@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-IMAGE_NAME="fix-politics"
+IMAGE_NAME="cfc-app"
 IMAGE_VER="1.0.0"
 
 if [[ -z "${IMAGE_NAME}" ]] || [[ -z "${IMAGE_VER}" ]]; then

@@ -1,4 +1,4 @@
-# Fix Politics
+# Legit-Info
 
 [![License](https://img.shields.io/badge/License-Apache2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0) 
 [![Slack](https://img.shields.io/badge/Join-Slack-blue)](https://callforcode.org/slack)
@@ -68,14 +68,14 @@ by multiple variations of a proposed policy.
 
 Searching for legislation can be complicated by the fact that each government
 level has their own repository, their own numbering convention, and different
-formats.  Technology can assist by allowing curated content to be centralized
+formats.  Technology can assist by allowing content to be centralized
 into a single database, readily accessible to advocates that need 
 simple-to-read information.
 
 
-### The idea  - Fix Politics App
+### The idea  - Legit-Info App
 
-Fix Politics is a web-based application written in Python programming
+This is a web-based application written in Python programming
 language, using the Django framework and Bootstrap user interface styling. Its 
 primary goal is to help advocates find legislation of interest based on an
 advocate's preferences for impact areas and geographical location. 
@@ -92,7 +92,7 @@ through voting or other activism.
 
 ## The architecture
 
-![architecture](docs/Architecture-Fix-Politics-2020-08-26.png)
+![architecture](docs/Architecture-2020-10-15.png)
 
 
 ## Long description
@@ -110,19 +110,13 @@ Without an email SMTP server, we used instead `Mailtrap.io`
 which allowed testing of the HTML and TEXT formats.  Considering adding
 an SMTP server to send out email.
 
-2. **Currated Data Entry:**
-
-Currently, locations, impacts and laws are 
-entered manually via the standard Django /admin panels.  These could
-be improved, with bigger and wider text boxes.
-
-3. **Permission Levels:**
+2. **Permission Levels:**
 
 The Superuser can grant privileges to other users, and
 this could be implemented as a "upgrade user to Staff" button option with
 specific privilege levels pre-set.
 
-4. **Share options:**
+3. **Share options:**
 
 The advocate can share results three ways: (a) print
 out the results on paper or PDF file; (b) email to self then forward that
@@ -131,7 +125,7 @@ to send out to others or perform other analyses.  Additional options could
 be to send out tweets on Twitter, post to a Blog, or send out to other 
 social media outlets like Facebook.
 
-5. **Feedback options:**
+4. **Feedback options:**
 
 Add information to each law related to the proponents
 or opponents, these could be elected officials or activists that are actively
@@ -139,20 +133,6 @@ involved with the legislation.  Feedback options can be to send opinions
 directly to those people, or to allow those elected officials to easily see the
 collection of opinions directly from the website.
 
-6. **Automate Collection:**
-
-The effort to review laws, determine if they apply to the desired impact
-areas for the locations involved, and then classify and summarize them in
-laymen terms, was manually intensive.  This could be improved by having a
-system that does web crawling, web page scraping, or invokes publicly APIs
-to gether the data, do some initial filtering, and present suject matter
-experts with a refined list to review.
-
-7. **Automate Classification**
-
-It is not obvious that policies and regulations have certain impacts.
-An improvement would be to use supervised training of AI models with a
-set of already classified laws to determine which impact area involved.
 
 
 ## Getting started
@@ -195,6 +175,7 @@ pip and pipenv supporting tools
 * [SQlite](https://www.sqlite.org/index.html) - A simple, local database
 * [Postgresql](https://www.postgresql.org/) - A robust, relational database
 * [Gunicorn](https://gunicorn.org/) - A WSGI HTTP server for Python
+* [Watson Studio Natural Language Understanding](https://www.ibm.com/watson/nlu)
 
 The following technologies were used to demonstrate the MVP.  Certainly,
 they are optional, as the above application can run on a traditional 
@@ -218,10 +199,13 @@ conduct, and the process for submitting pull requests to the project.
 
 ## Authors
 
-* **Tony Pearson** - *Developer*
+* **Tony Pearson** - *Lead Developer*
+* **Uchechukwu Uboh** - *Developer*
+* **Shilpi Bhattacharyya** - *Developer / Data Scientist*
 * **Tommy Adams** - *Tester*
 * **Beth Morgan** - *UI Designer*
 * **Nikhil Raja** - *Project Manager*
+* **Rita Tackett** - *Project Manager*
 * **Mao Vang Corne** - *Content Curator*
 
 

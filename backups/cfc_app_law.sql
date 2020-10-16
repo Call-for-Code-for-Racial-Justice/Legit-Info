@@ -11,6 +11,4 @@ INSERT INTO cfc_app_law VALUES(7,'Stalking Protection Act 2019','An Act to make 
 INSERT INTO cfc_app_law VALUES(8,'Crime (Overseas Production Orders) Act 2019','An Act to make provision about overseas production orders and about the designation of international agreements for the purposes of section 52 of the Investigatory Powers Act 2016.',2,8,'UK PGA 2019 c. 5');
 INSERT INTO cfc_app_law VALUES(9,'Parking (Code of Practice) Act of 2019','An Act to make provision for and in connection with a code of practice containing guidance about the operation and management of private parking facilities; and for connected purposes',4,8,'UK PGA 2019 c. 8');
 INSERT INTO cfc_app_law VALUES(10,'City of London Corporation (Open Spaces) Act 2018','An Act to make provision relating to the public open spaces under the management and control of the City of London Corporation; and for related purposes',3,11,'UK LA 2018 c. i');
-CREATE INDEX "fixpol_law_impact_id_b12ea346" ON "cfc_app_law" ("impact_id");
-CREATE INDEX "fixpol_law_location_id_7e957567" ON "cfc_app_law" ("location_id");
 COMMIT;

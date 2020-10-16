@@ -13,7 +13,7 @@ contribute:
 
 1. By opening the issue for discussion: For instance, if you believe that you
    have uncovered a bug in Project Sample, creating a new issue in 
-   the `embrace-call-for-code/fix-politics` issue tracker is the way to 
+   the `call-for-code/legit-info` issue tracker is the way to 
    report it.
 2. By helping to triage the issue: This can be done either by providing
    supporting details (a test case that demonstrates a bug), or providing
@@ -21,7 +21,7 @@ contribute:
 3. By helping to resolve the issue: Typically this is done either in the form
    of demonstrating that the issue reported is not a problem after all, or more
    often, by opening a Pull Request that changes some bit of something in
-   `embrace-call-for-code/fix-politics` in a concrete and reviewable manner.
+   `call-for-code/legit-info` in a concrete and reviewable manner.
 
 ## Asking for Help
 
@@ -30,11 +30,11 @@ appropriate Slack channel.
 
 * General Help: #emb-race-cfc-challenge
 * Technical Help: #emb-race-cfc-tech
-* Fix Politics Help: #embrace-politics-team1
+* Applicatoin Help: #embrace-politics-team1
 
 ## Submitting a Bug Report
 
-When opening a new issue in the `/embrace-call-for-code/fix-politics` issue 
+When opening a new issue in the `/call-for-code/legit-info` issue 
 tracker, please provide as much detail about your environment as possible.
 
 See [How to create a Minimal, Complete, and Verifiable 

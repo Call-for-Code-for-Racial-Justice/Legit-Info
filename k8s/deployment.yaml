@@ -2,30 +2,30 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: fix-politics-app
+    app: cfc-app
     version: v1
-  name: fix-politics-app
+  name: cfc-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: fix-politics-app
+      app: cfc-app
       version: v1
   template:
     metadata:
       labels:
-        app: fix-politics-app
+        app: cfc-app
         version: v1
     spec:
       containers:
-        - name: fix-politics-app
-          image: image-registry.openshift-image-registry.svc:5000/fix-politics/fix-politics:latest
+        - name: cfc-app
+          image: image-registry.openshift-image-registry.svc:5000/cfc-app/cfc-app:latest
           imagePullPolicy: Always
           envFrom:
             - secretRef:
                 name: smtp-mailtrap
             - secretRef:
-                name: db-fix-politics
+                name: db-cfc-app
           ports:
             - containerPort: 3000
               name: http

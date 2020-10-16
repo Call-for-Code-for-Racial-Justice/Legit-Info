@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# This script runs the application with SQLite3 (see Stage1.md for details)
+#
+# Examples:
+# ./stage1 runserver localhost:3000
+# ./stage1 shell
+# ./stage1 makemigrations
+# ./stage1 migrate
+# ./stage1 dbshell
+USE_SQLITE3='True' python manage.py "$@"

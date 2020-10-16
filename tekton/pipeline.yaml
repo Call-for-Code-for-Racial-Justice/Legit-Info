@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
-  name: fix-politics-app-build-and-deploy
+  name: cfc-app-build-and-deploy
 spec:
   resources:
   - name: git-repo
@@ -12,7 +12,7 @@ spec:
   - name: deployment-name
     type: string
     description: name of the deployment to be patched
-    default: fix-politics-app
+    default: cfc-app
   tasks:
   - name: build-image
     taskRef:

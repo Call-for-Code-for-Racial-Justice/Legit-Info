@@ -1,13 +1,13 @@
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name: fix-politics-app
+  name: cfc-app
   labels:
-    app: fix-politics-app
+    app: cfc-app
 spec:
   to:
     kind: Service
-    name: fix-politics-app
+    name: cfc-app
     weight: 100
   port:
     targetPort: http

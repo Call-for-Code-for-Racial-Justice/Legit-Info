@@ -58,8 +58,8 @@ it's time to create a fork.
 Clone this project locally.
 
 ```text
-$ git clone git@github.com:embrace-call-for-code/fix-politics.git
-$ cd fix-politics
+$ git clone git@github.com:call-for-code/legit-info.git
+$ cd legit-info
 ```
 
 It is recommended to configure `git` so that it knows who you are:
@@ -360,7 +360,7 @@ commit.
 ### Approving a change
 
 Any Project Sample core Collaborator (any GitHub user with commit rights in the
-`embrace-call-for-code/fix-politics.git` repository) is authorized to approve 
+`call-for-code/legit-info.git` repository) is authorized to approve 
 any other contributor's work. Collaborators are not permitted to approve their 
 own Pull Requests.
 

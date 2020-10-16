@@ -1,31 +1,31 @@
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineResource
 metadata:
-  name: jce-fix-politics-app-repo
+  name: jce-cfc-app-repo
 spec:
   type: git
   params:
   - name: url
-    value: https://github.com/embrace-call-for-code/fix-politics
+    value: https://github.com/Call-for-Code-for-Racial-Justice/fix-politics
   - name: revision
     value: lift-to-ocp
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineResource
 metadata:
-  name: fix-politics-app-repo
+  name: cfc-app-repo
 spec:
   type: git
   params:
   - name: url
-    value: https://github.com/embrace-call-for-code/fix-politics
+    value: https://github.com/Call-for-Code-for-Racial-Justice/fix-politics
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineResource
 metadata:
-  name: fix-politics-app-image
+  name: cfc-app-image
 spec:
   type: image
   params:
   - name: url
-    value: image-registry.openshift-image-registry.svc:5000/fix-politics/fix-politics:latest
+    value: image-registry.openshift-image-registry.svc:5000/cfc-app/cfc-app:latest

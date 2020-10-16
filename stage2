@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# This script runs the application with Postgresql (see Stage1.md for details)
+#
+# Examples:
+# ./stage2 runserver localhost:3000
+# ./stage2 shell
+# ./stage2 makemigrations
+# ./stage2 migrate
+# ./stage2 dbshell
+USE_SQLITE3='False' python manage.py "$@"

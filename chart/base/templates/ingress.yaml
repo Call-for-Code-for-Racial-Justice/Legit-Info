@@ -2,8 +2,8 @@ kind: Ingress
 apiVersion: networking.k8s.io/v1beta1
 metadata:
   name: example
-  namespace: fix-politics
-  selfLink: /apis/networking.k8s.io/v1beta1/namespaces/fix-politics/ingresses/example
+  namespace: legit-info
+  selfLink: /apis/networking.k8s.io/v1beta1/namespaces/legit-info/ingresses/example
   uid: 1bb3cbe0-0167-4258-8e34-2b2e92a4b835
   resourceVersion: '49915623'
   generation: 3
@@ -16,7 +16,7 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: fix-politics-app
+              serviceName: cfc-app
               servicePort: 3000
 status:
   loadBalancer: {}

@@ -1,4 +1,4 @@
-# Fix Politics - Stage 1
+# Stage 1
 
 ## Stage 1: Development
 
@@ -67,7 +67,7 @@ package dependencies at different levels.
 You can verify your level of pipenv with this command:
 
 ```bash
-[Yoga fix-politics]$ pipenv --version
+[legit-info]$ pipenv --version
 pipenv, version 2020.6.2
 ```
 
@@ -87,18 +87,18 @@ C:\Users\Grady> mkdir Dev
 * On Mac or Linux, for Grady's home directory:  /home/Grady/Dev
 
 ```
-[Grady ~]$ mkdir Dev
+[ ~]$ mkdir Dev
 ```
 
 
 3. Clone this GitHub repo to your local environment.
 
 Run the git command in your Development workspace directory.  This will create
-a new directory `/Dev/fix-politics` which we will refer to as "project root" 
+a new directory `/Dev/legit-info` which we will refer to as "project root" 
 
 ```bash
-[Grady ~]$ cd Dev
-[Grady Dev]$ git clone https://github.com/Call-for-Code/Embrace-Policy-Reform.git
+[ ~]$ cd Dev
+[ Dev]$ git clone https://github.com/Call-for-Code/Embrace-Policy-Reform.git
 ```
 
 IBM encourages everyone to use two-factor authorization for Github.  Generate
@@ -108,18 +108,18 @@ SSH]](https://docs.github.com/en/github/authenticating-to-github/connecting-to-g
 You can do git clone via SSH with these commands:
 
 ```bash
-[Grady ~]$ cd Dev
-[Grady Dev]$ git clone git@github.com/Call-for-Code/Embrace-Policy-Reform.git
+[ ~]$ cd Dev
+[ Dev]$ git clone git@github.com:Call-for-Code-for-Racial-Justice/legit-info.git
 ```
 
 4. The list of python dependencies needed for Djangjo, Bootstrap, and the
-rest of the Fix Politics application are recorded in `Pipfile.lock` file.
+rest of this application are recorded in `Pipfile.lock` file.
 From your project root, you can download and install the project 
 dependencies into your virtual environment (virtualenv) with:
 
 ```bash
-[Grady Dev]$ cd fix-politics
-[Grady fix-politics]$ pipenv install
+[ Dev]$ cd legit-info
+[ legit-info]$ pipenv install
 ```
 
 5. Develop and test in this virtual environment.  Running Django applications
@@ -141,6 +141,8 @@ POSTGRESQL_USER
 POSTGRESQL_PASSWORD
 POSTGRESQL_HOSTNAME
 POSTGRESQL_PORT
+LEGISCAN_API_KEY
+
 ```
 
 To generate SECRET_KEY, use this command:
@@ -155,43 +157,50 @@ set in your environment variables.
 Contact your Postgresql Administrator for the database name, user, password,
 and port used.
 
+For Legiscan API, you will need to register for a free account on 
+Legiscan.com website.  The API fetches the legislation for United States.
+
 While you are in the virtual environment, there will be an indicator such as 
-"(fix)" in front of your normal shell prompt.  Use "exit" to leave the 
+"(env)" in front of your normal shell prompt.  Use "exit" to leave the 
 virtual environment.  If you were using "python3" in your normal shell,
 you only need to use "python" within your virtualenv.
 
-You will need to see the "cfc_app_location" table with the first entry,
-using this SQL statement.
-
-```
-(fix) [Grady fix-politics]$ python manage.py dbshell
-**Using SQLite3**
-insert into cfc_app_location values(1,'world','world','world', 'world', clock_timestamp(), 1);
-.quit
-```
-
-
-We have created "run" script as a shortcut for 
-the `python manage.py runserver localhost:3000` command. 
-
 ```bash
-[Grady fix-politics]$ pipenv shell
+[ legit-info]$ pipenv shell
 Launching subshell in virtual environment…
 
-(fix) [Grady fix-politics]$ ./run
+We have created "stage1" script as a shortcut for 
+the `python manage.py` command. 
+
+Create Superuser on Postgresql.  You need at least one user to login
+as andministrator.  For example, create "cfcadmin" and acceptable password.
+
+(env) [ legit-info]$ ./stage1 createsuperuser
+**Using SQLITE3**
+Username (leave blank to use 'yourname'): cfcadmin
+Email address: yourname@us.ibm.com
+Password: <password here>
+Password (again): <password here>
+Superuser created successfully.
+
+Now you are ready to run the application server.  Django provides a simple
+webserver you can launch with a single one-line command.
+
+(env) [legit-info]$ ./stage1 runserver localhost:3000
 **Using SQLite3**
 Performing system checks...
 Django version 3.0.8, using settings 'cfc_project.settings'
 Starting development server at http://localhost:3000/
 Quit the server with CONTROL-C.
 
-^C (fix) [Grady fix-politics]$ exit
-[Grady fix-politics]$
+^C (env) [legit-info]$ exit
+[ legit-info]$
 
 ```
 
 6. Your application will be running at `http://localhost:3000` which
 you can launch in your favorite browser (Chrome, Firefox, Safari, etc.)
+
 
 ##### Debugging locally
 To debug a Django project, run with DEBUG set to True in `settings.py` to 

@@ -1,4 +1,4 @@
-# Fix Politics - Stage 3
+# Stage 3
 
 ## Stage 3: Production
 
@@ -7,15 +7,15 @@
 Start the Docker daemon.
 
 ```bash
-[Grady Dev]$ sudo systemctl start docker
+[ Dev]$ sudo systemctl start docker
 ```
 
 2. Build Docker container from Dockerfile
 
 ```bash
-[Grady Dev]$ cd fix-politics
-[Grady fix-politics]$ ./build-docker 
-Building fix-politics:1.0.0
+[ Dev]$ cd legit-info
+[ legit-info]$ ./build-docker 
+Building legit-info:1.0.0
 Sending build context to Docker daemon 38.22 MB
 Step 1/24 : FROM registry.access.redhat.com/ubi8
  ---> a1f8c9699786
@@ -35,10 +35,9 @@ Step 5/24 : RUN yum -y install python3
 Updating Subscription Management repositories.
 Unable to read consumer identity
 Subscription Manager is operating in container mode.
-This system is not registered to Red Hat Subscription Management. You can use subscription-manager to register.
-Red Hat Universal Base Image 8 (RPMs) - BaseOS  559 kB/s | 768 kB     00:01    
-Red Hat Universal Base Image 8 (RPMs) - AppStre 2.3 MB/s | 3.9 MB     00:01    
-Red Hat Universal Base Image 8 (RPMs) - CodeRea  14 kB/s |  12 kB     00:00    
+Red Hat Universal Base Image 8 (RPMs) - BaseOS  559 kB/s | 768 kB     00:01
+Red Hat Universal Base Image 8 (RPMs) - AppStre 2.3 MB/s | 3.9 MB     00:01
+Red Hat Universal Base Image 8 (RPMs) - CodeRea  14 kB/s |  12 kB     00:00
 Dependencies resolved.
 ==========================================================================================
  Package               Arch    Version                              Repository        Size
@@ -50,7 +49,7 @@ Installing dependencies:
  python3-pip           noarch  9.0.3-16.el8                         ubi-8-appstream   20 k
  python3-setuptools    noarch  39.2.0-5.el8                         ubi-8-baseos     163 k
 Enabling module streams:
- python36                      3.6                                                        
+ python36                      3.6
 
 Transaction Summary
 ==========================================================================================
@@ -59,12 +58,12 @@ Install  4 Packages
 Total download size: 2.0 M
 Installed size: 7.8 M
 Downloading Packages:
-(1/4): python36-3.6.8-2.module+el8.1.0+3334+5cb  49 kB/s |  19 kB     00:00    
-(2/4): python3-pip-9.0.3-16.el8.noarch.rpm      216 kB/s |  20 kB     00:00    
-(3/4): python3-setuptools-39.2.0-5.el8.noarch.r 259 kB/s | 163 kB     00:00    
-(4/4): platform-python-pip-9.0.3-16.el8.noarch. 1.9 MB/s | 1.8 MB     00:00    
+(1/4): python36-3.6.8-2.module+el8.1.0+3334+5cb  49 kB/s |  19 kB     00:00
+(2/4): python3-pip-9.0.3-16.el8.noarch.rpm      216 kB/s |  20 kB     00:00
+(3/4): python3-setuptools-39.2.0-5.el8.noarch.r 259 kB/s | 163 kB     00:00
+(4/4): platform-python-pip-9.0.3-16.el8.noarch. 1.9 MB/s | 1.8 MB     00:00
 --------------------------------------------------------------------------------
-Total                                           2.1 MB/s | 2.0 MB     00:00     
+Total                                           2.1 MB/s | 2.0 MB     00:00
 Running transaction check
 Transaction check succeeded.
 Running transaction test
@@ -84,10 +83,10 @@ Running transaction
 Installed products updated.
 
 Installed:
-  platform-python-pip-9.0.3-16.el8.noarch                                       
-  python3-pip-9.0.3-16.el8.noarch                                               
-  python3-setuptools-39.2.0-5.el8.noarch                                        
-  python36-3.6.8-2.module+el8.1.0+3334+5cb623d7.x86_64                          
+  platform-python-pip-9.0.3-16.el8.noarch
+  python3-pip-9.0.3-16.el8.noarch
+  python3-setuptools-39.2.0-5.el8.noarch
+  python36-3.6.8-2.module+el8.1.0+3334+5cb623d7.x86_64
 
 Complete!
  ---> 7c2b653bc7ce
@@ -98,7 +97,6 @@ Step 6/24 : RUN yum -y install python3-pip wget
 Updating Subscription Management repositories.
 Unable to read consumer identity
 Subscription Manager is operating in container mode.
-This system is not registered to Red Hat Subscription Management. You can use subscription-manager to register.
 Last metadata expiration check: 0:00:05 ago on Wed Aug 26 23:09:55 2020.
 Package python3-pip-9.0.3-16.el8.noarch is already installed.
 Dependencies resolved.
@@ -115,9 +113,9 @@ Install  1 Package
 Total download size: 735 k
 Installed size: 2.9 M
 Downloading Packages:
-wget-1.19.5-8.el8_1.1.x86_64.rpm                735 kB/s | 735 kB     00:00    
+wget-1.19.5-8.el8_1.1.x86_64.rpm                735 kB/s | 735 kB     00:00
 --------------------------------------------------------------------------------
-Total                                           731 kB/s | 735 kB     00:01     
+Total                                           731 kB/s | 735 kB     00:01
 Running transaction check
 Transaction check succeeded.
 Running transaction test
@@ -130,7 +128,7 @@ Running transaction
 Installed products updated.
 
 Installed:
-  wget-1.19.5-8.el8_1.1.x86_64                                                  
+  wget-1.19.5-8.el8_1.1.x86_64
 
 Complete!
  ---> b6587c144843
@@ -144,7 +142,7 @@ Collecting pip
 Installing collected packages: pip
 Successfully installed pip-20.2.2
 WARNING: pip is being invoked by an old script wrapper. This will fail in a future version of pip.
-Please see https://github.com/pypa/pip/issues/5599 for advice on fixing the underlying issue.
+Please see https://github.com/pypa/pip/issues/5599 for advice on the underlying issue.
 To avoid this problem you can invoke Python with '-m pip' instead of running pip directly.
 Collecting pipenv
   Downloading pipenv-2020.8.13-py2.py3-none-any.whl (3.9 MB)
@@ -248,10 +246,10 @@ Successfully built 6177f65fdaf4
 3. Verify Docker Image built
 
 ```bash
-[Grady Dev]$ cd fix-politics
-[Grady fix-politics]$ docker image ls
+[ Dev]$ cd legit-info
+[ legit-info]$ docker image ls
 REPOSITORY      TAG     IMAGE ID          CREATED             SIZE
-fix-politics    1.0.0   6177f65fdaf4      14 minutes ago      420 MB
+legit-info    1.0.0   6177f65fdaf4      14 minutes ago      420 MB
 ```
 
 4. Start and Stop Docker Image locally
@@ -259,8 +257,8 @@ fix-politics    1.0.0   6177f65fdaf4      14 minutes ago      420 MB
 Confirm that you can start the docker image locally.,
 
 ```bash
-[Grady Dev]$ cd fix-politics
-[Grady fix-politics]$ ./run-docker 
+[ Dev]$ cd legit-info
+[ legit-info]$ ./run-docker 
 21ca1ad1ec07863f090f57b27af71e3964b712abe3e3a961d3d3659fd1354665
 ```
 
@@ -272,10 +270,10 @@ To stop the application, you need to find the container id with `docker ps`
 command, then use `docker stop` command with that value.
 
 ```bash
-[Grady fix-politics]$ docker ps
+[ legit-info]$ docker ps
 CONTAINER ID        IMAGE                COMMAND                  CREATED             STATUS              PORTS                    NAMES
-21ca1ad1ec07        fix-politics:1.0.0   "gunicorn -b 0.0.0..."   5 seconds ago       Up 3 seconds        0.0.0.0:3000->3000/tcp   peaceful_snyder
-[Grady fix-politics]$ docker stop 21ca1ad1ec07
+21ca1ad1ec07        legit-info:1.0.0   "gunicorn -b 0.0.0..."   5 seconds ago       Up 3 seconds        0.0.0.0:3000->3000/tcp   peaceful_snyder
+[ legit-info]$ docker stop 21ca1ad1ec07
 21ca1ad1ec07
 
 ```
