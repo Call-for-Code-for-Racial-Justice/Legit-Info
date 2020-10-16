@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_truncate',
     'djcelery', 
-    'django_celery_beat',
 
     # Default django apps
     'django.contrib.admin',
