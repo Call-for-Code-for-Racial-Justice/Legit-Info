@@ -42,6 +42,56 @@ def cte_query(loc):
     return loc_list
 
 
+def load_default_impacts():
+    # The 'None' option allows legislation to be hidden from all
+    # searches.  This is useful for legislation that is fetched
+    # through automation but mis-classified.  Setting impact=None
+    # will prevent automation from fetching updated versions of this.
+
+    default_impacts = ['None', 'Healthcare', 'Safety', 'Environment',
+                       'Transportation', 'Jobs']
+    for entry in default_impacts:
+        new_impact = Impact()
+        new_impact.text = entry
+        new_impact.save()
+    return None
+
+
+def load_default_locations():
+    # The 'world' entry points to itself, so cannot be added using
+    # traditional Django administration.  To create it here, we have
+    # to create an entry with no parent, save it, then set the parent_id
+    # to 1.  This only works if the AUTOINCREMENT sequence is set to zero,
+    # for an empty database, or reset to zero if entries deleted.
+
+    world = Location()
+    world.desc = 'world'
+    world.shortname = 'world'
+    world.hierarchy = 'world'
+    world.govlevel = 'world'
+    world.save()
+    world.parent_id = 1
+    world.save()
+
+    # The concept of ancestor-search is confusing, so we create a few
+    # entries (usa, arizona, ohio) so people can understand the structure
+
+    usa = Location(desc = 'United States', shortname = 'usa',
+                   hierarchy='world.usa', govlevel = 'country')
+    usa.parent = world
+    usa.save()
+
+    arizona = Location(desc = 'Arizona, USA', shortname = 'arizona',
+                       hierarchy='world.usa.arizona', govlevel = 'state')
+    arizona.parent = usa
+    arizona.save()
+
+    ohio = Location(desc = 'Ohio, USA', shortname = 'ohio',
+                    hierarchy='world.usa.ohio', govlevel = 'state')
+    ohio.parent = usa
+    ohio.save()
+    return None
+
 def make_csv(search_id, laws):
     """ Make Comma-Separated-Value (CSV) format file"""
     laws_table = []
@@ -166,13 +216,10 @@ def impacts(request):
     """Show all impacts."""
     impacts = Impact.objects.order_by('date_added')
     if len(impacts) == 0:
-        default_impacts = ['Healthcare', 'Safety', 'Environment',
-                    'Transportation', 'Jobs']
-        for entry in default_impacts:
-            new_impact = Impact()
-            new_impact.text = entry
-            new_impact.save()
-        impacts = Impact.objects.order_by('date_added')
+        load_default_impacts()
+
+    # Do not display the None option for end-users
+    impacts = Impact.objects.order_by('date_added').exclude(text='None')
 
     context = {'impacts': impacts}
     return render(request, 'impacts.html', context)
@@ -203,34 +250,14 @@ def lawdump(request):
 def locations(request):
     """Show all locations."""
     locations = Location.objects.order_by('hierarchy')
+
+    # If database is empty, re-create the "world" entry that acts as
+    # the master parent for the ancestor-search.
     if len(locations) == 0:
-        import pdb; pdb.set_trace()
-        world = Location()
-        world.desc = 'world'
-        world.shortname = 'world'
-        world.hierarchy = 'world'
-        world.govlevel = 'world'
-        world.save()
-        world.parent_id = 1
-        world.save()
-
-        usa = Location(desc = 'United States', shortname = 'usa',
-                        hierarchy='world.usa', govlevel = 'country')
-        usa.parent = world
-        usa.save()
-
-        arizona = Location(desc = 'Arizona, USA', shortname = 'arizona',
-                        hierarchy='world.usa.arizona', govlevel = 'state')
-        arizona.parent = usa
-        arizona.save()
-
-        ohio = Location(desc = 'Ohio, USA', shortname = 'ohio',
-                        hierarchy='world.usa.ohio', govlevel = 'state')
-        ohio.parent = usa
-        ohio.save()
+        load_default_locations()
         
 
-    locations = Location.objects.order_by('hierarchy')
+    locations = Location.objects.order_by('hierarchy').exclude(desc='world')
     context = {'locations': locations}
     return render(request, 'locations.html', context)
 

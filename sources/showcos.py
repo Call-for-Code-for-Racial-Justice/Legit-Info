@@ -18,7 +18,7 @@ COS_INSTANCE = os.environ['COS_INSTANCE']
 
 
 def understand(extracted_text):
-    relevant_words = '{json-package}'
+    relevant_words = extracted_text[:50]
     #
     # Shilpi, your code goes here
     #
@@ -29,7 +29,7 @@ def process_legislation(cos, bucket_name, key, size):
     response = cos.get_object(Bucket=bucket_name, Key=key)
     extracted_text = response['Body'].read().decode('utf-8')
     relevant_words = understand(extracted_text)    
-    print(relevant_words)
+    print(key, relevant_words)
     return None
 
 

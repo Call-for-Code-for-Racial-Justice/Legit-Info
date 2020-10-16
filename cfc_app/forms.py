@@ -15,7 +15,7 @@ class SearchForm(forms.ModelForm):
 
     impacts = forms.ModelMultipleChoiceField(
         widget=forms.CheckboxSelectMultiple,
-        queryset=Impact.objects.all()
+        queryset=Impact.objects.all().exclude(text='None')
     )
 
     def __init__(self, *args, **kwargs):

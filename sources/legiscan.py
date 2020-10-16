@@ -77,21 +77,27 @@ class LegiScan:
                 if "bill_id" in masterList[i]:
                     localDict["bill_id"] = masterList[i]["bill_id"]
                 if "number" in masterList[i]:
-                    localDict["number"] = masterList[i]['number']
+                    localDict["bill_number"] = masterList[i]['number']
                 if "title" in masterList[i]:
                     localDict["title"] = masterList[i]['title']
                 if "description" in masterList[i]:
-                    localDict["description"] = masterList[i]['description']
+                    localDict["summary"] = masterList[i]['description']
+
+                # If none of the four above are found, do not add to
+                # the list.  Otherwise, add "State" as Location.
                 if len(localDict) > 0:
+                    localDict["location"] = state
                     bills[len(bills)] = localDict
+                    
             for i in bills:
                 billID = str(bills[i]["bill_id"])
                 docID, LastDate = self.getBill(billID)
                 if docID:
                     response = self.getBillText(docID)
-                    bills[i]["date"] = LastDate
-                    bills[i]["mime"] = response['mime']
-                    bills[i]["bill_text"] = response['doc']
+                    bills[i]["doc_id"] = docID
+                    bills[i]["doc_date"] = LastDate
+                    bills[i]["mime_type"] = response['mime']
+                    # bills[i]["bill_text"] = response['doc']
                     num += 1
                     dot.show()
             with open(state + ".json", 'w') as outfile:
