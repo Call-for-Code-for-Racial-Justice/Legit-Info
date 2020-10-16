@@ -3,6 +3,8 @@
 [![License](https://img.shields.io/badge/License-Apache2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0) 
 [![Slack](https://img.shields.io/badge/Join-Slack-blue)](https://callforcode.org/slack)
 
+"Legit Info" app helps residents understand the impact of legislation and policies based on their country, state, county, city, district location.
+
 ## Contents
 
 1. [Short description](#short-description)
@@ -19,24 +21,6 @@
 1. [Acknowledgments](#acknowledgments)
 
 ## Short description
-
-### Emb(race): Policy and Legislation Reform
-
-Technology has the power to drive action. And right now, a call to action is
-needed to eradicate racism. **Black lives matter.**
-
-We recognize technology alone cannot fix hundreds of years of racial injustice
-and inequality, but when we put it in the hands of the Black community and
-their supporters, technology can begin to bridge a gap. To start a dialogue.
-To identify areas where technology can help pave a road to progress.
-
-This project is an effort to utilize technology to analyze, inform, and
-develop policy to reform the workplace, products, public safety, and
-legislation.
-
-This is one of three open source projects underway as part of the [Call for 
-Code Emb(race) Spot Challenge](https://github.com/topics/embrace-call-for-code) 
-led by contributors from IBM and Red Hat.
 
 ### What's the problem?
 
@@ -63,7 +47,6 @@ they are.
 5. Policy makers have visibility into how diverse citizenry will be impacted
 by multiple variations of a proposed policy.
 
-
 ### How can technology help?
 
 Searching for legislation can be complicated by the fact that each government
@@ -71,7 +54,6 @@ level has their own repository, their own numbering convention, and different
 formats.  Technology can assist by allowing content to be centralized
 into a single database, readily accessible to advocates that need 
 simple-to-read information.
-
 
 ### The idea  - Legit-Info App
 
@@ -88,7 +70,6 @@ laymen-readable title and summary.
 By classifying legislation by impact and location, we hope to increase 
 awareness of current and pending legislation and their ability to affect change 
 through voting or other activism.
-
 
 ## The architecture
 
@@ -215,8 +196,3 @@ This project is licensed under the Apache 2 License -
 see the [LICENSE](LICENSE) file for details
 
 Please also read the [BSD Copyright Notice](BSD-NOTICE)
-
-## Acknowledgments
-
-* Based on [Billie Thompson's README 
-template](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2).
