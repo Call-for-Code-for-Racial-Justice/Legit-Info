@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'django_extensions',
     'django_truncate',
+    'djcelery', 
 
     # Default django apps
     'django.contrib.admin',
@@ -80,6 +81,17 @@ TEMPLATES = [
         },
     },
 ]
+
+
+# Celery for background tasks, such as to get api data for legislation
+BROKER_URL = 'amqp://'
+CELERY_ACCEPT_CONTENT = ['pickle']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+
 
 # The email host settings are optional, needed for the "email to self"
 # Feature.  The project team used 'Mailtrap.IO' for testing.
