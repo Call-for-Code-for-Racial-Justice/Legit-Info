@@ -18,6 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 MEDIA_URL = '/results/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'results')
+SOURCE_ROOT = os.path.join(BASE_DIR, 'sources')
 APP_NAME = 'Legit-Info'
 
 # Quick-start development settings - unsuitable for production

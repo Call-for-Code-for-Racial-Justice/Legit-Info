@@ -81,13 +81,13 @@ def load_default_locations():
     usa.parent = world
     usa.save()
 
-    arizona = Location(desc = 'Arizona, USA', shortname = 'arizona',
-                       hierarchy='world.usa.arizona', govlevel = 'state')
+    arizona = Location(desc = 'Arizona, USA', shortname = 'az',
+                       hierarchy='world.usa.az', govlevel = 'state')
     arizona.parent = usa
     arizona.save()
 
-    ohio = Location(desc = 'Ohio, USA', shortname = 'ohio',
-                    hierarchy='world.usa.ohio', govlevel = 'state')
+    ohio = Location(desc = 'Ohio, USA', shortname = 'oh',
+                    hierarchy='world.usa.oh', govlevel = 'state')
     ohio.parent = usa
     ohio.save()
     return None
@@ -372,12 +372,3 @@ def sendmail(request, search_id):
                'search_id': search_id}
     return render(request, 'email_sent.html', context)
 
-
-def sources(request):
-    path = os.path.join(settings.BASE_DIR, 'sources/')
-    file_list = os.listdir(path)
-    nf = len(file_list)
-    for filename in file_list:
-        x = len(filename)
-    context = { 'flie_list': file_list }
-    return render(request, 'gallery.html', context)

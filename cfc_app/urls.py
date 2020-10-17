@@ -41,8 +41,4 @@ urlpatterns = [
 
     # health endpoint
     path('health', views.health, name='health'),
-
-    # sources
-    path('sources', views.sources, name='sources'),
-
 ]
