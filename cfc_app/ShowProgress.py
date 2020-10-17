@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+# ShowProgress.py -- print dots across the screen
+# By Tony Pearson, IBM, 2020
+#
+
+
 import sys
 import time
 
