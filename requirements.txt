@@ -21,6 +21,7 @@ django-truncate==0.1
 django==3.0.8
 docutils==0.15.2; python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'
 gunicorn==20.0.4
+html5lib==1.1
 ibm-cloud-sdk-core==1.7.3
 ibm-cos-sdk-core==2.7.0; python_version ~= '3.5'
 ibm-cos-sdk-s3transfer==2.7.0; python_version ~= '3.5'
@@ -37,6 +38,7 @@ jmespath==0.10.0; python_version >= '2.6' and python_version not in '3.0, 3.1, 3
 jsonpath-rw==1.4.0
 kombu==3.0.37; python_version >= '3.6'
 livereload==2.6.2
+lxml==4.5.2
 numpy==1.19.2
 pandas==1.1.3
 parso==0.7.1; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
@@ -61,6 +63,7 @@ tornado==6.0.4
 traitlets==4.3.3
 urllib3==1.25.10; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_version < '4'
 wcwidth==0.2.5
+webencodings==0.5.1
 websocket-client==0.48.0
 whitenoise==5.1.0
 zipp==3.1.0

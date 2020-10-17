@@ -3,6 +3,8 @@
 # By Tony Pearson, IBM, 2020
 #
 import sys
+import os
+from django.conf import settings
 
 class Oneline():
     """ Class to maintain one long line in a file with no line breaks  """
@@ -10,6 +12,7 @@ class Oneline():
     def __init__(self):
         """ Set characters to use for showing progress"""
         self.oneline = ''
+        self.path = ''
         return None
 
     def add_text(self, line):
@@ -23,7 +26,11 @@ class Oneline():
         return self
 
     def write_name(self, outname):
-        with open(outname, "w") as outfile:
+        if self.path:
+            out_path = os.path.join(self.path, outname)
+        else:
+            out_path = outname
+        with open(out_path, "w") as outfile:
             self.write_file(outfile)
         return self
 
