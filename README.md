@@ -39,8 +39,8 @@ This project is an effort to utilize technology to analyze, inform, and
 develop policy to reform the workplace, products, public safety, and
 legislation.
 
-This is one of three open source projects underway as part of the [Call for 
-Code for Racial Justice] led by contributors from IBM and Red Hat.
+This is one of several open source projects underway as part of the Call for 
+Code for Racial Justice led by contributors from IBM and Red Hat.
 
 ### What's the problem?
 
