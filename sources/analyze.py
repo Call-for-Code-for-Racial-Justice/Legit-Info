@@ -11,6 +11,7 @@ import ibm_boto3
 from ibm_botocore.client import Config, ClientError
 #from ShowProgress import ShowProgress
 import pandas as pd
+import numpy as np
 import json
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
@@ -20,7 +21,7 @@ EmotionOptions, SentimentOptions, SemanticRolesOptions,KeywordsOptions,
 ConceptsOptions,SemanticRolesOptions,SyntaxOptions,SyntaxOptionsTokens,
 CategoriesOptions,ConceptsOptions)
 
-import numpy as np
+
 
 # Constants for IBM COS values
 COS_ENDPOINT_URL = os.environ['COS_ENDPOINT_URL']

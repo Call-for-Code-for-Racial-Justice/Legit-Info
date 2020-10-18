@@ -1,6 +1,23 @@
-#!/usr/bin/env python3
-# scan_json.py -- Scan JSON from Legiscan API
+# Python Code
+# scan_json.py -- Scan JSON retrieved by get_api_data.
 # By Tony Pearson, IBM, 2020
+#
+# This is intended as a background task
+#
+# You can invoke this in either "on demand" or as part of a "cron" job
+#
+# On Demand:
+# [...] $ pipenv shell
+# (cfc) $ ./stage1 scan_json --api --state AZ --limit 10
+#
+# Cron Job:
+# /home/yourname/Develop/legit-info/cron1 scan_json --api --limit 10
+#
+# The Legiscan.com API only allows 30,000 fetches per 30-day period, and
+# each legislation requires at least 2 fetches, so use the --limit keyword
+#
+# If you leave out the --api, the Legiscan.com API will not be invoked,
+# this is useful to process HTML and PDF files already fetched from API.
 #
 import base64
 import codecs
@@ -12,150 +29,166 @@ from bs4 import BeautifulSoup
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
+from cfc_app.FOB_Storage import FOB_Storage
 from cfc_app.ShowProgress import ShowProgress
 from cfc_app.PDFtoTEXT import PDFtoTEXT
 from cfc_app.models import Location
 from cfc_app.Legiscan_API import Legiscan_API
 from cfc_app.Oneline import Oneline
 
+
 PARSER = "lxml"
 TITLE_LIMIT_CHARS = 200
 SUMMARY_LIMIT_CHARS = 1000
 
+# Put the original file name, doc date, title and summary ahead of text
 HeadForm = "{} {} _TITLE_ {} _SUMMARY_ {} _TEXT_"
 
 
 class Command(BaseCommand):
-    help = 'For each state, scan the NN.json file, converting '
-    help += 'HTML and PDF versions of each legislation into text file'
+    help =  'For each state, scan the associated NN.json file, fetching '
+    help += 'legislation from Legiscan.API as either HTML or PDF file, '
+    help += 'and extract to TEXT.  Both the original (HTML/PDF) and the '
+    help += 'extracted TEXT file are stored in File/Object Storage.'
 
     def add_arguments(self, parser):
-        parser.add_argument("--json", help="Specify single JSON file")
-        parser.add_argument("--fresh", action="store_true",
+        parser.add_argument("--api", action="store_true",
                             help="Invoke Legiscan.com API")
-        parser.add_argument("--skip", action="store_true",
-                            help="Skip if text file already exists")
+        parser.add_argument("--state", help="Process single state: AZ, OH")
+        parser.add_argument("--limit", type=int, default=0, 
+                            help="Limit number of entries to detail")
         return None
+
 
     def handle(self, *args, **options):
         leg = Legiscan_API()
+        fob = FOB_Storage(settings.FOB_METHOD)
 
-        if options['json']:
-            jsf = options['json']
-            state = jsf[:2]
-            fullname = os.path.join(settings.SOURCE_ROOT, jsf)
-            self.process_json(state, fullname, options)
-        else:
-            usa = Location.objects.get(shortname='usa')
-            locations = Location.objects.order_by(
-                'hierarchy').filter(parent=usa)
-            for loc in locations:
-                state = loc.shortname.upper()  # Convert state to UPPER CASE
-                fullname = os.path.join(settings.SOURCE_ROOT, state+'.json')
-                self.process_json(state, fullname, options)
+        usa = Location.objects.get(shortname='usa')
+        locations = Location.objects.order_by('hierarchy').filter(parent=usa)
+        for loc in locations:
+            state = loc.shortname.upper()  # Convert state to UPPER CASE
+
+            # If we are only processing one state, and this is
+            # not it, skip it.
+            if options['state'] and state != options['state']:
+                continue
+            json_fullname = '{}.json'.format(state)
+            self.process_json(state, fob, json_fullname, options)
         return None
 
-    def process_json(self, state, jsonname, options):
-        print('project_json', state, jsonname)
-        with open(jsonname, "r") as jsonfile:
-            data = json.load(jsonfile)
-            num = 0
-            dot = ShowProgress()
-            for entry in data:
-                num += 1
-                import pdb; pdb.set_trace()
-                if num > 10:
-                    break
-                dot.show()
-                bill = data[entry]
-                print(bill)
 
-                key = "{}-{}".format(state, bill['bill_number'])
-                document_date = ''
-                if 'doc_date' in bill:
-                    document_date = bill['doc_date']
-                    if len(key) < 15:
-                        key += '-Y' + bill['doc_date'][:4]
-                    else:
-                        key += '-Y' + bill['doc_date'][2:4]
+    def process_json(self, state, fob, jsonname, options):
+        json_str = fob.download_text(jsonname)
+        data = json.loads(json_str)
 
-                title = self.remove_section_numbers(bill['title'])
-                summary = self.remove_section_numbers(bill['summary'])
+        limit, num = 0, 0
+        if options['limit']:
+            limit = options['limit']
 
-                if len(title) > TITLE_LIMIT_CHARS:
-                    revised = self.shrink_line(title, TITLE_LIMIT_CHARS)
+        dot = ShowProgress()
+        for entry in data:
+            
+            # import pdb; pdb.set_trace()
+            dot.show()
+            bill = data[entry]
 
-                if len(summary) > SUMMARY_LIMIT_CHARS:
-                    revised = self.shrink_line(summary, SUMMARY_LIMIT_CHARS)
-
-                # If the text file already exists, honor the --skip flag
-                textname = '{}.{}'.format(key, 'txt')
-                text_path = os.path.join(settings.SOURCE_ROOT, textname)
-                if options['skip'] and os.path.exists(text_path):
-                    continue
-
-                # Don't invoke Legiscan.com API unless --fresh specified
-                if options['fresh']:
-                    print('FRESH')
-
-                    docID = bill['doc_id']
-                    LastDate = bill['doc_date']
-
-                    leg = Legiscan_API()
-                    response = leg.getBillText(docID)
-                    mime_type = response['mime_type']
-                    extension = self.determine_extension(mime_type)
-
-                    mimedata = reponse['doc'].encode('latin-1')
-                    msg_bytes = base64.b64decode(mimedata)
-
-                    billname = '{}.{}'.format(key, extension)
-                    bill_path = os.join.path(settings.SOURCE_ROOT, billname)
-
-                    if extension == 'html':
-                        billtext = msg_bytes.decode('latin-1')
-                        with open(bill_path, "w") as billfile:
-                            print(billtext, file=billfile)
-                    elif extension == 'pdf':
-                        with open(bill_path, "wb") as billfile:
-                            billfile.write(msg_bytes)
-
-                # Otherwise, read the HTML/PDF from SOURCE_ROOT directory
+            key = "{}-{}".format(state, bill['bill_number'])
+            document_date = ''
+            if 'doc_date' in bill:
+                document_date = bill['doc_date']
+                if len(key) < 15:
+                    key += '-Y' + bill['doc_date'][:4]
                 else:
-                    extension = 'unk'
-                    if state == 'AZ':
-                        extension = 'html'
-                        billname = '{}.{}'.format(key, extension)
-                        bill_path = os.path.join(
-                            settings.SOURCE_ROOT, billname)
-                        if os.path.exists(bill_path):
-                            with open(bill_path, "r") as billfile:
-                                billtext = billfile.read()
-                        else:
-                            print('File not found: ', bill_path)
-                            continue
+                    key += '-Y' + bill['doc_date'][2:4]
 
-                    elif state == 'OH':
-                        extension = 'pdf'
-                        billname = '{}.{}'.format(key, extension)
-                        bill_path = os.path.join(
-                            settings.SOURCE_ROOT, billname)
-                        if os.path.exists(bill_path):
-                            with open(bill_path, "rb") as billfile:
-                                msg_bytes = billfile.read()
-                        else:
-                            print('File not found: ', bill_path)
-                            continue
+            title = self.remove_section_numbers(bill['title'])
+            summary = self.remove_section_numbers(bill['summary'])
 
-                if extension == 'html':
-                    self.process_html(key, document_date,
-                                     title, summary, billtext)
-                elif extension == 'pdf':
-                    self.process_pdf(key, document_date, 
-                                    title, summary, msg_bytes)
+            if len(title) > TITLE_LIMIT_CHARS:
+                revised = self.shrink_line(title, TITLE_LIMIT_CHARS)
+
+            if len(summary) > SUMMARY_LIMIT_CHARS:
+                revised = self.shrink_line(summary, SUMMARY_LIMIT_CHARS)
+
+            # If the text file already exists, honor the --skip flag
+            textname = '{}.{}'.format(key, 'txt')
+            if options['skip'] and fob.handle_exists(textname):
+                continue
+
+            # Don't invoke Legiscan.com API unless --fresh specified
+            if options['fresh']:
+                extension, msg_bytes = self.fetch_bill(fob, bill)
+
+            # Otherwise, download the HTML/PDF file
+            else:
+                extension, msg_bytes = self.read_local(fob, key)
+
+            if extension == 'html':
+                self.process_html(key, document_date,
+                                 title, summary, msg_bytes)
+            elif extension == 'pdf':
+                self.process_pdf(key, document_date, 
+                                title, summary, msg_bytes)
+
+            num += 1
+            if limit > 0 and num >= limit:
+                break
 
             dot.end()
         return self
+
+
+    def fetch_bill(self, fob, bill):
+        extension, msg_bytes = '', b''
+        docID = bill['doc_id']
+        LastDate = bill['doc_date']
+
+        leg = Legiscan_API()
+        response = leg.getBillText(docID)
+        mime_type = response['mime_type']
+        extension = self.determine_extension(mime_type)
+
+        mimedata = reponse['doc'].encode('UTF-8')
+        msg_bytes = base64.b64decode(mimedata)
+
+        billname = '{}.{}'.format(key, extension)
+        print('Getting from Legiscan: ', billname)
+
+        if extension == 'html':
+            billtext = msg_bytes.decode('UTF-8',errors='ignore')
+            fob.upload_text(billname, billtext)
+        elif extension == 'pdf':
+            fob.upload_binary(billname, msg_bytes)
+
+        return extension, msg_bytes
+
+
+    def read_local(self, fob, key):
+        extension, msg_bytes = '', b''
+        state = key[:2]
+        if state == 'AZ':
+            extension = 'html'  # Assume html for Arizona
+            billname = '{}.{}'.format(key, extension)
+            billtext = fob.download_text(billname)
+            msg_bytes = billtext.encode('UTF-8')
+            if billtext == '':
+                print('File not found: ', billname)
+                extension = ''
+            else:
+                print('Reading: ', billname)
+
+        elif state == 'OH':
+            extension = 'pdf'   # Assume html for Ohio
+            billname = '{}.{}'.format(key, extension)
+            msg_bytes = fob.download_binary(billname)
+            if msg_bytes == b'':
+                print('File not found: ', billname)
+                extension = ''
+            else:
+                print('Reading: ', billname)
+        return extension, msg_bytes
+
 
     def parse_html(self, in_line, out_line):
         soup = BeautifulSoup(in_line, PARSER)
@@ -179,16 +212,19 @@ class Command(BaseCommand):
 
         return self
 
+
     def process_html(self, key, docdate, title, summary, billtext):
         billname = '{}.{}'.format(key, 'html')
         textname = '{}.{}'.format(key, 'txt')
 
         text_line = Oneline()
-        text_line.path = settings.SOURCE_ROOT
         text_line.add_text(HeadForm.format(billname, docdate, title, summary))
         self.parse_html(billtext, text_line)
+        text_line.oneline = self.remove_section_numbers(text_line.oneline)
         text_line.write_name(textname)
+        print('Writing: ', textname)
         return self
+
 
     def parse_intermediate(self, input_string, output_line):
         lines = input_string.splitlines()
@@ -200,21 +236,29 @@ class Command(BaseCommand):
                 output_line.add_text(newline)
         return self
 
-    def process_pdf(self, key, docdate, title, summary, msg_bytes):
-        billname = '{}.{}'.format(key, 'pdf')
-        bill_path = os.path.join(settings.SOURCE_ROOT, billname)
-        intermediate = os.path.join(settings.SOURCE_ROOT, "intermediate.file")
-        textname = '{}.{}'.format(key, 'txt')
 
+    def process_pdf(self, key, docdate, title, summary, msg_bytes):
+        
+        source_pdf = "source.pdf"
+        intermediate = "intermediate.file"
+        
+        bill_path = os.path.join(settings.SOURCE_ROOT, "scan_json.pdf")
+        with open(bill_path, "wb") as outfile:
+            outfile.write(msg_bytes)
         PDFtoTEXT(bill_path, intermediate)
+
+        billname = '{}.{}'.format(key, 'pdf')
+        textname = '{}.{}'.format(key, 'txt')
         text_line = Oneline()
-        text_line.path = settings.SOURCE_ROOT
         text_line.add_text(HeadForm.format(billname, docdate, title, summary))
         with open(intermediate, "r") as infile:
             input_str = infile.read()
             self.parse_intermediate(input_str, text_line)
+        text_line.oneline = self.remove_section_numbers(text_line.oneline)
         text_line.write_name(textname)
+        print('Writing: ', textname)
         return self
+
 
     def remove_section_numbers(self, line):
         newline = re.sub(r'and [-0-9]+[.][0-9]+\b\s*', '', line)

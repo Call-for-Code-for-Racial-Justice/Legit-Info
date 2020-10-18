@@ -133,6 +133,9 @@ class Law(models.Model):
     key = models.CharField(max_length=20, null=False,
                            unique=True, default=get_default_law_key)
 
+    bill_id = models.CharField(max_length=15, null=True)
+    doc_date = models.CharField(max_length=10, null=True)
+
     title = models.CharField(max_length=200)
 
     summary = models.CharField(max_length=1000)
@@ -142,6 +145,8 @@ class Law(models.Model):
 
     impact = models.ForeignKey('cfc_app.Impact', null=True,
                                related_name='laws', on_delete=models.CASCADE)
+
+    relevance = models.CharField(max_length=250, null=True)
 
     def __str__(self):
         """Return a string representation of the model."""

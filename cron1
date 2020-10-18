@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# By Tony Pearson, IBM, 2020
+#
+# This script runs the application with SQLite3 (see STAGE1.md for details)
+# Designed for use with operating system "cron" for background tasks
+#
+# Examples:
+#
+# cron1 get_api_data    Invokes Legiscan.API and creates AZ.json, OH.json
+# cron1 scan_json       Scans AZ.json and OH.json, converts PDF/HTML -> TXT
+# cron1 analyze_text    Analyzes TXT files, assigns IMPACT, loads database
+#
+parms="$@"
+export USE_SQLITE3='True'
+cd /home/tpearson/Develop/legit-info && pipenv run python manage.py $parms

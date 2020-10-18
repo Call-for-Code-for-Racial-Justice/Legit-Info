@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
-import djcelery
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -19,7 +18,28 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_URL = '/results/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'results')
 SOURCE_ROOT = os.path.join(BASE_DIR, 'sources')
+
 APP_NAME = 'Legit-Info'
+
+# Legiscan.com only allows 30,000 requests per 30-day period.
+#
+# Legislation will be fetched from Legiscan.com and either stored in
+# local file system or Cloud Object Storage (bucket=legi-info)
+#
+# Specify FOB_METHOD='FILE' to use local or shared file system.  
+#    Requires the following environment variables appropriate for
+#    your operating system:
+#
+#       FOB_STORAGE = 'full/path/that/you/want/to/store/your/files'
+#
+# Specify FOB_METHOD='OBJECT' to use Cloud Object Storage
+#    Requires the following environment variables for COS credentials:
+#
+#       COS_ENDPOINT_URL = <https://endpoint.url>
+#       COS_API_KEY_ID = <COS api-key-id>
+#       COS_INSTANCE = <crn:v1:bluemix:public:etc:etc:etc>
+#
+FOB_METHOD = 'FILE'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -43,7 +63,6 @@ INSTALLED_APPS = [
     'bootstrap4',
     'django_extensions',
     'django_truncate',
-    'djcelery', 
 
     # Default django apps
     'django.contrib.admin',
@@ -83,17 +102,6 @@ TEMPLATES = [
         },
     },
 ]
-
-
-# Celery for background tasks, such as to get api data for legislation
-CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL')
-CELERY_ACCEPT_CONTENT = ['pickle', 'json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-
-CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
-CELERY_BEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
-djcelery.setup_loader()
 
 
 # The email host settings are optional, needed for the "email to self"

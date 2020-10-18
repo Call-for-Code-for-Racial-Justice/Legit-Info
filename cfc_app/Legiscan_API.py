@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # Legiscan_API.py -- Pull data from Legiscan.com API
-# By Uchechukwu Uboh, IBM, 2020
-# Updated by Tony Pearson, IBM -- 2020-10-15
+# By Uchechukwu Uboh and Tony Pearson, IBM, 2020
 #
 
 import requests
 import os
 import logging
-import json
 import sys
+import random
 from cfc_app.ShowProgress import ShowProgress
+from cfc_app.FOB_Storage import FOB_Storage
 from django.conf import settings
 
 """
@@ -19,9 +19,12 @@ to be an environmental variable with the key of "LEGISCAN_API_KEY". Visit
 https://legiscan.com/legiscan to create your own Legiscan.com apikey.
 """
 
+
 class Legiscan_API:
+
     def __init__(self):
-        """Constructor for Legiscan_API. Checks if a Legiscan_API apikey exists."""
+        """Constructor for Legiscan_API. 
+           Checks if a Legiscan_API apikey exists."""
         try:
             self.apiKey = os.environ['LEGISCAN_API_KEY']
             if not self.apiKey:
@@ -60,18 +63,18 @@ class Legiscan_API:
             logging.error("Error: error getting bill text. " + str(e))
         return None
 
-    def getAllBills(self, state):
+    def getAllBills(self, state, json_filename, limit=10):
         """Create a json file of all bill for a given state. Each object
             represents a bill and contains bill_id, number, title,
             description, mime, and bill_text."""
-        num = 0
-        fullname = os.path.join(settings.SOURCE_ROOT, state+".json")
+
+        jsonForm = "{}.json"
+        json_handle = jsonForm.format(state)
         try:
             problem_happened = False
             state_url = self.url + "getMasterList&state=" + state
             stateBills = requests.get(state_url)
             response = stateBills.json()
-
 
             # Legiscan imposes a limit of 30,000 requests per month
             # If the limit is exceeded, print message response here.
@@ -80,52 +83,87 @@ class Legiscan_API:
                     print(response['alert'])
                     problem_happened = True
 
-            if 'masterlist' not in response:
-                problem_happened = True
-
-            if problem_happened:
-                if os.path.exists(fullname):
-                    print('Will use previous fetch: ', fullname)
-                return
-
-            masterList = response["masterlist"]
             bills = {}
+            if 'masterlist' in response:
+                masterList = response["masterlist"]
 
-            for i in masterList:
-                localDict = {}
-                if "bill_id" in masterList[i]:
-                    localDict["bill_id"] = masterList[i]["bill_id"]
-                if "number" in masterList[i]:
-                    localDict["bill_number"] = masterList[i]['number']
-                if "title" in masterList[i]:
-                    localDict["title"] = masterList[i]['title']
-                if "description" in masterList[i]:
-                    localDict["summary"] = masterList[i]['description']
+                for i in masterList:
+                    localDict = {}
+                    if "bill_id" in masterList[i]:
+                        localDict["bill_id"] = masterList[i]["bill_id"]
+                    if "number" in masterList[i]:
+                        localDict["bill_number"] = masterList[i]['number']
+                    if "title" in masterList[i]:
+                        localDict["title"] = masterList[i]['title']
+                    if "description" in masterList[i]:
+                        localDict["summary"] = masterList[i]['description']
 
-                # If none of the four above are found, do not add to
-                # the list.  Otherwise, add "State" as Location.
-                if len(localDict) > 0:
-                    localDict["location"] = state
-                    bills[len(bills)] = localDict
-            dot = ShowProgress()       
+                    # If none of the four above are found, do not add to
+                    # the list.  Otherwise, add "State" as Location.
+                    if len(localDict) > 0:
+                        localDict["location"] = state
+                        bills[len(bills)] = localDict
+
+            elif fob.handle_exists(fob, json_handle):
+                json_str = fob.download_text(json_handle)
+                bills = json.loads(json_str)
+
+            else:
+                print('Unable to get latest info from Legiscan.com, ')
+                print('and {} does not already exist.'.format(json_handle))
+                return None
+
+            dot = ShowProgress()
+            details, num = 0, 0
+            num_bills = len(bills)
             for i in bills:
-                billID = str(bills[i]["bill_id"])
-                docID, LastDate = self.getBill(billID)
-                if docID:
-                    bills[i]["doc_id"] = docID
-                    bills[i]["doc_date"] = LastDate
-                    num += 1
-                    dot.show()
+                if "doc_id" in bills[i]:
+                    details += 1
             
-            with open(fullname, 'w') as outfile:
-                json.dump(bills, outfile)
+            # We have three scanning modes:
+            # Mode 1: Fetch every bill fresh, high limit or unlimited,
+            #         getting the latest doc_id and doc_date for all bills.
+            if limit == 0 or limit >= num_bills:
+                for i in bills:
+                    self.fetch_bill(bills, i)
+                    dot.show()
 
+            # Mode 2: if limit is placed, only fetch bills that are
+            #         missing details like doc_id and doc_date.
+            elif limit > 0 and details < num_bills:
+                for i in bills:
+                    if "doc_id" not in bills[i]:
+                        self.fetch_bill(bills, i)
+                        num += 1
+                        dot.show()
+                        if num >= limit:
+                            break
+
+            # Mode 3: if limit is placed, and all bills have previously
+            #         fetched details, randomly refresh scattered bills.
+            elif limit < num_bills:
+                for j in range(limit):
+                    i = randint(0, num_bills)
+                    self.fetch_bill(bills, i)
+                    dot.show()
             dot.end()
-            print("File {} written".format(fullname))
+
+            textdata = json.dumps(bills)
+            fob.upload_textdata(textdata, json_handle)
+
+            print("File {} uploaded".format(json_handle))
         except Exception as e:
             logging.error("Error: error getting state bills. " + str(e))
-        
-        return self
+
+        return None
+
+    def fetch_bill(bills, index):
+        billID = str(bills[i]["bill_id"])
+        docID, LastDate = self.getBill(billID)
+        if docID:
+            bills[i]["doc_id"] = docID
+            bills[i]["doc_date"] = LastDate
+        return None     
 
 
 if __name__ == "__main__":
@@ -135,6 +173,9 @@ if __name__ == "__main__":
         states = ['AZ', 'OH']
 
     leg = Legiscan_API()
+    fob = FOB_Storage(settings.FOB_METHOD)
     for state in states:
-        print('Processing: ', state)   
-        leg.getAllBills(state)
+        print('Processing: ', state)
+        jsonForm = "{}.json"
+        json_filename = jsonForm.format(state)
+        leg.getAllBills(state, json_filename)

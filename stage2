@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# This script runs the application with Postgresql (see Stage1.md for details)
+# This script runs the application with Postgresql (see STAGE2.md for details)
 #
 # Examples:
 # ./stage2 runserver localhost:3000   <-- default if nothing specified
@@ -13,4 +13,4 @@ parms="$@"
 if [ "$#" -eq 0 ]; 
     then parms="runserver localhost:3000"
 fi
-USE_SQLITE3='False' python manage.py "$parms"
+USE_SQLITE3='False' python manage.py $parms

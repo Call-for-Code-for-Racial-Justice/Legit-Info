@@ -17,7 +17,9 @@ sources/*.file
 sources/drafts/
 sources/curated/
 sources/zipfiles/
-
+fob-storage/
+intermediate.file
+scan_json.pdf
 
 # misc
 **/*DONOT_SAVE*.*
