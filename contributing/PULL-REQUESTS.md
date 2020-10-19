@@ -5,8 +5,9 @@ and technical, and one more process oriented. The concrete and technical
 component involves the specific details of setting up your local environment
 so that you can make the actual changes. This is where we will start.
 
+* [Dependencies](#dependencies)
 * [Setting up your local environment](#setting-up-your-local-environment)
-  * [Step 1: Clone](#step-1-fork)
+  * [Step 1: Fork](#step-1-fork)
   * [Step 2: Branch](#step-2-branch)
 * [The Process of Making Changes](#the-process-of-making-changes)
   * [Step 3: Code](#step-3-code)
@@ -17,49 +18,48 @@ so that you can make the actual changes. This is where we will start.
   * [Step 7: Push](#step-7-push)
   * [Step 8: Opening the Pull Request](#step-8-opening-the-pull-request)
   * [Step 9: Discuss and Update](#step-9-discuss-and-update)
-    * [Approval and Request Changes 
-       Workflow](#approval-and-request-changes-workflow)
+    * [Approval and Request Changes Workflow](#approval-and-request-changes-workflow)
   * [Step 10: Landing](#step-10-landing)
 * [Reviewing Pull Requests](#reviewing-pull-requests)
   * [Review a bit at a time](#review-a-bit-at-a-time)
-  * [Be aware of the person behind the 
-     code](#be-aware-of-the-person-behind-the-code)
-  * [Respect the minimum wait time for 
-     comments](#respect-the-minimum-wait-time-for-comments)
+  * [Be aware of the person behind the code](#be-aware-of-the-person-behind-the-code)
+  * [Respect the minimum wait time for comments](#respect-the-minimum-wait-time-for-comments)
   * [Abandoned or Stalled Pull Requests](#abandoned-or-stalled-pull-requests)
   * [Approving a change](#approving-a-change)
-  * [Accept that there are different opinions about what belongs in Project 
-     Sample](#accept-that-there-are-different-opinions-about-what-belongs-in-project-sample)
+  * [Accept that there are different opinions about what belongs in Legit Info](#accept-that-there-are-different-opinions-about-what-belongs-in-legit-info)
   * [Performance is not everything](#performance-is-not-everything)
   * [Continuous Integration Testing](#continuous-integration-testing)
 * [Notes](#notes)
   * [Commit Squashing](#commit-squashing)
-  * [Getting Approvals for your Pull 
-     Request](#getting-approvals-for-your-pull-request)
+  * [Getting Approvals for your Pull Request](#getting-approvals-for-your-pull-request)
   * [CI Testing](#ci-testing)
-  * [Waiting Until the Pull Request Gets 
-     Landed](#waiting-until-the-pull-request-gets-landed)
+  * [Waiting Until the Pull Request Gets Landed](#waiting-until-the-pull-request-gets-landed)
   * [Check Out the Collaborator Guide](#check-out-the-collaborator-guide)
 
+## Dependencies
+
+More details to come on Call for Code for Racial Justice Legit Info dependencies. In case of doubt, open an issue in the
+[issue tracker](https://github.com/Call-for-Code-for-Racial-Justice/Legit-Info/issues/) or engage on the
+[Call for Code Slack workspace](https://callforcode.org/slack).
 
 ## Setting up your local environment
 
 To get started, you will need to have `git` installed locally. Depending on
 your operating system, there are also a number of other dependencies required.
 
-The default level of git on Red Hat Enterprise Linux (RHEL) is git 1.8.3,
-we recommend you upgrade to git 2.22 or higher.
-
 Once you have `git` and are sure you have all of the necessary dependencies,
 it's time to create a fork.
 
-### Step 1: Clone
+### Step 1: Fork
 
-Clone this project locally.
+Fork the project [on GitHub](https://github.com/Call-for-Code-for-Racial-Justice/Legit-Info) and clone your fork
+locally.
 
 ```text
-$ git clone git@github.com:call-for-code/legit-info.git
-$ cd legit-info
+$ git clone git@github.com:username/Legit-Info.git
+$ cd Legit-Info
+$ git remote add upstream https://github.com/Call-for-Code-for-Racial-Justice/Legit-Info.git
+$ git fetch upstream
 ```
 
 It is recommended to configure `git` so that it knows who you are:
@@ -78,25 +78,17 @@ your changes to you in the `AUTHORS` file and the changelog.
 
 As a best practice to keep your development environment as organized as
 possible, create local branches to work within. These should also be created
-directly off of the `main` branch.
+directly off of the `master` branch.
 
 ```text
-$ git checkout -b my-branch -t origin/main
+$ git checkout -b my-branch -t upstream/master
 ```
 
 ## The Process of Making Changes
 
 ### Step 3: Code
 
-This project is based on the [Python Style Guide - 
-PEP 8](https://www.python.org/dev/peps/pep-0008/)
-
-You can use `autopep8` tool to standardize all tabs to four spaces. The
-fixes can be done in-place with the `-i` parameter.
-
-```bash
-$ autopep8 -i views.py
-```
+Legit Info does not yet have a style guide.
 
 ### Step 4: Commit
 
@@ -152,11 +144,11 @@ please do proper word-wrap and keep columns shorter than about
 72 characters or so. That way, `git log` will show things
 nicely even when it is indented.
 
-Fixes: https://github.com/Code-and-Response/Project-Sample/issues/1337
+Fixes: https://github.com/Call-for-Code-for-Racial-Justice/Legit-Info/issues/343
 Refs: http://eslint.org/docs/rules/space-in-parens.html
 ```
 
-If you are new to contributing to this project, please try to do your best at
+If you are new to contributing to Call for Code for Racial Justice Legit Info, please try to do your best at
 conforming to these guidelines, but do not worry if you get something wrong.
 One of the existing contributors will help get things situated and the
 contributor landing the Pull Request will ensure that everything follows
@@ -169,32 +161,31 @@ to use `git rebase` (not `git merge`) to synchronize your work with the main
 repository.
 
 ```text
-$ git fetch origin
-$ git rebase origin/main
+$ git fetch upstream
+$ git rebase upstream/master
 ```
 
 This ensures that your working branch has the latest changes from `c`
-main.
+master.
 
 ### Step 6: Test
 
-Instructions should also be provided so that the core team can validate 
-the change.
+Instructions should also be provided so that the core team can validate the change.
 
 ### Step 7: Push
 
 Once you are sure your commits are ready to go, with passing tests and linting,
 begin the process of opening a Pull Request by pushing your working branch to
-the project on GitHub.
+your fork on GitHub.
 
 ```text
 $ git push origin my-branch
 ```
 
-### Step 8: Opening the Pull Request (PR)
+### Step 8: Opening the Pull Request
 
-From within GitHub, opening a new Pull Request will present you with a few 
-form fields. 
+From within GitHub, opening a new Pull Request will present you with a few
+form fields.
 
 Please try to do your best at filling out the details, but feel free to skip
 parts if you're not sure what to put.
@@ -210,7 +201,7 @@ more detailed comments or feedback. This is a necessary part of the process
 in order to evaluate whether the changes are correct and necessary.
 
 To make changes to an existing Pull Request, make the changes to your local
-branch, add a new commit with those changes, and push those to the project.
+branch, add a new commit with those changes, and push those to your fork.
 GitHub will automatically update the Pull Request.
 
 ```text
@@ -220,17 +211,18 @@ $ git push origin my-branch
 ```
 
 It is also frequently necessary to synchronize your Pull Request with other
-changes that have landed in `main` by using `git rebase`:
+changes that have landed in `master` by using `git rebase`:
 
 ```text
 $ git fetch --all
-$ git rebase origin/main
+$ git rebase origin/master
 $ git push --force-with-lease origin my-branch
 ```
 
 **Important:** The `git push --force-with-lease` command is one of the few ways
 to delete history in `git`. Before you use it, make sure you understand the
-risks. If in doubt, you can always ask for guidance in the Pull Request.
+risks. If in doubt, you can always ask for guidance in the Pull Request or on the
+[Call for Code Slack workspace].
 
 If you happen to make a mistake in any of your commits, do not worry. You can
 amend the last commit (for example if you want to change the commit log).
@@ -245,7 +237,9 @@ There are a number of more advanced mechanisms for managing commits using
 `git rebase` that can be used, but are beyond the scope of this guide.
 
 Feel free to post a comment in the Pull Request to ping reviewers if you are
-awaiting an answer on something. 
+awaiting an answer on something. If you encounter words or acronyms that
+seem unfamiliar, refer to this
+[glossary](https://sites.google.com/a/chromium.org/dev/glossary).
 
 #### Approval and Request Changes Workflow
 
@@ -267,13 +261,24 @@ unhelpful is likely safe to ignore.
 
 ### Step 10: Landing
 
-In order to land, a Pull Request needs to be reviewed and approved by the
-lead developer.
+In order to land, a Pull Request needs to be reviewed and [approved][] by
+at least two Legit Info Collaborators (one Collaborator approval is enough if the
+pull request has been open for more than 7 days) and pass a
+[CI (Continuous Integration) test run][]. After that, as long as there are no
+objections from other contributors, the Pull Request can be merged. If you find
+your Pull Request waiting longer than you expect, see the
+[notes about the waiting time](#waiting-until-the-pull-request-gets-landed).
 
+When a collaborator lands your Pull Request, they will post
+a comment to the Pull Request page mentioning the commit(s) it
+landed as. GitHub often shows the Pull Request as `Closed` at this
+point, but don't worry. If you look at the branch you raised your
+Pull Request against (probably `master`), you should see a commit with
+your name on it. Congratulations and thanks for your contribution!
 
 ## Reviewing Pull Requests
 
-All contributors who choose to review and provide feedback on Pull
+All Legit Info contributors who choose to review and provide feedback on Pull
 Requests have a responsibility to both the project and the individual making the
 contribution. Reviews and feedback must be helpful, insightful, and geared
 towards improving the contribution as opposed to simply blocking it. If there
@@ -283,7 +288,7 @@ expect to be able to block a Pull Request from advancing simply because you say
 to working with the contributor to make the Pull Request better.
 
 Reviews that are dismissive or disrespectful of the contributor or any other
-reviewers are strictly counter to the [Code of Conduct](CODE_OF_CONDUCT.md)
+reviewers are strictly counter to the [Code of Conduct][/CONTRIBUTING.md].
 
 When reviewing a Pull Request, the primary goals are for the codebase to improve
 and for the person submitting the request to succeed. Even if a Pull Request
@@ -300,8 +305,8 @@ perfect grammar, or exact style matches. Do not succumb to that temptation.
 
 Focus first on the most significant aspects of the change:
 
-1. Does this change make sense for this project?
-2. Does this change make this project better, even if only incrementally?
+1. Does this change make sense for Legit Info?
+2. Does this change make Legit Info better, even if only incrementally?
 3. Are there clear bugs or larger scale issues that need attending to?
 4. Is the commit message readable and correct? If it contains a breaking change
    is it clear enough?
@@ -314,7 +319,7 @@ change over time. The first impression you give to a new contributor never does.
 
 Nits (requests for small changes that are not essential) are fine, but try to
 avoid stalling the Pull Request. Most nits can typically be fixed by the
-Project Sample Collaborator landing the Pull Request but they can also be an
+Legit Info Collaborator landing the Pull Request but they can also be an
 opportunity for the contributor to learn a bit more about the project.
 
 It is always good to clearly indicate nits when you comment: e.g.
@@ -328,9 +333,9 @@ with the appropriate reason to keep the conversation flow concise and relevant.
 
 Be aware that *how* you communicate requests and reviews in your feedback can
 have a significant impact on the success of the Pull Request. Yes, we may land
-a particular change that makes Project Sample better, but the individual might 
-just not want to have anything to do with this project ever again. The goal is 
-not just having good code.
+a particular change that makes Legit Info better, but the individual might just
+not want to have anything to do with Legit Info ever again. The goal is not just
+having good code.
 
 ### Respect the minimum wait time for comments
 
@@ -359,10 +364,9 @@ commit.
 
 ### Approving a change
 
-Any Project Sample core Collaborator (any GitHub user with commit rights in the
-`call-for-code/legit-info.git` repository) is authorized to approve 
-any other contributor's work. Collaborators are not permitted to approve their 
-own Pull Requests.
+Any Legit Info core Collaborator (any GitHub user with commit rights in the
+`Call-for-Code-for-Racial-Justice/Legit-Info` repository) is authorized to approve any other contributor's
+work. Collaborators are not permitted to approve their own Pull Requests.
 
 Collaborators indicate that they have reviewed and approve of the changes in
 a Pull Request either by using GitHub's Approval Workflow, which is preferred,
@@ -379,7 +383,7 @@ available later to check whether your comments have been addressed.
 If you see that requested changes have been made, you can clear another
 collaborator's `Changes requested` review.
 
-Change requests that are vague, dismissive, or unconstructive may also be
+Change requests that are vague, dismissive, or nonconstructive may also be
 dismissed if requests for greater clarification go unanswered within a
 reasonable period of time.
 
@@ -389,27 +393,32 @@ to block the PR from landing. When doing so, explain *why* you believe the
 Pull Request should not land along with an explanation of what may be an
 acceptable alternative course, if any.
 
-### Accept that there are different opinions about what belongs in the project
+### Accept that there are different opinions about what belongs in Legit Info
 
 Opinions on this vary, even among the members of the Technical Steering
 Committee.
 
+One general rule of thumb is that if Legit Info itself needs it (due to historic
+or functional reasons), then it belongs in Legit Info.
+
+Also, functionality that either cannot be implemented outside of core in any
+reasonable way, or only with significant pain.
+
 It is not uncommon for contributors to suggest new features they feel would
-make this project better. These may or may not make sense to add, but as with all
+make Legit Info better. These may or may not make sense to add, but as with all
 changes, be courteous in how you communicate your stance on these. Comments
 that make the contributor feel like they should have "known better" or
-ridiculed for even trying run counter to 
-the [Code of Conduct](CODE_OF_CONDUCT.md)
+ridiculed for even trying run counter to the [Code of Conduct][/CONTRIBUTING.md].
 
 ### Performance is not everything
 
-This project does not need speed of execution. If a particular change
-can be shown to make some part of the project faster, it's quite likely to be
+Legit Info has always optimized for speed of execution. If a particular change
+can be shown to make some part of Legit Info faster, it's quite likely to be
 accepted. Claims that a particular Pull Request will make things faster will
 almost always be met by requests for performance [benchmark results][] that
 demonstrate the improvement.
 
-That said, performance is not the only factor to consider. The project also
+That said, performance is not the only factor to consider. Legit Info also
 optimizes in favor of not breaking existing code in the ecosystem, and not
 changing working functional code just for the sake of changing.
 
@@ -422,9 +431,10 @@ feedback.
 
 ### Continuous Integration Testing
 
-Every Pull Request needs to be tested to make sure that it works on the 
-platforms that this project supports. This is currently done manually, but 
-automated testing can be done via Selenium.
+Every Pull Request needs to be tested
+to make sure that it works on the platforms that Legit Info
+supports. This is currently done manually, but automated testing
+may come soon.
 
 ## Notes
 
@@ -436,6 +446,12 @@ squashed into one commit per logical change. Metadata will be added to the
 commit message (including links to the Pull Request, links to relevant issues,
 and the names of the reviewers). The commit history of your Pull Request,
 however, will stay intact on the Pull Request page.
+
+For the size of "one logical change",
+[0b5191f](https://github.com/nodejs/node/commit/0b5191f15d0f311c804d542b67e2e922d98834f8)
+can be a good example. It touches the implementation, the documentation,
+and the tests, but is still one logical change. All tests should always pass
+when each individual commit lands on the master branch.
 
 ### Getting Approvals for Your Pull Request
 
@@ -453,7 +469,7 @@ because the reviewers have hit the buttons before.
 ### CI Testing
 
 Every Pull Request needs to be tested
-to make sure that it works on the platforms that the project
+to make sure that it works on the platforms that Legit Info
 supports. This is currently done manually, but automated testing
 may come soon.
 
@@ -464,3 +480,12 @@ submitted, even after it gets approved and passes the CI. This is to make sure
 that everyone has a chance to weigh in. If the changes are trivial,
 collaborators may decide it doesn't need to wait. A Pull Request may well take
 longer to be merged in.
+
+### Check Out the Collaborator Guide
+
+If you want to know more about the code review and the landing process, see the
+[Collaborator Guide][].
+
+[Code of Conduct]: https://github.com/Call-for-Code-for-Racial-Justice/Legit-Info/CONTRIBUTING.md
+[Collaborator Guide]: /CONTRIBUTING.md
+[Call for Code Slack workspace]: https://callforcode.org/slack
