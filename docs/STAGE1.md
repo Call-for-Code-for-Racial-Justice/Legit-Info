@@ -202,6 +202,17 @@ Quit the server with CONTROL-C.
 you can launch in your favorite browser (Chrome, Firefox, Safari, etc.)
 
 
+7. To populate your databases, login as "cfcadmin".  Click on the "Impact"
+option in the upper right, and the five Impact areas will be written to
+your empty database.  Likewise, click on the "Location" option and the
+"world", "usa', "arizona" and "ohio" locations will be created for you.
+
+
+8. To populate the "Laws" database via automation, see the instructions
+for [Cron Automation](CRON.md)
+
+
+
 ##### Debugging locally
 To debug a Django project, run with DEBUG set to True in `settings.py` to 
 start a native Django development server. This comes with the Django's 
