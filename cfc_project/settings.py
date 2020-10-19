@@ -26,7 +26,7 @@ APP_NAME = 'Legit-Info'
 # Legislation will be fetched from Legiscan.com and either stored in
 # local file system or Cloud Object Storage (bucket=legi-info)
 #
-# Specify FOB_METHOD='FILE' to use local or shared file system.  
+# Specify FOB_METHOD='FILE' to use local or shared file system.
 #    Requires the following environment variables appropriate for
 #    your operating system:
 #
@@ -39,7 +39,7 @@ APP_NAME = 'Legit-Info'
 #       COS_API_KEY_ID = <COS api-key-id>
 #       COS_INSTANCE = <crn:v1:bluemix:public:etc:etc:etc>
 #
-FOB_METHOD = 'OBJECT'
+FOB_METHOD = 'FILE'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -149,16 +149,20 @@ else:
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME':
+    'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 

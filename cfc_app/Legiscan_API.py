@@ -74,8 +74,13 @@ class Legiscan_API:
         bill_text = ''
         if self.api_ok:
             try:
-                billText = requests.get(self.url + "getBillText&id=" + docID)
-                bill_text = billText.json()['text']
+                response = requests.get(self.url + "getBillText&id=" + docID)
+                if 'status' in response:
+                    if response['status'] == 'ERROR':
+                        self.api_ok = False
+                    elif response['status'] == 'OK':
+                        package = response.json()
+                        bill_text = package['text']
             except Exception as e:
                 self.api_ok = False
                 logging.error("Error: error getting bill text. " + str(e))
@@ -86,9 +91,9 @@ class Legiscan_API:
         """Create a json file of all bill for a given state. Each object
             represents a bill and contains bill_id, number, title,
             description, mime, and bill_text."""
-        
+
         bills, response = {}, {}
-        
+
         if self.fob.handle_exists(json_handle):
             json_str = self.fob.download_text(json_handle)
             bills = json.loads(json_str)
@@ -138,7 +143,7 @@ class Legiscan_API:
 
         dot = ShowProgress()
         session, detail, num = 0, 0, 0
-        
+
         for entry in bills:
             bill = bills[entry]
             if 'bill_number' in bill:
@@ -168,7 +173,7 @@ class Legiscan_API:
                         dot.show()
                         if num >= limit:
                             break
-    
+
             # Mode 3: if limit is placed, and all bills have previously
             #         fetched detail, randomly refresh scattered bills.
             elif limit < num_bills:

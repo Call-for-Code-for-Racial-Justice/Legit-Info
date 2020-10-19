@@ -38,8 +38,8 @@ from cfc_app.Oneline import Oneline
 
 
 PARSER = "lxml"
-TITLE_LIMIT_CHARS = 200
-SUMMARY_LIMIT_CHARS = 1000
+TITLE_LIMIT = 200
+SUMMARY_LIMIT = 1000
 
 # Put the original file name, doc date, title and summary ahead of text
 HeadForm = "{} {} _TITLE_ {} _SUMMARY_ {} _TEXT_"
@@ -119,14 +119,8 @@ class Command(BaseCommand):
                 else:
                     key += '-Y' + bill['doc_date'][2:4]
 
-            title = self.remove_section_numbers(bill['title'])
-            summary = self.remove_section_numbers(bill['summary'])
-
-            if len(title) > TITLE_LIMIT_CHARS:
-                self.shrink_line(title, TITLE_LIMIT_CHARS)
-
-            if len(summary) > SUMMARY_LIMIT_CHARS:
-                self.shrink_line(summary, SUMMARY_LIMIT_CHARS)
+            title = self.form_sentence(bill['title'], TITLE_LIMIT)
+            summary = self.form_sentence(bill['summary'], SUMMARY_LIMIT)
 
             # If the text file already exists, honor the --skip flag
             textname = '{}.{}'.format(key, 'txt')
@@ -155,6 +149,25 @@ class Command(BaseCommand):
 
             dot.end()
         return self
+
+    def form_sentence(self, line, charlimit):
+        newline = self.remove_section_numbers(line)
+
+        # Remove trailing spaces, and add period at end of sentence.
+        newline = newline.strip()
+        if not newline.endswith('.'):
+            newline = newline + '.'
+
+        # If the line is longer than the limit, keep the number
+        # of characters from the end of the sentence.  If this
+        # results a word being chopped in half, remove the half-word
+
+        if len(newline) > charlimit:
+            self.shrink_line(newline, charlimit)
+
+        # Capitalize the (possibly new) first word in the sentence.
+        newline = newline[0].upper() + newline[1:]
+        return newline
 
     def fetch_bill(self, bill, key):
         extension, msg_bytes = '', b''
@@ -289,12 +302,12 @@ class Command(BaseCommand):
         newline = newline.replace(r'\x91', '')
 
         # Collapse "H. B. No. 43" to just "HB43", for example
-        newline = newline.replace(r'H. B. No. ','HB')
-        newline = newline.replace(r'S. B. No. ','SB')
-        newline = newline.replace(r'H. R. No. ','HR')
-        newline = newline.replace(r'S. R. No. ','SR')
-        newline = newline.replace(r'C. R. No. ','CR')
-        newline = newline.replace(r'J. R. No. ','JR')
+        newline = newline.replace(r'H. B. No. ', 'HB')
+        newline = newline.replace(r'S. B. No. ', 'SB')
+        newline = newline.replace(r'H. R. No. ', 'HR')
+        newline = newline.replace(r'S. R. No. ', 'SR')
+        newline = newline.replace(r'C. R. No. ', 'CR')
+        newline = newline.replace(r'J. R. No. ', 'JR')
         return newline
 
     def shrink_line(self, line, charlimit):

@@ -12,11 +12,12 @@ zipForm = "{}-G{:02}-{}-{}.zip"
 cmdForm = "zip zipfiles/{} {}"
 resForm = 'Created {} RC={}'
 
+
 def process_group(state, groupnum, first_bill, last_bill, txtfiles):
     zipname = zipForm.format(state, groupnum, first_bill, last_bill)
     cmd = cmdForm.format(zipname, txtfiles)
     rc = os.system(cmd)
-    results.append(resForm.format(zipname,rc))
+    results.append(resForm.format(zipname, rc))
     return None
 
 

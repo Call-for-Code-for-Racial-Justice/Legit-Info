@@ -55,6 +55,8 @@ HeadRegex = re.compile(HeadRegex1+HeadRegex2)
 keyRegex = re.compile(r"^\w\w-(.*)-")
 mapRegex = re.compile(r'["](.*)["]\s*,\s*["](.*)["]')
 
+RLIMIT = 5   # number of phrases to be returned by IBM Watson NLU
+
 
 class Command(BaseCommand):
 
@@ -77,20 +79,27 @@ class Command(BaseCommand):
         wordmap, secondary_impacts = self.load_wordmap(impact_list)
         self.wordmap = wordmap
         self.secondary_impacts = secondary_impacts
-        primary, secondary = [], []
+        primary, secondary, tertiary = [], [], []
         for term in wordmap:
             if wordmap[term] in impact_list:
-                primary.append([ term, wordmap[term] ])
+                primary.append([term, wordmap[term]])
             elif wordmap[term] in secondary_impacts:
-                secondary.append([ term, wordmap[term] ])
+                secondary.append([term, wordmap[term]])
+            else:
+                tertiary.append([term, wordmap[term]])
         self.primary = primary
         self.secondary = secondary
+        self.tertiary = tertiary
+
+        print('Primary: {}, with {} terms'.format(impact_list, len(primary)))
+        print('Secondary: {}, with {} terms'.format(secondary_impacts,
+                                                    len(secondary)))
+        print('Tertiary: {}, with {} terms'.format(['None'], len(tertiary)))
 
         self.fob = FOB_Storage(settings.FOB_METHOD)
         self.use_api = False
         self.limit = 0
         return None
-
 
     def add_arguments(self, parser):
         parser.add_argument("--api", action="store_true",
@@ -105,8 +114,12 @@ class Command(BaseCommand):
 
         if options['limit']:
             self.limit = options['limit']
+
         if options['api']:
             self.use_api = True
+            print('Analyzing with IBM Watson NLU API')
+        else:
+            print('Analyzing with internal Wordmap ONLY')
 
         usa = Location.objects.get(shortname='usa')
         locations = Location.objects.order_by('hierarchy').filter(parent=usa)
@@ -126,7 +139,7 @@ class Command(BaseCommand):
         json_str = self.fob.download_text('{}.json'.format(state))
         json_data = json.loads(json_str)
 
-        handles = self.fob.list_handles(prefix=state, suffix=".txt", 
+        handles = self.fob.list_handles(prefix=state, suffix=".txt",
                                         limit=self.limit)
 
         dot = ShowProgress()
@@ -155,9 +168,9 @@ class Command(BaseCommand):
 
         tokens = SyntaxOptionsTokens(lemma=True, part_of_speech=True)
         syntax = SyntaxOptions(tokens=tokens, sentences=True)
-        features = Features(categories=CategoriesOptions(limit=5),
+        features = Features(categories=CategoriesOptions(limit=RLIMIT),
                             sentiment=SentimentOptions(),
-                            concepts=ConceptsOptions(limit=5),
+                            concepts=ConceptsOptions(limit=RLIMIT),
                             keywords=KeywordsOptions(sentiment=True, limit=10),
                             syntax=syntax)
 
@@ -168,8 +181,25 @@ class Command(BaseCommand):
         concept = result.get("concepts")
         return concept
 
-    def Relevance_Map(self, extracted_text):
+    def Relevance_Wordmap(self, extracted_text):
+        concept = []
+
+        self.scan_extract(extracted_text, self.primary, concept)
+        if len(concept) < RLIMIT:
+            self.scan_extract(extracted_text, self.secondary, concept)
+        if len(concept) < RLIMIT:
+            self.scan_extract(extracted_text, self.tertiary, concept)
+
         return concept
+
+    def scan_extract(self, extracted_text, category_list, concept):
+        for rel in category_list:
+            term = rel[0]
+            if term in extracted_text:
+                concept.append({'text': term, 'Reason': self.wordmap[term]})
+                if len(concept) >= RLIMIT:
+                    break
+        return None
 
     def process_legislation(self, filename, json_data):
         lob = FOB_Storage(settings.FOB_METHOD)
@@ -202,6 +232,8 @@ class Command(BaseCommand):
                 rel += connector + "'{}' => '{}'".format(r[0], r[1])
                 connector = ", "
 
+            print('Filename {}  Impact {}'.format(filename, impact_chosen))
+
             bill_id = self.get_bill_id(json_data, key)
             self.save_law(key, bill_id, doc_date, title,
                           summary, rel, impact_chosen)
@@ -214,8 +246,13 @@ class Command(BaseCommand):
         # If record exists, check if this is newer..
         if Law.objects.filter(key=key).exists():
             law = Law.objects.get(key=key)
-            if doc_date <= law.doc_date:
-                return
+            # import pdb; pdb.set_trace()
+
+            # If the record is up-to-date and matches the
+            # impact chosen, leave it alone
+            if doc_date < law.doc_date and impact_chosen == law.impact.text:
+                return None
+
             result = 'Updated'
         # otherwise, this is a new record.
         else:
@@ -272,7 +309,7 @@ class Command(BaseCommand):
                     continue
                 if impact_category.upper() in ['REMOVE']:
                     continue
-                if impact_category.upper() == 'NONE':
+                if impact_category.upper() in ['NONE']:
                     impact_category = 'None'
                 wordmap[term] = impact_category
                 if impact_category not in categories:
@@ -286,7 +323,7 @@ class Command(BaseCommand):
             marker = ' '
             if impact in impact_list:
                 marker = '*'
-            else:
+            elif impact != 'None':
                 secondary_list.append(impact)
             print(marker, impact)
 
@@ -307,5 +344,8 @@ class Command(BaseCommand):
             impact = rel[1]
             if impact_chosen not in self.impact_list:
                 impact_chosen = impact
+
+        if impact_chosen not in self.impact_list:
+            impact_chosen = 'None'
 
         return revlist, impact_chosen

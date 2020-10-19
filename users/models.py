@@ -16,12 +16,14 @@ class Profile(models.Model):
                                 related_name='profile')
 
     location = models.ForeignKey('cfc_app.Location', null=True,
-                                 related_name='profiles', on_delete=models.SET_NULL)
+                                 related_name='profiles',
+                                 on_delete=models.SET_NULL)
 
     impacts = models.ManyToManyField(Impact)
 
     criteria = models.ForeignKey('cfc_app.Criteria', null=True,
-                                 related_name='profiles', on_delete=models.SET_NULL)
+                                 related_name='profiles',
+                                 on_delete=models.SET_NULL)
 
     def __str__(self):
         """Return a string representation of the model."""

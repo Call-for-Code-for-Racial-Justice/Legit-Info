@@ -7,6 +7,7 @@ def is_venv():
     return (hasattr(sys, 'real_prefix') or
             (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix))
 
+
 if __name__ == '__main__':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cfc_project.settings')
     os.environ.setdefault('LD_LIBRARY_PATH', '/usr/local/lib')

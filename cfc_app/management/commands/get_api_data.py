@@ -46,7 +46,6 @@ class Command(BaseCommand):
         self.limit = 10
         return None
 
-
     def add_arguments(self, parser):
         parser.add_argument("--api", action="store_true",
                             help="Invoke Legiscan.com API")
