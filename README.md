@@ -1,5 +1,10 @@
 # Legit-Info
 
+Concerned citizens and impacted residents don't have a straightforward way of 
+knowing what or how policies and regulations impact them or what they can do 
+in response.  A community leader could use this tool to help motivate their
+social followers.
+
 [![License](https://img.shields.io/badge/License-Apache2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0) 
 [![Slack](https://img.shields.io/badge/Join-Slack-blue)](https://callforcode.org/slack)
 
@@ -20,7 +25,7 @@
 
 ## Short description
 
-### Emb(race): Policy and Legislation Reform
+### Policy and Legislation Reform
 
 Technology has the power to drive action. And right now, a call to action is
 needed to eradicate racism. **Black lives matter.**
@@ -34,9 +39,8 @@ This project is an effort to utilize technology to analyze, inform, and
 develop policy to reform the workplace, products, public safety, and
 legislation.
 
-This is one of three open source projects underway as part of the [Call for 
-Code Emb(race) Spot Challenge](https://github.com/topics/embrace-call-for-code) 
-led by contributors from IBM and Red Hat.
+This is one of several open source projects underway as part of the Call for 
+Code for Racial Justice led by contributors from IBM and Red Hat.
 
 ### What's the problem?
 
@@ -211,12 +215,6 @@ conduct, and the process for submitting pull requests to the project.
 
 ## License
 
-This project is licensed under the Apache 2 License - 
-see the [LICENSE](LICENSE) file for details
+This project is licensed under the Apache 2 License - see the [LICENSE](LICENSE) file for details
 
 Please also read the [BSD Copyright Notice](BSD-NOTICE)
-
-## Acknowledgments
-
-* Based on [Billie Thompson's README 
-template](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2).
