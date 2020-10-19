@@ -76,21 +76,22 @@ def load_default_locations():
     # The concept of ancestor-search is confusing, so we create a few
     # entries (usa, arizona, ohio) so people can understand the structure
 
-    usa = Location(desc = 'United States', shortname = 'usa',
-                   hierarchy='world.usa', govlevel = 'country')
+    usa = Location(desc='United States', shortname='usa',
+                   hierarchy='world.usa', govlevel='country')
     usa.parent = world
     usa.save()
 
-    arizona = Location(desc = 'Arizona, USA', shortname = 'az',
-                       hierarchy='world.usa.az', govlevel = 'state')
+    arizona = Location(desc='Arizona, USA', shortname='az',
+                       hierarchy='world.usa.az', govlevel='state')
     arizona.parent = usa
     arizona.save()
 
-    ohio = Location(desc = 'Ohio, USA', shortname = 'oh',
-                    hierarchy='world.usa.oh', govlevel = 'state')
+    ohio = Location(desc='Ohio, USA', shortname='oh',
+                    hierarchy='world.usa.oh', govlevel='state')
     ohio.parent = usa
     ohio.save()
     return None
+
 
 def make_csv(search_id, laws):
     """ Make Comma-Separated-Value (CSV) format file"""
@@ -255,7 +256,6 @@ def locations(request):
     # the master parent for the ancestor-search.
     if len(locations) == 0:
         load_default_locations()
-        
 
     locations = Location.objects.order_by('hierarchy').exclude(desc='world')
     context = {'locations': locations}
@@ -337,7 +337,7 @@ def sendmail(request, search_id):
         # import pdb; pdb.set_trace()
 
     # Specify email headers
-    subject = settings.APP_NAME + ' -- Legislation Search Results -- ' + gen_date
+    subject = settings.APP_NAME + ' -- Search Results -- ' + gen_date
     sender_email = 'CFCapp@ibm.com'
     user = request.user
     recipients = [recipient_format(user.first_name,
@@ -371,4 +371,3 @@ def sendmail(request, search_id):
                'recipients': recipients,
                'search_id': search_id}
     return render(request, 'email_sent.html', context)
-

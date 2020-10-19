@@ -17,6 +17,8 @@
 #
 # If you leave out the --api, the Legiscan.com API will not be invoked,
 # this is useful to see the status of AZ.json and OH.json files.
+#
+#
 
 import json
 from django.core.management.base import BaseCommand
@@ -35,6 +37,16 @@ class Command(BaseCommand):
     help += 'NN is the two-letter state abbreviation like AZ or OH.  '
     help += 'The NN.json files are stored in File/Object Storage.'
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fob = FOB_Storage(settings.FOB_METHOD)
+        self.leg = Legiscan_API()
+
+        self.use_api = False
+        self.limit = 10
+        return None
+
+
     def add_arguments(self, parser):
         parser.add_argument("--api", action="store_true",
                             help="Invoke Legiscan.com API")
@@ -45,13 +57,15 @@ class Command(BaseCommand):
         return None
 
     def handle(self, *args, **options):
-        fob = FOB_Storage(settings.FOB_METHOD)
+
+        if options['limit']:
+            self.limit = options['limit']
+
+        if options['api']:
+            self.use_api = True
+
         usa = Location.objects.get(shortname='usa')
         locations = Location.objects.order_by('hierarchy').filter(parent=usa)
-
-        limit = 0
-        if options['limit']:
-            limit = options['limit']
 
         states = []
         for loc in locations:
@@ -62,23 +76,22 @@ class Command(BaseCommand):
                     continue
 
             json_handle = '{}.json'.format(state)
-            if options['api']:
+            if self.use_api and self.leg.api_ok:
                 print('Fetching {}: {}'.format(state, loc.desc))
-                leg = Legiscan_API()
-                leg.getAllBills(state, json_handle, limit=limit)
+                self.leg.getAllBills(state, json_handle, limit=self.limit)
 
         for state in states:
             json_handle = '{}.json'.format(state)
-            success = fob.handle_exists(json_handle)
+            success = self.fob.handle_exists(json_handle)
             if success:
-                self.show_results(fob, json_handle)
+                self.show_results(json_handle)
             else:
                 print('FILE NOT FOUND: ', json_handle)
 
         return None
 
-    def show_results(self, fob, json_handle):
-        json_str = fob.download_text(json_handle)
+    def show_results(self, json_handle):
+        json_str = self.fob.download_text(json_handle)
         bills = json.loads(json_str)
         session, detail = 0, 0
         for entry in bills:
