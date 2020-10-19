@@ -26,6 +26,7 @@ class Location(models.Model):
 
     desc = models.CharField(max_length=80)
     shortname = models.CharField(max_length=20)
+    legiscan_id = models.IntegerField()
     hierarchy = models.CharField(max_length=200)
     govlevel = models.CharField(max_length=80)
     parent = models.ForeignKey('self', null=True,

@@ -25,6 +25,7 @@ import base64
 import json
 import os
 import re
+import zipfile
 from bs4 import BeautifulSoup
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -65,7 +66,7 @@ class Command(BaseCommand):
         parser.add_argument("--api", action="store_true",
                             help="Invoke Legiscan.com API")
         parser.add_argument("--state", help="Process single state: AZ, OH")
-        parser.add_argument("--limit", type=int, default=10,
+        parser.add_argument("--limit", type=int, default=self.limit,
                             help="Limit number of entries to detail")
         parser.add_argument("--skip", action="store_true",
                             help="Skip files already processed")
@@ -92,17 +93,40 @@ class Command(BaseCommand):
             # not it, skip it.
             if options['state'] and state != options['state']:
                 continue
-            json_handle = '{}.json'.format(state)
-            self.process_json(state, json_handle)
+
+            hlist = self.fob.list_handles(prefix=state, suffix='.json')
+            for json_handle in hlist:
+                self.process_json(state, json_handle)
+
+#z = zipfile.ZipFile("zipfile.zip", "r")
+
+#for filename in z.namelist(  ):
+#    print 'File:', filename,
+#    bytes = z.read(filename)
+#    print 'has',len(bytes),'bytes'
         return None
 
     def process_json(self, state, json_handle):
-        """ Process NN.json for this state """
+        """ Process NN-NNNN.json for this state """
         # import pdb; pdb.set_trace()
+
         json_str = self.fob.download_text(json_handle)
-        bills = json.loads(json_str)
+        zip_handle = json_handle.replace('.json', '.zip')
 
         dot = ShowProgress()
+        print(json_handle, zip_handle)
+        if not self.fob.handle_exists(zip_handle):
+            if not self.skip:
+                package = json.loads(json_str)   
+                if package['status'] == 'OK':
+                    dataset = package['dataset']        
+                    mimedata = dataset['zip'].encode('UTF-8')
+                    msg_bytes = base64.b64decode(mimedata)
+                    self.fob.upload_binary(msg_bytes, zip_handle)
+
+        print('Done')
+        return None
+        
         count = 0
         for index in bills:
 

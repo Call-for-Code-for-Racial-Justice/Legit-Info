@@ -18,16 +18,16 @@
 # If you leave out the --api, the Legiscan.com API will not be invoked,
 # this is useful to see the status of AZ.json and OH.json files.
 #
-#
+# Debug with:  import pdb; pdb.set_trace()
 
 import json
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 from cfc_app.models import Location
 from cfc_app.Legiscan_API import Legiscan_API
 from cfc_app.FOB_Storage import FOB_Storage
 from django.conf import settings
 
-StateForm = 'File {}: Current Session {} laws, detail fetched for {} laws'
+StateForm = 'File {}: Session {} Year: {} Date: {} Size: {} bytes'
 
 
 class Command(BaseCommand):
@@ -41,17 +41,18 @@ class Command(BaseCommand):
         super().__init__(*args, **kwargs)
         self.fob = FOB_Storage(settings.FOB_METHOD)
         self.leg = Legiscan_API()
-
         self.use_api = False
-        self.limit = 10
+        self.limit = 1
+        self.list_handle = 'Legiscan-List.json'
+        self.list_data = None
         return None
 
     def add_arguments(self, parser):
         parser.add_argument("--api", action="store_true",
                             help="Invoke Legiscan.com API")
         parser.add_argument("--state", help="Process single state: AZ, OH")
-        parser.add_argument("--limit", type=int, default=10,
-                            help="Limit number of entries to detail")
+        parser.add_argument("--limit", type=int, default=self.limit,
+                            help="Limit number of entries per state")
 
         return None
 
@@ -62,6 +63,15 @@ class Command(BaseCommand):
 
         if options['api']:
             self.use_api = True
+            if not self.fob.handle_exists(self.list_handle):
+                self.list_data = self.leg.get_dataset_list()
+                self.fob.upload_text(self.list_data, self.list_handle)
+
+        if not self.list_data:
+            if self.fob.handle_exists(self.list_handle):
+                self.list_data = self.fob.download_text(self.list_handle)
+            else:
+                raise CommandError('File not found: '+self.list_handle)
 
         usa = Location.objects.get(shortname='usa')
         locations = Location.objects.order_by('hierarchy').filter(parent=usa)
@@ -69,36 +79,68 @@ class Command(BaseCommand):
         states = []
         for loc in locations:
             state = loc.shortname.upper()  # Convert state to UPPER CASE
-            states.append(state)
+            state_id = loc.legiscan_id
+
+            states.append([state, state_id])
             if options['state']:
                 if state != options['state']:
                     continue
 
-            json_handle = '{}.json'.format(state)
-            if self.use_api and self.leg.api_ok:
-                print('Fetching {}: {}'.format(state, loc.desc))
-                self.leg.getAllBills(state, json_handle, limit=self.limit)
+            response = json.loads(self.list_data)
 
-        for state in states:
-            json_handle = '{}.json'.format(state)
-            success = self.fob.handle_exists(json_handle)
-            if success:
-                self.show_results(json_handle)
-            else:
-                print('FILE NOT FOUND: ', json_handle)
+            # import pdb; pdb.set_trace()
+
+            if 'status' in response:
+                if response['status'] != 'OK':
+                    raise CommandError('Status not OK: '+self.list_handle)
+                else:
+                    if 'datasetlist' not in response:
+                        raise CommandError('datsetlist missing')
+                    else:
+                        datasetlist = response['datasetlist']
+
+            num = 0
+            for entry in datasetlist:
+                if entry['state_id'] == state_id:
+                    session_id = entry['session_id']
+                    session_handle = self.json_handle(state, session_id)
+                    if self.use_api and self.leg.api_ok:
+                        print('Fetching {}: {}'.format(state, state_id))
+                        session_data = self.leg.get_session_id(session_id)
+                        self.fob.upload_text(session_data, session_handle)
+                        num += 1
+                        if self.limit > 0 and num >= self.limit:
+                            break
+
+        for state_data in states:
+            state, state_id = state_data[0], state_data[1]
+            datasetlist = json.loads(self.list_data)['datasetlist']
+            num = 0
+            found_list = self.fob.list_handles(prefix=state, suffix='.json')
+            for entry in datasetlist:
+                if entry['state_id'] == state_id:
+                    session_id = entry['session_id']
+                    session_handle = self.json_handle(state, session_id)
+                    if session_handle in found_list:
+                        self.show_results(session_handle, entry)
+                    else:
+                        print('FILE NOT FOUND: ', session_handle)
+                    num += 1
+                    if self.limit > 0 and num >= self.limit:
+                        break
 
         return None
 
-    def show_results(self, json_handle):
-        json_str = self.fob.download_text(json_handle)
-        bills = json.loads(json_str)
-        session, detail = 0, 0
-        for entry in bills:
-            bill = bills[entry]
-            if 'bill_number' in bill:
-                session += 1
-            if 'doc_id' in bill:
-                detail += 1
+    def json_handle(self, state, state_id):
+        handle = "{}-{:04d}.json".format(state, state_id)
+        return handle
 
-        print(StateForm.format(json_handle, session, detail))
+    def show_results(self, json_handle, entry):
+        year_range = str(entry['year_start'])
+        if year_range != entry['year_end']:
+            year_range += '-' + str(entry['year_end'])
+
+        print(StateForm.format(json_handle, entry['session_id'],
+                               year_range, entry['dataset_date'],
+                               entry['dataset_size']))
         return None
