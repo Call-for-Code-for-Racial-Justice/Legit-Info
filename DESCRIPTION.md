@@ -18,12 +18,23 @@ take all of the same commands and parameters.
 * ./stage1  -- sets Use_SQLITE3='True' to use the SQLite3 database
 * ./stage2  -- sets Use_SQLITE3='False' to use the Postgresql database
 
-Both ./stage1 and ./stage2 verify that you are in the Pipenv shell.  Some
-commands can be run natively, such as in a cron job, using these scripts
-instead:
+Both ./stage1 and ./stage2 verify that you are in the Pipenv shell already,
+and are intended for interactive administration.
+
+For one-line commands, such as for use with cron scheduler, you can use the
+alternate versions that will (a) launch pipenv, (b) run the command, and
+(c) exit out of Pipenv:
 
 * ./cron1  -- sets Use_SQLITE3='True' to use the SQLite3 database
 * ./cron2  -- sets Use_SQLITE3='False' to use the Postgresql database
+
+In other words, issue "./cron1 <command> <parameters>" is equivalent to:
+
+```bash
+$ pipenv shell
+(fix) $ ./stage1 <command> <parameters>
+(fix) $ exit
+```
 
 You will notice that **Using SQLite3** or **Using Postgresql** issued
 when you use these scripts to confirm that your Use_SQLITE3 is set correctly.
@@ -151,6 +162,16 @@ testing, use:  `http://localhost:3000/admin`
 
 Alternatively, launch `http://localhost:3000` and sign in as "cfcadmin",
 you will find an "Admin" tab on the upper right of the navigation bar.
+
+To change this fixture, or create your own with updated settings, use:
+
+```bash
+$ cd legit-info
+$ pipenv shell
+(fix) $ ./stage1 loaddata cfc-seed.json
+```
+
+
 
 ### Subsection 1.2 Set password for Superuser "cfcadmin"
 
