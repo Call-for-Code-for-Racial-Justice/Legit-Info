@@ -45,6 +45,9 @@ SUMMARY_LIMIT = 1000
 # Put the original file name, doc date, title and summary ahead of text
 HeadForm = "{} {} _TITLE_ {} _SUMMARY_ {} _TEXT_"
 
+billRegex = re.compile("(\w\w)/\d\d\d\d-(\d\d\d\d).*/bill/(\w*).json$")
+handleForm = "{}_{}_Y{}.{}"
+
 
 class Command(BaseCommand):
     help = 'For each state, scan the associated NN.json file, fetching '
@@ -94,16 +97,12 @@ class Command(BaseCommand):
             if options['state'] and state != options['state']:
                 continue
 
+            print('Processing state: ', state)
             hlist = self.fob.list_handles(prefix=state, suffix='.json')
+
             for json_handle in hlist:
                 self.process_json(state, json_handle)
 
-#z = zipfile.ZipFile("zipfile.zip", "r")
-
-#for filename in z.namelist(  ):
-#    print 'File:', filename,
-#    bytes = z.read(filename)
-#    print 'has',len(bytes),'bytes'
         return None
 
     def process_json(self, state, json_handle):
@@ -113,18 +112,34 @@ class Command(BaseCommand):
         json_str = self.fob.download_text(json_handle)
         zip_handle = json_handle.replace('.json', '.zip')
 
+        print('Checking: ', json_handle)
         dot = ShowProgress()
-        print(json_handle, zip_handle)
-        if not self.fob.handle_exists(zip_handle):
-            if not self.skip:
-                package = json.loads(json_str)   
-                if package['status'] == 'OK':
-                    dataset = package['dataset']        
-                    mimedata = dataset['zip'].encode('UTF-8')
-                    msg_bytes = base64.b64decode(mimedata)
-                    self.fob.upload_binary(msg_bytes, zip_handle)
+        if self.fob.handle_exists(zip_handle):
+            msg_bytes = self.fob.download_binary(zip_handle)
+        else:
+            package = json.loads(json_str)   
+            if package['status'] == 'OK':
+                dataset = package['dataset']        
+                mimedata = dataset['zip'].encode('UTF-8')
+                msg_bytes = base64.b64decode(mimedata)
+                self.fob.upload_binary(msg_bytes, zip_handle)
 
-        print('Done')
+        zip_path = os.path.join(settings.SOURCE_ROOT, 'scan_json.pdf')        
+        with open(zip_path, "wb") as zip_file:
+            zip_file.write(msg_bytes)
+
+        count = 0
+        with zipfile.ZipFile(zip_path, 'r') as zf:
+            namelist = zf.namelist()
+            for path in namelist:
+                mo = billRegex.search(path)
+                if mo:
+                    json_data = zf.read(path).decode('UTF-8', errors='ignore')
+                    self.process_source(mo, json_data)
+                    count += 1
+                    if self.limit > 0 and count >= self.limit:
+                        break
+
         return None
         
         count = 0
@@ -348,5 +363,38 @@ class Command(BaseCommand):
             extension = 'pdf'
         elif mime_type == 'application/doc':
             extension = 'doc'
-
         return extension
+
+    def process_source(self, mo, json_data):
+        bill_state = mo.group(1)
+        bill_year = mo.group(2)
+        bill_number = mo.group(3)
+        bill_json = json.loads(json_data)
+        bill_detail = bill_json['bill']
+        texts = bill_detail['texts']
+        chosen = self.latest_text(texts)
+        bill_handle = self.source_handle(bill_state, bill_number, 
+                                    bill_year, chosen['mime'])
+        print(bill_handle)
+        return
+
+
+    def source_handle(self, state, bill_number, bill_year, mime_type):
+        extension = self.determine_extension(mime_type)
+        handle = handleForm.format(state, bill_number, bill_year, extension)
+        return handle
+
+    def latest_text(self, texts):
+        LastDate = "0000-00-00"
+        LastDocid = 0
+        LastEntry = None
+        for entry in texts:
+            this_date = entry['date']
+            this_docid = entry['doc_id']
+            if (this_date > LastDate or 
+               (this_date == LastDate and this_docid > LastDocid)):
+                LastDate = this_date
+                LastDocid = this_docid
+                LastEntry = entry
+          
+        return LastEntry
