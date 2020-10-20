@@ -11,19 +11,140 @@ needed to provide meaningful title, summary, location and impact attributes.
 ## Section 1 Administration
 
 Administration allows authorized staff to create and maintain the list of
-locations, impact areas, and curated policy legislation.
+locations, impact areas, and curated policy legislation.  All of the examples
+below use "./stage1" instead of "django-admin" or "python manage.py" and
+take all of the same commands and parameters.
 
-### Subsection 1.1 Superuser: cfcadmin
+* ./stage1  -- sets Use_SQLITE3='True' to use the SQLite3 database
+* ./stage2  -- sets Use_SQLITE3='False' to use the Postgresql database
 
-Use the Django `createsuperuser` to create the first user.
+Both ./stage1 and ./stage2 verify that you are in the Pipenv shell.  Some
+commands can be run natively, such as in a cron job, using these scripts
+instead:
+
+* ./cron1  -- sets Use_SQLITE3='True' to use the SQLite3 database
+* ./cron2  -- sets Use_SQLITE3='False' to use the Postgresql database
+
+You will notice that **Using SQLite3** or **Using Postgresql** issued
+when you use these scripts to confirm that your Use_SQLITE3 is set correctly.
+You may turn this off by setting CFC_SHOWDB='False' either on the command
+line, or permanently in your Operating System Environment variables.
+
+```
+(cfc) $ CFC_SHOWDB='False' ./stage1 <command> <parms>
+```
+
+You can issue "help" to get a list of commands, or "help <command>", 
+"<command> -h", "<command --help" to get details on any specific command.
+
+```
+(cfc) $ ./stage1 help
+Available subcommands:
+
+[auth]
+    changepassword
+    createsuperuser
+
+[cfc_app]
+    analyze_text    <-- these are custom commands specific to this app
+    get_api_data    <-- these are custom commands specific to this app
+    scan_json       <-- these are custom commands specific to this app
+
+[contenttypes]
+    remove_stale_contenttypes
+
+[django]
+    check
+    compilemessages
+    createcachetable
+    dbshell
+    diffsettings
+    dumpdata
+    flush
+    inspectdb
+    loaddata
+    makemessages
+    makemigrations
+    migrate
+    sendtestemail
+    shell
+    showmigrations
+    sqlflush
+    sqlmigrate
+    sqlsequencereset
+    squashmigrations
+    startapp
+    startproject
+    test
+    testserver
+
+[django_extensions]
+    admin_generator
+    clean_pyc
+    clear_cache
+    compile_pyc
+    create_command
+    create_jobs
+    create_template_tags
+    delete_squashed_migrations
+    describe_form
+    drop_test_database
+    dumpscript
+    export_emails
+    find_template
+    generate_password
+    generate_secret_key
+    graph_models
+    list_model_info
+    list_signals
+    mail_debug
+    merge_model_instances
+    notes
+    pipchecker
+    print_settings
+    print_user_for_session
+    reset_db
+    reset_schema
+    runjob
+    runjobs
+    runprofileserver
+    runscript
+    runserver_plus
+    set_default_site
+    set_fake_emails
+    set_fake_passwords
+    shell_plus
+    show_template_tags
+    show_urls
+    sqlcreate
+    sqldiff
+    sqldsn
+    sync_s3
+    syncdata
+    unreferenced_files
+    update_permissions
+    validate_templates
+
+[sessions]
+    clearsessions
+
+[staticfiles]
+    collectstatic
+    findstatic
+    runserver
+```
+
+### Subsection 1.1 Seed Databases
+
+To save time, we have created a Django Fixture called "cfc-seed.json"
+that allows you to pre-populate the data with sample impacts, locations,
+and a single superuser "cfcadmin" / "Call4Code"
 
 ```bash
 $ cd legit-info
 $ pipenv shell
-(fix) $ ./stage1 createsuperuser
+(fix) $ ./stage1 loaddata cfc-seed.json
 ```
-
-For example, create username "cfcadmin".
 
 To access admin panels, add "/admin" to the main website.  For local
 testing, use:  `http://localhost:3000/admin`
@@ -31,27 +152,77 @@ testing, use:  `http://localhost:3000/admin`
 Alternatively, launch `http://localhost:3000` and sign in as "cfcadmin",
 you will find an "Admin" tab on the upper right of the navigation bar.
 
-### Subsection 1.2 Seed Databases
+### Subsection 1.2 Set password for Superuser "cfcadmin"
 
+If you are not happy with the cfcadmin default password, or forgot
+what you set it to, you can generate a random password, and use that
+to reset the password.  Please note that generate_password has an 
+underscore character(_) and the changepassword does not.
 
+```bash
+$ cd legit-info
+$ pipenv shell
+(cfc) $ ./stage1 generate_password cfcadmin
+**Using SQLite3**
+Lv5EN5HvRU
 
+(cfc) [legit-info]$ ./stage1 changepassword cfcadmin
+**Using SQLite3**
+Changing password for user 'cfcadmin'
+Password:                  <-- enter the random password, or choose your own!
+Password (again): 
+Password changed successfully for user 'cfcadmin'
+
+```
+
+The generate_password and changepassword methods can be used with other
+usernames as well.  For example, if an end-user forgot their password, you
+can change it to a new random password and send it via email to them.
+
+If you need additional "superuser" accounts, each with their own profile,
+you can use the Django `createsuperuser` to create others:
+
+```bash
+$ cd legit-info
+$ pipenv shell
+(fix) $ ./stage1 createsuperuser
+```
+
+To access admin panels, add "/admin" to the main website.  For local
+testing, use:  `http://localhost:3000/admin`
+
+Alternatively, launch `http://localhost:3000` and sign in as "cfcadmin",
+you will find an "Admin" tab on the upper right of the navigation bar.
 
 
 ### Subsection 1.3 Impacts and Locations
 
-To access admin panels, add "/admin" to the main website.  For local
-testing, use:  `http://localhost:3000/admin`  From here, you can add
-or remove impact and locations.  Here is an example:
+The cfc-seed.json in step 1.1 above populates the database tables with
+example entries to get you started.  Here is what you will find if you 
+look at them from the Admin panels.
 
 ```
 Impacts:
+* None
 * Healthcare
 * Safety
 * Environment
 * Transportation
 * Jobs
+```
 
+Note that the only required impact is "None".  This will show only in
+Administration panels, and not shown to end-users.  This is used by the
+IBM Watson Natural Language Understanding (NLU) algorithm to indicate that a
+particular legislation does not match the other impact areas.
+
+In the event that the IBM Watson NLU chooses an impact for a particular
+legislation, and staff decide to re-classify it to "None", they can do this
+from the Admin panels.
+
+```
 Locations:
+world
 United States
 └─ Arizona, USA
     └─ Pima County, AZ
@@ -70,13 +241,21 @@ application will detect if the database is empty, and populate it with the
 In the above example, you must create
 `United States` before you can enter `Arizona` or `Ohio`.
 
-For `United States`, the parent is `world`
-For `Ohio, USA`, the parent is `United States`
-For `Franklin County`, the parent is `Ohio, USA`
-For `Columbus, OH`, the parent is `Franklin County`
+* For `United States`, the parent is `world`
+* For `Ohio, USA`, the parent is `United States`
+* For `Franklin County`, the parent is `Ohio, USA`
+* For `Columbus, OH`, the parent is `Franklin County`
+
+For Legiscan, the Locations "Arizona" and "Ohio" must have their respective
+2-letter abbreviations for shortname "AZ" and "OH", and must specify the
+Legiscan_id of 3 and 35, respectively.  These are used for the cron job
+that auomates the download of legislation for these two states.
 
 You may designate any location by its government level, such as `country`,
 `state`, `county`, `city`, `province`, `district`, etc.
+
+Note that Impact=None and Location=world must exist, but are never 
+displayed to end-users.
 
 
 ### Subsection 1.4 Laws
@@ -215,8 +394,15 @@ export EMAIL_HOST_PASSWORD='your_password'
 export EMAIL_PORT='2525'
 ```
 
-3. When you click "Send Results" from the app, your results should be e-mailed
-to your Mailtrap inbox.
+4. Test that this is working correctly using this command:
+
+```
+(cfc) [legit-info]$ ./stage1 sendtestemail cfcadmin@us.ibm.com
+**Using SQLite3**
+```
+
+Now, when an end-user clicks "Send Results" from the app, the results 
+should be e-mailed to your Mailtrap inbox.
 
 
 
