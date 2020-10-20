@@ -26,6 +26,7 @@ import json
 import os
 import re
 import requests
+import urllib.request, urllib.error, urllib.parse
 import zipfile
 from bs4 import BeautifulSoup
 from django.conf import settings
@@ -334,26 +335,20 @@ class Command(BaseCommand):
 
         key = bill_handle.replace("."+extension, "")
         title = key
-        summary = chosen['state_link']
-
+        summary = key
+        # import pdb; pdb.set_trace()
         if extension == 'html':
-            if self.fob.handle_exists(bill_handle):
-                textdata = self.fob.download_text(bill_handle)
-                bindata = textdata.decode('UTF-8')
-            else:
-                bindata = requests.get(chosen['state_link'])
-                textdata = bindata.encode('UTF-8')
-                self.fob.upload_text(textdata, bill_handle)
-
-            self.process_html(key, chosen['date'], title, summary, bindata)
+            resp = requests.get(chosen['url'])
+            print(resp.status_code, resp.headers)
+            textdata = resp.text
+            # import pdb; pdb.set_trace()
+            self.fob.upload_text(textdata, bill_handle)
+            self.process_html(key, chosen['date'], title, summary, textdata)
 
         elif extension == 'pdf':
-            if self.fob.handle_exists(bill_handle):
-                bindata = self.fob.download_binary(bill_handle)
-            else:
-                bindata = requests.get(chosen['state_link'])
-                self.fob.upload_binary(textdata, bill_handle)
-
+            response = requests.get(chosen['state_link'])
+            bindata = response.content
+            self.fob.upload_binary(bindata, bill_handle)
             self.process_pdf(key, chosen['date'], title, summary, bindata)
 
         return
