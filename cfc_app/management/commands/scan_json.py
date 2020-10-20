@@ -25,6 +25,7 @@ import base64
 import json
 import os
 import re
+import requests
 import zipfile
 from bs4 import BeautifulSoup
 from django.conf import settings
@@ -45,7 +46,7 @@ SUMMARY_LIMIT = 1000
 # Put the original file name, doc date, title and summary ahead of text
 HeadForm = "{} {} _TITLE_ {} _SUMMARY_ {} _TEXT_"
 
-billRegex = re.compile("(\w\w)/\d\d\d\d-(\d\d\d\d).*/bill/(\w*).json$")
+billRegex = re.compile(r"(\w\w)/\d\d\d\d-(\d\d\d\d).*/bill/(\w*).json$")
 handleForm = "{}_{}_Y{}.{}"
 
 
@@ -117,14 +118,14 @@ class Command(BaseCommand):
         if self.fob.handle_exists(zip_handle):
             msg_bytes = self.fob.download_binary(zip_handle)
         else:
-            package = json.loads(json_str)   
+            package = json.loads(json_str)
             if package['status'] == 'OK':
-                dataset = package['dataset']        
+                dataset = package['dataset']
                 mimedata = dataset['zip'].encode('UTF-8')
                 msg_bytes = base64.b64decode(mimedata)
                 self.fob.upload_binary(msg_bytes, zip_handle)
 
-        zip_path = os.path.join(settings.SOURCE_ROOT, 'scan_json.pdf')        
+        zip_path = os.path.join(settings.SOURCE_ROOT, 'scan_json.pdf')
         with open(zip_path, "wb") as zip_file:
             zip_file.write(msg_bytes)
 
@@ -134,60 +135,14 @@ class Command(BaseCommand):
             for path in namelist:
                 mo = billRegex.search(path)
                 if mo:
+                    dot.show()
                     json_data = zf.read(path).decode('UTF-8', errors='ignore')
                     self.process_source(mo, json_data)
                     count += 1
                     if self.limit > 0 and count >= self.limit:
                         break
-
+        dot.end()
         return None
-        
-        count = 0
-        for index in bills:
-
-            # import pdb; pdb.set_trace()
-            dot.show()
-            bill = bills[index]
-
-            key = "{}-{}".format(state, bill['bill_number'])
-            document_date = ''
-            if 'doc_date' in bill:
-                document_date = bill['doc_date']
-                if len(key) < 15:
-                    key += '-Y' + bill['doc_date'][:4]
-                else:
-                    key += '-Y' + bill['doc_date'][2:4]
-
-            title = self.form_sentence(bill['title'], TITLE_LIMIT)
-            summary = self.form_sentence(bill['summary'], SUMMARY_LIMIT)
-
-            # If the text file already exists, honor the --skip flag
-            textname = '{}.{}'.format(key, 'txt')
-            if self.skip and self.fob.handle_exists(textname):
-                print('File exists, skipping: ', textname)
-                continue
-
-            # Don't invoke Legiscan.com API unless --api specified
-            if self.use_api and self.leg.api_ok:
-                extension, msg_bytes = self.fetch_bill(bill, key)
-
-            # Otherwise, download the HTML/PDF file
-            else:
-                extension, msg_bytes = self.read_from_fob(key)
-
-            if extension == 'html':
-                self.process_html(key, document_date,
-                                  title, summary, msg_bytes)
-            elif extension == 'pdf':
-                self.process_pdf(key, document_date,
-                                 title, summary, msg_bytes)
-
-            count += 1
-            if self.limit > 0 and count >= self.limit:
-                break
-
-            dot.end()
-        return self
 
     def form_sentence(self, line, charlimit):
         newline = self.remove_section_numbers(line)
@@ -242,7 +197,7 @@ class Command(BaseCommand):
         extension, msg_bytes = '', b''
         state = key[:2]
         if state == 'AZ':
-            extension = 'html'  # Assume html for Arizona
+            extension == 'html'  # Assume html for Arizona
             billtext = ''
             billname = '{}.{}'.format(key, extension)
             if self.fob.handle_exists(billname):
@@ -373,11 +328,35 @@ class Command(BaseCommand):
         bill_detail = bill_json['bill']
         texts = bill_detail['texts']
         chosen = self.latest_text(texts)
-        bill_handle = self.source_handle(bill_state, bill_number, 
-                                    bill_year, chosen['mime'])
-        print(bill_handle)
-        return
+        extension = self.determine_extension(chosen['mime'])
+        bill_handle = handleForm.format(bill_state, bill_number,
+                                        bill_year, extension)
 
+        key = bill_handle.replace("."+extension, "")
+        title = key
+        summary = chosen['state_link']
+
+        if extension == 'html':
+            if self.fob.handle_exists(bill_handle):
+                textdata = self.fob.download_text(bill_handle)
+                bindata = textdata.decode('UTF-8')
+            else:
+                bindata = requests.get(chosen['state_link'])
+                textdata = bindata.encode('UTF-8')
+                self.fob.upload_text(textdata, bill_handle)
+
+            self.process_html(key, chosen['date'], title, summary, bindata)
+
+        elif extension == 'pdf':
+            if self.fob.handle_exists(bill_handle):
+                bindata = self.fob.download_binary(bill_handle)
+            else:
+                bindata = requests.get(chosen['state_link'])
+                self.fob.upload_binary(textdata, bill_handle)
+
+            self.process_pdf(key, chosen['date'], title, summary, bindata)
+
+        return
 
     def source_handle(self, state, bill_number, bill_year, mime_type):
         extension = self.determine_extension(mime_type)
@@ -391,10 +370,10 @@ class Command(BaseCommand):
         for entry in texts:
             this_date = entry['date']
             this_docid = entry['doc_id']
-            if (this_date > LastDate or 
+            if (this_date > LastDate or
                (this_date == LastDate and this_docid > LastDocid)):
                 LastDate = this_date
                 LastDocid = this_docid
                 LastEntry = entry
-          
+
         return LastEntry
