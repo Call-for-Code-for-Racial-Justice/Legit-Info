@@ -152,9 +152,7 @@ that allows you to pre-populate the data with sample impacts, locations,
 and a single superuser "cfcadmin" / "Call4Code"
 
 ```bash
-$ cd legit-info
-$ pipenv shell
-(fix) $ ./stage1 loaddata cfc-seed.json
+$ ./cron1 ./stage1 loaddata cfc-seed.json
 ```
 
 To access admin panels, add "/admin" to the main website.  For local
@@ -166,12 +164,16 @@ you will find an "Admin" tab on the upper right of the navigation bar.
 To change this fixture, or create your own with updated settings, use:
 
 ```bash
-$ cd legit-info
-$ pipenv shell
-(fix) $ ./stage1 loaddata cfc-seed.json
+$ ./cron1 loaddata auth.user users.profile cfc_app.criteria 
+    cfc_app.impact cfc_app_location cfc-seed.json --output cfc-seed.json
 ```
 
+Lastly, if you added or removed users, impacts, or locations, and need
+to reset it back to this intial state, you can run this command:
 
+```bash
+$ ./cron1 syncdata cfc-seed.json
+```
 
 ### Subsection 1.2 Set password for Superuser "cfcadmin"
 
