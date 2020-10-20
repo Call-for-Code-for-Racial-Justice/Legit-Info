@@ -73,8 +73,8 @@ by multiple variations of a proposed policy.
 Searching for legislation can be complicated by the fact that each government
 level has their own repository, their own numbering convention, and different
 formats.  Technology can assist by allowing content to be centralized
-into a single database, readily accessible to advocates that need 
-simple-to-read information.
+into a single database, in a consistent format,  readily accessible to 
+advocates that need simple-to-read information.
 
 
 ### The idea  - Legit-Info App
@@ -85,9 +85,13 @@ primary goal is to help advocates find legislation of interest based on an
 advocate's preferences for impact areas and geographical location. 
 
 The application is customizable, allowing application staff to specify
-the location hierarchy and impact categories.  Complex legislation is curated, 
-resulting in classifying the location scope and impact area, with a brief 
-laymen-readable title and summary.
+the location hierarchy and impact categories.
+
+The database is automatically updated weekly, combining the resources from 
+Legiscan.com API with government repositories.  Plain text is extracted from 
+HTML and PDF formatted documents, processed through IBM Watson Natural Language 
+Understanding (NLU) service to identify title, summary, location,
+and impact.  The results can then be further curated to improve legibility.
 
 By classifying legislation by impact and location, we hope to increase 
 awareness of current and pending legislation and their ability to affect change 
@@ -137,6 +141,16 @@ involved with the legislation.  Feedback options can be to send opinions
 directly to those people, or to allow those elected officials to easily see the
 collection of opinions directly from the website.
 
+5. **Other locations and languages:**
+
+The solution is focused on United States and the English language.  The
+MVP focused on just Arizona and Ohio. However, the location hierarchy does 
+accomodate different governmental structures, and the Impact, Location, Title 
+and Summary all support UTF-8 character set to allow for international 
+characters.  This solution could be modified to handle other locations, 
+evaluating alternatives to Legiscan.com, and finding other public sources of 
+information for the particular country or language.
+
 
 
 ## Getting started
@@ -155,6 +169,11 @@ In stage 1, each developer has their own copy of application code and
 data, using SQLite3 that stores the entire database in a single file.
 Django provides a development webserver to allow local testing.
 
+The original PDF or HTML version of the legislation, along with the extracted
+TEXT files, are stored on local file system and analyzed.  The resulting
+title, summary, location and impact are stored in the database.  This
+allows staff to review the AI/NLP-based classifications and make adjustments.
+
 2. [Pre-Production](docs/STAGE2.md)
 
 In stage 2, each developer has their own copy of application code, but
@@ -163,27 +182,43 @@ developer can choose to use the Django development webserver, or try out
 the production server called Gunicorn.  The difference is that Django
 is designed for single-user, and Gunicorn for concurrent multiple users.
 
+Optionally, the PDF, HTML and TEXT files of the legislation can be stored
+on a network file system or IBM Cloud Object Storage for shared access.
+
 3. [Production](docs/STAGE3.md)
 
 In stage 3, the application is running in the IBM Cloud in one pod, using the
 Postgresql running in the IBM Cloud from pre-production.  Updates to the
 code are deployed using a Tekton pipeline.
 
+The PDF, HTML and TEXT files of the legislation can be stored on the same
+web application container, a network file system, or IBM Cloud Object Storage.
+
 
 ## Built with IBM and Open Source technologies
+
+The web application and cron job use the following IBM and open source
+technologies.
 
 * [Python](https://www.python.org/) - The programming language, along with
 pip and pipenv supporting tools
 * [Django](https://www.djangoproject.com/) - A framework for web applications
 * [Bootstrap](https://getbootstrap.com/) - A popular User Interface toolkit
+* [PDFminer](https://pypi.org/project/pdfminer.six/) - Extracts text from PDF
 * [SQlite](https://www.sqlite.org/index.html) - A simple, local database
 * [Postgresql](https://www.postgresql.org/) - A robust, relational database
 * [Gunicorn](https://gunicorn.org/) - A WSGI HTTP server for Python
 * [Watson Studio Natural Language Understanding](https://www.ibm.com/watson/nlu)
 
-The following technologies were used to demonstrate the MVP.  Certainly,
-they are optional, as the above application can run on a traditional 
-LAMP stack bare-metal server.
+The following repositories are used to automate the collection of legislation:
+
+* [Legiscan](https://legiscan.com/) -- API provides links to all 50 USA states
+* [AZLeg](https://www.azleg.gov/) -- Arizona State Legislature website
+* [Ohio.gov](https://ohio.gov/wps/portal/gov/site/home/) -- Ohio State website
+
+The following technologies were used to deploy and demonstrate the MVP.
+Certainly, they are optional, as the above application can run on a traditional 
+LAMP stack bare-metal server or virtual machine.
 
 * [Red Hat UBI](https://catalog.redhat.com/software/containers/ubi8)  - Red Hat
   Universal Base Image, based on Red Hat Enterprise Linux (RHEL) 8.2
@@ -215,6 +250,7 @@ conduct, and the process for submitting pull requests to the project.
 
 ## License
 
-This project is licensed under the Apache 2 License - see the [LICENSE](LICENSE) file for details
+This project is licensed under the Apache 2 License - see the [LICENSE
+](LICENSE) file for details
 
 Please also read the [BSD Copyright Notice](BSD-NOTICE)

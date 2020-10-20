@@ -12,4 +12,4 @@
 #
 parms="$@"
 export USE_SQLITE3='True'
-cd /home/tpearson/Develop/legit-info && pipenv run python manage.py $parms
+cd ~/Develop/legit-info && pipenv run python manage.py $parms

@@ -1,7 +1,11 @@
 # Legit-Info
 
-Legit-Info is a simple `Content Management System`, or CMS for short, that
-delivers legislation content to users.
+Legit-Info offers a simple `Content Management System`, or CMS for short, 
+that delivers legislation content to users.  Legislation is automatically
+fetched from various sources as an asynchronous background task so that the
+website is not slowed down during search activities.  IBM Watson Natural
+Language Understanding is used to minimize the amount of curation effort
+needed to provide meaningful title, summary, location and impact attributes.
 
 
 ## Section 1 Administration
@@ -27,25 +31,27 @@ testing, use:  `http://localhost:3000/admin`
 Alternatively, launch `http://localhost:3000` and sign in as "cfcadmin",
 you will find an "Admin" tab on the upper right of the navigation bar.
 
-### Subsection 1.2 Impact Areas
+### Subsection 1.2 Seed Databases
+
+
+
+
+
+### Subsection 1.3 Impacts and Locations
 
 To access admin panels, add "/admin" to the main website.  For local
 testing, use:  `http://localhost:3000/admin`  From here, you can add
-or remove impact areas.  Here is an example:
+or remove impact and locations.  Here is an example:
 
+```
+Impacts:
 * Healthcare
 * Safety
 * Environment
 * Transportation
 * Jobs
 
-### Subsection 1.3 Locations
-
-To access admin panels, add "/admin" to the main website.  For local
-testing, use:  `http://localhost:3000/admin`  From here, you can add
-or remove locations.  Here is an example:
-
-```
+Locations:
 United States
 └─ Arizona, USA
     └─ Pima County, AZ

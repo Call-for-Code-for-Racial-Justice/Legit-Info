@@ -58,7 +58,7 @@ so push it aside, and use other terminal windows for the other tasks.
 Use 'icc embrace' to log into IBM Cloud and OpenShift
 API endpoint:      https://cloud.ibm.com
 Region:            us-east
-User:              tpearson@us.ibm.com
+User:              cfcadmin@us.ibm.com
 Account:           GSI Labs - IBM (7e341a8be8c9464e8778c7107b2bcccc) <-> 1924691
 Resource group:    emb-race-team
 CF API endpoint:

@@ -1,0 +1,195 @@
+[
+{
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$180000$NgxaHCSGByQU$Yvtyd31uHdswuhlaxsPPrwiAWA+mu1//BzBCYu8LAAE=",
+        "last_login": "2020-10-20T16:52:52.751Z",
+        "is_superuser": true,
+        "username": "cfcadmin",
+        "first_name": "CFC",
+        "last_name": "Administrator",
+        "email": "cfcadmin@us.ibm.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2020-10-20T16:40:02.177Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "cfc_app.criteria",
+    "pk": 1,
+    "fields": {
+        "text": "world.usa-None",
+        "location": 2,
+        "impacts": [
+            1
+        ]
+    }
+},
+{
+    "model": "cfc_app.impact",
+    "pk": 1,
+    "fields": {
+        "text": "None",
+        "date_added": "2020-10-20T16:48:02.661Z"
+    }
+},
+{
+    "model": "cfc_app.impact",
+    "pk": 2,
+    "fields": {
+        "text": "Healthcare",
+        "date_added": "2020-10-20T16:48:02.676Z"
+    }
+},
+{
+    "model": "cfc_app.impact",
+    "pk": 3,
+    "fields": {
+        "text": "Safety",
+        "date_added": "2020-10-20T16:48:02.681Z"
+    }
+},
+{
+    "model": "cfc_app.impact",
+    "pk": 4,
+    "fields": {
+        "text": "Environment",
+        "date_added": "2020-10-20T16:48:02.686Z"
+    }
+},
+{
+    "model": "cfc_app.impact",
+    "pk": 5,
+    "fields": {
+        "text": "Transportation",
+        "date_added": "2020-10-20T16:48:02.692Z"
+    }
+},
+{
+    "model": "cfc_app.impact",
+    "pk": 6,
+    "fields": {
+        "text": "Jobs",
+        "date_added": "2020-10-20T16:48:02.696Z"
+    }
+},
+{
+    "model": "cfc_app.location",
+    "pk": 1,
+    "fields": {
+        "desc": "world",
+        "shortname": "world",
+        "legiscan_id": 0,
+        "hierarchy": "world",
+        "govlevel": "world",
+        "parent": 1,
+        "date_added": "2020-10-20T16:47:58.327Z"
+    }
+},
+{
+    "model": "cfc_app.location",
+    "pk": 2,
+    "fields": {
+        "desc": "United States",
+        "shortname": "usa",
+        "legiscan_id": 0,
+        "hierarchy": "world.usa",
+        "govlevel": "country",
+        "parent": 1,
+        "date_added": "2020-10-20T16:47:58.334Z"
+    }
+},
+{
+    "model": "cfc_app.location",
+    "pk": 3,
+    "fields": {
+        "desc": "Arizona, USA",
+        "shortname": "az",
+        "legiscan_id": 3,
+        "hierarchy": "world.usa.az",
+        "govlevel": "state",
+        "parent": 2,
+        "date_added": "2020-10-20T16:47:58.337Z"
+    }
+},
+{
+    "model": "cfc_app.location",
+    "pk": 4,
+    "fields": {
+        "desc": "Ohio, USA",
+        "shortname": "oh",
+        "legiscan_id": 35,
+        "hierarchy": "world.usa.oh",
+        "govlevel": "state",
+        "parent": 2,
+        "date_added": "2020-10-20T16:47:58.346Z"
+    }
+},
+{
+    "model": "cfc_app.location",
+    "pk": 5,
+    "fields": {
+        "desc": "Pima County, AZ",
+        "shortname": "pima",
+        "legiscan_id": 0,
+        "hierarchy": "world.usa.az.pima",
+        "govlevel": "county",
+        "parent": 3,
+        "date_added": "2020-10-20T16:53:39.080Z"
+    }
+},
+{
+    "model": "cfc_app.location",
+    "pk": 6,
+    "fields": {
+        "desc": "Tucson, Arizona",
+        "shortname": "tucson",
+        "legiscan_id": 0,
+        "hierarchy": "world.usa.az.pima.tucson",
+        "govlevel": "city",
+        "parent": 5,
+        "date_added": "2020-10-20T16:54:16.785Z"
+    }
+},
+{
+    "model": "cfc_app.location",
+    "pk": 7,
+    "fields": {
+        "desc": "Franklin County",
+        "shortname": "franklin",
+        "legiscan_id": 0,
+        "hierarchy": "world.usa.oh.franklin",
+        "govlevel": "county",
+        "parent": 4,
+        "date_added": "2020-10-20T16:56:49.243Z"
+    }
+},
+{
+    "model": "cfc_app.location",
+    "pk": 8,
+    "fields": {
+        "desc": "Columbus, OH",
+        "shortname": "columbus",
+        "legiscan_id": 0,
+        "hierarchy": "world.usa.oh.franklin.columbus",
+        "govlevel": "city",
+        "parent": 7,
+        "date_added": "2020-10-20T16:57:22.254Z"
+    }
+},
+{
+    "model": "users.profile",
+    "pk": 1,
+    "fields": {
+        "user": 1,
+        "location": 2,
+        "criteria": 1,
+        "impacts": [
+            1
+        ]
+    }
+}
+]

@@ -45,8 +45,8 @@ from cfc_app.ShowProgress import ShowProgress
 
 
 # Constants for IBM Watson NLU credentials in Environment Variables
-NLU_APIKEY = os.environ['NLU_APIKEY']
-NLU_SERVICE_URL = os.environ['NLU_SERVICE_URL']
+NLU_APIKEY = os.getenv('NLU_APIKEY', None)
+NLU_SERVICE_URL = os.getenv('NLU_SERVICE_URL', None)
 
 NameRegex = re.compile(r"^(\w\w-\w*-Y\d*).")
 HeadRegex1 = r"^(\w\w-\w*-Y\d*).\w*\s(\d\d\d\d-\d\d-\d\d)\s*"

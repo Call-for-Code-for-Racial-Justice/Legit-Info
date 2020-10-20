@@ -48,6 +48,8 @@ def load_default_impacts():
     # through automation but mis-classified.  Setting impact=None
     # will prevent automation from fetching updated versions of this.
 
+    # Impacts are displayed in the order they are added in this table.
+    # Any new impacts added will appear at the bottom of the list.
     default_impacts = ['None', 'Healthcare', 'Safety', 'Environment',
                        'Transportation', 'Jobs']
     for entry in default_impacts:
@@ -67,6 +69,7 @@ def load_default_locations():
     world = Location()
     world.desc = 'world'
     world.shortname = 'world'
+    world.legiscan_id = 0
     world.hierarchy = 'world'
     world.govlevel = 'world'
     world.save()
@@ -75,18 +78,19 @@ def load_default_locations():
 
     # The concept of ancestor-search is confusing, so we create a few
     # entries (usa, arizona, ohio) so people can understand the structure
+    # Note the legiscan_id is only needed for States in the United States.
 
-    usa = Location(desc='United States', shortname='usa',
+    usa = Location(desc='United States', shortname='usa', legiscan_id = 0,
                    hierarchy='world.usa', govlevel='country')
     usa.parent = world
     usa.save()
 
-    arizona = Location(desc='Arizona, USA', shortname='az',
+    arizona = Location(desc='Arizona, USA', shortname='az', legiscan_id = 3,
                        hierarchy='world.usa.az', govlevel='state')
     arizona.parent = usa
     arizona.save()
 
-    ohio = Location(desc='Ohio, USA', shortname='oh',
+    ohio = Location(desc='Ohio, USA', shortname='oh', legiscan_id = 35,
                     hierarchy='world.usa.oh', govlevel='state')
     ohio.parent = usa
     ohio.save()

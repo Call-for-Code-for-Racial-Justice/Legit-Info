@@ -35,7 +35,7 @@ class Legiscan_API:
     def __init__(self):
         """Constructor for Legiscan_API.
            Checks if a Legiscan_API apikey exists."""
-        self.apiKey = os.environ['LEGISCAN_API_KEY']
+        self.apiKey = os.getenv('LEGISCAN_API_KEY', None)
         if not self.apiKey:
             raise APIkeyError
 

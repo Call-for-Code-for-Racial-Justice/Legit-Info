@@ -45,11 +45,14 @@ FOB_METHOD = 'FILE'
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get(
+SECRET_KEY = os.getenv(
     'SECRET_KEY', 'ry()%j23$u$c7q$m2o0vo1w(u^eut8b3c0ylpy+)((6f7j08a4')
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# Environment variable can allow dynamically changing DEBUG setting
+
 DEBUG = True
+DEBUG = os.getenv('CFC_DEBUG', DEBUG)
 ALLOWED_HOSTS = ['*', '127.0.0.1', 'localhost']
 
 # Application definition
@@ -62,7 +65,6 @@ INSTALLED_APPS = [
     # Third party apps.
     'bootstrap4',
     'django_extensions',
-    'django_truncate',
 
     # Default django apps
     'django.contrib.admin',
@@ -107,10 +109,10 @@ TEMPLATES = [
 # The email host settings are optional, needed for the "email to self"
 # Feature.  The project team used 'Mailtrap.IO' for testing.
 
-EMAIL_HOST = os.environ.get('EMAIL_HOST', '')
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
-EMAIL_PORT = os.environ.get('EMAIL_PORT', '')
+EMAIL_HOST = os.getenv('EMAIL_HOST', '')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
+EMAIL_PORT = os.getenv('EMAIL_PORT', '')
 
 WSGI_APPLICATION = 'cfc_project.wsgi.application'
 
@@ -121,8 +123,10 @@ WSGI_APPLICATION = 'cfc_project.wsgi.application'
 # Postgresql is used in Stage 2 and Stage 3.  See /docs for details
 
 use_SQLite3 = os.getenv('USE_SQLITE3', 'True')
+CFC_SHOWDB = os.getenv('CFC_SHOWDB', 'True')
 if use_SQLite3 == 'True':
-    print('**Using SQLite3**')
+    if CFC_SHOWDB == 'True':
+        print('**Using SQLite3**')
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -130,7 +134,8 @@ if use_SQLite3 == 'True':
         }
     }
 else:
-    print('**Using PostgreSQL**')
+    if CFC_SHOWDB == 'True':
+        print('**Using PostgreSQL**')
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
