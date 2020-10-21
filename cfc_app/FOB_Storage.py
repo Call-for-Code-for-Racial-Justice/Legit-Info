@@ -87,49 +87,42 @@ class FOB_Storage():
         os.makedirs(self.filesys, exist_ok=True)
         return self
 
-    def upload_binary(self, bindata, handle, mode='DEFAULT'):
+    def upload_binary(self, bindata, item_name):
         """ Upload binary file """
-        fob_mode = mode
-        if fob_mode not in ['FILE', 'OBJECT']:
-            fob_mode = self.mode
+        fob_mode = self.mode
 
         if self.cos and fob_mode == 'OBJECT':
-            self.cos.put_object(Key=handle, Body=bindata,
+            self.cos.put_object(Key=item_name, Body=bindata,
                                 Bucket=self.cos_bucket)
 
         if self.filesys and fob_mode == 'FILE':
-            fullname = os.path.join(self.filesys, handle)
+            fullname = os.path.join(self.filesys, item_name)
             with open(fullname, 'wb') as outfile:
                 outfile.write(bindata)
 
         return self
 
-    def upload_text(self, textdata, handle, mode='DEFAULT', codec='UTF-8'):
+    def upload_text(self, textdata, item_name, codec='UTF-8'):
         """ Upload text file """
         bindata = textdata.encode(codec)
-        self.upload_binary(bindata, handle, mode=mode)
+        self.upload_binary(bindata, item_name)
         return self
 
-    def handle_exists(self, handle, mode='DEFAULT'):
-        fob_mode = mode
-        if fob_mode not in ['FILE', 'OBJECT']:
-            fob_mode = self.mode
+    def item_exists(self, item_name):
 
-        handles = self.list_handles(mode, prefix=handle, limit=1)
+        items = self.list_items(prefix=item_name, limit=1)
         found = False
-        if handles:
-            if handles[0] == handle:
+        if items:
+            if items[0] == item_name:
                 found = True
         return found
 
-    def list_handles(self, mode='DEFAULT', prefix=None, suffix=None,
-                     after=None, limit=MAXLIMIT):
-        """ list handles that match prefix/suffix """
-        fob_mode = mode
-        if fob_mode not in ['FILE', 'OBJECT']:
-            fob_mode = self.mode
+    def list_items(self, prefix=None, suffix=None,
+                   after=None, limit=MAXLIMIT):
+        """ list items that match prefix/suffix """
+        fob_mode = self.mode
 
-        handles = []
+        items = []
 
         if self.cos and fob_mode == 'OBJECT':
             found = 0
@@ -150,12 +143,12 @@ class FOB_Storage():
                 if 'Contents' in response:
                     contents = response['Contents']
                     for content in contents:
-                        handle = content['Key']
-                        cursor = handle
-                        if suffix and not handle.endswith(suffix):
+                        item_name = content['Key']
+                        cursor = item_name
+                        if suffix and not item_name.endswith(suffix):
                             continue
                         found += 1
-                        handles.append(handle)
+                        items.append(item_name)
                         if limit > 0 and found >= limit:
                             break
                 else:
@@ -182,30 +175,28 @@ class FOB_Storage():
                 if after:
                     if basename <= after:
                         continue
-                handles.append(basename)
+                items.append(basename)
                 num += 1
                 if limit > 0 and num >= limit:
                     break
 
-        return handles
+        return items
 
-    def download_binary(self, handle, mode='DEFAULT'):
+    def download_binary(self, item_name):
         """ Upload binary file """
-        fob_mode = mode
-        if fob_mode not in ['FILE', 'OBJECT']:
-            fob_mode = self.mode
+        fob_mode = self.mode
 
         bindata = b''
         try:
             if self.cos and fob_mode == 'OBJECT':
                 infile = self.cos.get_object(
-                    Key=handle, Bucket=self.cos_bucket)
+                    Key=item_name, Bucket=self.cos_bucket)
                 bindata = infile["Body"].read()
         except Exception as e:
             print(e)
 
         if self.filesys and fob_mode == 'FILE':
-            fullname = os.path.join(self.filesys, handle)
+            fullname = os.path.join(self.filesys, item_name)
             try:
                 with open(fullname, 'rb') as infile:
                     bindata = infile.read()
@@ -214,23 +205,21 @@ class FOB_Storage():
 
         return bindata
 
-    def download_text(self, handle, mode='DEFAULT', codec='UTF-8'):
+    def download_text(self, item_name, codec='UTF-8'):
         """ Upload text file """
-        bindata = self.download_binary(handle, mode=mode)
+        bindata = self.download_binary(item_name)
         textdata = bindata.decode(codec, errors='ignore')
         return textdata
 
-    def remove_handle(self, handle):
+    def remove_item(self, item_name):
         """ Remove file or object """
-        fob_mode = mode
-        if fob_mode not in ['FILE', 'OBJECT']:
-            fob_mode = self.mode
+        fob_mode = self.mode
 
         if self.cos and fob_mode == 'OBJECT':
-            self.cos.delete_object(Bucket=self.cos_bucket, Key=handle)
+            self.cos.delete_object(Bucket=self.cos_bucket, Key=item_name)
 
         if self.filesys and fob_mode == 'FILE':
-            fullname = os.path.join(self.filesys, handle)
+            fullname = os.path.join(self.filesys, item_name)
             if os.path.exists(fullname):
                 os.remove(fullname)
         return self
@@ -265,27 +254,27 @@ if __name__ == "__main__":
     fob.upload_binary(SAMPLE_BIN, 'CCC-TEST.bin')
     fob.upload_text(SAMPLE_TEXT, 'CCC-TEST.txt')
 
-    print('List all handles:')
-    print(fob.list_handles(limit=TESTLIMIT))
+    print('List all items:')
+    print(fob.list_items(limit=TESTLIMIT))
 
     print('Limit=3:')
-    print(fob.list_handles(limit=3))
+    print(fob.list_items(limit=3))
 
     print("Prefix='BBB':")
-    print(fob.list_handles(prefix='BBB', limit=TESTLIMIT))
+    print(fob.list_items(prefix='BBB', limit=TESTLIMIT))
 
     print("Suffix='.bin':")
-    print(fob.list_handles(suffix='.bin', limit=TESTLIMIT))
+    print(fob.list_items(suffix='.bin', limit=TESTLIMIT))
 
     print("Prefix='B' and Suffix='.bin': ")
-    print(fob.list_handles(prefix='B', suffix='.bin', limit=TESTLIMIT))
+    print(fob.list_items(prefix='B', suffix='.bin', limit=TESTLIMIT))
 
     # import pdb; pdb.set_trace()
     print("After='AAA-TEST.txt' ")
-    print(fob.list_handles(after='AAA-TEST.txt', limit=TESTLIMIT))
+    print(fob.list_items(after='AAA-TEST.txt', limit=TESTLIMIT))
 
     print("After='AAA-TEST.txt' Limit=3 ")
-    print(fob.list_handles(after='AAB-TEST.txt', limit=3))
+    print(fob.list_items(after='AAB-TEST.txt', limit=3))
 
     print('Download binary:')
     bin_test = fob.download_binary('AAA-TEST.bin')
@@ -306,26 +295,25 @@ if __name__ == "__main__":
         print('Error, text data does not match')
 
     print('Test if BBB-TEST.txt exists')
-    if fob.handle_exists('BBB-TEST.txt'):
+    if fob.item_exists('BBB-TEST.txt'):
         print('--- BBB-TEST.txt exists!')
     else:
         print('Not found: BBB-TEST.txt')
 
     print('Delete existing file BBB-TEST.txt:')
-    fob.remove_handle('BBB-TEST.txt')
-    print(fob.list_handles(limit=TESTLIMIT))
+    fob.remove_item('BBB-TEST.txt')
+    print(fob.list_items(limit=TESTLIMIT))
 
     print('Delete non-existient file ZZZ-TEST.unk:')
-    fob.remove_handle('ZZZ-TEST.unk')
-    handles = fob.list_handles()
-    print(fob.list_handles(limit=TESTLIMIT))
+    fob.remove_item('ZZZ-TEST.unk')
+    print(fob.list_items(limit=TESTLIMIT))
 
     # Cleanup directory space
-    fob.remove_handle('AAA-TEST.bin')
-    fob.remove_handle('AAA-TEST.txt')
-    fob.remove_handle('BBB-TEST.bin')
-    fob.remove_handle('BBB-TEST.txt')
-    fob.remove_handle('CCC-TEST.bin')
-    fob.remove_handle('CCC-TEST.txt')
+    fob.remove_item('AAA-TEST.bin')
+    fob.remove_item('AAA-TEST.txt')
+    fob.remove_item('BBB-TEST.bin')
+    fob.remove_item('BBB-TEST.txt')
+    fob.remove_item('CCC-TEST.bin')
+    fob.remove_item('CCC-TEST.txt')
 
     print('Congratulations')

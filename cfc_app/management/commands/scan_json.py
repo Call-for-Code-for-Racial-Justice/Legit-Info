@@ -26,7 +26,6 @@ import json
 import os
 import re
 import requests
-import urllib.request, urllib.error, urllib.parse
 import zipfile
 from bs4 import BeautifulSoup
 from django.conf import settings
@@ -48,7 +47,7 @@ SUMMARY_LIMIT = 1000
 HeadForm = "{} {} _TITLE_ {} _SUMMARY_ {} _TEXT_"
 
 billRegex = re.compile(r"(\w\w)/\d\d\d\d-(\d\d\d\d).*/bill/(\w*).json$")
-handleForm = "{}_{}_Y{}.{}"
+nameForm = "{}_{}_Y{}.{}"
 
 
 class Command(BaseCommand):
@@ -100,31 +99,31 @@ class Command(BaseCommand):
                 continue
 
             print('Processing state: ', state)
-            hlist = self.fob.list_handles(prefix=state, suffix='.json')
+            hlist = self.fob.list_items(prefix=state, suffix='.json')
 
-            for json_handle in hlist:
-                self.process_json(state, json_handle)
+            for json_name in hlist:
+                self.process_json(state, json_name)
 
         return None
 
-    def process_json(self, state, json_handle):
+    def process_json(self, state, json_name):
         """ Process NN-NNNN.json for this state """
         # import pdb; pdb.set_trace()
 
-        json_str = self.fob.download_text(json_handle)
-        zip_handle = json_handle.replace('.json', '.zip')
+        json_str = self.fob.download_text(json_name)
+        zip_name = json_name.replace('.json', '.zip')
 
-        print('Checking: ', json_handle)
+        print('Checking: ', json_name)
         dot = ShowProgress()
-        if self.fob.handle_exists(zip_handle):
-            msg_bytes = self.fob.download_binary(zip_handle)
+        if self.fob.name_exists(zip_name):
+            msg_bytes = self.fob.download_binary(zip_name)
         else:
             package = json.loads(json_str)
             if package['status'] == 'OK':
                 dataset = package['dataset']
                 mimedata = dataset['zip'].encode('UTF-8')
                 msg_bytes = base64.b64decode(mimedata)
-                self.fob.upload_binary(msg_bytes, zip_handle)
+                self.fob.upload_binary(msg_bytes, zip_name)
 
         zip_path = os.path.join(settings.SOURCE_ROOT, 'scan_json.pdf')
         with open(zip_path, "wb") as zip_file:
@@ -201,7 +200,7 @@ class Command(BaseCommand):
             extension == 'html'  # Assume html for Arizona
             billtext = ''
             billname = '{}.{}'.format(key, extension)
-            if self.fob.handle_exists(billname):
+            if self.fob.item_exists(billname):
                 billtext = self.fob.download_text(billname)
                 msg_bytes = billtext.encode('UTF-8')
             if billtext == '':
@@ -213,7 +212,7 @@ class Command(BaseCommand):
         elif state == 'OH':
             extension = 'pdf'   # Assume html for Ohio
             billname = '{}.{}'.format(key, extension)
-            if self.fob.handle_exists(billname):
+            if self.fob.item_exists(billname):
                 msg_bytes = self.fob.download_binary(billname)
             if msg_bytes == b'':
                 print('File not found: ', billname)
@@ -330,10 +329,10 @@ class Command(BaseCommand):
         texts = bill_detail['texts']
         chosen = self.latest_text(texts)
         extension = self.determine_extension(chosen['mime'])
-        bill_handle = handleForm.format(bill_state, bill_number,
-                                        bill_year, extension)
+        bill_name = nameForm.format(bill_state, bill_number,
+                                    bill_year, extension)
 
-        key = bill_handle.replace("."+extension, "")
+        key = bill_name.replace("."+extension, "")
         title = key
         summary = key
         # import pdb; pdb.set_trace()
@@ -342,21 +341,21 @@ class Command(BaseCommand):
             print(resp.status_code, resp.headers)
             textdata = resp.text
             # import pdb; pdb.set_trace()
-            self.fob.upload_text(textdata, bill_handle)
+            self.fob.upload_text(textdata, bill_name)
             self.process_html(key, chosen['date'], title, summary, textdata)
 
         elif extension == 'pdf':
             response = requests.get(chosen['state_link'])
             bindata = response.content
-            self.fob.upload_binary(bindata, bill_handle)
+            self.fob.upload_binary(bindata, bill_name)
             self.process_pdf(key, chosen['date'], title, summary, bindata)
 
         return
 
-    def source_handle(self, state, bill_number, bill_year, mime_type):
+    def source_name(self, state, bill_number, bill_year, mime_type):
         extension = self.determine_extension(mime_type)
-        handle = handleForm.format(state, bill_number, bill_year, extension)
-        return handle
+        item_name = nameForm.format(state, bill_number, bill_year, extension)
+        return item_name
 
     def latest_text(self, texts):
         LastDate = "0000-00-00"

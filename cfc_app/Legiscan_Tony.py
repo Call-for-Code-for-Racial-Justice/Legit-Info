@@ -39,10 +39,57 @@ class Legiscan_API:
         if not self.apiKey:
             raise APIkeyError
 
-        self.url = "https://api.legiscan.com/?key=" + self.apiKey + "&op="
+        self.badKey = os.getenv('LEGISCAN_BAD_KEY', None)
+        self.url = "https://api.legiscan.com/"
         self.api_ok = True    # assume safe to use API
         self.fob = FOB_Storage(settings.FOB_METHOD)
         return None
+
+    def get_dataset_list(self, apikey='Good'):
+        """ Get list of datasets for all 50 states """
+        key = self.badKey
+        if apikey == 'Good':
+            key = self.apiKey
+
+        list_params = { 'key': key, 'op': 'getDatasetList'} 
+        response = invoke_api(list_params)
+        
+        list_data = response['datasetlist']
+        return list_data
+
+    def get_session_id(self, session_id, access_key, apikey='Good'):
+        """ Get datasets for individual legislative session """
+        key = self.badKey
+        if apikey == 'Good':
+            key = self.apiKey
+
+        sesh_params = { 'key': key, 'op': 'getDataset', 
+                        'id': session_id, 'access_key': access_key }
+
+        response = self.invoke_api(sesh_params)
+        session_data = response['dataset']
+        return session_data
+
+    def invoke_api(self, params):
+        """ Invoke the Legiscan API """
+
+        response = {}
+        if self.api_ok:
+            try:
+                response = requests.get(url=self.url, params=params)
+                print(response.ok)
+                print(response.headers)
+                print(response.status_code)
+                print(len(response.content), len(response.text)) 
+                    
+            except Exception as e:
+                self.api_ok = False
+                resp = response.json()
+                if resp:
+                    for r in resp:
+                        print(r, resp[r])
+                # raise LegiscanError
+        return resp
 
     def getBill(self, billID):
         """Return the document id (docID) for a given bill id."""

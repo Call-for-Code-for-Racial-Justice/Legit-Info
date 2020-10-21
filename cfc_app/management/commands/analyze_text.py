@@ -139,12 +139,12 @@ class Command(BaseCommand):
         json_str = self.fob.download_text('{}.json'.format(state))
         json_data = json.loads(json_str)
 
-        handles = self.fob.list_handles(prefix=state, suffix=".txt",
+        items = self.fob.list_items(prefix=state, suffix=".txt",
                                         limit=self.limit)
 
         dot = ShowProgress()
         num = 0
-        for filename in handles:
+        for filename in items:
             self.process_legislation(filename, json_data)
             dot.show()
             num += 1
