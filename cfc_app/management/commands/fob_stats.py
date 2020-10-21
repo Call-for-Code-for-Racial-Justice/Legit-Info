@@ -33,11 +33,11 @@ class Command(BaseCommand):
         return None
 
     def add_arguments(self, parser):
-        parser.add_argument("--prefix", help="Prefix of handle names")
-        parser.add_argument("--suffix", help="Suffix of handle names")
-        parser.add_argument("--after", help="Start after this handle name")
+        parser.add_argument("--prefix", help="Prefix of item names")
+        parser.add_argument("--suffix", help="Suffix of item names")
+        parser.add_argument("--after", help="Start after this item name")
         parser.add_argument("--mode", help="From FILE, OBJECT, or BOTH")
-        parser.add_argument("--limit", help="Number of handles to process",
+        parser.add_argument("--limit", help="Number of items to process",
                             default=0)
         return None
 
@@ -73,15 +73,15 @@ class Command(BaseCommand):
 
         count = 0
         for n in range(50):
-            hlist = self.fob_file.list_items(prefix=prefix, suffix=suffix,
+            item_list = self.fob_file.list_items(prefix=prefix, suffix=suffix,
                                                after=cursor)
-            if len(hlist) == 0 or (limit > 0 and count >= limit):
+            if len(item_list) == 0 or (limit > 0 and count >= limit):
                 break
 
-            for handle in hlist:
-                cursor = handle
+            for name in item_list:
+                cursor = name
 
-                state = handle[:2]
+                state = name[:2]
                 if state not in state_list:
                     state = 'Other'
 
@@ -91,8 +91,8 @@ class Command(BaseCommand):
                     by_state[state] = 1
 
                 extension = 'None'
-                if '.' in handle:
-                    parts = handle.rsplit('.', 1)
+                if '.' in name:
+                    parts = name.rsplit('.', 1)
                     extension = '.' + parts[1]
                     if extension not in ext_list:
                         ext_list.append(extension)
@@ -107,7 +107,7 @@ class Command(BaseCommand):
                     break
 
         print('Mode = ', mode, '(Default Setting: ', settings.FOB_METHOD, ')')
-        print('Total number of handles processed: ', count)
+        print('Total number of items processed: ', count)
 
         print('Statistics by STATE prefix: ')
         if 'Other' in by_state:
