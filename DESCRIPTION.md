@@ -164,8 +164,8 @@ you will find an "Admin" tab on the upper right of the navigation bar.
 To change this fixture, or create your own with updated settings, use:
 
 ```bash
-$ ./cron1 loaddata auth.user users.profile cfc_app.criteria 
-    cfc_app.impact cfc_app_location cfc-seed.json --output cfc-seed.json
+$ ./cron1 dumpdata auth.user users.profile cfc_app.criteria 
+    cfc_app.impact cfc_app_location --output cfc-seed.json
 ```
 
 Lastly, if you added or removed users, impacts, or locations, and need

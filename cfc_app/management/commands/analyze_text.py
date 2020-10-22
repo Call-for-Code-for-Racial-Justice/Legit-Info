@@ -98,6 +98,7 @@ class Command(BaseCommand):
 
         self.fob = FOB_Storage(settings.FOB_METHOD)
         self.use_api = False
+        self.after = None
         self.limit = 0
         return None
 
@@ -105,12 +106,16 @@ class Command(BaseCommand):
         parser.add_argument("--api", action="store_true",
                             help="Invoke IBM Watson NLU API")
         parser.add_argument("--state", help="Process single state: AZ, OH")
+        parser.add_argument("--after", help="Start after this item name")
         parser.add_argument("--limit", type=int, default=0,
                             help="Limit number of entries to detail")
 
         return None
 
     def handle(self, *args, **options):
+
+        if options['after']:
+            self.after = options['after']
 
         if options['limit']:
             self.limit = options['limit']
@@ -136,11 +141,14 @@ class Command(BaseCommand):
     def process_state(self, state):
         # import pdb; pdb.set_trace()
 
-        json_str = self.fob.download_text('{}.json'.format(state))
-        json_data = json.loads(json_str)
+        json_name, json_data = '{}.json'.format(state), None
+        if self.fob.item_exists(json_name):
+            json_str = self.fob.download_text()
+            json_data = json.loads(json_str)
 
+        cursor, limit = self.after, self.limit
         items = self.fob.list_items(prefix=state, suffix=".txt",
-                                        limit=self.limit)
+                                    after=cursor, limit=limit)
 
         dot = ShowProgress()
         num = 0
@@ -226,14 +234,18 @@ class Command(BaseCommand):
 
         revlist, impact_chosen = self.classify_impact(concept)
 
+        rel = '(MAP)'
+        if self.use_api:
+            rel = '(NLU)'
+
+        connector = ''
+        for r in revlist:
+            rel += connector + "'{}' => '{}'".format(r[0], r[1])
+            connector = ", "
+
+        print('Filename {}  Impact {}'.format(filename, impact_chosen))
+
         if key:
-            rel, connector = '', ''
-            for r in revlist:
-                rel += connector + "'{}' => '{}'".format(r[0], r[1])
-                connector = ", "
-
-            print('Filename {}  Impact {}'.format(filename, impact_chosen))
-
             bill_id = self.get_bill_id(json_data, key)
             self.save_law(key, bill_id, doc_date, title,
                           summary, rel, impact_chosen)
@@ -279,9 +291,9 @@ class Command(BaseCommand):
         return None
 
     def get_bill_id(self, json_data, key):
-        bill_id = ''
+        bill_id = 'NOT FOUND'
         mo = keyRegex.search(key)
-        if mo:
+        if (mo is not None) and (json_data is not None):
             bill_number = mo.group(1)
             for entry in json_data:
                 bill = json_data[entry]

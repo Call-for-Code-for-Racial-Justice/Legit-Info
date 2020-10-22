@@ -39,7 +39,7 @@ APP_NAME = 'Legit-Info'
 #       COS_API_KEY_ID = <COS api-key-id>
 #       COS_INSTANCE = <crn:v1:bluemix:public:etc:etc:etc>
 #
-FOB_METHOD = 'FILE'
+FOB_METHOD = os.getenv('FOB_METHOD', 'FILE')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/

@@ -53,8 +53,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.flist = self.fob_file.list_names(prefix=options['prefix'],
-                                                suffix=options['suffix'],
-                                                after=options['after'])
+                                              suffix=options['suffix'],
+                                              after=options['after'])
         name = options['only']
         if name:
             if name in self.flist or self.fob_file.name_exists(name):
@@ -64,8 +64,8 @@ class Command(BaseCommand):
                 self.flist = []
 
         self.olist = self.fob_object.list_names(prefix=options['prefix'],
-                                                  suffix=options['suffix'],
-                                                  after=options['after'])
+                                                suffix=options['suffix'],
+                                                after=options['after'])
 
         name = options['only']
         if name:
@@ -86,9 +86,9 @@ class Command(BaseCommand):
         del_count, put_count, get_count = 0, 0, 0
 
         if maxdel > 0:
-            self.delete_names(found_in='OBJECT', but_not_in='FILE',
-                             limit=maxdel):
-        
+            self.delete_items(found_in='OBJECT', but_not_in='FILE',
+                              limit=maxdel)
+
         # Send Files to Object
         if maxput > 0:
             for name in flist:
@@ -137,22 +137,24 @@ class Command(BaseCommand):
 
         return None
 
-    def del_names(self, found_in=None, but_not_in=None, limit=10):
-        if found_in = 'FILE' and but_not_in = 'OBJECT'
-        xlist = self.flist
-        check_against = self.fob_object
-        remove_from = self.fob_file
-        elif found_in = 'OBJECT' and but_not_in = 'FILE'
-        xlist = self.olist
-        check_against = self.fob_file
-        remove_from = self.fob_object
+    def del_items(self, found_in=None, but_not_in=None, limit=10):
+        if found_in == 'FILE' and but_not_in == 'OBJECT':
+            item_list = self.flist
+            check_against = self.fob_object
+            remove_from = self.fob_file
+        elif found_in == 'OBJECT' and but_not_in == 'FILE':
+            item_list = self.olist
+            check_against = self.fob_file
+            remove_from = self.fob_object
         else:
             print('Invalid combination of parameters')
             return
 
         count = 0
-        for name in xlist:
-            if not check_against.name_exists(name)
-            remove_from.remove_name(name)
+        for name in item_list:
+            if not check_against.item_exists(name):
+                remove_from.remove_item(name)
+        return None
 
     def copy_names(from_fob=None, to_fob=None):
+        return None

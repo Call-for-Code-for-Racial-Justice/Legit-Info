@@ -2,24 +2,19 @@
 # Legiscan_API.py -- Pull data from Legiscan.com API
 # By Uchechukwu Uboh and Tony Pearson, IBM, 2020
 #
+# Legiscan_API class automates the retrival and curation of bill data for a
+# particular US state. Before running this class, your Legiscan.com apikey
+# needs to be an environmental variable with the key of "LEGISCAN_API_KEY".
+# Visit https://legiscan.com/legiscan to create your own Legiscan.com apikey.
+#
 # Debug with:  # import pdb; pdb.set_trace()
-
 
 import logging
 import json
 import os
 from random import randint
 import requests
-from cfc_app.ShowProgress import ShowProgress
-from cfc_app.FOB_Storage import FOB_Storage
-from django.conf import settings
-
-"""
-    Legiscan_API class automates the retrival and curation of bill data for a
-particular US state. Before running this class, your Legiscan.com apikey needs
-to be an environmental variable with the key of "LEGISCAN_API_KEY". Visit
-https://legiscan.com/legiscan to create your own Legiscan.com apikey.
-"""
+from cfc_app.DataBundle import DataBundle
 
 
 class LegiscanError(Exception):
@@ -42,54 +37,114 @@ class Legiscan_API:
         self.badKey = os.getenv('LEGISCAN_BAD_KEY', None)
         self.url = "https://api.legiscan.com/"
         self.api_ok = True    # assume safe to use API
-        self.fob = FOB_Storage(settings.FOB_METHOD)
+        # self.fob = FOB_Storage(settings.FOB_METHOD)
         return None
 
-    def get_dataset_list(self, apikey='Good'):
+    def getDatasetList(self, apikey='Good'):
         """ Get list of datasets for all 50 states """
         key = self.badKey
         if apikey == 'Good':
             key = self.apiKey
 
-        list_params = { 'key': key, 'op': 'getDatasetList'} 
-        response = invoke_api(list_params)
-        
-        list_data = response['datasetlist']
+        list_data = None
+        dsl_bundle = DataBundle('getDataSetList')
+        dsl_params = {'key': key, 'op': 'getDatasetList'}
+        # import pdb; pdb.set_trace()
+        success = self.invoke_api(dsl_bundle, dsl_params)
+        if success:
+            if 'datasetlist' in dsl_bundle.json_pkg:
+                list_data = dsl_bundle.text
+            else:
+                dsl_bundle.ok = False
+                dsl_bundle.status_code = 487
+
+        if not dsl_bundle.ok:
+            print('Failure', dsl_bundle)
+            self.api_ok = False
+            list_data = None
         return list_data
 
-    def get_session_id(self, session_id, access_key, apikey='Good'):
+    def getDataset(self, session_id, access_key, apikey='Good'):
         """ Get datasets for individual legislative session """
         key = self.badKey
         if apikey == 'Good':
             key = self.apiKey
 
-        sesh_params = { 'key': key, 'op': 'getDataset', 
-                        'id': session_id, 'access_key': access_key }
+        sesh_data = None
+        sesh_bundle = DataBundle('getDataset')
+        sesh_params = {'key': key, 'op': 'getDataset',
+                       'id': session_id, 'access_key': access_key}
 
-        response = self.invoke_api(sesh_params)
-        session_data = response['dataset']
-        return session_data
+        success = self.invoke_api(sesh_bundle, sesh_params)
+        if success:
+            if 'dataset' in sesh_bundle.json_pkg:
+                sesh_data = sesh_bundle.text
+            else:
+                sesh_bundle.ok = False
+                sesh_bundle.status_code = 487
 
-    def invoke_api(self, params):
+        if not sesh_bundle.ok:
+            print('Failure', sesh_bundle)
+            self.api_ok = False
+            sesh_data = None
+        return sesh_data
+
+    def getMasterList(self, session_id, apikey='Good'):
+        """ Get datasets for individual legislative session """
+        key = self.badKey
+        if apikey == 'Good':
+            key = self.apiKey
+
+        mast_data = None
+        mast_bundle = DataBundle('getDataset')
+        mast_params = {'key': key, 'op': 'getMasterList', 'id': session_id}
+
+        success = self.invoke_api(mast_bundle, mast_params)
+        if success:
+            if 'masterlist' in mast_bundle.json_pkg:
+                mast_data = mast_bundle.text
+            else:
+                mast_bundle.ok = False
+                mast_bundle.status_code = 487
+
+        if not mast_bundle.ok:
+            print('Failure', mast_bundle)
+            self.api_ok = False
+            mast_data = None
+        return mast_data
+
+    def invoke_api(self, bundle, params):
         """ Invoke the Legiscan API """
-
-        response = {}
+        EXCEEDED = "maximum query count"
+        bundle.ok = False
         if self.api_ok:
             try:
-                response = requests.get(url=self.url, params=params)
-                print(response.ok)
-                print(response.headers)
-                print(response.status_code)
-                print(len(response.content), len(response.text)) 
-                    
+                response = bundle.make_request(self.url, params)
+                result = bundle.load_response(response)
+                if result:
+                    if bundle.extension == 'json':
+                        if bundle.json_pkg['status'] == 'ERROR':
+                            self.api_ok = False
+                            bundle.ok = False
+                            bundle.status_code = 406
+                            pkg = bundle.json_pkg
+                            if 'alert' in pkg:
+                                bundle.name += ' *ERROR*'
+                                bundle.text = ('ERROR: ' +
+                                               pkg['alert']['message'])
+                                if EXCEEDED in bundle.text:
+                                    bundle.status_code = 429
+                    else:
+                        bundle.ok = False
+                        bundle.status_code = 415
             except Exception as e:
+                print('Error {}'.format(e))
                 self.api_ok = False
-                resp = response.json()
-                if resp:
-                    for r in resp:
-                        print(r, resp[r])
-                # raise LegiscanError
-        return resp
+                bundle.ok = False
+                bundle.status_code = 403
+        else:
+            bundle.status_code = 405
+        return bundle.ok
 
     def getBill(self, billID):
         """Return the document id (docID) for a given bill id."""
@@ -188,7 +243,6 @@ class Legiscan_API:
             print('and {} contains no entries.'.format(json_handle))
             raise LegiscanError
 
-        dot = ShowProgress()
         session, detail, num = 0, 0, 0
 
         for entry in bills:
@@ -198,7 +252,7 @@ class Legiscan_API:
             if 'doc_id' in bill:
                 detail += 1
         print('{}: Entries: {}  Session: {}   Detail: {}'.format(
-                json_handle, num_bills, session, detail))
+            json_handle, num_bills, session, detail))
 
         if self.api_ok:
             # import pdb; pdb.set_trace()
@@ -208,7 +262,6 @@ class Legiscan_API:
             if limit == 0 or limit >= num_bills:
                 for index in bills:
                     self.fetch_bill(bills, index)
-                    dot.show()
 
             # Mode 2: if limit is placed, only fetch bills that are
             #         missing detail like doc_id and doc_date.
@@ -217,7 +270,6 @@ class Legiscan_API:
                     if "doc_id" not in bills[index]:
                         self.fetch_bill(bills, index)
                         num += 1
-                        dot.show()
                         if num >= limit:
                             break
 
@@ -227,8 +279,6 @@ class Legiscan_API:
                 for j in range(limit):
                     index = randint(0, num_bills)
                     self.fetch_bill(bills, index)
-                    dot.show()
-            dot.end()
 
         textdata = json.dumps(bills)
         self.fob.upload_text(textdata, json_handle)
@@ -251,3 +301,73 @@ class Legiscan_API:
             bills[index]["doc_id"] = docID
             bills[index]["doc_date"] = LastDate
         return None
+
+
+if __name__ == "__main__":
+
+    leg = Legiscan_API()
+
+    save_api_ok = leg.api_ok
+    leg.api_ok = False
+    params = {}
+    bundle01 = DataBundle('Test1')
+    print('Test with API_OK, no params, API_OK', leg.api_ok)
+    r01 = leg.invoke_api(bundle01, params)
+    print('Result:', r01, bundle01)
+
+    leg.api_ok = True
+    bundle02 = DataBundle('Test2')
+    print('Test with no params, API_OK=', leg.api_ok)
+    r02 = leg.invoke_api(bundle02, params)
+    print('Result:', r02, bundle02)
+
+    bundle02b = DataBundle('Test2b')
+    dsl_params = {'key': leg.badKey}
+    r02b = leg.invoke_api(bundle02b, params)
+    print('Result:', r02b, bundle02b)
+
+    bundle02c = DataBundle('Test2c')
+    dsl_params = {'op': 'getDatasetList'}
+    r02c = leg.invoke_api(bundle02c, params)
+    print('Result:', r02c, bundle02c)
+
+    # import pdb; pdb.set_trace()
+    print('Test getDatasetList with bad API key')
+    r03 = leg.getDatasetList(apikey='Bad')
+    print('Result: ', r03, 'API_OK=', leg.api_ok)
+    leg.api_ok = True
+
+    print('Test getDatasetList with good API key')
+    r04 = leg.getDatasetList(apikey='Good')
+    print('Result:', len(r04))
+
+    r04_pkg = json.loads(r04)
+    print(r04_pkg['status'], len(r04_pkg['datasetlist']))
+    dsl = r04_pkg['datasetlist']
+
+    first_sesh = dsl[0]
+    session_id = first_sesh['session_id']
+    access_key = first_sesh['access_key']
+
+    print('Test getDataset with bad API key')
+    r05 = leg.getDataset(session_id, access_key, apikey='Bad')
+    print('Result: ', r05)
+    leg.api_ok = True
+
+    print('Test getDataset with invalid session id')
+    r06 = leg.getDataset(9999, access_key, apikey='Good')
+    print('Result: ', r06)
+
+    leg.api_ok = True
+    print('Test getDataset with invalid access key')
+    r07 = leg.getDataset(session_id, '', apikey='Good')
+    print('Result: ', r07)
+
+    leg.api_ok = True
+    print('Test getDataset')
+    r08 = leg.getDataset(session_id, access_key, apikey='Good')
+    print('Result: ', len(r08))
+
+    print('Test getMasterList')
+    r09 = leg.getMasterList(session_id, apikey='Good')
+    print('Result: ', len(r09))

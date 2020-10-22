@@ -53,6 +53,7 @@ class Impact(models.Model):
 
     class Meta:
         app_label = 'cfc_app'
+        ordering = ['date_added']
 
     text = models.CharField(max_length=80, unique=True)
     date_added = models.DateTimeField(auto_now_add=True)
@@ -130,6 +131,7 @@ class Law(models.Model):
     class Meta:
         app_label = 'cfc_app'
         verbose_name_plural = "laws"  # plural of legislation
+        ordering = ['key']
 
     key = models.CharField(max_length=20, null=False,
                            unique=True, default=get_default_law_key)
