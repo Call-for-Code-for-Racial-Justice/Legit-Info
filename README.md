@@ -233,7 +233,9 @@ LAMP stack bare-metal server or virtual machine.
 ## Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on the code of 
-conduct, and the process for submitting pull requests to the project.
+conduct, and the process for submitting pull requests to the project.  This
+project adheres to the PEP 8 Python Coding Style Guidelines, Django naming
+conventions, and other standards.  See [STYLE.md](docs/STYLE.md) for details.
 
 
 ## Authors

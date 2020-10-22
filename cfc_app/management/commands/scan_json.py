@@ -25,7 +25,6 @@ import base64
 import json
 import os
 import re
-import requests
 import zipfile
 from bs4 import BeautifulSoup
 from django.conf import settings
@@ -37,6 +36,7 @@ from cfc_app.PDFtoTEXT import PDFtoTEXT
 from cfc_app.models import Location
 from cfc_app.Legiscan_API import Legiscan_API, LegiscanError
 from cfc_app.Oneline import Oneline
+from cfc_app.DataBundle import DataBundle
 
 
 PARSER = "lxml"
@@ -46,15 +46,17 @@ SUMMARY_LIMIT = 1000
 # Put the original file name, doc date, title and summary ahead of text
 HeadForm = "{} {} _TITLE_ {} _SUMMARY_ {} _TEXT_"
 
-billRegex = re.compile(r"(\w\w)/\d\d\d\d-(\d\d\d\d).*/bill/(\w*).json$")
+billRegex = re.compile(r"^(\w\w)/\d\d\d\d-(\d\d\d\d).*/bill/(\w*).json$")
+dslRegex = re.compile(r"^(\w\w)-(\d\d\d\d)-(\w*).json$")
 nameForm = "{}_{}_Y{}.{}"
 
 
 class Command(BaseCommand):
-    help = 'For each state, scan the associated NN.json file, fetching '
-    help += 'legislation from Legiscan.API as either HTML or PDF file, '
-    help += 'and extract to TEXT.  Both the original (HTML/PDF) and the '
-    help += 'extracted TEXT file are stored in File/Object Storage.'
+    help = ("For each state, scan the associated SS-NNNN-Dataset.json "
+            "and SS-NNNN-Master.json files, fetching legislation from "
+            "as either HTML or PDF file, and extract to TEXT.  Both the "
+            "original (HTML/PDF) and the extracted TEXT file are stored "
+            "in File/Object Storage.")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -70,8 +72,9 @@ class Command(BaseCommand):
         parser.add_argument("--api", action="store_true",
                             help="Invoke Legiscan.com API")
         parser.add_argument("--state", help="Process single state: AZ, OH")
+        parser.add_argument("--session", help="Process a single session id")
         parser.add_argument("--limit", type=int, default=self.limit,
-                            help="Limit number of entries to detail")
+                            help="Limit number of items to extract per state")
         parser.add_argument("--skip", action="store_true",
                             help="Skip files already processed")
 
@@ -88,6 +91,8 @@ class Command(BaseCommand):
         if options['skip']:
             self.skip = True
 
+        # Use the Django "Location" database to get list of states.
+
         usa = Location.objects.get(shortname='usa')
         locations = Location.objects.order_by('hierarchy').filter(parent=usa)
         for loc in locations:
@@ -101,21 +106,42 @@ class Command(BaseCommand):
             print('Processing state: ', state)
             hlist = self.fob.list_items(prefix=state, suffix='.json')
 
+            sesh_dict = {}
             for json_name in hlist:
-                self.process_json(state, json_name)
+                mo = dslRegex.search(json_name)
+                if mo:
+                    state = mo.group(1)
+                    session_id = mo.group(2)
+                    corpus = mo.group(3)
+
+                    if options['session']:
+                        if session_id != options['session']:
+                            continue
+
+                    if session_id not in sesh_dict:
+                        sesh_dict[session_id] = []
+                    sesh_dict[session_id].append(corpus)
+
+            for session_id in sesh_dict:
+                sesh_array = sesh_dict[session_id]
+                if len(sesh_array) == 2:
+                    self.process_json(state, session_id)
 
         return None
 
-    def process_json(self, state, json_name):
-        """ Process NN-NNNN.json for this state """
+    def process_json(self, state, session_id):
+        """ Process SS-NNNN-Dataset.json and SS-NNNN-Master.json """
         # import pdb; pdb.set_trace()
 
-        json_str = self.fob.download_text(json_name)
-        zip_name = json_name.replace('.json', '.zip')
+        dsl_name = '{}-{}-Dataset.json'.format(state, session_id)
+        json_str = self.fob.download_text(dsl_name)
+        zip_name = dsl_name.replace('.json', '.zip')
 
-        print('Checking: ', json_name)
+        print('Checking: ', dsl_name)
         dot = ShowProgress()
-        if self.fob.name_exists(zip_name):
+
+        # If the ZIP file already exists, use it, otherwise create it.
+        if self.fob.item_exists(zip_name):
             msg_bytes = self.fob.download_binary(zip_name)
         else:
             package = json.loads(json_str)
@@ -125,6 +151,8 @@ class Command(BaseCommand):
                 msg_bytes = base64.b64decode(mimedata)
                 self.fob.upload_binary(msg_bytes, zip_name)
 
+        # We need ZIP file on local file system to read it, so we make
+        # a second copy under SOURCE_ROOT
         zip_path = os.path.join(settings.SOURCE_ROOT, 'scan_json.pdf')
         with open(zip_path, "wb") as zip_file:
             zip_file.write(msg_bytes)
@@ -335,20 +363,27 @@ class Command(BaseCommand):
         key = bill_name.replace("."+extension, "")
         title = key
         summary = key
+        params = {}
         # import pdb; pdb.set_trace()
         if extension == 'html':
-            resp = requests.get(chosen['url'])
-            print(resp.status_code, resp.headers)
-            textdata = resp.text
-            # import pdb; pdb.set_trace()
-            self.fob.upload_text(textdata, bill_name)
-            self.process_html(key, chosen['date'], title, summary, textdata)
+            html_bundle = DataBundle(bill_name)
+            response = html_bundle.make_request(chosen['state_link'], params)
+            result = html_bundle.load_response(response)
+            if result:
+                textdata = html_bundle.text
+                # import pdb; pdb.set_trace()
+                self.fob.upload_text(textdata, bill_name)
+                self.process_html(key, chosen['date'],
+                                  title, summary, textdata)
 
         elif extension == 'pdf':
-            response = requests.get(chosen['state_link'])
-            bindata = response.content
-            self.fob.upload_binary(bindata, bill_name)
-            self.process_pdf(key, chosen['date'], title, summary, bindata)
+            pdf_bundle = DataBundle(bill_name)
+            response = pdf_bundle.make_request(chosen['state_link'], params)
+            result = pdf_bundle.load_response(response)
+            if result:
+                bindata = pdf_bundle.content
+                self.fob.upload_binary(bindata, bill_name)
+                self.process_pdf(key, chosen['date'], title, summary, bindata)
 
         return
 

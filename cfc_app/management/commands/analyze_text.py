@@ -60,12 +60,12 @@ RLIMIT = 5   # number of phrases to be returned by IBM Watson NLU
 
 class Command(BaseCommand):
 
-    help = 'For all text files found in File/Object storage, run the'
-    help += 'IBM Watson Natural Language Understanding (NLU) API, generate '
-    help += 'relevant words or phrases, and compare these to the '
-    help += 'wordmap.csv table determine the impact of each legislation.'
-    help += 'The wordmap.csv is stored in the /sources directory as part '
-    help += 'this application project.'
+    help = ("For all text files found in File/Object storage, run the "
+            "IBM Watson Natural Language Understanding (NLU) API, generate "
+            "relevant words or phrases, and compare these to the "
+            "'wordmap.csv' table determine the impact of each legislation."
+            "The wordmap.csv is stored in the /sources directory as part "
+            "this application.")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -13,7 +13,6 @@ from ibm_botocore.client import Config, ClientError
 MAXLIMIT = 1000
 TESTLIMIT = 10
 
-
 class FOB_Storage():
     """
     Support both Local File and Remote Object Storage
@@ -130,16 +129,22 @@ class FOB_Storage():
             if after:
                 cursor = after
 
+            objlimit = MAXLIMIT
+            if (limit > 0) and (suffix is None):
+                objlimit = min(objlimit, limit)
+
             for n in range(999):   # Avoid run-away tasks
                 if prefix:
                     response = self.cos.list_objects_v2(
-                        Bucket=self.cos_bucket,
-                        StartAfter=cursor, MaxKeys=limit,
-                        Prefix=prefix)
+                                Bucket=self.cos_bucket,
+                                StartAfter=cursor, Prefix=prefix, 
+                                MaxKeys=objlimit)
+                    
                 else:
                     response = self.cos.list_objects_v2(
                         Bucket=self.cos_bucket,
-                        StartAfter=cursor, MaxKeys=limit)
+                        StartAfter=cursor, MaxKeys=objlimit)
+
                 if 'Contents' in response:
                     contents = response['Contents']
                     for content in contents:
@@ -224,6 +229,83 @@ class FOB_Storage():
                 os.remove(fullname)
         return self
 
+    def test_with_empty(self):
+        TEST_LIMIT = 10
+    
+        SAMPLE_BIN = b'How quickly daft jumping zebras vex'
+        SAMPLE_TEXT = "The quick brown fox jumps over a lazy dog"
+        UNICODE_TEXT = "ā <- abreve, ć <- c acute, ũ <- u tilde"
+    
+        fob.upload_binary(SAMPLE_BIN, 'AAA-TEST.bin')
+        fob.upload_text(SAMPLE_TEXT, 'AAA-TEST.txt')
+        fob.upload_binary(SAMPLE_BIN, 'BBB-TEST.bin')
+        fob.upload_text(UNICODE_TEXT, 'BBB-TEST.txt')
+        fob.upload_binary(SAMPLE_BIN, 'CCC-TEST.bin')
+        fob.upload_text(SAMPLE_TEXT, 'CCC-TEST.txt')
+    
+        print('List all items:')
+        print(fob.list_items(limit=0))
+    
+        print('Limit=3:')
+        print(fob.list_items(limit=3))
+    
+        print("Prefix='BBB':")
+        print(fob.list_items(prefix='BBB', limit=TESTLIMIT))
+    
+        print("Suffix='.bin':")
+        print(fob.list_items(suffix='.bin', limit=TESTLIMIT))
+    
+        print("Prefix='B' and Suffix='.bin': ")
+        print(fob.list_items(prefix='B', suffix='.bin', limit=TESTLIMIT))
+    
+        # import pdb; pdb.set_trace()
+        print("After='AAA-TEST.txt' ")
+        print(fob.list_items(after='AAA-TEST.txt', limit=TESTLIMIT))
+    
+        print("After='AAA-TEST.txt' Limit=3 ")
+        print(fob.list_items(after='AAB-TEST.txt', limit=3))
+
+        print('Download binary:')
+        bin_test = fob.download_binary('AAA-TEST.bin')
+        print(bin_test)
+        if bin_test != SAMPLE_BIN:
+            print('Error, binary data does not match')
+    
+        print('Download text:')
+        # import pdb; pdb.set_trace()
+        text_data = fob.download_text('BBB-TEST.txt')
+        print('=['+text_data+']=')
+        if text_data != UNICODE_TEXT:
+            print('Error, text data does not match')
+    
+        text_data = fob.download_text('CCC-TEST.txt')
+        print('=['+text_data+']=')
+        if text_data != SAMPLE_TEXT:
+            print('Error, text data does not match')
+    
+        print('Test if BBB-TEST.txt exists')
+        if fob.item_exists('BBB-TEST.txt'):
+            print('--- BBB-TEST.txt exists!')
+        else:
+            print('Not found: BBB-TEST.txt')
+    
+        print('Delete existing file BBB-TEST.txt:')
+        fob.remove_item('BBB-TEST.txt')
+        print(fob.list_items(limit=TESTLIMIT))
+    
+        print('Delete non-existient file ZZZ-TEST.unk:')
+        fob.remove_item('ZZZ-TEST.unk')
+        print(fob.list_items(limit=TESTLIMIT))
+
+        # Cleanup directory space
+        fob.remove_item('AAA-TEST.bin')
+        fob.remove_item('AAA-TEST.txt')
+        fob.remove_item('BBB-TEST.bin')
+        fob.remove_item('BBB-TEST.txt')
+        fob.remove_item('CCC-TEST.bin')
+        fob.remove_item('CCC-TEST.txt')
+        return None    
+
 
 if __name__ == "__main__":
 
@@ -239,81 +321,14 @@ if __name__ == "__main__":
         sys.exit(4)
 
     print('Testing: ', sys.argv[0], mode)
-    TEST_LIMIT = 10
-
+    
+    # Test with empty structure first
     fob = FOB_Storage(mode, filesys='/tmp/FOB-TEST', bucket='fob-test')
+    fob.test_with_empty()
 
-    SAMPLE_BIN = b'How quickly daft jumping zebras vex'
-    SAMPLE_TEXT = "The quick brown fox jumps over a lazy dog"
-    UNICODE_TEXT = "ā <- abreve, ć <- c acute, ũ <- u tilde"
-
-    fob.upload_binary(SAMPLE_BIN, 'AAA-TEST.bin')
-    fob.upload_text(SAMPLE_TEXT, 'AAA-TEST.txt')
-    fob.upload_binary(SAMPLE_BIN, 'BBB-TEST.bin')
-    fob.upload_text(UNICODE_TEXT, 'BBB-TEST.txt')
-    fob.upload_binary(SAMPLE_BIN, 'CCC-TEST.bin')
-    fob.upload_text(SAMPLE_TEXT, 'CCC-TEST.txt')
-
-    print('List all items:')
-    print(fob.list_items(limit=TESTLIMIT))
-
-    print('Limit=3:')
-    print(fob.list_items(limit=3))
-
-    print("Prefix='BBB':")
-    print(fob.list_items(prefix='BBB', limit=TESTLIMIT))
-
-    print("Suffix='.bin':")
-    print(fob.list_items(suffix='.bin', limit=TESTLIMIT))
-
-    print("Prefix='B' and Suffix='.bin': ")
-    print(fob.list_items(prefix='B', suffix='.bin', limit=TESTLIMIT))
-
-    # import pdb; pdb.set_trace()
-    print("After='AAA-TEST.txt' ")
-    print(fob.list_items(after='AAA-TEST.txt', limit=TESTLIMIT))
-
-    print("After='AAA-TEST.txt' Limit=3 ")
-    print(fob.list_items(after='AAB-TEST.txt', limit=3))
-
-    print('Download binary:')
-    bin_test = fob.download_binary('AAA-TEST.bin')
-    print(bin_test)
-    if bin_test != SAMPLE_BIN:
-        print('Error, binary data does not match')
-
-    print('Download text:')
-    # import pdb; pdb.set_trace()
-    text_data = fob.download_text('BBB-TEST.txt')
-    print('=['+text_data+']=')
-    if text_data != UNICODE_TEXT:
-        print('Error, text data does not match')
-
-    text_data = fob.download_text('CCC-TEST.txt')
-    print('=['+text_data+']=')
-    if text_data != SAMPLE_TEXT:
-        print('Error, text data does not match')
-
-    print('Test if BBB-TEST.txt exists')
-    if fob.item_exists('BBB-TEST.txt'):
-        print('--- BBB-TEST.txt exists!')
-    else:
-        print('Not found: BBB-TEST.txt')
-
-    print('Delete existing file BBB-TEST.txt:')
-    fob.remove_item('BBB-TEST.txt')
-    print(fob.list_items(limit=TESTLIMIT))
-
-    print('Delete non-existient file ZZZ-TEST.unk:')
-    fob.remove_item('ZZZ-TEST.unk')
-    print(fob.list_items(limit=TESTLIMIT))
-
-    # Cleanup directory space
-    fob.remove_item('AAA-TEST.bin')
-    fob.remove_item('AAA-TEST.txt')
-    fob.remove_item('BBB-TEST.bin')
-    fob.remove_item('BBB-TEST.txt')
-    fob.remove_item('CCC-TEST.bin')
-    fob.remove_item('CCC-TEST.txt')
+    # test_with_live copy
+    fob = FOB_Storage(mode)
+    item_list = fob.list_items(limit=0)
+    print(len(item_list))
 
     print('Congratulations')

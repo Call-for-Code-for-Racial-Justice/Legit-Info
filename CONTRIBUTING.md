@@ -1,11 +1,25 @@
 # Contributing
 
-When contributing a major change to this repository, please first discuss the change you wish to make via an [issue](contributing/ISSUES.md) or via
-[Slack in the #racial-justice-legit-info channel](https://callforcode.slack.com/archives/C01CRAN53CM) in the [Call for Code Slack workspace](https://callforcode.org/slack). Minor issues can simply be addressed by sending by a pull request.
+When contributing a major change to this repository, please first discuss the
+change you wish to make via an [issue](contributing/ISSUES.md) or via
+[Slack in the #racial-justice-legit-info 
+channel](https://callforcode.slack.com/archives/C01CRAN53CM) in the [Call for
+Code Slack workspace](https://callforcode.org/slack). Minor issues can simply
+be addressed by sending by a pull request.
 
-All [pull requests](contributing/PULL-REQUESTS.md) will require you to ensure the change is certified via the [Developer Certificate of Origin (DCO)](https://github.com/apps/dco/). The DCO is a lightweight way for contributors to certify that they wrote or otherwise have the right to submit the code they are contributing to the project.
+All [pull requests](contributing/PULL-REQUESTS.md) will require you to ensure
+the change is certified via the [Developer Certificate of Origin 
+(DCO)](https://github.com/apps/dco/). The DCO is a lightweight way for 
+contributors to certify that they wrote or otherwise have the right to submit
+the code they are contributing to the project.
 
-Please note we have a [Code of Conduct](#code-of-conduct), please follow it in all your interactions with the project and its community.
+Please note we have a [Code of Conduct](#code-of-conduct), please follow it in
+all your interactions with the project and its community.
+
+## Coding Standards
+
+This project adheres to the PEP 8 Python Coding Style Guidelines, Django naming
+conventions, and other standards.  See [STYLE.md](docs/STYLE.md) for details.
 
 ## Pull Request Process
 
@@ -21,7 +35,10 @@ Please note we have a [Code of Conduct](#code-of-conduct), please follow it in a
 
 In the interest of fostering an open and welcoming environment, we as
 contributors and maintainers pledge to making participation in our project and
-our community a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.
+our community a harassment-free experience for everyone, regardless of age, 
+body size, disability, ethnicity, gender identity and expression, level of 
+experience, nationality, personal appearance, race, religion, or sexual 
+identity and orientation.
 
 ### Our Standards
 

@@ -1,7 +1,7 @@
 # get_api_data.py
 # By Tony Pearson, IBM, 2020
 #
-# This is intended as a background task
+# This is intended as an asynchronous background task
 #
 # You can invoke this in either "on demand" or as part of a "cron" job
 #
@@ -31,12 +31,13 @@ StateForm = 'File {}: Session {} Year: {} Date: {} Size: {} bytes'
 
 
 class Command(BaseCommand):
-    help = 'For each state in the United States listed under LOCATIONS, '
-    help += 'this script will fetch the most recent legislative sessions, '
-    help += 'and create a json output file SS-NNNN.json where '
-    help += 'SS is the two-letter state abbreviation like AZ or OH, and '
-    help += 'NNNN is the four-digit session_id from Legiscan.com API.'
-    help += 'The SS-NNNN.json files are stored in File/Object Storage.'
+    help = ("For each state in the United States listed in cfc_app_law "
+            "database table, this script will fetch the most recent "
+            "legislative sessions, and create a JSON-formatted output file "
+            "SS-NNNN.json where 'SS' is the two-letter state abbreviation "
+            "like AZ or OH, and 'NNNN' is the four-digit session_id assigned "
+            "by Legiscan.com API. The SS-NNNN.json files are stored in "
+            "File/Object Storage.")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
