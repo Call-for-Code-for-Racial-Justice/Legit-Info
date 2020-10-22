@@ -18,7 +18,6 @@
 
 from django.core.management.base import BaseCommand, CommandError
 from cfc_app.FOB_Storage import FOB_Storage
-from django.conf import settings
 
 
 class Command(BaseCommand):
@@ -31,6 +30,9 @@ class Command(BaseCommand):
         self.fob_object = FOB_Storage('OBJECT')
         self.olist = []
         self.maxlimit = 1000
+        self.delcount = 0
+        self.putcount = 0
+        self.getcount = 0
         return None
 
     def add_arguments(self, parser):
@@ -52,109 +54,128 @@ class Command(BaseCommand):
         return None
 
     def handle(self, *args, **options):
-        self.flist = self.fob_file.list_names(prefix=options['prefix'],
-                                              suffix=options['suffix'],
-                                              after=options['after'])
-        name = options['only']
-        if name:
-            if name in self.flist or self.fob_file.name_exists(name):
-                self.flist = [name]
+
+        prefix = options['prefix']
+        suffix = options['suffix']
+        after = options['after']
+
+        # If --only specified, ignore prefix/suffix/after options
+        only_name = None
+        if options['only']:
+            only_name = options['only']
+            prefix = None
+            suffix = None
+            after = None
+
+        # Get a list of ALL files on FOB FILE that match criteria
+        self.flist = self.fob_file.list_items(prefix=prefix, suffix=suffix,
+                                              after=after, limit=0)
+        if only_name:
+            if only_name in self.flist:
+                self.flist = [only_name]
             else:
-                print('name {} not found in FILE'.format(name))
+                print('name {} not found in FILE'.format(only_name))
                 self.flist = []
 
-        self.olist = self.fob_object.list_names(prefix=options['prefix'],
-                                                suffix=options['suffix'],
-                                                after=options['after'])
-
-        name = options['only']
-        if name:
-            if name in self.olist or self.fob_object.name_exists(name):
-                self.olist = [name]
+        # Get a list of ALL files on FOB FILE that match criteria
+        self.olist = self.fob_object.list_items(prefix=prefix, suffix=suffix,
+                                                after=after, limit=0)
+        if only_name:
+            if only_name in self.olist:
+                self.olist = [only_name]
             else:
-                print('Name {} not found in OBJECT'.format(name))
+                print('Name {} not found in OBJECT'.format(only_name))
                 self.olist = []
 
         print('Number of files found:', len(self.flist))
         print('Number of objects found:', len(self.olist))
 
-        maxdel = min(options['maxput'], self.maxlimit)
+        maxdel = min(options['maxdel'], self.maxlimit)
         maxput = min(options['maxput'], self.maxlimit)
         maxget = min(options['maxget'], self.maxlimit)
-        print(maxput, maxget)
 
         del_count, put_count, get_count = 0, 0, 0
 
+        # Delete items from IBM Cloud Object Store if not found on FILE
         if maxdel > 0:
-            self.delete_items(found_in='OBJECT', but_not_in='FILE',
-                              limit=maxdel)
+            self.del_count = self.delete_items(maxdel, found_in='OBJECT',
+                                          but_not_in='FILE')
 
         # Send Files to Object
         if maxput > 0:
-            for name in flist:
-                if name not in olist:
-
-                    bindata = self.fob_file.download_binary(name)
-                    self.fob_object.upload_binary(bindata, name)
-                    put_count += 1
-
-                    if options['readback']:
-                        bindata2 = self.fob_object.download_binary(name)
-                        print('Length of file;', len(bindata), len(bindata2))
-                        if bindata != bindata2:
-                            raise CommandError('Put failed '+name)
-                    print('File ', name, 'copied to OBJECT storage')
-
-                    if put_count >= maxput:
-                        break
-
-                elif options['skip']:
-                    print('File ', name, 'exists in both places, skipping')
+            self.put_count = self.copy_items(maxput, options, from_fob='FILE',
+                                             to_fob='OBJECT')
 
         # Send Object to Files
         if maxget > 0:
-            for name in olist:
-                if name not in flist:
-                    get_count += 1
-                    if get_count >= maxget:
-                        break
-                    bindata = self.fob_object.download_binary(name)
-                    self.fob_file.upload_binary(bindata, name)
+            self.get_count = self.copy_items(maxget, options, from_fob='OBJECT',
+                                             to_fob='FILE')
 
-                    if options['readback']:
-                        bindata2 = self.fob_file.download_binary(name)
-                        print('Length of file;', len(bindata), len(bindata2))
-                        if bindata != bindata2:
-                            raise CommandError('Put failed '+name)
-                    print('Object ', name, 'copied to FILE storage')
-
-                elif options['skip']:
-                    print('Object ', name, 'exists in both places, skipping')
-
-        print('Number of DELETE requests from OBJECT storage: ', put_count)
-        print('Number of PUT requests to OBJECT storage:      ', put_count)
-        print('Number of GET requests from OBJECT storage:    ', get_count)
-
+        print('Nunmber of DELETE requests from OBJECT: ', del_count)
+        print('Nunmber of PUT requests from OBJECT:    ', put_count)
+        print('Nunmber of GET requests from OBJECT:    ', get_count)
         return None
 
-    def del_items(self, found_in=None, but_not_in=None, limit=10):
+    def delete_items(self, maxcount, found_in=None, but_not_in=None):
+        # import pdb; pdb.set_trace()
+
         if found_in == 'FILE' and but_not_in == 'OBJECT':
             item_list = self.flist
-            check_against = self.fob_object
+            other_list = self.olist
             remove_from = self.fob_file
         elif found_in == 'OBJECT' and but_not_in == 'FILE':
             item_list = self.olist
-            check_against = self.fob_file
+            other_list = self.flist
             remove_from = self.fob_object
         else:
-            print('Invalid combination of parameters')
-            return
+            raise CommandError('Invalid combination of parameters')
 
         count = 0
         for name in item_list:
-            if not check_against.item_exists(name):
+            if name not in other_list:
                 remove_from.remove_item(name)
-        return None
+                print('Removed from {}: {}'.format(found_in, name))
+                count += 0
+                if count >= maxcount:
+                    break
+        return count
 
-    def copy_names(from_fob=None, to_fob=None):
-        return None
+    def copy_items(self, maxcount, options, from_fob=None, to_fob=None):
+        if (from_fob == 'FILE') and (to_fob == 'OBJECT'):
+            item_list = self.flist
+            other_list = self.olist
+            read_from = self.fob_file
+            write_to = self.fob_object
+        elif (from_fob == 'OBJECT') and (to_fob == 'FILE'):
+            item_list = self.olist
+            other_list = self.flist
+            read_from = self.fob_object
+            write_to = self.fob_file
+        else:
+            raise CommandError('Invalid combination of parameters')
+
+        count = 0
+        for name in item_list:
+            if name not in other_list:
+
+                bindata = read_from.download_binary(name)
+                write_to.upload_binary(bindata, name)
+                count += 1
+
+                if options['readback']:
+                    bindata2 = self.fob_object.download_binary(name)
+                    if bindata != bindata2:
+                        raise CommandError('Put failed '+name)
+                print('File ', name, 'copied to', to_fob)
+
+                if count >= maxcount:
+                    break
+
+            elif options['skip']:
+                print('File ', name, 'exists in both places, skipping')
+
+            else:
+                # perhaps we can compare files if both exist?
+                pass
+
+        return count

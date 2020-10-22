@@ -30,6 +30,7 @@ class Command(BaseCommand):
         self.fob_object = FOB_Storage('OBJECT')
         self.maxlimit = 400
         self.mode = "FILE"
+        self.verbosity = 1
         return None
 
     def add_arguments(self, parser):
@@ -38,7 +39,7 @@ class Command(BaseCommand):
         parser.add_argument("--after", help="Start after this item name")
         parser.add_argument("--mode", help="From FILE, OBJECT, or BOTH")
         parser.add_argument("--limit", help="Number of items to process",
-                            default=0)
+                            type=int, default=0)  # 0 is UNLIMITED
         return None
 
     def handle(self, *args, **options):
@@ -46,6 +47,9 @@ class Command(BaseCommand):
         mode = self.mode
         if options['mode']:
             mode = options['mode']
+
+        if options['verbosity']:
+            self.verbosity = options['verbosity']
 
         if mode in ['FILE', 'BOTH']:
             self.fob_file = FOB_Storage('FILE')
@@ -63,7 +67,7 @@ class Command(BaseCommand):
         return None
 
     def show_stats(self, fob, mode, prefix=None, suffix=None, after=None,
-                   limit=None):
+                   limit=10):
         cursor = ''
         if after:
             cursor = after
@@ -71,54 +75,54 @@ class Command(BaseCommand):
         by_state, state_list = {}, ['AZ', 'OH']
         by_ext, ext_list = {}, ['.html', '.pdf', '.txt']
 
+        item_list = fob.list_items(prefix=prefix, suffix=suffix,
+                                   after=cursor, limit=0)
         count = 0
-        for n in range(50):
-            item_list = self.fob_file.list_items(prefix=prefix, suffix=suffix,
-                                               after=cursor)
-            if len(item_list) == 0 or (limit > 0 and count >= limit):
+        for name in item_list:
+            cursor = name
+            if self.verbosity == 3:
+                print(name)
+
+            state = name[:2]
+            if state not in state_list:
+                state = 'Other'
+
+            if state in by_state:
+                by_state[state] += 1
+            else:
+                by_state[state] = 1
+
+            extension = 'None'
+            if '.' in name:
+                parts = name.rsplit('.', 1)
+                extension = '.' + parts[1]
+                if extension not in ext_list:
+                    ext_list.append(extension)
+
+            if extension in by_ext:
+                by_ext[extension] += 1
+            else:
+                by_ext[extension] = 1
+
+            count += 1
+            if limit > 0 and count >= limit:
                 break
 
-            for name in item_list:
-                cursor = name
-
-                state = name[:2]
-                if state not in state_list:
-                    state = 'Other'
-
-                if state in by_state:
-                    by_state[state] += 1
-                else:
-                    by_state[state] = 1
-
-                extension = 'None'
-                if '.' in name:
-                    parts = name.rsplit('.', 1)
-                    extension = '.' + parts[1]
-                    if extension not in ext_list:
-                        ext_list.append(extension)
-
-                if extension in by_ext:
-                    by_ext[extension] += 1
-                else:
-                    by_ext[extension] = 1
-
-                count += 1
-                if limit > 0 and count >= limit:
-                    break
-
-        print('Mode = ', mode, '(Default Setting: ', settings.FOB_METHOD, ')')
+        print('Mode = ', mode, '(Default: ' + settings.FOB_METHOD + ')')
         print('Total number of items processed: ', count)
 
         print('Statistics by STATE prefix: ')
         if 'Other' in by_state:
             state_list.append('Other')
         for state in state_list:
-            print(' ', state,  by_state[state])
+            if state in by_state:
+                print(' ', state,  by_state[state])
 
         print('Statistics by extension suffix: ')
         if 'None' in by_ext:
             ext_list.append('None')
         for ext in ext_list:
-            print(' ', ext, by_ext[ext])
+            if ext in by_ext:
+                print(' ', ext, by_ext[ext])
 
         return None
