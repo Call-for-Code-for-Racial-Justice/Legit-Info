@@ -31,16 +31,16 @@ def main(argv):
         counties = file.readlines()
         counties = [x.strip() for x in counties]
 
-    # count all occurences of cities and counties in bill
+    # count all occurrences of cities and counties in bill
     with open(bill_file, 'r') as file:
         bill = file.read()
         for city in cities:
-            occurences = bill.count(city)
-            print ("Occurences of %s: %d" %(city, occurences))
+            occurrences = bill.count(city)
+            print ("Occurrences of %s: %d" %(city, occurrences))
         print ("\n")
         for county in counties:
-            occurences = bill.count(county)
-            print ("Occurences of %s: %d" %(county, occurences))
+            occurrences = bill.count(county)
+            print ("Occurrences of %s: %d" %(county, occurrences))
 
 if __name__ == '__main__':
     main(sys.argv[1:])
