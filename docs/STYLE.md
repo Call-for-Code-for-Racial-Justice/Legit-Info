@@ -1,10 +1,44 @@
 # Style Guidelines
 
+## Contents
+
+1. [Character Set](#character-set)
+1. [Python Style Guide](#python-style-guide)
+
 ## Character Set
 
-This project uses UTF-8.
+This project uses UTF-8 character set, the default for Python and HTML5,
+except Python identifiers (variables, methods, functions) that should be
+written in 7-bit ASCII, a subset of UTF-8.  See [UTF-8
+](https://en.wikipedia.org/wiki/UTF-8) in Wikipedia for details.
 
-## PEP 8 Style Guide for Python
+the following terminology is used in the rest of this document:
+
+* UTF-8: a multi-byte character representation based on Unicode.  Most
+characters use only a single byte.
+* ASCII: refers to the 7-bit standard. For compatability, the first 128 
+characters of UTF-8 is identical to ASCII.
+
+Capitalization methods are defined as follows:
+
+* Uppercase - Letters in ABCDEFGHIJKLMNOPQRSTUVWXYZ
+* Lowercase - Letters in abcdefghijklmnopqrstuvwxyz
+* SentenceCase -- Statements that have uppercase as the first word in a
+standard english sentence, other words start with lower case letters unless
+they are formal names or acronyms.  Full UTF-8 character set supported to
+handle foreign names and words with international characters. The sentence 
+ends with a period.
+* SnakeCase -- lowercase ASCII characters with words separated by underscore.
+Example: this_function_name
+* [CamelCase
+](https://en.wikipedia.org/wiki/Camel_case) -- multiple words combined without 
+spaces, first character is lowercase ASCII, and subsequent words start with
+uppercase ASCII letter.  Example:  thisFunctionName
+* CapWords -- often called PascalCase or upper CamelCase -- all words start 
+with uppercase, with no spaces in between.  Example:  ThisFunctionName
+
+
+## Python Style Guide
 This project adheres to the [PEP 8 Style Guide for Pyton 
 Code](https://www.python.org/dev/peps/pep-0008/).  PEP — short for Python 
 Enhancement Proposal — is a list of documents that propose new features or 
@@ -12,7 +46,8 @@ conventions for the Python programming language. Of these, PEP 8, is a living
 document of style conventions for writing Python
 
 Here is a brief summary, based in part [A Five-Minute Introduction to Python's 
-Style Guide PEP 8](https://medium.com/code-85/a-five-minute-introduction-to-pythons-style-guide-pep-8-57202886265f)
+Style Guide PEP 8
+](https://medium.com/code-85/a-five-minute-introduction-to-pythons-style-guide-pep-8-57202886265f)
 by Jonathan Hsu.
 
 **Naming Conventions**
@@ -22,13 +57,13 @@ and lower case (a-z) characters used in identifiers.
 
 * For functions, class methods, and variables, use snake case (lowercase 
 letters and underscores to separate words).
-* For classes, use CapWords [
-CamelCase](https://en.wikipedia.org/wiki/Camel_case): capitalize the first 
+* For classes and API methods, use CapWords [
+: capitalize the first 
 letter of each word.
 * For constants, use all capital letters and underscores to separate words.
 * Avoid using overly abbreviated names such as fn; write out first_name 
 instead.
-* All identifiers must be in ASCII only, using English words.
+* All identifiers must be in 7-bit ASCII only, using English words.
 
 **Indentation**
 
@@ -65,9 +100,33 @@ on side-by-side windows.
 * Comments that contradict the code are worse than no comments. Always make a
 priority of keeping the comments meaningful and up-to-date when the code
 changes!
-* Comments should be complete sentences. 
+* Comments should be complete sentences in SentenceCase capitalization. 
 * Use triple-doublequotes """ to write docstrings for all public modules,
 functions, classes, and methods.
+
+To check your code for consistency to these guidelines, use the 
+[flake8](https://pypi.org/project/flake8/) utility.  Any code that results
+in flake8 errors prevents the application from being deployed on IBM Cloud.
+
+```console
+$ flake8  my_program.py
+```
+
+To better understand guideline violates flagged by flake8, use the 
+[pycodestyle](https://github.com/PyCQA/pycodestyle) utility.
+
+```console
+$ pycodestyle  --show-source  --show-pep8  my_program.py
+```
+
+
+Many guideline violations flagged by flake8 can be automatically corrected
+using [autopep8](https://pypi.org/project/autopep8) utility.  For example:
+
+```console
+$ autopep8  --in-place  my_program.py
+```
+
 
 
 ## Django Conventions

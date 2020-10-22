@@ -8,7 +8,6 @@ localdev-config.json
 venv/
 secret-smtp-mailtrap.env
 results/*.csv
-sources/*.json
 sources/*.html
 sources/*.pdf
 sources/*.txt
