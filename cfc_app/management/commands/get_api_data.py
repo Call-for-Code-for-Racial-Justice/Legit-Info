@@ -23,7 +23,7 @@
 import json
 from django.core.management.base import BaseCommand, CommandError
 from cfc_app.models import Location
-from cfc_app.Legiscan_Tony import Legiscan_API
+from cfc_app.LegiscanAPI import LegiscanAPI
 from cfc_app.FOB_Storage import FOB_Storage
 from django.conf import settings
 
@@ -42,7 +42,7 @@ class Command(BaseCommand):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fob = FOB_Storage(settings.FOB_METHOD)
-        self.leg = Legiscan_API()
+        self.leg = LegiscanAPI()
         self.use_api = False
         self.limit = 1
         self.list_name = 'Legiscan-List.json'

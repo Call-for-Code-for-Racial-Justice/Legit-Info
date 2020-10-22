@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-# Legiscan_API.py -- Pull data from Legiscan.com API
+# LegiscanAPI.py -- Pull data from Legiscan.com API
 # By Uchechukwu Uboh and Tony Pearson, IBM, 2020
 #
-# Legiscan_API class automates the retrival and curation of bill data for a
+# LegiscanAPI class automates the retrival and curation of bill data for a
 # particular US state. Before running this class, your Legiscan.com apikey
 # needs to be an environmental variable with the key of "LEGISCAN_API_KEY".
 # Visit https://legiscan.com/legiscan to create your own Legiscan.com apikey.
@@ -25,11 +25,11 @@ class APIkeyError(LegiscanError):
     pass
 
 
-class Legiscan_API:
+class LegiscanAPI:
 
     def __init__(self):
-        """Constructor for Legiscan_API.
-           Checks if a Legiscan_API apikey exists."""
+        """Constructor for LegiscanAPI.
+           Checks if a LegiscanAPI apikey exists."""
         self.apiKey = os.getenv('LEGISCAN_API_KEY', None)
         if not self.apiKey:
             raise APIkeyError
@@ -305,7 +305,7 @@ class Legiscan_API:
 
 if __name__ == "__main__":
 
-    leg = Legiscan_API()
+    leg = LegiscanAPI()
 
     save_api_ok = leg.api_ok
     leg.api_ok = False

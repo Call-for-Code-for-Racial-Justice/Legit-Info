@@ -34,7 +34,7 @@ from cfc_app.FOB_Storage import FOB_Storage
 from cfc_app.ShowProgress import ShowProgress
 from cfc_app.PDFtoTEXT import PDFtoTEXT
 from cfc_app.models import Location
-from cfc_app.Legiscan_API import Legiscan_API, LegiscanError
+from cfc_app.LegiscanAPI import LegiscanAPI, LegiscanError
 from cfc_app.Oneline import Oneline
 from cfc_app.DataBundle import DataBundle
 
@@ -61,7 +61,7 @@ class Command(BaseCommand):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fob = FOB_Storage(settings.FOB_METHOD)
-        self.leg = Legiscan_API()
+        self.leg = LegiscanAPI()
 
         self.use_api = False
         self.skip = False
