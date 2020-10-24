@@ -181,5 +181,5 @@ class Hash(models.Model):
 
     def __str__(self):
         """Return a string representation of the model."""
-        desc = '{} ({}}'.format(self.item_name, self.FOB_method)
+        desc = '{} ({})'.format(self.item_name, self.fob_method)
         return desc

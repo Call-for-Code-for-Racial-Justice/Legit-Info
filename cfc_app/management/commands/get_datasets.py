@@ -1,4 +1,4 @@
-# get_api_data.py
+# get_datasets.py
 # By Tony Pearson, IBM, 2020
 #
 # This is intended as an asynchronous background task
@@ -7,33 +7,34 @@
 #
 # On Demand:
 # [..] $ pipenv shell
-# (cfc) $ ./stage1 get_api_data --api --state AZ --limit 10
+# (cfc) $ ./stage1 get_datasets --api --state AZ --limit 10
 #
 # Cron Job:
-# /home/yourname/Develop/legit-info/cron1 get_api_data --api --limit 10
+# /home/yourname/Develop/legit-info/cron1 get_datasets --api --limit 10
 #
-# The Legiscan.com API only allows 30,000 fetches per 30-day period, and
-# each legislation requires at least 2 fetches, so use the --limit keyword
+# The Legiscan.com API only allows 30,000 fetches per 30-day period, so
+# we have optimized this application to minimize API calls to Legiscan.
 #
 # If you leave out the --api, the Legiscan.com API will not be invoked,
-# this is useful to see the status of AZ.json and OH.json files.
+# this is useful to see the status of existing Dataset JSON files.
 #
 # Debug with:  import pdb; pdb.set_trace()
 
 import datetime as DT
 import json
-import re
 from django.core.management.base import BaseCommand, CommandError
 from cfc_app.models import Location, Hash
 from cfc_app.LegiscanAPI import LegiscanAPI
-from cfc_app.FOB_Storage import FOB_Storage, DSLregex
+from cfc_app.FOB_Storage import FOB_Storage
 from cfc_app.views import load_default_locations
 from django.conf import settings
 
-StateForm = 'Session {} Year: {} Date: {} Size: {} bytes'
-DateForm = '{} {}'
 
 class Command(BaseCommand):
+
+    StateForm = 'Session {} Year: {} Date: {} Size: {} bytes'
+    VERSIONS = 5   # Number of weeks to keep DatasetLists from Legiscan
+
     help = ("For each state in the United States listed in cfc_app_law "
             "database table, this script will fetch the most recent "
             "legislative sessions, and create a JSON-formatted output file "
@@ -76,7 +77,6 @@ class Command(BaseCommand):
             self.frequency = options['frequency']
 
         self.list_data = self.recent_enough()
-        # import pdb; pdb.set_trace()
 
         # Get the list of states from the Django database for "Location"
 
@@ -85,7 +85,7 @@ class Command(BaseCommand):
         except Location.DoesNotExist:
             load_default_locations()
             usa = Location.objects.get(shortname='usa')
-            
+
         locations = Location.objects.filter(parent=usa)
         if not locations:
             load_default_locations()
@@ -101,7 +101,6 @@ class Command(BaseCommand):
                 if state != options['state']:
                     continue
 
-            # import pdb; pdb.set_trace()
             print('Processing: {} ({})'.format(loc.desc, state))
 
             # Get dataset and master files, up to the --limit set
@@ -112,9 +111,9 @@ class Command(BaseCommand):
         return None
 
     def recent_enough(self):
-       
+
         now = DT.datetime.today()
-        week_ago = now - DT.timedelta(days=7)
+        week_ago = now - DT.timedelta(days=self.frequency)
         dsl_list = self.fob.DatasetList_items()
 
         latest_date = DT.datetime(1911, 6, 16, 16, 20)  # Long ago in history
@@ -130,14 +129,16 @@ class Command(BaseCommand):
         self.list_name = latest_name
 
         # If --api is set, but file is more than a week old, get the latest
-        if self.use_api and latest_date < week_ago:      
+        if self.use_api and latest_date < week_ago:
+            today = now.strftime("%Y-%m-%d")
+            self.list_name = self.fob.DatasetList_name(today)
+            print('Fetching Dataset: {}'.format(self.list_name))
             self.list_data = self.leg.getDatasetList('Good')
 
             # If successful return from API, save this to a file
             if self.list_data:
-                today = now.strftime("%Y-%m-%d")
-                self.list_name = self.fob.gen_DatasetList_name(today)          
                 self.fob.upload_text(self.list_data, self.list_name)
+                dsl_list.appen(self.list_name)
             else:
                 print('API Failed to get DatasetList from Legiscan')
 
@@ -166,6 +167,12 @@ class Command(BaseCommand):
                 print('Did you forget the --api parameter?')
             raise CommandError('API failure, or DatasetList not Found')
 
+        if len(dsl_list) > self.VERSIONS:
+            dsl_list.sort(reverse=True)
+            for name in dsl_list[self.VERSIONS:]:
+                self.fob.remove_item(name)
+                print('Removing: ', name)
+
         return
 
     def fetch_dataset(self, state, state_id):
@@ -174,14 +181,26 @@ class Command(BaseCommand):
             if entry['state_id'] == state_id:
                 session_id = entry['session_id']
                 access_key = entry['access_key']
-                session_name = self.fob.Dataset_name(state, state_id)
+                session_name = self.fob.Dataset_name(state, session_id)
                 if entry['year_end'] >= self.fromyear:
-                    if self.use_api and self.leg.api_ok:
+                    hashcode, hashdate = '', "0000-00-00"
+                    hash = self.check_hash(session_name)
+                    if hash:
+                        hashcode = hash.hashcode
+                        hashdate = hash.generated_date
+                    if (hashcode != entry['dataset_hash'] and
+                            hashdate <= entry['dataset_date'] and
+                            self.use_api and self.leg.api_ok):
                         print('Fetching {}: {}'.format(state, session_id))
                         session_data = self.leg.getDataset(session_id,
                                                            access_key)
                         self.fob.upload_text(session_data, session_name)
         return None
+
+    def check_hash(self, session_name):
+        hash = Hash.objects.filter(item_name=session_name,
+                                   fob_method=settings.FOB_METHOD).first()
+        return hash
 
     def datasets_found(self, states):
         for state_data in states:
@@ -191,32 +210,37 @@ class Command(BaseCommand):
             for entry in self.datasetlist:
                 if (entry['state_id'] == state_id
                         and entry['year_end'] >= self.fromyear):
-                    
+
                     session_id = entry['session_id']
                     session_name = self.fob.Dataset_name(state, session_id)
                     if session_name in found_list:
                         self.show_results(session_name, entry)
                         print('Found session dataset: ', session_name)
+                        self.save_to_database(session_name, entry)
                     else:
                         print('Item not found: ', session_name)
 
-                    hash = Hash()
-                    hash.item_name = session_name
-                    hash.fob_method = settings.FOB_METHOD
-                    hash.generated_date = entry['dataset_date']
-                    hash.hashcode = entry['dataset_hash']
-                    hash.size = entry['dataset_size']
-                    hash.desc = entry['session_name']
-                    hash.save()
-
         return None
+
+    def save_to_database(self, session_name, entry):
+
+        find_hash = self.check_hash(session_name)
+        if find_hash is None:
+            hash = Hash()
+            hash.item_name = session_name
+            hash.fob_method = settings.FOB_METHOD
+            hash.generated_date = entry['dataset_date']
+            hash.hashcode = entry['dataset_hash']
+            hash.size = entry['dataset_size']
+            hash.desc = entry['session_name']
+            hash.save()
 
     def show_results(self, json_name, entry):
         year_range = str(entry['year_start'])
         if year_range != entry['year_end']:
             year_range += '-' + str(entry['year_end'])
 
-        print(StateForm.format(entry['session_id'],
-                               year_range, entry['dataset_date'],
-                               entry['dataset_size']))
+        print(self.StateForm.format(entry['session_id'],
+                                    year_range, entry['dataset_date'],
+                                    entry['dataset_size']))
         return None
