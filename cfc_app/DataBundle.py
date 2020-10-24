@@ -2,6 +2,7 @@
 # DataBundle.py -- to handle API requests / responses
 # By Tony Pearson, IBM, 2020
 #
+# Debug with:  import pdb; pdb.set_trace()
 
 import requests
 import sys
@@ -65,6 +66,13 @@ class DataBundle():
             self.extension = 'json'
             self.json_pkg = response.json()
             self.text = response.text
+        if 'pdf' in  self.mime_type:
+            self.extension = 'pdf'
+            if self.content[:4] != b'%PDF':
+                self.ok = False
+                self.extension = 'error'
+                self.name += " *NOT PDF*"
+                self.status_code = 406
         return response.ok
 
 

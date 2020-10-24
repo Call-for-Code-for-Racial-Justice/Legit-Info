@@ -78,6 +78,7 @@ class Command(BaseCommand):
         item_list = fob.list_items(prefix=prefix, suffix=suffix,
                                    after=cursor, limit=0)
         count = 0
+        print(' ')
         for name in item_list:
             cursor = name
             if self.verbosity == 3:
@@ -108,7 +109,7 @@ class Command(BaseCommand):
             if limit > 0 and count >= limit:
                 break
 
-        print('Mode = ', mode, '(Default: ' + settings.FOB_METHOD + ')')
+        print('Mode = ', mode)
         print('Total number of items processed: ', count)
 
         print('Statistics by STATE prefix: ')

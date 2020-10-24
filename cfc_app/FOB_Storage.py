@@ -12,6 +12,8 @@ from ibm_botocore.client import Config, ClientError
 
 MAXLIMIT = 1000
 TESTLIMIT = 10
+DSLregex = re.compile('^DatasetList-(\d\d\d\d-\d\d-\d\d).json$')
+DSNregex = re.compile('^(\w\w)-Dataset-(\d\d\d\d).json$')
 
 class FOB_Storage():
     """
@@ -187,6 +189,33 @@ class FOB_Storage():
 
         return items
 
+    # Helpers for Legiscan DatasetList (DatasetList-YYYY-MM-DD.json)
+    def DatasetList_items():
+        dsl_list = self.fob.list_items(prefix='DatasetList-', suffix='.json')
+        return dsl_list
+
+    def DatasetList_search(item_name):
+        mo = DSLregex.search(item_name)
+        return mo
+
+    def DatasetList_name(today):
+        return 'DatasetList-{}.json'.format(today)
+
+    # Helpers for Legiscan Dataset (SS-Dataset-NNNN.json)
+    def Dataset_items(state):
+        dsn_prefix = "{}-Dataset-".format(state)
+        dsl_list = self.fob.list_items(prefix=dsn_prefix, suffix='.json')
+        return dsl_list
+
+    def Dataset_search(item_name):
+        mo = DSNregex.search(item_name)
+        return mo
+
+    def Dataset_name(self, state, state_id):
+        item_name = "{}-Dataset-{:04d}.json".format(state, state_id)
+        return item_name
+
+
     def download_binary(self, item_name):
         """ Upload binary file """
         fob_mode = self.mode
@@ -228,6 +257,9 @@ class FOB_Storage():
             if os.path.exists(fullname):
                 os.remove(fullname)
         return self
+
+
+
 
     def test_with_empty(self):
         TEST_LIMIT = 10

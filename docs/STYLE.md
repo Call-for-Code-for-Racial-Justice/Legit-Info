@@ -21,8 +21,8 @@ characters of UTF-8 is identical to ASCII.
 
 Capitalization methods are defined as follows:
 
-* Uppercase - Letters in ABCDEFGHIJKLMNOPQRSTUVWXYZ
-* Lowercase - Letters in abcdefghijklmnopqrstuvwxyz
+* Uppercase -- Letters in ABCDEFGHIJKLMNOPQRSTUVWXYZ
+* Lowercase -- Letters in abcdefghijklmnopqrstuvwxyz
 * SentenceCase -- Statements that have uppercase as the first word in a
 standard english sentence, other words start with lower case letters unless
 they are formal names or acronyms.  Full UTF-8 character set supported to
@@ -36,6 +36,8 @@ spaces, first character is lowercase ASCII, and subsequent words start with
 uppercase ASCII letter.  Example:  thisFunctionName
 * CapWords -- often called PascalCase or upper CamelCase -- all words start 
 with uppercase, with no spaces in between.  Example:  ThisFunctionName
+* Kebab-case -- similar to SnakeCase, but with words separated by hyphens, 
+used for file names, object names, and command line parameters.
 
 
 ## Python Style Guide

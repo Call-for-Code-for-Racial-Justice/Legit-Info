@@ -212,8 +212,8 @@ pip and pipenv supporting tools
 
 The following repositories are used to automate the collection of legislation:
 
-* [Legiscan](https://legiscan.com/) -- API provides links to all 50 USA states
-* [AZLeg](https://www.azleg.gov/) -- Arizona State Legislature website
+* [Legiscan.com](https://legiscan.com/) -- API for all 50 USA states
+* [AZLeg.gov](https://www.azleg.gov/) -- Arizona State Legislature website
 * [Ohio.gov](https://ohio.gov/wps/portal/gov/site/home/) -- Ohio State website
 
 The following technologies were used to deploy and demonstrate the MVP.

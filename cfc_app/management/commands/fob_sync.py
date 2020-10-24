@@ -30,9 +30,7 @@ class Command(BaseCommand):
         self.fob_object = FOB_Storage('OBJECT')
         self.olist = []
         self.maxlimit = 1000
-        self.delcount = 0
-        self.putcount = 0
-        self.getcount = 0
+        self.count = 0
         return None
 
     def add_arguments(self, parser):
@@ -98,18 +96,22 @@ class Command(BaseCommand):
 
         # Delete items from IBM Cloud Object Store if not found on FILE
         if maxdel > 0:
-            self.del_count = self.delete_items(maxdel, found_in='OBJECT',
-                                          but_not_in='FILE')
+            self.count = 0
+            self.delete_items(maxdel, found_in='OBJECT', but_not_in='FILE')
+            del_count = self.count
 
         # Send Files to Object
         if maxput > 0:
-            self.put_count = self.copy_items(maxput, options, from_fob='FILE',
-                                             to_fob='OBJECT')
+            self.count = 0
+            self.copy_items(maxput, options, from_fob='FILE', to_fob='OBJECT')
+            put_count = self.count
 
         # Send Object to Files
         if maxget > 0:
+            self.count = 0
             self.get_count = self.copy_items(maxget, options, from_fob='OBJECT',
                                              to_fob='FILE')
+            get_count = self.count
 
         print('Nunmber of DELETE requests from OBJECT: ', del_count)
         print('Nunmber of PUT requests from OBJECT:    ', put_count)
@@ -130,13 +132,13 @@ class Command(BaseCommand):
         else:
             raise CommandError('Invalid combination of parameters')
 
-        count = 0
+        self.count = 0
         for name in item_list:
             if name not in other_list:
                 remove_from.remove_item(name)
                 print('Removed from {}: {}'.format(found_in, name))
-                count += 0
-                if count >= maxcount:
+                self.count += 0
+                if self.count >= maxcount:
                     break
         return count
 
@@ -154,13 +156,13 @@ class Command(BaseCommand):
         else:
             raise CommandError('Invalid combination of parameters')
 
-        count = 0
+        self.count = 0
         for name in item_list:
             if name not in other_list:
 
                 bindata = read_from.download_binary(name)
                 write_to.upload_binary(bindata, name)
-                count += 1
+                self.count += 1
 
                 if options['readback']:
                     bindata2 = self.fob_object.download_binary(name)
@@ -168,7 +170,7 @@ class Command(BaseCommand):
                         raise CommandError('Put failed '+name)
                 print('File ', name, 'copied to', to_fob)
 
-                if count >= maxcount:
+                if self.count >= maxcount:
                     break
 
             elif options['skip']:
@@ -178,4 +180,4 @@ class Command(BaseCommand):
                 # perhaps we can compare files if both exist?
                 pass
 
-        return count
+        return None
