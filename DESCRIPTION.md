@@ -221,8 +221,11 @@ you will find an "Admin" tab on the upper right of the navigation bar.
 ### Subsection 1.3 Impacts and Locations
 
 The cfc-seed.json in step 1.1 above populates the database tables with
-example entries to get you started.  Here is what you will find if you 
-look at them from the Admin panels.
+example entries to get you started.
+
+#### Section 1.3.1 Impacts
+
+Here is what you will find if you look at them from the Admin panels.
 
 ```
 Impacts:
@@ -242,6 +245,13 @@ particular legislation does not match the other impact areas.
 In the event that the IBM Watson NLU chooses an impact for a particular
 legislation, and staff decide to re-classify it to "None", they can do this
 from the Admin panels.
+
+Note that Impact=None must exist, but is never 
+displayed to advocates.  Here is what the advocate sees instead:
+
+![](docs/Legit-Info-Impacts.png)
+
+#### Section 1.3.2 Locations
 
 ```
 Locations:
@@ -277,8 +287,10 @@ that auomates the download of legislation for these two states.
 You may designate any location by its government level, such as `country`,
 `state`, `county`, `city`, `province`, `district`, etc.
 
-Note that Impact=None and Location=world must exist, but are never 
-displayed to end-users.
+Note that Location=world must exist, but is never 
+displayed to advocates.  Here is what the advocate sees instead:
+
+![](docs/Legit-Info-Locations.png)
 
 
 ### Subsection 1.4 Laws
@@ -334,7 +346,11 @@ curated legislation content.
 Advocates do not need to pre-register to search for legislation.  This
 is referred to as "anonymous search".
 
+![](docs/Legit-Info-Home-Page.png)
+
 ### Subsection 2.1 Initiate Search
+
+![](docs/Legit-Info-Search-Anonymous.png)
 
 From the home page, `http://localhost:3000` select "Search" either from
 the upper right navigation bar, or the button at the bottom of screen.
@@ -349,6 +365,8 @@ as well as laws that relate to Ohio overall, and USA as well, but not any
 from Columbus OH as that is more specific.
 
 ### Subsection 2.2 Results Page
+
+![](docs/Legit-Info-Results.png)
 
 A list of legislation that matches the search criteria is found.  The 
 anonymous advocate may choose to "Print Results", "Save CSV File", or
@@ -366,17 +384,35 @@ The results can be downloaded as a comma-separated-variable (CSV) file.
 Selecting "Download" will initiate this download.
 
 
-
 ## Section 3 Registration and Profile
 
 To simplify repeat usage, an advocate may register their profile.  From
 the home page, `http://localhost:3000` select "Register".
 
 * First screen: enter username and password, re-enter same password.
+
+![](docs/Legit-Info-Register.png)
+
 * Second screen: enter first and last name, location and impact areas.
+
+![](docs/Legit-Info-Profile-Name.png)
+![](docs/Legit-Info-Profile-Location.png)
+![](docs/Legit-Info-Profile-Impacts.png)
+
+When you sign in, you will see your name on the upper right corner.
+
+![](docs/Legit-Info-Pulldown.png)
+
+Advocates can review their profile and update any time.
+
+![](docs/Legit-Info-Profile-Review.png)
 
 
 ## Section 4 Profile Search
+
+![](docs/Legit-Info-Signed-in.png)
+
+![](Legit-Info-Search-Profile.png)
 
 Registered advocates can perform search using their profile to set the
 defaults.  From home page, `http://localhost:3000` select "Sign in".
@@ -385,6 +421,8 @@ Once signed in, select "Search" to initiate search screen.  The advocate
 can leave the defaults as is, or modify the location and/or impact areas.
 
 ### Subsection 4.1 Results Page
+
+![](docs/Legit-Info-Results-Save.png)
 
 The results page is similar to section 2.2, but with an additional feature:
 "Send Results"

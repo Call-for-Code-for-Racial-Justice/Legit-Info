@@ -140,7 +140,7 @@ class Command(BaseCommand):
                 self.count += 0
                 if self.count >= maxcount:
                     break
-        return count
+        return
 
     def copy_items(self, maxcount, options, from_fob=None, to_fob=None):
         if (from_fob == 'FILE') and (to_fob == 'OBJECT'):

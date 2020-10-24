@@ -5,6 +5,7 @@
 # requires:  pip install -U ibm-cos-sdk for IBM Cloud Object Storage
 #
 import os
+import re
 import sys
 import glob
 import ibm_boto3
@@ -190,24 +191,24 @@ class FOB_Storage():
         return items
 
     # Helpers for Legiscan DatasetList (DatasetList-YYYY-MM-DD.json)
-    def DatasetList_items():
-        dsl_list = self.fob.list_items(prefix='DatasetList-', suffix='.json')
+    def DatasetList_items(self):
+        dsl_list = self.list_items(prefix='DatasetList-', suffix='.json')
         return dsl_list
 
-    def DatasetList_search(item_name):
+    def DatasetList_search(self, item_name):
         mo = DSLregex.search(item_name)
         return mo
 
-    def DatasetList_name(today):
+    def DatasetList_name(self, today):
         return 'DatasetList-{}.json'.format(today)
 
     # Helpers for Legiscan Dataset (SS-Dataset-NNNN.json)
-    def Dataset_items(state):
+    def Dataset_items(self, state):
         dsn_prefix = "{}-Dataset-".format(state)
-        dsl_list = self.fob.list_items(prefix=dsn_prefix, suffix='.json')
+        dsl_list = self.list_items(prefix=dsn_prefix, suffix='.json')
         return dsl_list
 
-    def Dataset_search(item_name):
+    def Dataset_search(self, item_name):
         mo = DSNregex.search(item_name)
         return mo
 

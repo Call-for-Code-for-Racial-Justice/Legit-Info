@@ -162,3 +162,24 @@ class Law(models.Model):
                 law_string += " ..."
         law_string = self.key + ' ' + law_string
         return law_string
+
+class Hash(models.Model):
+    """ Track hash codes of files stored in FOB_Storage """
+
+    class Meta:
+        app_label = 'cfc_app'
+        verbose_name_plural = "hashcodes"  # plural of hash
+        ordering = ['item_name']   
+        unique_together = ('item_name', 'fob_method',)
+
+    item_name = models.CharField(max_length=255, null=False)
+    fob_method = models.CharField(max_length=6, null=False)
+    generated_date = models.DateField(null=False)
+    hashcode = models.CharField(max_length=32, null=False)
+    size = models.PositiveIntegerField(null=False)
+    desc = models.CharField(max_length=255, null=True)
+
+    def __str__(self):
+        """Return a string representation of the model."""
+        desc = '{} ({}}'.format(self.item_name, self.FOB_method)
+        return desc

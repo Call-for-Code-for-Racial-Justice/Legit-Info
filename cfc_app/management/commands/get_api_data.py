@@ -24,7 +24,7 @@ import datetime as DT
 import json
 import re
 from django.core.management.base import BaseCommand, CommandError
-from cfc_app.models import Location
+from cfc_app.models import Location, Hash
 from cfc_app.LegiscanAPI import LegiscanAPI
 from cfc_app.FOB_Storage import FOB_Storage, DSLregex
 from cfc_app.views import load_default_locations
@@ -51,7 +51,7 @@ class Command(BaseCommand):
         self.list_data = None
         self.list_pkg = None
         self.datasetlist = None
-        self.fromyear = '2018'
+        self.fromyear = 2018
         self.frequency = 7
         return None
 
@@ -76,7 +76,7 @@ class Command(BaseCommand):
             self.frequency = options['frequency']
 
         self.list_data = self.recent_enough()
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
 
         # Get the list of states from the Django database for "Location"
 
@@ -115,20 +115,18 @@ class Command(BaseCommand):
        
         now = DT.datetime.today()
         week_ago = now - DT.timedelta(days=7)
-        dsl_list = self.fob.list_items_DatasetList()
+        dsl_list = self.fob.DatasetList_items()
 
         latest_date = DT.datetime(1911, 6, 16, 16, 20)  # Long ago in history
         latest_name = None
         for name in dsl_list:
-            print(name)
-            mo = self.fob.search_DatasetList(item_name)
+            mo = self.fob.DatasetList_search(name)
             if mo:
                 filedate = DT.datetime.strptime(mo.group(1), "%Y-%m-%d")
                 if filedate > latest_date:
                     latest_date = filedate
                     latest_name = name
 
-        print(latest_date, latest_name)
         self.list_name = latest_name
 
         # If --api is set, but file is more than a week old, get the latest
@@ -147,7 +145,6 @@ class Command(BaseCommand):
         if latest_name and (not self.list_data):
             print('Downloading: ', self.list_name)
             self.list_data = self.fob.download_text(self.list_name)
-            print(len(self.list_data))
 
         if self.list_data:
             print('Verifying JSON contents of: ', self.list_name)
@@ -177,7 +174,7 @@ class Command(BaseCommand):
             if entry['state_id'] == state_id:
                 session_id = entry['session_id']
                 access_key = entry['access_key']
-                session_name = self.fob.Dataset_name(self, state, state_id)
+                session_name = self.fob.Dataset_name(state, state_id)
                 if entry['year_end'] >= self.fromyear:
                     if self.use_api and self.leg.api_ok:
                         print('Fetching {}: {}'.format(state, session_id))
@@ -188,28 +185,29 @@ class Command(BaseCommand):
 
     def datasets_found(self, states):
         for state_data in states:
+            print(' ')
             state, state_id = state_data[0], state_data[1]
-            found_list = Dataset_items(state)
+            found_list = self.fob.Dataset_items(state)
             for entry in self.datasetlist:
                 if (entry['state_id'] == state_id
-                        and entry['year_end'] >= self.fromyear:
-                    print(' ')
+                        and entry['year_end'] >= self.fromyear):
+                    
                     session_id = entry['session_id']
-                    session_name = self.fob.Dataset_name(self, state, 
-                                                         session_id)
+                    session_name = self.fob.Dataset_name(state, session_id)
                     if session_name in found_list:
                         self.show_results(session_name, entry)
                         print('Found session dataset: ', session_name)
                     else:
-                        print('FILE NOT FOUND: ', session_name)
+                        print('Item not found: ', session_name)
 
-                    # import pdb; pdb.set_trace()
-                    master_name = self.mast_name(state, session_id)
-                    if master_name in found_list:
-                        print('Found Master List:  ', master_name)
-                    else:
-                        print('FILE NOT FOUND: ', master_name)
-
+                    hash = Hash()
+                    hash.item_name = session_name
+                    hash.fob_method = settings.FOB_METHOD
+                    hash.generated_date = entry['dataset_date']
+                    hash.hashcode = entry['dataset_hash']
+                    hash.size = entry['dataset_size']
+                    hash.desc = entry['session_name']
+                    hash.save()
 
         return None
 
