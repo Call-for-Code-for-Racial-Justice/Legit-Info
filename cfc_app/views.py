@@ -80,7 +80,7 @@ def load_default_locations():
     # entries (usa, arizona, ohio) so people can understand the structure
     # Note the legiscan_id is only needed for States in the United States.
 
-    usa = Location(desc='United States', shortname='usa', legiscan_id = 0,
+    usa = Location(desc='United States', shortname='usa', legiscan_id = 52,
                    hierarchy='world.usa', govlevel='country')
     usa.parent = world
     usa.save()

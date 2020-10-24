@@ -1,5 +1,5 @@
 # Python Code
-# scan_json.py -- Scan JSON retrieved by get_api_data.
+# extract_files.py -- Extract text from HTML/PDF files
 # By Tony Pearson, IBM, 2020
 #
 # This is intended as a background task
@@ -8,16 +8,16 @@
 #
 # On Demand:
 # [...] $ pipenv shell
-# (cfc) $ ./stage1 scan_json --api --state AZ --limit 10
+# (cfc) $ ./stage1 extract_files --api --state AZ --limit 10
 #
 # Cron Job:
-# /home/yourname/Develop/legit-info/cron1 scan_json --api --limit 10
+# /home/yourname/Develop/legit-info/cron1 extract_files --api --limit 10
 #
-# The Legiscan.com API only allows 30,000 fetches per 30-day period, and
-# each legislation requires at least 2 fetches, so use the --limit keyword
+# The Legiscan.com API only allows 30,000 fetches per 30-day period, so
+# we will download HTML/PDF versions from each state's website instead.
+# If that fails, we will then fetch from Legiscan API.
 #
-# If you leave out the --api, the Legiscan.com API will not be invoked,
-# this is useful to process HTML and PDF files already fetched from API.
+# If you leave out the --api, the Legiscan.com API will not be invoked.
 #
 # Debug with:   import pdb; pdb.set_trace()
 
@@ -54,11 +54,10 @@ nameForm = "{}.{}"
 
 
 class Command(BaseCommand):
-    help = ("For each state, scan the associated SS-NNNN-Dataset.json "
-            "and SS-NNNN-Master.json files, fetching the legislation "
-            "as either HTML or PDF file, and extract to TEXT.  Both the "
-            "original (HTML/PDF) and the extracted TEXT file are stored "
-            "in File/Object Storage.")
+    help = ("For each state, scan the associated SS-Dataset-NNNN.json "
+            "fetching the legislation as either HTML or PDF file, and "
+            "extract to TEXT.  Both the original (HTML/PDF) and the "
+            "extracted TEXT file are stored in File/Object Storage.")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -77,8 +76,6 @@ class Command(BaseCommand):
         parser.add_argument("--api", action="store_true",
                             help="Invoke Legiscan.com API")
         parser.add_argument("--state", help="Process single state: AZ, OH")
-        parser.add_argument("--sessions", type=int, default=self.limit,
-                            help="Number of legislative sessions per state")
         parser.add_argument("--session_id", help="Process this session only")
         parser.add_argument("--limit", type=int, default=self.limit,
                             help="Number of bills to extract per state")
@@ -111,7 +108,7 @@ class Command(BaseCommand):
         # Use the Django "Location" database to get list of states.
 
         usa = Location.objects.get(shortname='usa')
-        locations = Location.objects.order_by('hierarchy').filter(parent=usa)
+        locations = Location.objects.order_by(shortname).filter(parent=usa)
         for loc in locations:
             state = loc.shortname.upper()  # Convert state to UPPER CASE
 
@@ -141,15 +138,11 @@ class Command(BaseCommand):
                         sesh_dict.insert(0, session_id)
 
             # Loop through the sessions found, most recent first, until
-            # number of sessions to process are met
-            count = 0
+            # the limit of bills to process is reached.
             for session_id in sesh_dict:
                 if self.limit > 0 and self.state_count >= self.limit:
                     break
                 self.process_json(state, session_id)
-                count += 1
-                if count >= self.sessions:
-                    break
 
         return None
 
