@@ -18,71 +18,20 @@
 # If you leave out the --api, the Legiscan.com API will not be invoked,
 # this is useful to see the status of existing Dataset JSON files.
 #
+# This is Phase 1 of the weekly cron job, to run asynchronously to refresh
+# the Django database.  See CRON.md for more details.
+#
 # Debug with:  import pdb; pdb.set_trace()
 
 import datetime as DT
 import json
 from django.core.management.base import BaseCommand, CommandError
 from cfc_app.models import Location, Hash
-from cfc_app.LegiscanAPI import LegiscanAPI
+from cfc_app.LegiscanAPI import LegiscanAPI, LEGISCAN_ID
 from cfc_app.FOB_Storage import FOB_Storage
 from cfc_app.views import load_default_locations
 from django.conf import settings
 
-LEGISCAN_ID = {
-1: {"code": "AL", "name": "Alabama", "capital": "Montgomery"},
-2: {"code": "AK", "name": "Alaska", "capital": "Juneau"},
-3: {"code": "AZ", "name": "Arizona", "capital": "Phoenix"},
-4: {"code": "AR", "name": "Arkansas", "capital": "Little Rock"},
-5: {"code": "CA", "name": "California", "capital": "Sacramento"},
-6: {"code": "CO", "name": "Colorado", "capital": "Denver"},
-7: {"code": "CT", "name": "Connecticut", "capital": "Hartford"},
-8: {"code": "DE", "name": "Delaware", "capital": "Dover"},
-9: {"code": "FL", "name": "Florida", "capital": "Tallahassee"},
-10: {"code": "GA", "name": "Georgia", "capital": "Atlanta"},
-11: {"code": "HI", "name": "Hawaii", "capital": "Honolulu"},
-12: {"code": "ID", "name": "Idaho", "capital": "Boise"},
-13: {"code": "IL", "name": "Illinois", "capital": "Springfield"},
-14: {"code": "IN", "name": "Indiana", "capital": "Indianapolis"},
-15: {"code": "IA", "name": "Iowa", "capital": "Des Moines"},
-16: {"code": "KS", "name": "Kansas", "capital": "Topeka"},
-17: {"code": "KY", "name": "Kentucky", "capital": "Frankfort"},
-18: {"code": "LA", "name": "Louisiana", "capital": "Baton Rouge"},
-19: {"code": "ME", "name": "Maine", "capital": "Augusta"},
-20: {"code": "MD", "name": "Maryland", "capital": "Annapolis"},
-21: {"code": "MA", "name": "Massachusetts", "capital": "Boston"},
-22: {"code": "MI", "name": "Michigan", "capital": "Lansing"},
-23: {"code": "MN", "name": "Minnesota", "capital": "Saint Paul"},
-24: {"code": "MS", "name": "Mississippi", "capital": "Jackson"},
-25: {"code": "MO", "name": "Missouri", "capital": "Jefferson City"},
-26: {"code": "MT", "name": "Montana", "capital": "Helena"},
-27: {"code": "NE", "name": "Nebraska", "capital": "Lincoln"},
-28: {"code": "NV", "name": "Nevada", "capital": "Carson City"},
-29: {"code": "NH", "name": "New Hampshire", "capital": "Concord"},
-30: {"code": "NJ", "name": "New Jersey", "capital": "Trenton"},
-31: {"code": "NM", "name": "New Mexico", "capital": "Santa Fe"},
-32: {"code": "NY", "name": "New York", "capital": "Albany"},
-33: {"code": "NC", "name": "North Carolina", "capital": "Raleigh"},
-34: {"code": "ND", "name": "North Dakota", "capital": "Bismarck"},
-35: {"code": "OH", "name": "Ohio", "capital": "Columbus"},
-36: {"code": "OK", "name": "Oklahoma", "capital": "Oklahoma City"},
-37: {"code": "OR", "name": "Oregon", "capital": "Salem"},
-38: {"code": "PA", "name": "Pennsylvania", "capital": "Harrisburg"},
-39: {"code": "RI", "name": "Rhode Island", "capital": "Providence"},
-40: {"code": "SC", "name": "South Carolina", "capital": "Columbia"},
-41: {"code": "SD", "name": "South Dakota", "capital": "Pierre"},
-42: {"code": "TN", "name": "Tennessee", "capital": "Nashville"},
-43: {"code": "TX", "name": "Texas", "capital": "Austin"},
-44: {"code": "UT", "name": "Utah", "capital": "Salt Lake City"},
-45: {"code": "VT", "name": "Vermont", "capital": "Montpelier"},
-46: {"code": "VA", "name": "Virginia", "capital": "Richmond"},
-47: {"code": "WA", "name": "Washington", "capital": "Olympia"},
-48: {"code": "WV", "name": "West Virginia", "capital": "Charleston"},
-49: {"code": "WI", "name": "Wisconsin", "capital": "Madison"},
-50: {"code": "WY", "name": "Wyoming", "capital": "Cheyenne"},
-51: {"code": "DC", "name": "Washington D.C.", "capital": "Washington, DC"},
-52: {"code": "US", "name": "US Congress", "capital": "Washington, DC"},
-}
 
 class Command(BaseCommand):
 
@@ -106,7 +55,8 @@ class Command(BaseCommand):
         self.list_data = None
         self.list_pkg = None
         self.datasetlist = None
-        self.fromyear = 2018
+        now = DT.datetime.today()
+        self.fromyear = now.year - 2 # Go back three years 2018, 2019, 2020
         self.frequency = 7
         return None
 

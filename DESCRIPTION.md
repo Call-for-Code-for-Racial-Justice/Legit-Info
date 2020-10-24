@@ -30,7 +30,7 @@ alternate versions that will (a) launch pipenv, (b) run the command, and
 
 In other words, issue "./cron1 <command> <parameters>" is equivalent to:
 
-```bash
+```console
 $ pipenv shell
 (fix) $ ./stage1 <command> <parameters>
 (fix) $ exit
@@ -151,8 +151,8 @@ To save time, we have created a Django Fixture called "cfc-seed.json"
 that allows you to pre-populate the data with sample impacts, locations,
 and a single superuser "cfcadmin" / "Call4Code"
 
-```bash
-$ ./cron1 ./stage1 loaddata cfc-seed.json
+```console
+$ ./cron1 ./stage1 loaddata sources/cfc-seed.json
 ```
 
 To access admin panels, add "/admin" to the main website.  For local
@@ -163,7 +163,7 @@ you will find an "Admin" tab on the upper right of the navigation bar.
 
 To change this fixture, or create your own with updated settings, use:
 
-```bash
+```console
 $ ./cron1 dumpdata auth.user users.profile cfc_app.criteria 
     cfc_app.impact cfc_app_location --output cfc-seed.json
 ```
@@ -171,7 +171,7 @@ $ ./cron1 dumpdata auth.user users.profile cfc_app.criteria
 Lastly, if you added or removed users, impacts, or locations, and need
 to reset it back to this intial state, you can run this command:
 
-```bash
+```console
 $ ./cron1 syncdata cfc-seed.json
 ```
 
@@ -182,7 +182,7 @@ what you set it to, you can generate a random password, and use that
 to reset the password.  Please note that generate_password has an 
 underscore character(_) and the changepassword does not.
 
-```bash
+```console
 $ cd legit-info
 $ pipenv shell
 (cfc) $ ./stage1 generate_password cfcadmin
@@ -205,7 +205,7 @@ can change it to a new random password and send it via email to them.
 If you need additional "superuser" accounts, each with their own profile,
 you can use the Django `createsuperuser` to create others:
 
-```bash
+```console
 $ cd legit-info
 $ pipenv shell
 (fix) $ ./stage1 createsuperuser
@@ -439,7 +439,7 @@ account using the steps below.  This can be used in all stages of deployment.
 
 2. Go to your Demo Inbox and copy your credentials:
 
-```bash
+```console
 user_name => 'your_username',
 password => 'your_password',
 address => 'smtp.mailtrap.io',
@@ -448,7 +448,7 @@ port => '2525',
 ```
 
 3. In your virtual environment, export your credentials:
-```bash
+```console
 export EMAIL_HOST='smtp.mailtrap.io'
 export EMAIL_HOST_USER='your_username'
 export EMAIL_HOST_PASSWORD='your_password'

@@ -95,7 +95,7 @@
     "fields": {
         "desc": "United States",
         "shortname": "usa",
-        "legiscan_id": 0,
+        "legiscan_id": 52,
         "hierarchy": "world.usa",
         "govlevel": "country",
         "parent": 1,
@@ -107,9 +107,9 @@
     "pk": 3,
     "fields": {
         "desc": "Arizona, USA",
-        "shortname": "az",
+        "shortname": "arizona",
         "legiscan_id": 3,
-        "hierarchy": "world.usa.az",
+        "hierarchy": "world.usa.arizona",
         "govlevel": "state",
         "parent": 2,
         "date_added": "2020-10-20T16:47:58.337Z"
@@ -120,9 +120,9 @@
     "pk": 4,
     "fields": {
         "desc": "Ohio, USA",
-        "shortname": "oh",
+        "shortname": "ohio",
         "legiscan_id": 35,
-        "hierarchy": "world.usa.oh",
+        "hierarchy": "world.usa.ohio",
         "govlevel": "state",
         "parent": 2,
         "date_added": "2020-10-20T16:47:58.346Z"
@@ -135,7 +135,7 @@
         "desc": "Pima County, AZ",
         "shortname": "pima",
         "legiscan_id": 0,
-        "hierarchy": "world.usa.az.pima",
+        "hierarchy": "world.usa.arizona.pima",
         "govlevel": "county",
         "parent": 3,
         "date_added": "2020-10-20T16:53:39.080Z"
@@ -148,7 +148,7 @@
         "desc": "Tucson, Arizona",
         "shortname": "tucson",
         "legiscan_id": 0,
-        "hierarchy": "world.usa.az.pima.tucson",
+        "hierarchy": "world.usa.arizona.pima.tucson",
         "govlevel": "city",
         "parent": 5,
         "date_added": "2020-10-20T16:54:16.785Z"
@@ -161,7 +161,7 @@
         "desc": "Franklin County",
         "shortname": "franklin",
         "legiscan_id": 0,
-        "hierarchy": "world.usa.oh.franklin",
+        "hierarchy": "world.usa.ohio.franklin",
         "govlevel": "county",
         "parent": 4,
         "date_added": "2020-10-20T16:56:49.243Z"
@@ -174,7 +174,7 @@
         "desc": "Columbus, OH",
         "shortname": "columbus",
         "legiscan_id": 0,
-        "hierarchy": "world.usa.oh.franklin.columbus",
+        "hierarchy": "world.usa.ohio.franklin.columbus",
         "govlevel": "city",
         "parent": 7,
         "date_added": "2020-10-20T16:57:22.254Z"
