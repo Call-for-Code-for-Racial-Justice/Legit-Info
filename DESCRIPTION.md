@@ -249,7 +249,7 @@ from the Admin panels.
 Note that Impact=None must exist, but is never 
 displayed to advocates.  Here is what the advocate sees instead:
 
-![](docs/Legit-Info-Impacts.png)
+![](docs/screenshots/Legit-Info-Impacts.png)
 
 #### Section 1.3.2 Locations
 
@@ -290,7 +290,7 @@ You may designate any location by its government level, such as `country`,
 Note that Location=world must exist, but is never 
 displayed to advocates.  Here is what the advocate sees instead:
 
-![](docs/Legit-Info-Locations.png)
+![](docs/screenshots/Legit-Info-Locations.png)
 
 
 ### Subsection 1.4 Laws
@@ -346,11 +346,11 @@ curated legislation content.
 Advocates do not need to pre-register to search for legislation.  This
 is referred to as "anonymous search".
 
-![](docs/Legit-Info-Home-Page.png)
+![](docs/screenshots/Legit-Info-Home-Page.png)
 
 ### Subsection 2.1 Initiate Search
 
-![](docs/Legit-Info-Search-Anonymous.png)
+![](docs/screenshots/Legit-Info-Search-Anonymous.png)
 
 From the home page, `http://localhost:3000` select "Search" either from
 the upper right navigation bar, or the button at the bottom of screen.
@@ -366,7 +366,7 @@ from Columbus OH as that is more specific.
 
 ### Subsection 2.2 Results Page
 
-![](docs/Legit-Info-Results.png)
+![](docs/screenshots/Legit-Info-Results.png)
 
 A list of legislation that matches the search criteria is found.  The 
 anonymous advocate may choose to "Print Results", "Save CSV File", or
@@ -391,26 +391,26 @@ the home page, `http://localhost:3000` select "Register".
 
 * First screen: enter username and password, re-enter same password.
 
-![](docs/Legit-Info-Register.png)
+![](docs/screenshots/Legit-Info-Register.png)
 
 * Second screen: enter first and last name, location and impact areas.
 
-![](docs/Legit-Info-Profile-Name.png)
-![](docs/Legit-Info-Profile-Location.png)
-![](docs/Legit-Info-Profile-Impacts.png)
+![](docs/screenshots/Legit-Info-Profile-Name.png)
+![](docs/screenshots/Legit-Info-Profile-Location.png)
+![](docs/screenshots/Legit-Info-Profile-Impacts.png)
 
 When you sign in, you will see your name on the upper right corner.
 
-![](docs/Legit-Info-Pulldown.png)
+![](docs/screenshots/Legit-Info-Pulldown.png)
 
 Advocates can review their profile and update any time.
 
-![](docs/Legit-Info-Profile-Review.png)
+![](docs/screenshots/Legit-Info-Profile-Review.png)
 
 
 ## Section 4 Profile Search
 
-![](docs/Legit-Info-Signed-in.png)
+![](docs/screenshots/Legit-Info-Signed-in.png)
 
 ![](Legit-Info-Search-Profile.png)
 
@@ -422,7 +422,7 @@ can leave the defaults as is, or modify the location and/or impact areas.
 
 ### Subsection 4.1 Results Page
 
-![](docs/Legit-Info-Results-Save.png)
+![](docs/screenshots/Legit-Info-Results-Save.png)
 
 The results page is similar to section 2.2, but with an additional feature:
 "Send Results"
