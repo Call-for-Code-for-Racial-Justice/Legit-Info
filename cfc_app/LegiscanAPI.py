@@ -7,6 +7,8 @@
 # needs to be an environmental variable with the key of "LEGISCAN_API_KEY".
 # Visit https://legiscan.com/legiscan to create your own Legiscan.com apikey.
 #
+# See /docs/Legiscan/ for API manual and Entity relationship diagram (ERD)
+#
 # Debug with:  # import pdb; pdb.set_trace()
 
 import logging
@@ -184,10 +186,13 @@ class LegiscanAPI:
                             pkg = bundle.json_pkg
                             if 'alert' in pkg:
                                 bundle.name += ' *ERROR*'
-                                bundle.text = ('ERROR: ' +
+                                bundle.text = ('*ERROR* ' +
                                                pkg['alert']['message'])
+                                bundle.text += " " + self.url 
+                                bundle.text += " " + json.dumps(params)
                                 if EXCEEDED in bundle.text:
                                     bundle.status_code = 429
+                                raise LegiscanError(bundle.name+" "+bundle.text)
                     else:
                         bundle.ok = False
                         bundle.status_code = 415

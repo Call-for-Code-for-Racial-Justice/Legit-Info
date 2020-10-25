@@ -15,7 +15,7 @@
 #
 # The Legiscan.com API only allows 30,000 fetches per 30-day period, so
 # we will download HTML/PDF versions from each state's website instead.
-# If that fails, we will then fetch from Legiscan API.
+# If that fails, we can then fetch from Legiscan API.
 #
 # If you leave out the --api, the Legiscan.com API will not be invoked.
 #

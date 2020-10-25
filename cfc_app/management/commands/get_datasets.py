@@ -55,8 +55,9 @@ class Command(BaseCommand):
         self.list_data = None
         self.list_pkg = None
         self.datasetlist = None
-        now = DT.datetime.today()
-        self.fromyear = now.year - 2 # Go back three years 2018, 2019, 2020
+        self.now = DT.datetime.today().date()
+        self.fromyear = self.now.year - 2  # Go back three years 2018, 2019, 2020
+        self.long_ago = DT.date(1911, 6, 16)  # Long ago in history
         self.frequency = 7
         return None
 
@@ -64,7 +65,7 @@ class Command(BaseCommand):
         parser.add_argument("--api", action="store_true",
                             help="Invoke Legiscan.com API")
         parser.add_argument("--state", help="Process single state: AZ, OH")
-        parser.add_argument("--frequency", type=int, default=7,
+        parser.add_argument("--frequency", type=int, default=self.frequency,
                             help="Days since last DatasetList request")
         return None
 
@@ -77,8 +78,7 @@ class Command(BaseCommand):
             self.use_api = True
         if options['state']:
             self.state = options['state']
-        if options['frequency']:
-            self.frequency = options['frequency']
+        self.frequency = options['frequency']
 
         self.list_data = self.recent_enough()
 
@@ -89,7 +89,7 @@ class Command(BaseCommand):
         except Location.DoesNotExist:
             load_default_locations()
             usa = Location.objects.get(shortname='usa')
-        
+
         locations = Location.objects.filter(legiscan_id__gt=0)
         if not locations:
             load_default_locations()
@@ -109,6 +109,7 @@ class Command(BaseCommand):
             print('Processing: {} ({})'.format(loc.desc, state))
 
             # Get dataset and master files, up to the --limit set
+
             self.fetch_dataset(state, state_id)
 
         # Show status of all files we expect to have now
@@ -117,16 +118,15 @@ class Command(BaseCommand):
 
     def recent_enough(self):
 
-        now = DT.datetime.today()
-        week_ago = now - DT.timedelta(days=self.frequency)
+        week_ago = self.now - DT.timedelta(days=self.frequency)
         dsl_list = self.fob.DatasetList_items()
 
-        latest_date = DT.datetime(1911, 6, 16, 16, 20)  # Long ago in history
+        latest_date = self.long_ago  # Long ago in history
         latest_name = None
         for name in dsl_list:
             mo = self.fob.DatasetList_search(name)
             if mo:
-                filedate = DT.datetime.strptime(mo.group(1), "%Y-%m-%d")
+                filedate = self.date_type(mo.group(1))
                 if filedate > latest_date:
                     latest_date = filedate
                     latest_name = name
@@ -135,7 +135,7 @@ class Command(BaseCommand):
 
         # If --api is set, but file is more than a week old, get the latest
         if self.use_api and latest_date < week_ago:
-            today = now.strftime("%Y-%m-%d")
+            today = self.now.strftime("%Y-%m-%d")
             self.list_name = self.fob.DatasetList_name(today)
             print('Fetching Dataset: {}'.format(self.list_name))
             self.list_data = self.leg.getDatasetList('Good')
@@ -143,7 +143,8 @@ class Command(BaseCommand):
             # If successful return from API, save this to a file
             if self.list_data:
                 self.fob.upload_text(self.list_data, self.list_name)
-                dsl_list.appen(self.list_name)
+                if self.list_name not in dsl_list:
+                    dsl_list.append(self.list_name)
             else:
                 print('API Failed to get DatasetList from Legiscan')
 
@@ -172,11 +173,14 @@ class Command(BaseCommand):
                 print('Did you forget the --api parameter?')
             raise CommandError('API failure, or DatasetList not Found')
 
+        # Let's keep only five versions of DatasetList, older ones
+        # will be expired
+
         if len(dsl_list) > self.VERSIONS:
             dsl_list.sort(reverse=True)
             for name in dsl_list[self.VERSIONS:]:
                 self.fob.remove_item(name)
-                print('Removing: ', name)
+                print('Expiring: ', name)
 
         return
 
@@ -188,24 +192,42 @@ class Command(BaseCommand):
                 access_key = entry['access_key']
                 session_name = self.fob.Dataset_name(state, session_id)
                 if entry['year_end'] >= self.fromyear:
-                    hashcode, hashdate = '', "0000-00-00"
+                    entry_date = self.date_type(entry['dataset_date'])
+
+                    hashcode, hashdate = '', self.long_ago
                     hash = self.check_hash(session_name)
                     if hash:
                         hashcode = hash.hashcode
                         hashdate = hash.generated_date
+
                     if (hashcode != entry['dataset_hash'] and
-                            hashdate <= entry['dataset_date'] and
+                            hashdate <= entry_date and
                             self.use_api and self.leg.api_ok):
                         print('Fetching {}: {}'.format(state, session_id))
+
                         session_data = self.leg.getDataset(session_id,
                                                            access_key)
-                        self.fob.upload_text(session_data, session_name)
+                        if session_data:
+                            if session_data.startswith('*ERROR*'):
+                                print(session_data)
+                            else:
+                                self.fob.upload_text(session_data,
+                                                     session_name)
+                        else:
+                            print('Fetch unsuccessful for:', session_name)
+
         return None
 
     def check_hash(self, session_name):
+        """ Read the hash entry from Django cfc_app_hash database table """
         hash = Hash.objects.filter(item_name=session_name,
                                    fob_method=settings.FOB_METHOD).first()
         return hash
+
+    def date_type(self, date_string):
+        """ Convert "YYYY-MM-DD" string to datetime.date format """
+        date_value = DT.datetime.strptime(date_string, "%Y-%m-%d").date()
+        return date_value
 
     def datasets_found(self, states):
         for state_data in states:
