@@ -165,13 +165,14 @@ class Law(models.Model):
         law_string = self.key + ' ' + law_string
         return law_string
 
+
 class Hash(models.Model):
     """ Track hash codes of files stored in FOB_Storage """
 
     class Meta:
         app_label = 'cfc_app'
         verbose_name_plural = "hashcodes"  # plural of hash
-        ordering = ['item_name']   
+        ordering = ['item_name']
         unique_together = ('item_name', 'fob_method',)
 
     item_name = models.CharField(max_length=255, null=False)

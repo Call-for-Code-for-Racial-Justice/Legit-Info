@@ -11,67 +11,65 @@
 #
 # Debug with:  # import pdb; pdb.set_trace()
 
-import logging
 import json
 import os
-from random import randint
-import requests
 from cfc_app.DataBundle import DataBundle
 
 LEGISCAN_ID = {
-1: {"code": "AL", "name": "Alabama", "capital": "Montgomery"},
-2: {"code": "AK", "name": "Alaska", "capital": "Juneau"},
-3: {"code": "AZ", "name": "Arizona", "capital": "Phoenix"},
-4: {"code": "AR", "name": "Arkansas", "capital": "Little Rock"},
-5: {"code": "CA", "name": "California", "capital": "Sacramento"},
-6: {"code": "CO", "name": "Colorado", "capital": "Denver"},
-7: {"code": "CT", "name": "Connecticut", "capital": "Hartford"},
-8: {"code": "DE", "name": "Delaware", "capital": "Dover"},
-9: {"code": "FL", "name": "Florida", "capital": "Tallahassee"},
-10: {"code": "GA", "name": "Georgia", "capital": "Atlanta"},
-11: {"code": "HI", "name": "Hawaii", "capital": "Honolulu"},
-12: {"code": "ID", "name": "Idaho", "capital": "Boise"},
-13: {"code": "IL", "name": "Illinois", "capital": "Springfield"},
-14: {"code": "IN", "name": "Indiana", "capital": "Indianapolis"},
-15: {"code": "IA", "name": "Iowa", "capital": "Des Moines"},
-16: {"code": "KS", "name": "Kansas", "capital": "Topeka"},
-17: {"code": "KY", "name": "Kentucky", "capital": "Frankfort"},
-18: {"code": "LA", "name": "Louisiana", "capital": "Baton Rouge"},
-19: {"code": "ME", "name": "Maine", "capital": "Augusta"},
-20: {"code": "MD", "name": "Maryland", "capital": "Annapolis"},
-21: {"code": "MA", "name": "Massachusetts", "capital": "Boston"},
-22: {"code": "MI", "name": "Michigan", "capital": "Lansing"},
-23: {"code": "MN", "name": "Minnesota", "capital": "Saint Paul"},
-24: {"code": "MS", "name": "Mississippi", "capital": "Jackson"},
-25: {"code": "MO", "name": "Missouri", "capital": "Jefferson City"},
-26: {"code": "MT", "name": "Montana", "capital": "Helena"},
-27: {"code": "NE", "name": "Nebraska", "capital": "Lincoln"},
-28: {"code": "NV", "name": "Nevada", "capital": "Carson City"},
-29: {"code": "NH", "name": "New Hampshire", "capital": "Concord"},
-30: {"code": "NJ", "name": "New Jersey", "capital": "Trenton"},
-31: {"code": "NM", "name": "New Mexico", "capital": "Santa Fe"},
-32: {"code": "NY", "name": "New York", "capital": "Albany"},
-33: {"code": "NC", "name": "North Carolina", "capital": "Raleigh"},
-34: {"code": "ND", "name": "North Dakota", "capital": "Bismarck"},
-35: {"code": "OH", "name": "Ohio", "capital": "Columbus"},
-36: {"code": "OK", "name": "Oklahoma", "capital": "Oklahoma City"},
-37: {"code": "OR", "name": "Oregon", "capital": "Salem"},
-38: {"code": "PA", "name": "Pennsylvania", "capital": "Harrisburg"},
-39: {"code": "RI", "name": "Rhode Island", "capital": "Providence"},
-40: {"code": "SC", "name": "South Carolina", "capital": "Columbia"},
-41: {"code": "SD", "name": "South Dakota", "capital": "Pierre"},
-42: {"code": "TN", "name": "Tennessee", "capital": "Nashville"},
-43: {"code": "TX", "name": "Texas", "capital": "Austin"},
-44: {"code": "UT", "name": "Utah", "capital": "Salt Lake City"},
-45: {"code": "VT", "name": "Vermont", "capital": "Montpelier"},
-46: {"code": "VA", "name": "Virginia", "capital": "Richmond"},
-47: {"code": "WA", "name": "Washington", "capital": "Olympia"},
-48: {"code": "WV", "name": "West Virginia", "capital": "Charleston"},
-49: {"code": "WI", "name": "Wisconsin", "capital": "Madison"},
-50: {"code": "WY", "name": "Wyoming", "capital": "Cheyenne"},
-51: {"code": "DC", "name": "Washington D.C.", "capital": "Washington, DC"},
-52: {"code": "US", "name": "US Congress", "capital": "Washington, DC"},
+    1: {"code": "AL", "name": "Alabama", "capital": "Montgomery"},
+    2: {"code": "AK", "name": "Alaska", "capital": "Juneau"},
+    3: {"code": "AZ", "name": "Arizona", "capital": "Phoenix"},
+    4: {"code": "AR", "name": "Arkansas", "capital": "Little Rock"},
+    5: {"code": "CA", "name": "California", "capital": "Sacramento"},
+    6: {"code": "CO", "name": "Colorado", "capital": "Denver"},
+    7: {"code": "CT", "name": "Connecticut", "capital": "Hartford"},
+    8: {"code": "DE", "name": "Delaware", "capital": "Dover"},
+    9: {"code": "FL", "name": "Florida", "capital": "Tallahassee"},
+    10: {"code": "GA", "name": "Georgia", "capital": "Atlanta"},
+    11: {"code": "HI", "name": "Hawaii", "capital": "Honolulu"},
+    12: {"code": "ID", "name": "Idaho", "capital": "Boise"},
+    13: {"code": "IL", "name": "Illinois", "capital": "Springfield"},
+    14: {"code": "IN", "name": "Indiana", "capital": "Indianapolis"},
+    15: {"code": "IA", "name": "Iowa", "capital": "Des Moines"},
+    16: {"code": "KS", "name": "Kansas", "capital": "Topeka"},
+    17: {"code": "KY", "name": "Kentucky", "capital": "Frankfort"},
+    18: {"code": "LA", "name": "Louisiana", "capital": "Baton Rouge"},
+    19: {"code": "ME", "name": "Maine", "capital": "Augusta"},
+    20: {"code": "MD", "name": "Maryland", "capital": "Annapolis"},
+    21: {"code": "MA", "name": "Massachusetts", "capital": "Boston"},
+    22: {"code": "MI", "name": "Michigan", "capital": "Lansing"},
+    23: {"code": "MN", "name": "Minnesota", "capital": "Saint Paul"},
+    24: {"code": "MS", "name": "Mississippi", "capital": "Jackson"},
+    25: {"code": "MO", "name": "Missouri", "capital": "Jefferson City"},
+    26: {"code": "MT", "name": "Montana", "capital": "Helena"},
+    27: {"code": "NE", "name": "Nebraska", "capital": "Lincoln"},
+    28: {"code": "NV", "name": "Nevada", "capital": "Carson City"},
+    29: {"code": "NH", "name": "New Hampshire", "capital": "Concord"},
+    30: {"code": "NJ", "name": "New Jersey", "capital": "Trenton"},
+    31: {"code": "NM", "name": "New Mexico", "capital": "Santa Fe"},
+    32: {"code": "NY", "name": "New York", "capital": "Albany"},
+    33: {"code": "NC", "name": "North Carolina", "capital": "Raleigh"},
+    34: {"code": "ND", "name": "North Dakota", "capital": "Bismarck"},
+    35: {"code": "OH", "name": "Ohio", "capital": "Columbus"},
+    36: {"code": "OK", "name": "Oklahoma", "capital": "Oklahoma City"},
+    37: {"code": "OR", "name": "Oregon", "capital": "Salem"},
+    38: {"code": "PA", "name": "Pennsylvania", "capital": "Harrisburg"},
+    39: {"code": "RI", "name": "Rhode Island", "capital": "Providence"},
+    40: {"code": "SC", "name": "South Carolina", "capital": "Columbia"},
+    41: {"code": "SD", "name": "South Dakota", "capital": "Pierre"},
+    42: {"code": "TN", "name": "Tennessee", "capital": "Nashville"},
+    43: {"code": "TX", "name": "Texas", "capital": "Austin"},
+    44: {"code": "UT", "name": "Utah", "capital": "Salt Lake City"},
+    45: {"code": "VT", "name": "Vermont", "capital": "Montpelier"},
+    46: {"code": "VA", "name": "Virginia", "capital": "Richmond"},
+    47: {"code": "WA", "name": "Washington", "capital": "Olympia"},
+    48: {"code": "WV", "name": "West Virginia", "capital": "Charleston"},
+    49: {"code": "WI", "name": "Wisconsin", "capital": "Madison"},
+    50: {"code": "WY", "name": "Wyoming", "capital": "Cheyenne"},
+    51: {"code": "DC", "name": "Washington D.C.", "capital": "Washington, DC"},
+    52: {"code": "US", "name": "US Congress", "capital": "Washington, DC"},
 }
+
 
 class LegiscanError(Exception):
     pass
@@ -188,11 +186,12 @@ class LegiscanAPI:
                                 bundle.name += ' *ERROR*'
                                 bundle.text = ('*ERROR* ' +
                                                pkg['alert']['message'])
-                                bundle.text += " " + self.url 
+                                bundle.text += " " + self.url
                                 bundle.text += " " + json.dumps(params)
                                 if EXCEEDED in bundle.text:
                                     bundle.status_code = 429
-                                raise LegiscanError(bundle.name+" "+bundle.text)
+                                raise LegiscanError(
+                                    bundle.name+" "+bundle.text)
                     else:
                         bundle.ok = False
                         bundle.status_code = 415
@@ -218,7 +217,7 @@ class LegiscanAPI:
         success = self.invoke_api(bill_bundle, bill_params)
         if success:
             if 'text' in bill_bundle.json_pkg:
-                bill_data = sesh_bundle.text
+                bill_data = bill_bundle.text
             else:
                 bill_bundle.ok = False
                 bill_bundle.status_code = 487
