@@ -66,24 +66,12 @@ class Command(BaseCommand):
             after = None
 
         # Get a list of ALL files on FOB FILE that match criteria
-        self.flist = self.fob_file.list_items(prefix=prefix, suffix=suffix,
-                                              after=after, limit=0)
-        if only_name:
-            if only_name in self.flist:
-                self.flist = [only_name]
-            else:
-                print('name {} not found in FILE'.format(only_name))
-                self.flist = []
+        self.flist = self.get_list(self.fob_file, prefix, suffix, 
+                                   after, only_name)
 
         # Get a list of ALL files on FOB FILE that match criteria
-        self.olist = self.fob_object.list_items(prefix=prefix, suffix=suffix,
-                                                after=after, limit=0)
-        if only_name:
-            if only_name in self.olist:
-                self.olist = [only_name]
-            else:
-                print('Name {} not found in OBJECT'.format(only_name))
-                self.olist = []
+        self.olist = self.get_list(self.fob_object, prefix, suffix, 
+                                   after, only_name)
 
         print('Number of files found:', len(self.flist))
         print('Number of objects found:', len(self.olist))
@@ -99,6 +87,14 @@ class Command(BaseCommand):
             self.count = 0
             self.delete_items(maxdel, found_in='OBJECT', but_not_in='FILE')
             del_count = self.count
+
+        # Get a list of ALL files on FOB FILE that match criteria
+        self.flist = self.get_list(self.fob_file, prefix, suffix, 
+                                   after, only_name)
+
+        # Get a list of ALL files on FOB FILE that match criteria
+        self.olist = self.get_list(self.fob_object, prefix, suffix, 
+                                   after, only_name)
 
         # Send Files to Object
         if maxput > 0:
@@ -137,7 +133,7 @@ class Command(BaseCommand):
             if name not in other_list:
                 remove_from.remove_item(name)
                 print('Removed from {}: {}'.format(found_in, name))
-                self.count += 0
+                self.count += 1
                 if self.count >= maxcount:
                     break
         return
@@ -181,3 +177,14 @@ class Command(BaseCommand):
                 pass
 
         return None
+
+    def get_list(self, fob, prefix, suffix, after, only_name):
+        my_list = fob.list_items(prefix=prefix, suffix=suffix,
+                                 after=after, limit=0)
+        if only_name:
+            if only_name in self.flist:
+                my_list = [only_name]
+            else:
+                print('name {} not found in FILE'.format(only_name))
+                my_list = []
+        return my_list

@@ -1,5 +1,7 @@
 from django.db import models
 from datetime import datetime
+from django.conf import settings
+
 
 LEFT_CORNER = u"\u2514\u2500\u2002"
 LEFT_PAD = u"\u2002\u2002\u2002\u2002"
@@ -183,3 +185,8 @@ class Hash(models.Model):
         """Return a string representation of the model."""
         desc = '{} ({})'.format(self.item_name, self.fob_method)
         return desc
+
+    def find_item_name(name, mode=settings.FOB_METHOD):
+        found = Hash.objects.filter(item_name=name,
+                                    fob_method=mode).first()
+        return found

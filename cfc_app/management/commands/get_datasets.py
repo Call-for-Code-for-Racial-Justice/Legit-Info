@@ -27,7 +27,7 @@ import datetime as DT
 import json
 from django.core.management.base import BaseCommand, CommandError
 from cfc_app.models import Location, Hash
-from cfc_app.LegiscanAPI import LegiscanAPI, LEGISCAN_ID
+from cfc_app.LegiscanAPI import LegiscanAPI, LEGISCAN_ID, LegiscanError
 from cfc_app.FOB_Storage import FOB_Storage
 from cfc_app.views import load_default_locations
 from django.conf import settings
@@ -38,13 +38,14 @@ class Command(BaseCommand):
     StateForm = 'Session {} Year: {} Date: {} Size: {} bytes'
     VERSIONS = 5   # Number of weeks to keep DatasetLists from Legiscan
 
-    help = ("For each state in the United States listed in cfc_app_law "
-            "database table, this script will fetch the most recent "
+    help = ("Fetches DatasetList-YYYY-MM-DD.json from Legiscan.com, then "
+            "for each location listed in cfc_app_law database table with "
+            "a valid Legiscan_id, this script will fetch the most recent "
             "legislative sessions, and create a JSON-formatted output file "
-            "SS-NNNN.json where 'SS' is the two-letter state abbreviation "
+            "CC-Dataset-NNNN.json where 'CC' is the Legiscan location code "
             "like AZ or OH, and 'NNNN' is the four-digit session_id assigned "
-            "by Legiscan.com API. The SS-NNNN.json files are stored in "
-            "File/Object Storage.")
+            "by Legiscan.com API. The DatasetList and Dataset files are "
+            "stored in File/Object Storage.")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -57,7 +58,6 @@ class Command(BaseCommand):
         self.datasetlist = None
         self.now = DT.datetime.today().date()
         self.fromyear = self.now.year - 2  # Go back three years 2018, 2019, 2020
-        self.long_ago = DT.date(1911, 6, 16)  # Long ago in history
         self.frequency = 7
         return None
 
@@ -93,7 +93,7 @@ class Command(BaseCommand):
         locations = Location.objects.filter(legiscan_id__gt=0)
         if not locations:
             load_default_locations()
-            locations = Location.objects.filter(parent=usa)
+            locations = Location.objects.filter(legiscan_id__gt=0)
 
         states = []
         for loc in locations:
@@ -121,7 +121,7 @@ class Command(BaseCommand):
         week_ago = self.now - DT.timedelta(days=self.frequency)
         dsl_list = self.fob.DatasetList_items()
 
-        latest_date = self.long_ago  # Long ago in history
+        latest_date = settings.LONG_AGO  # Long ago in history
         latest_name = None
         for name in dsl_list:
             mo = self.fob.DatasetList_search(name)
@@ -195,7 +195,7 @@ class Command(BaseCommand):
                     entry_date = self.date_type(entry['dataset_date'])
 
                     hashcode, hashdate = '', self.long_ago
-                    hash = self.check_hash(session_name)
+                    hash = Hash.find_item_name(session_name)
                     if hash:
                         hashcode = hash.hashcode
                         hashdate = hash.generated_date
@@ -214,7 +214,8 @@ class Command(BaseCommand):
                                 self.fob.upload_text(session_data,
                                                      session_name)
                         else:
-                            print('Fetch unsuccessful for:', session_name)
+                            err_msg = 'Fetch unsuccessful for: '+session_name
+                            raise LegiscanError(err_msg)
 
         return None
 
@@ -251,16 +252,24 @@ class Command(BaseCommand):
 
     def save_to_database(self, session_name, entry):
 
-        find_hash = self.check_hash(session_name)
+        find_hash = Hash.find_item_name(session_name)
         if find_hash is None:
             hash = Hash()
             hash.item_name = session_name
             hash.fob_method = settings.FOB_METHOD
+            hash.desc = entry['session_name']
             hash.generated_date = entry['dataset_date']
             hash.hashcode = entry['dataset_hash']
             hash.size = entry['dataset_size']
-            hash.desc = entry['session_name']
             hash.save()
+
+        else:
+            find_hash.generated_date = entry['dataset_date']
+            find_hash.hashcode = entry['dataset_hash']
+            find_hash.size = entry['dataset_size']
+            find_hash.save()
+
+        return None
 
     def show_results(self, json_name, entry):
         year_range = str(entry['year_start'])

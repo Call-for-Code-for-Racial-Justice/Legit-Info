@@ -41,8 +41,8 @@ id=3 represents Arizona, id=35 represents Ohio, and id=52 represents USA.
 You may limit the processing to a single state using the --state parameter.
 
 Each legislative session is identified by a unique session_id (NNNN), so 
-the Datasets saved from Legiscan API are named SS-Dataset-NNNN.json, where
-'SS' is the state code (AZ for Arizona, for example), and NNNN is four-digit
+the Datasets saved from Legiscan API are named CC-Dataset-NNNN.json, where
+'CC' is the state code (AZ for Arizona, for example), and NNNN is four-digit
 number representing the session_id.  Each session has a year_start and 
 year_end.  To get legislation for 2018, 2019 and 2020, we get all sessions
 that have a year_end 2018 or later.
@@ -91,11 +91,12 @@ Cron Job:
 usage: manage.py get_datasets [-h] [--api] [--state STATE]
                               [--frequency FREQUENCY]
 
-For each state in the United States listed in cfc_app_law database table, this
-script will fetch the most recent legislative sessions, and create a JSON-
-formatted output file SS-NNNN.json where 'SS' is the two-letter state
-abbreviation like AZ or OH, and 'NNNN' is the four-digit session_id assigned
-by Legiscan.com API. The SS-NNNN.json files are stored in File/Object Storage.
+Fetches DatasetList-YYYY-MM-DD.json from Legiscan.com, then for each location
+listed in cfc_app_law database table with a valid Legiscan_id, this script
+will fetch the most recent legislative sessions, and create a JSON-formatted
+output file CC-Dataset-NNNN.json where 'CC' is the Legiscan location code like
+AZ or OH, and 'NNNN' is the four-digit session_id assigned by Legiscan.com
+API. The DatasetList and Dataset files are stored in File/Object Storage.
 
 optional arguments:
   -h, --help            show this help message and exit

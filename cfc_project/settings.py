@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/2.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
-
+import datetime as DT
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -205,3 +205,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # My settings
 LOGIN_URL = 'users:login'
+LONG_AGO = DT.date(1911, 6, 16)  # Long ago in history
+
+

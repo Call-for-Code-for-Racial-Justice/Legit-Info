@@ -22,8 +22,8 @@
 # Debug with:   import pdb; pdb.set_trace()
 
 import base64
+import datetime as DT
 import json
-import os
 import re
 import tempfile
 import zipfile
@@ -34,8 +34,8 @@ from django.core.management.base import BaseCommand
 from cfc_app.FOB_Storage import FOB_Storage
 from cfc_app.ShowProgress import ShowProgress
 from cfc_app.PDFtoTEXT import PDFtoTEXT
-from cfc_app.models import Location
-from cfc_app.LegiscanAPI import LegiscanAPI, LegiscanError
+from cfc_app.models import Law, Location, Hash
+from cfc_app.LegiscanAPI import LegiscanAPI, LEGISCAN_ID, LegiscanError
 from cfc_app.Oneline import Oneline
 from cfc_app.DataBundle import DataBundle
 
@@ -47,17 +47,18 @@ SUMMARY_LIMIT = 1000
 # Put the original file name, doc date, title and summary ahead of text
 HeadForm = "{} {} _TITLE_ {} _SUMMARY_ {} _TEXT_"
 
-billRegex = re.compile(r"^(\w\w)/\d\d\d\d-(\d\d\d\d).*/bill/(\w*).json$")
-dslRegex = re.compile(r"^(\w\w)-(\d\d\d\d)-(\w*).json$")
-keyForm = "{}-{}-Y{}"
+billRegex = re.compile(r"^([A-Z]{2})/\d\d\d\d-(\d\d\d\d).*/bill/(\w*).json$")
+keyForm = "{}-{}-{}"
 nameForm = "{}.{}"
 
 
 class Command(BaseCommand):
-    help = ("For each state, scan the associated SS-Dataset-NNNN.json "
+    help = ("For each state, scan the associated CC-Dataset-NNNN.json "
             "fetching the legislation as either HTML or PDF file, and "
             "extract to TEXT.  Both the original (HTML/PDF) and the "
-            "extracted TEXT file are stored in File/Object Storage.")
+            "extracted TEXT file are stored in File/Object Storage, "
+            "so that they can be compared by developers to validate "
+            "the text analysis.")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -65,29 +66,27 @@ class Command(BaseCommand):
         self.leg = LegiscanAPI()
 
         self.use_api = False
-        self.skip = False
-        self.sessions = 1
+        self.state = None
         self.session_id = None
         self.limit = 10
+        self.skip = False
+
         self.state_count = 0
         return None
 
     def add_arguments(self, parser):
         parser.add_argument("--api", action="store_true",
-                            help="Invoke Legiscan.com API")
+                            help="Invoke Legiscan.com API, if needed")
         parser.add_argument("--state", help="Process single state: AZ, OH")
         parser.add_argument("--session_id", help="Process this session only")
         parser.add_argument("--limit", type=int, default=self.limit,
                             help="Number of bills to extract per state")
         parser.add_argument("--skip", action="store_true",
-                            help="Skip files already processed")
+                            help="Skip files already in File/Object storage")
 
         return None
 
     def handle(self, *args, **options):
-
-        if options['sessions']:
-            self.sessions = options['sessions']
 
         if options['state']:
             self.state = options['state']
@@ -105,59 +104,65 @@ class Command(BaseCommand):
             self.session_id = options['session_id']
             self.state = None
 
-        # Use the Django "Location" database to get list of states.
+        # Use the Django "Location" database to get list of locations
+        # listed with valid (non-zero) Legiscan_id.  For example,
+        # Legiscan_id=3 for Arizona, and Legiscan_id=35 for Ohio.
 
-        usa = Location.objects.get(shortname='usa')
-        locations = Location.objects.order_by(shortname).filter(parent=usa)
+        locations = Location.objects.filter(legiscan_id__gt=0)
+
         for loc in locations:
-            state = loc.shortname.upper()  # Convert state to UPPER CASE
+            self.loc = loc
+            state_id = loc.legiscan_id
+            if state_id > 0:
+                state = LEGISCAN_ID[state_id]['code']
 
             # If we are only processing one state, and this is
-            # not it, skip it.
+            # not it, continue to the next state.
             if self.state and (state != self.state):
                 continue
 
-            print('Processing state: ', state)
+            print('Processing: {} ({})'.format(loc.desc, state))
             self.state_count = 0
-            hlist = self.fob.list_items(prefix=state, suffix='.json')
+            found_list = self.fob.Dataset_items(state)
 
-            sesh_dict = []
-            for json_name in hlist:
-                mo = dslRegex.search(json_name)
+            sessions = []
+            found_list.sort(reverse=True)
+            for json_name in found_list:
+                mo = self.fob.Dataset_search(json_name)
                 if mo:
                     state = mo.group(1)
                     session_id = mo.group(2)
 
                     # If you are only doing one session_id, and this one
-                    # isn't it, continue to the next session_id
+                    # isn't it, continue to the next session_id.
                     if self.session_id and (session_id != self.session_id):
                         continue
 
-                    # Insert in front of list to put most recent years first
-                    if session_id not in sesh_dict:
-                        sesh_dict.insert(0, session_id)
+                    # Add session_id to list of sessions found.
+                    if session_id not in sessions:
+                        sessions.append([session_id, json_name])
 
             # Loop through the sessions found, most recent first, until
-            # the limit of bills to process is reached.
-            for session_id in sesh_dict:
+            # the limit of bills to process is reached for this state.
+            sessions.sort(reverse=True)
+            for session_detail in sessions:
                 if self.limit > 0 and self.state_count >= self.limit:
                     break
-                self.process_json(state, session_id)
+                session_id, json_name = session_detail
+                self.process_json(state, session_id, json_name)
 
         return None
 
-    def process_json(self, state, session_id):
-        """ Process SS-NNNN-Dataset.json and SS-NNNN-Master.json """
-        # import pdb; pdb.set_trace()
+    def process_json(self, state, session_id, json_name):
+        """ Process CC-Dataset-NNNN.json file """
 
-        dsl_name = '{}-{}-Dataset.json'.format(state, session_id)
-        json_str = self.fob.download_text(dsl_name)
-        zip_name = dsl_name.replace('.json', '.zip')
+        json_str = self.fob.download_text(json_name)
 
-        print('Checking: ', dsl_name)
+        print('Checking: ', json_name)
         dot = ShowProgress()
 
         # If the ZIP file already exists, use it, otherwise create it.
+        zip_name = json_name.replace('.json', '.zip')
         if self.fob.item_exists(zip_name):
             msg_bytes = self.fob.download_binary(zip_name)
         else:
@@ -168,42 +173,65 @@ class Command(BaseCommand):
                 msg_bytes = base64.b64decode(mimedata)
                 self.fob.upload_binary(msg_bytes, zip_name)
 
-        #import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
 
-        with tempfile.NamedTemporaryFile(suffix='.zip',prefix='tmp-',
+        with tempfile.NamedTemporaryFile(suffix='.zip', prefix='tmp-',
                                          delete=True) as temp_zip:
             temp_zip.write(msg_bytes)
             temp_zip.seek(0)
 
             with zipfile.ZipFile(temp_zip.name, 'r') as zf:
                 namelist = zf.namelist()
+
                 for path in namelist:
                     if self.limit > 0 and self.state_count >= self.limit:
                         break
                     mo = billRegex.search(path)
                     if mo:
                         dot.show()
-                        json_data = zf.read(path).decode('UTF-8', 
+                        json_data = zf.read(path).decode('UTF-8',
                                                          errors='ignore')
-                        self.state_count += self.process_source(mo, json_data)
+                        processed = self.process_source(mo, json_data)
+                        self.state_count += processed
 
         dot.end()
         return None
 
     def process_source(self, mo, json_data):
         bill_state = mo.group(1)
-        bill_year = mo.group(2)
         bill_number = mo.group(3)
         bill_json = json.loads(json_data)
+
         bill_detail = bill_json['bill']
+        session_id = bill_detail['session_id']
         texts = bill_detail['texts']
+        # import pdb; pdb.set_trace()
+        
+
+        # If a bill has multiple versions, choose the latest one.
         chosen = self.latest_text(texts)
         extension = self.determine_extension(chosen['mime'])
-        key = keyForm.format(bill_state, bill_number, bill_year)
-        text_name = nameForm.format(key, "txt")
+        bill_year = chosen['date'][:4]
 
-        if self.skip and self.fob.item_exists(text_name):
-            print('File exists, skipping: ', text_name)
+        # Generate the key to be used to refer to this legislation.
+        key = self.fob.BillText_key(bill_state, bill_number,
+                                    session_id, bill_year)
+        bill_id = bill_detail['bill_id']
+        title = bill_detail['title']
+        summary = bill_detail['description']
+        doc_date = chosen['date']
+        law_record = Law.objects.filter(key=key).first()
+        if law_record is None:
+            law_record = Law(key=key, title=title, summary=summary,
+                             bill_id=bill_id, doc_date=doc_date,
+                             location=self.loc)
+            law_record.save()
+
+        text_name = self.fob.BillText_name(key, "txt")
+
+        # If we already have the final text file, honor the --skip parameter
+        if self.fob.item_exists(text_name) and self.skip:
+            print('File {} already exists, skipping: ', text_name)
             processed = 0
         else:
             self.process_bill(key, extension, bill_detail, chosen)
@@ -211,72 +239,117 @@ class Command(BaseCommand):
         return processed
 
     def process_bill(self, key, extension, bill_detail, chosen):
-        bill_name = nameForm.format(key, extension)
-        title = bill_detail['title']
-        summary = bill_detail['description']
+        bill_name = self.fob.BillText_name(key, extension)
+        bill_hash = Hash.find_item_name(bill_name)
 
-        params = {}
+        # If the source PDF/HTML exists, and the hash code matches,
+        # then it is up-to-date and we can use it directly.
+        FOB_source = False
+        if (self.fob.item_exists(bill_name)
+                and bill_hash is not None
+                and bill_hash.hashcode == bill_detail['change_hash']):
+            # read the existing PDF/HTML file we have in File/Object store
+            FOB_source = True
+
         # import pdb; pdb.set_trace()
         if extension == 'html':
-            html_bundle = DataBundle(bill_name)
-            response = html_bundle.make_request(chosen['state_link'], params)
-            result = html_bundle.load_response(response)
-            if result:
-                textdata = html_bundle.text
-                
-                self.fob.upload_text(textdata, bill_name)
-                self.process_html(key, chosen['date'], bill_detail, textdata)
+            if FOB_source:
+                textdata = self.fob.download_text(bill_name)
+            else:
+                params = {}
+                bill_bundle = DataBundle(bill_name)
+                response = bill_bundle.make_request(chosen['state_link'],
+                                                    params)
+                result = bill_bundle.load_response(response)
+                if result:
+                    textdata = bill_bundle.text
+                    self.fob.upload_text(textdata, bill_name)
+
+            self.process_html(key, chosen['date'], bill_detail, textdata)
 
         elif extension == 'pdf':
-            pdf_bundle = DataBundle(bill_name)
-            # import pdb; pdb.set_trace()
-            response = pdf_bundle.make_request(chosen['state_link'], params)
-            result = pdf_bundle.load_response(response)
-            if result:
-                bindata = pdf_bundle.content
-                self.fob.upload_binary(bindata, bill_name)
-                self.process_pdf(key, chosen['date'], bill_detail, bindata)
+            if FOB_source:
+                bindata = self.fob.download_binary(bill_name)
+            else:
+                params = {}
+                bill_bundle = DataBundle(bill_name)
+                response = bill_bundle.make_request(chosen['state_link'],
+                                                    params)
+                result = bill_bundle.load_response(response)
+                if result:
+                    bindata = bill_bundle.content
+                    self.fob.upload_binary(bindata, bill_name)
 
+            self.process_pdf(key, chosen['date'], bill_detail, bindata)
+
+        self.save_source_hash(bill_hash, bill_name, bill_detail, chosen)
         return
 
+    def save_source_hash(self, bill_hash, bill_name, bill_detail, chosen):
+
+        if bill_hash is None:
+            hash = Hash()
+            hash.item_name = bill_name
+            hash.fob_method = settings.FOB_METHOD
+            hash.desc = bill_detail['title']
+            hash.generated_date = chosen['date']
+            hash.hashcode = bill_detail['change_hash']
+            hash.size = chosen['text_size']
+            hash.save()
+
+        else:
+            bill_hash.generated_date = chosen['date']
+            bill_hash.hashcode = bill_detail['change_hash']
+            bill_hash.size = chosen['text_size']
+            bill_hash.save()
+
+        return None
+
+    def fetch_file_from_state(self, bill_name, chosen):
+        params = {}
+        bill_bundle = DataBundle(bill_name)
+        response = bill_bundle.make_request(chosen['state_link'], params)
+        result = bill_bundle.load_response(response)
+        return result
+
     def process_html(self, key, docdate, bill_detail, billtext):
-        bill_name = nameForm.format(key, 'html')
-        text_name = nameForm.format(key, 'txt')
+        bill_name = self.fob.BillText_name(key, 'html')
+        text_name = self.fob.BillText_name(key, 'txt')
 
         text_line = Oneline()
         title, summary = bill_detail['title'], bill_detail['description']
         text_line.add_text(HeadForm.format(bill_name, docdate, title, summary))
         self.parse_html(billtext, text_line)
         text_line.oneline = self.remove_section_numbers(text_line.oneline)
-        text_line.write_name(textname)
-        print('Writing: ', textname)
+        text_line.write_name(text_name)
+        print('Writing: ', text_name)
         return self
 
     def process_pdf(self, key, docdate, bill_detail, msg_bytes):
 
-        imput_str = ""
-        with tempfile.NamedTemporaryFile(suffix='.pdf',prefix='tmp-',
+        input_str = ""
+        with tempfile.NamedTemporaryFile(suffix='.pdf', prefix='tmp-',
                                          delete=True) as temp_pdf:
             temp_pdf.write(msg_bytes)
             temp_pdf.seek(0)
-            with tempfile.NamedTemporaryFile(suffix='.txt',prefix='tmp-',
-                                         delete=True) as temp_out:
+            with tempfile.NamedTemporaryFile(suffix='.txt', prefix='tmp-',
+                                             delete=True) as temp_out:
                 PDFtoTEXT(temp_pdf.name, temp_out.name)
                 temp_out.seek(0)
-                imput_str = temp_out.read().decode('UTF-8')
+                input_str = temp_out.read().decode('UTF-8')
 
-        bill_name = nameForm.format(key, 'pdf')
+        bill_name = self.fob.BillText_name(key, 'pdf')
         title, summary = bill_detail['title'], bill_detail['description']
         header = HeadForm.format(bill_name, docdate, title, summary)
-        
-        text_name = nameForm.format(key, 'txt')
+
+        text_name = self.fob.BillText_name(key, 'txt')
         text_line = Oneline()
         text_line.add_text(header)
         if input_str:
             self.parse_intermediate(input_str, text_line)
             text_line.oneline = self.remove_section_numbers(text_line.oneline)
-        text_line.write_name(textname)
-        print('Writing: ', textname)
+        text_line.write_name(text_name)
+        print('Writing: ', text_name)
         return self
 
     def form_sentence(self, line, charlimit):
@@ -308,7 +381,7 @@ class Command(BaseCommand):
             except Exception as e:
                 self.leg.api_ok = False
                 print('Error: {}'.format(e))
-                raise LegiscanError
+                raise LegiscanError('Unable to fetch bill: '+key+" "+docID)
 
         if response != '':
             mime_type = response['mime_type']
@@ -378,8 +451,6 @@ class Command(BaseCommand):
 
         return self
 
-
-
     def parse_intermediate(self, input_string, output_line):
         lines = input_string.splitlines()
         for line in lines:
@@ -389,8 +460,6 @@ class Command(BaseCommand):
             if newline != '' and not newline.isdigit():
                 output_line.add_text(newline)
         return self
-
-
 
     def remove_section_numbers(self, line):
         newline = re.sub(r'and [-0-9]+[.][0-9]+\b\s*', '', line)
@@ -434,16 +503,21 @@ class Command(BaseCommand):
         return item_name
 
     def latest_text(self, texts):
-        LastDate = "0000-00-00"
+        LastDate = settings.LONG_AGO
         LastDocid = 0
         LastEntry = None
         for entry in texts:
-            this_date = entry['date']
+            this_date = self.date_type(entry['date'])
             this_docid = entry['doc_id']
             if (this_date > LastDate or
-               (this_date == LastDate and this_docid > LastDocid)):
+                    (this_date == LastDate and this_docid > LastDocid)):
                 LastDate = this_date
                 LastDocid = this_docid
                 LastEntry = entry
 
         return LastEntry
+
+    def date_type(self, date_string):
+        """ Convert "YYYY-MM-DD" string to datetime.date format """
+        date_value = DT.datetime.strptime(date_string, "%Y-%m-%d").date()
+        return date_value

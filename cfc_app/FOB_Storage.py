@@ -13,8 +13,9 @@ from ibm_botocore.client import Config, ClientError
 
 MAXLIMIT = 1000
 TESTLIMIT = 10
-DSLregex = re.compile('^DatasetList-(\d\d\d\d-\d\d-\d\d).json$')
-DSNregex = re.compile('^(\w\w)-Dataset-(\d\d\d\d).json$')
+DSLregex = re.compile(r'^DatasetList-(\d\d\d\d-\d\d-\d\d).json$')
+DSNregex = re.compile(r'^([A-Z]{2})-Dataset-(\d\d\d\d).json$')
+BTregex = re.compile(r'^([A-Z]{2})-([A-Z0-9]*)-(\d\d\d\d)(.json|.pdf|.html)$')
 
 class FOB_Storage():
     """
@@ -216,6 +217,28 @@ class FOB_Storage():
         item_name = "{}-Dataset-{:04d}.json".format(state, state_id)
         return item_name
 
+    # Helpers for Legiscan BillText (SS-Dataset-NNNN.json)
+    def BillText_items(self, state, extension):
+        dsn_prefix = "{}-".format(state)
+        dsl_list = self.list_items(prefix=dsn_prefix, suffix=extension)
+        return dsl_list
+
+    def BillText_search(self, item_name):
+        mo = BTregex.search(item_name)
+        return mo
+
+    def BillText_key(self, state, bill_number, session_id, doc_year):
+        key = "{}-{}-{}".format(state, bill_number, session_id)
+        if len(key) <= 14:
+            key += "-Y" + doc_year
+        elif len(key)<=16:
+            key += "-Y" + doc_year[2:4]
+        return key
+
+    def BillText_name(self, key, extension):
+        ext = extension.lower()
+        item_name = "{}.{}".format(key, ext)
+        return item_name
 
     def download_binary(self, item_name):
         """ Upload binary file """

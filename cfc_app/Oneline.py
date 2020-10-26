@@ -18,13 +18,14 @@ class Oneline():
     def add_text(self, line):
         newline = line.replace('\u2011', '-').replace('\u2013', '-')
         newline = newline.replace('\u2019', '-')
-        newline = newline.replace("'", "-").replace('"', '_').splitlines()
+        # newline = newline.replace("'", "-").replace('"', '_').splitlines()
         newline2 = ' '.join(newline)
         self.oneline += newline2 + ' '
         return self
 
     def write_name(self, outname):
         fob = FOB_Storage(settings.FOB_METHOD)
+        self.oneline = self.oneline.replace(". ", '.\n')
         fob.upload_text(self.oneline, outname, codec='UTF-8')
         return self
 
