@@ -57,7 +57,7 @@ class Command(BaseCommand):
         self.list_pkg = None
         self.datasetlist = None
         self.now = DT.datetime.today().date()
-        self.fromyear = self.now.year - 2  # Go back three years 2018, 2019, 2020
+        self.fromyear = self.now.year - 2  # Back three years 2018, 2019, 2020
         self.frequency = 7
         return None
 
@@ -85,10 +85,9 @@ class Command(BaseCommand):
         # Get the list of states from the Django database for "Location"
 
         try:
-            usa = Location.objects.get(shortname='usa')
+            Location.objects.get(shortname='usa')
         except Location.DoesNotExist:
             load_default_locations()
-            usa = Location.objects.get(shortname='usa')
 
         locations = Location.objects.filter(legiscan_id__gt=0)
         if not locations:
@@ -194,7 +193,7 @@ class Command(BaseCommand):
                 if entry['year_end'] >= self.fromyear:
                     entry_date = self.date_type(entry['dataset_date'])
 
-                    hashcode, hashdate = '', self.long_ago
+                    hashcode, hashdate = '', settings.LONG_AGO
                     hash = Hash.find_item_name(session_name)
                     if hash:
                         hashcode = hash.hashcode

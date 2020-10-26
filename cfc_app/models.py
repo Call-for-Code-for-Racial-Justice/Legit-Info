@@ -188,6 +188,6 @@ class Hash(models.Model):
         return desc
 
     def find_item_name(name, mode=settings.FOB_METHOD):
-        found = Hash.objects.filter(item_name=name,
-                                    fob_method=mode).first()
-        return found
+        record = Hash.objects.filter(item_name=name,
+                                     fob_method=mode).first()
+        return record

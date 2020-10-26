@@ -18,7 +18,6 @@
 
 from django.core.management.base import BaseCommand
 from cfc_app.FOB_Storage import FOB_Storage
-from django.conf import settings
 
 
 class Command(BaseCommand):

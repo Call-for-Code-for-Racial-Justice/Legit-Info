@@ -24,9 +24,12 @@
 import base64
 import datetime as DT
 import json
+from random import randint
+import os
 import re
 import tempfile
 import zipfile
+from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -65,12 +68,12 @@ class Command(BaseCommand):
         self.fob = FOB_Storage(settings.FOB_METHOD)
         self.leg = LegiscanAPI()
 
-        self.use_api = False
+        self.api_limit = 0
         self.state = None
         self.session_id = None
         self.limit = 10
         self.skip = False
-
+        self.rand_key = "tmp" + str(randint(1000, 9999))
         self.state_count = 0
         return None
 
@@ -95,7 +98,7 @@ class Command(BaseCommand):
             self.limit = options['limit']
 
         if options['api']:
-            self.use_api = True
+            self.api_limit = 10
 
         if options['skip']:
             self.skip = True
@@ -206,7 +209,6 @@ class Command(BaseCommand):
         session_id = bill_detail['session_id']
         texts = bill_detail['texts']
         # import pdb; pdb.set_trace()
-        
 
         # If a bill has multiple versions, choose the latest one.
         chosen = self.latest_text(texts)
@@ -234,8 +236,7 @@ class Command(BaseCommand):
             print('File {} already exists, skipping: ', text_name)
             processed = 0
         else:
-            self.process_bill(key, extension, bill_detail, chosen)
-            processed = 1
+            processed = self.process_bill(key, extension, bill_detail, chosen)
         return processed
 
     def process_bill(self, key, extension, bill_detail, chosen):
@@ -251,21 +252,31 @@ class Command(BaseCommand):
             # read the existing PDF/HTML file we have in File/Object store
             FOB_source = True
 
-        # import pdb; pdb.set_trace()
+        processed = 0
+        textdata = None
+        bindata = None
+
         if extension == 'html':
+
             if FOB_source:
                 textdata = self.fob.download_text(bill_name)
             else:
                 params = {}
                 bill_bundle = DataBundle(bill_name)
-                response = bill_bundle.make_request(chosen['state_link'],
+                source = urlparse(chosen['state_link'])
+                print(source.params)
+                response = bill_bundle.make_request(source.geturl,
                                                     params)
                 result = bill_bundle.load_response(response)
                 if result:
                     textdata = bill_bundle.text
                     self.fob.upload_text(textdata, bill_name)
 
-            self.process_html(key, chosen['date'], bill_detail, textdata)
+            if textdata:
+                self.process_html(key, chosen['date'], bill_detail, textdata)
+                processed = 1
+            else:
+                print('Failure processing HTML source')
 
         elif extension == 'pdf':
             if FOB_source:
@@ -273,17 +284,45 @@ class Command(BaseCommand):
             else:
                 params = {}
                 bill_bundle = DataBundle(bill_name)
-                response = bill_bundle.make_request(chosen['state_link'],
-                                                    params)
+                source = urlparse(chosen['state_link'])
+                querylist = source.query.split('&')
+                for q in querylist:
+                    qfragments = q.split('=')
+                    qkey, qvalue = qfragments
+                    params[qkey] = qvalue
+                scheme = source.scheme
+                stem = source.netloc + source.path
+                if scheme == '':
+                    scheme = 'http'
+                baseurl = '{}://{}'.format(scheme, stem)
+                response = bill_bundle.make_request(baseurl, params)
                 result = bill_bundle.load_response(response)
-                if result:
+                import pdb
+                pdb.set_trace()
+                if result and bill_bundle.content[:4] == b'%PDF':
                     bindata = bill_bundle.content
                     self.fob.upload_binary(bindata, bill_name)
+                elif self.api_limit > 0 and self.leg.api_ok:
+                    response = self.leg.getBillText(chosen['doc_id'])
+                    self.api_limit -= 1
+                    if response:
+                        json_data = json.loads(response)
+                        json_text = json_data['text']
+                        json_doc = json_text['doc']
 
-            self.process_pdf(key, chosen['date'], bill_detail, bindata)
+                        mimedata = json_doc.encode('UTF-8')
+                        bindata = base64.b64decode(mimedata)
+                    
 
-        self.save_source_hash(bill_hash, bill_name, bill_detail, chosen)
-        return
+            if bindata:
+                self.process_pdf(key, chosen['date'], bill_detail, bindata)
+                processed = 1
+            else:
+                print('Failure processing PDF source')
+
+        if processed:
+            self.save_source_hash(bill_hash, bill_name, bill_detail, chosen)
+        return processed
 
     def save_source_hash(self, bill_hash, bill_name, bill_detail, chosen):
 
@@ -328,15 +367,17 @@ class Command(BaseCommand):
     def process_pdf(self, key, docdate, bill_detail, msg_bytes):
 
         input_str = ""
-        with tempfile.NamedTemporaryFile(suffix='.pdf', prefix='tmp-',
-                                         delete=True) as temp_pdf:
-            temp_pdf.write(msg_bytes)
-            temp_pdf.seek(0)
-            with tempfile.NamedTemporaryFile(suffix='.txt', prefix='tmp-',
-                                             delete=True) as temp_out:
-                PDFtoTEXT(temp_pdf.name, temp_out.name)
-                temp_out.seek(0)
-                input_str = temp_out.read().decode('UTF-8')
+        # import pdb; pdb.set_trace()
+        temp_name = self.rand_key + ".pdf"
+        temp_path = os.path.join(settings.SOURCE_ROOT, temp_name)
+        with open(temp_path, "wb") as outfile:
+            outfile.write(msg_bytes)
+
+        with tempfile.NamedTemporaryFile(suffix='.txt', prefix='tmp-',
+                                         delete=True) as temp_out:
+            PDFtoTEXT(temp_path, temp_out.name)
+            temp_out.seek(0)
+            input_str = temp_out.read().decode('UTF-8')
 
         bill_name = self.fob.BillText_name(key, 'pdf')
         title, summary = bill_detail['title'], bill_detail['description']
@@ -375,7 +416,7 @@ class Command(BaseCommand):
         extension, msg_bytes = '', b''
         docID = bill['doc_id']
         response = ''
-        if self.use_api and self.leg.api_ok:
+        if self.api_limit > 0 and self.leg.api_ok:
             try:
                 response = self.leg.getBillText(docID)
             except Exception as e:
@@ -383,7 +424,7 @@ class Command(BaseCommand):
                 print('Error: {}'.format(e))
                 raise LegiscanError('Unable to fetch bill: '+key+" "+docID)
 
-        if response != '':
+        if response:
             mime_type = response['mime_type']
             extension = self.determine_extension(mime_type)
 
@@ -504,6 +545,7 @@ class Command(BaseCommand):
 
     def latest_text(self, texts):
         LastDate = settings.LONG_AGO
+
         LastDocid = 0
         LastEntry = None
         for entry in texts:

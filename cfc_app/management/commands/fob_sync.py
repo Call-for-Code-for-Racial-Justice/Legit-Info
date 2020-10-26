@@ -66,11 +66,11 @@ class Command(BaseCommand):
             after = None
 
         # Get a list of ALL files on FOB FILE that match criteria
-        self.flist = self.get_list(self.fob_file, prefix, suffix, 
+        self.flist = self.get_list(self.fob_file, prefix, suffix,
                                    after, only_name)
 
         # Get a list of ALL files on FOB FILE that match criteria
-        self.olist = self.get_list(self.fob_object, prefix, suffix, 
+        self.olist = self.get_list(self.fob_object, prefix, suffix,
                                    after, only_name)
 
         print('Number of files found:', len(self.flist))
@@ -88,13 +88,9 @@ class Command(BaseCommand):
             self.delete_items(maxdel, found_in='OBJECT', but_not_in='FILE')
             del_count = self.count
 
-        # Get a list of ALL files on FOB FILE that match criteria
-        self.flist = self.get_list(self.fob_file, prefix, suffix, 
-                                   after, only_name)
-
-        # Get a list of ALL files on FOB FILE that match criteria
-        self.olist = self.get_list(self.fob_object, prefix, suffix, 
-                                   after, only_name)
+            # Refresh list of ALL files on FOB FILE that match criteria
+            self.olist = self.get_list(self.fob_object, prefix, suffix,
+                                       after, only_name)
 
         # Send Files to Object
         if maxput > 0:
@@ -105,8 +101,8 @@ class Command(BaseCommand):
         # Send Object to Files
         if maxget > 0:
             self.count = 0
-            self.get_count = self.copy_items(maxget, options, from_fob='OBJECT',
-                                             to_fob='FILE')
+            self.get_count = self.copy_items(maxget, options,
+                                             from_fob='OBJECT', to_fob='FILE')
             get_count = self.count
 
         print('Nunmber of DELETE requests from OBJECT: ', del_count)

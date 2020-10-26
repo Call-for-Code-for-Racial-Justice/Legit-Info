@@ -143,29 +143,30 @@ class LegiscanAPI:
             sesh_data = None
         return sesh_data
 
-    def getMasterList(self, session_id, apikey='Good'):
-        """ Get datasets for individual legislative session """
+    def getBillText(self, document_id, apikey='Good'):
+        """ Get specific document identified in bill """
         key = self.badKey
         if apikey == 'Good':
             key = self.apiKey
 
-        mast_data = None
-        mast_bundle = DataBundle('getDataset')
-        mast_params = {'key': key, 'op': 'getMasterList', 'id': session_id}
+        bill_data = None
+        bill_bundle = DataBundle('getBillText')
+        bill_params = {'key': key, 'op': 'getBillText', 'id': document_id}
 
-        success = self.invoke_api(mast_bundle, mast_params)
+        success = self.invoke_api(bill_bundle, bill_params)
         if success:
-            if 'masterlist' in mast_bundle.json_pkg:
-                mast_data = mast_bundle.text
+            if 'text' in bill_bundle.json_pkg:
+                bill_data = bill_bundle.text
             else:
-                mast_bundle.ok = False
-                mast_bundle.status_code = 487
+                bill_bundle.ok = False
+                bill_bundle.status_code = 487
 
-        if not mast_bundle.ok:
-            print('Failure', mast_bundle)
+        if not bill_bundle.ok:
+            print('Failure', bill_bundle)
             self.api_ok = False
-            mast_data = None
-        return mast_data
+            bill_data = None
+        return bill_data
+
 
     def invoke_api(self, bundle, params):
         """ Invoke the Legiscan API """
@@ -204,29 +205,7 @@ class LegiscanAPI:
             bundle.status_code = 405
         return bundle.ok
 
-    def getBillText(self, document_id, apikey='Good'):
-        """ Get specific document identified in bill """
-        key = self.badKey
-        if apikey == 'Good':
-            key = self.apiKey
 
-        bill_data = None
-        bill_bundle = DataBundle('getDataset')
-        bill_params = {'key': key, 'op': 'getDataset', 'id': document_id}
-
-        success = self.invoke_api(bill_bundle, bill_params)
-        if success:
-            if 'text' in bill_bundle.json_pkg:
-                bill_data = bill_bundle.text
-            else:
-                bill_bundle.ok = False
-                bill_bundle.status_code = 487
-
-        if not bill_bundle.ok:
-            print('Failure', bill_bundle)
-            self.api_ok = False
-            bill_data = None
-        return bill_data
 
 
 if __name__ == "__main__":
