@@ -1,0 +1,12 @@
+#!/bin/bash
+module="$1"
+program="$0"
+migs="migrations"
+inits="__init__."
+if [[ "$module" == "all" ]]; then
+find . -iname "*.py" -exec "$program" {} \;
+elif [[ ("$module" != *"$migs"*) && ("$module" != *"$inits"*) ]]; then
+  echo "Check_python: $1"
+  pylint "$module"
+  flake8 "$module"
+fi

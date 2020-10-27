@@ -22,15 +22,18 @@
 # Debug with:   import pdb; pdb.set_trace()
 
 import base64
+from bs4 import BeautifulSoup
 import datetime as DT
 import json
 from random import randint
+import nltk
 import os
 import re
 import tempfile
+from titlecase import titlecase
 import zipfile
 from urllib.parse import urlparse
-from bs4 import BeautifulSoup
+
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
@@ -230,7 +233,8 @@ class Command(BaseCommand):
         key = self.fob.BillText_key(bill_state, bill_number,
                                     session_id, earliest_year)
         bill_id = bill_detail['bill_id']
-        title = bill_detail['title']
+        title = titlecase(bill_detail['title'])
+        bill_detail['title']=title
         summary = bill_detail['description']
         doc_date = chosen['date']
         law_record = Law.objects.filter(key=key).first()

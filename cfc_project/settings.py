@@ -49,10 +49,10 @@ SECRET_KEY = os.getenv(
     'SECRET_KEY', 'ry()%j23$u$c7q$m2o0vo1w(u^eut8b3c0ylpy+)((6f7j08a4')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# Environment variable can allow dynamically changing DEBUG setting
-
-DEBUG = True
-DEBUG = os.getenv('CFC_DEBUG', DEBUG)
+# Specify environment variable CFC_DEBUG='False' for Production
+DEBUG = False
+if os.getenv('CFC_DEBUG', 'True') == 'True':
+    DEBUG = True
 ALLOWED_HOSTS = ['*', '127.0.0.1', 'localhost']
 
 # Application definition
@@ -157,7 +157,7 @@ else:
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME':
-    'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
         'NAME':
@@ -206,5 +206,4 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # My settings
 LOGIN_URL = 'users:login'
 LONG_AGO = DT.date(1911, 6, 16)  # Long ago in history
-
-
+# End of module

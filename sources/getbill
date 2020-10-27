@@ -1,8 +1,0 @@
-#!/bin/bash
-billnum="$1"
-apikey=$LEGISCAN_API_KEY
-outfile="-O ${billnum}.json"
-mimetype="--header=Content-Type:application/json"
-url="https://api.legiscan.com/?key=${apikey}&op=getBill&id=${billnum}"
-echo wget $outfile $mimetype $url
-wget $outfile $mimetype $url

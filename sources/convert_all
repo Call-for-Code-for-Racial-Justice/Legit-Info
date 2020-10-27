@@ -1,3 +1,0 @@
-#!/bin/bash
-find . -iname "Arizona-*.html" -exec python3 html2txt.py {} \;
-find . -iname "Ohio-*.pdf" -exec ./convert_pdf {} \;

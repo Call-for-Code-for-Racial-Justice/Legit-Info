@@ -13,7 +13,7 @@
 
 import json
 import os
-from cfc_app.DataBundle import DataBundle
+from DataBundle import DataBundle
 
 LEGISCAN_ID = {
     1: {"code": "AL", "name": "Alabama", "capital": "Montgomery"},
@@ -107,7 +107,7 @@ class LegiscanAPI:
         success = self.invoke_api(dsl_bundle, dsl_params)
         if success:
             if 'datasetlist' in dsl_bundle.json_pkg:
-                list_data = dsl_bundle.text
+                list_data = json.dumps(dsl_bundle.json_pkg, indent=2)
             else:
                 dsl_bundle.ok = False
                 dsl_bundle.status_code = 487
@@ -132,7 +132,7 @@ class LegiscanAPI:
         success = self.invoke_api(sesh_bundle, sesh_params)
         if success:
             if 'dataset' in sesh_bundle.json_pkg:
-                sesh_data = sesh_bundle.text
+                sesh_data = json.dumps(sesh_bundle.json_pkg, indent=2)
             else:
                 sesh_bundle.ok = False
                 sesh_bundle.status_code = 487
@@ -156,7 +156,7 @@ class LegiscanAPI:
         success = self.invoke_api(bill_bundle, bill_params)
         if success:
             if 'text' in bill_bundle.json_pkg:
-                bill_data = bill_bundle.text
+                bill_data = json.dumps(bill_bundle.json_pkg, indent=2)
             else:
                 bill_bundle.ok = False
                 bill_bundle.status_code = 487
@@ -166,7 +166,6 @@ class LegiscanAPI:
             self.api_ok = False
             bill_data = None
         return bill_data
-
 
     def invoke_api(self, bundle, params):
         """ Invoke the Legiscan API """
@@ -205,12 +204,19 @@ class LegiscanAPI:
             bundle.status_code = 405
         return bundle.ok
 
-
+    def dump_id_table(self):
+        output_string = json.dumps(LEGISCAN_ID, indent=2)
+        return output_string
 
 
 if __name__ == "__main__":
 
     leg = LegiscanAPI()
+
+    out_str = leg.dump_id_table()
+    out_name = "Legiscan_id.json"
+    with open(out_name, "w") as out_file:
+        out_file.write(out_str)
 
     save_api_ok = leg.api_ok
     leg.api_ok = False

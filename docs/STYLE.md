@@ -2,8 +2,28 @@
 
 ## Contents
 
+1. [General Guidance](#general-guidance)
 1. [Character Set](#character-set)
 1. [Python Style Guide](#python-style-guide)
+
+
+## General Guidance
+
+> "Build tools for others that you want to be built for you." 
+> -- <cite>Kenneth Reitz</cite>
+
+> "Simplicity is alway better than functionality." 
+> -- <cite>Pieter Hintjens</cite>
+
+> "Fit the 90% use-case. Ignore the nay sayers." 
+> -- <cite>Kenneth Reitz</cite>
+
+> "Readability counts. Beautiful is better than ugly.  Explicit is better 
+> than implicit. Fix each broken window (bad design, wrong decision, or poor 
+> code) as soon as it is discovered.  Now is better than never." 
+> -- <cite>PEP 20</cite>
+
+> Test ruthlessly. Write docs for new features.
 
 ## Character Set
 
@@ -23,6 +43,10 @@ Capitalization methods are defined as follows:
 
 * Uppercase -- Letters in ABCDEFGHIJKLMNOPQRSTUVWXYZ
 * Lowercase -- Letters in abcdefghijklmnopqrstuvwxyz
+* TitleCase -- In the United States, titles capitalize the first and last
+words, and capitalize all other words unless they are one of
+a handleful of stopwords (a, an, and, at, but, by, for, in, nor, of, on, or,
+so, the, to, up, yet).
 * SentenceCase -- Statements that have uppercase as the first word in a
 standard english sentence, other words start with lower case letters unless
 they are formal names or acronyms.  Full UTF-8 character set supported to
@@ -96,6 +120,15 @@ on side-by-side windows.
 * Use double quotes for strings with an apostrophe.
 * Use single quotes for strings with quotation marks.
 * Always use parentheses with double quotes for multiline strings.
+
+**Imports**
+
+Put all imports at the top of the page with three sections, each separated by
+a blank line, in this order:
+
+1. System imports
+1. Third-party imports, including Django imports
+1. Local source tree imports from this application
 
 **Comments**
 

@@ -191,17 +191,23 @@ class Command(BaseCommand):
                 access_key = entry['access_key']
                 session_name = self.fob.Dataset_name(state, session_id)
                 if entry['year_end'] >= self.fromyear:
-                    entry_date = self.date_type(entry['dataset_date'])
 
-                    hashcode, hashdate = '', settings.LONG_AGO
-                    hash = Hash.find_item_name(session_name)
-                    if hash:
-                        hashcode = hash.hashcode
-                        hashdate = hash.generated_date
+                    fetch_new = False
+                    if self.fob.item_exists(session_name):
+                        fetch_new = True
 
-                    if (hashcode != entry['dataset_hash'] and
-                            hashdate <= entry_date and
-                            self.use_api and self.leg.api_ok):
+                    else:   
+                        entry_date = self.date_type(entry['dataset_date'])
+                        hashcode, hashdate = '', settings.LONG_AGO
+                        hash = Hash.find_item_name(session_name)
+                        if hash:
+                            hashcode = hash.hashcode
+                            hashdate = hash.generated_date
+                        if (hashcode != entry['dataset_hash']
+                                and hashdate <= entry_date):
+                            fetch_new = True
+
+                    if fetch_new and self.use_api and self.leg.api_ok):
                         print('Fetching {}: {}'.format(state, session_id))
 
                         session_data = self.leg.getDataset(session_id,
