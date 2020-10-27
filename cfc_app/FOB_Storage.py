@@ -230,9 +230,9 @@ class FOB_Storage():
     def BillText_key(self, state, bill_number, session_id, doc_year):
         key = "{}-{}-{}".format(state, bill_number, session_id)
         if len(key) <= 14:
-            key += "-Y" + doc_year
+            key += "-Y" + str(doc_year)
         elif len(key)<=16:
-            key += "-Y" + doc_year[2:4]
+            key += "-Y" + str(doc_year)[2:4]
         return key
 
     def BillText_name(self, key, extension):

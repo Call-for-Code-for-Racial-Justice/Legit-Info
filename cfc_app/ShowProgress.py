@@ -25,9 +25,12 @@ class ShowProgress():
         """ Set characters to use for showing progress"""
         self.dotchar = dotchar
 
-    def show(self):
+    def show(self, char=None):
         """ Display a single dot """
-        sys.stdout.write(self.dotchar)
+        use_char = self.dotchar
+        if char:
+            use_char = char
+        sys.stdout.write(use_char)
         sys.stdout.flush()
         return None
 

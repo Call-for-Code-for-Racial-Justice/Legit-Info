@@ -203,11 +203,15 @@ technologies.
 * [Python](https://www.python.org/) - The programming language, along with
 pip and pipenv supporting tools
 * [Django](https://www.djangoproject.com/) - A framework for web applications
-* [Bootstrap](https://getbootstrap.com/) - A popular User Interface toolkit
+written in Python
+* [Bootstrap](https://getbootstrap.com/) - A popular User Interface toolkit, 
+providing "responsive UI" to handle different screen sizes across smartphones,
+tablets and desktops.
 * [PDFminer](https://pypi.org/project/pdfminer.six/) - Extracts text from PDF
 * [SQlite](https://www.sqlite.org/index.html) - A simple, local database
 * [Postgresql](https://www.postgresql.org/) - A robust, relational database
-* [Gunicorn](https://gunicorn.org/) - A WSGI HTTP server for Python
+* [Gunicorn](https://gunicorn.org/) - A WSGI HTTP webserver for Python
+* [NLTK](https://github.com/nltk/nltk) - Natural Language Toolkit
 * [Watson Studio Natural Language Understanding](https://www.ibm.com/watson/nlu)
 
 The following repositories are used to automate the collection of legislation:

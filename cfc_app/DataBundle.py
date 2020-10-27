@@ -37,7 +37,7 @@ class DataBundle():
     def __repr__(self):  
         dispForm1 = "Bundle {}: OK={} Code={}"
         dispForm2 = '{}  {}{}'
-        dispForm3 = '{}  Lenght={} bytes'
+        dispForm3 = '{}  Length={} bytes'
         display = dispForm1.format(self.name, self.ok, self.status_code)
         if self.ok:
             if self.extension:

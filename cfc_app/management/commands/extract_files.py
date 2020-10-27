@@ -67,7 +67,7 @@ class Command(BaseCommand):
         super().__init__(*args, **kwargs)
         self.fob = FOB_Storage(settings.FOB_METHOD)
         self.leg = LegiscanAPI()
-
+        self.dot = ShowProgress()
         self.api_limit = 0
         self.state = None
         self.session_id = None
@@ -75,6 +75,9 @@ class Command(BaseCommand):
         self.skip = False
         self.rand_key = "tmp" + str(randint(1000, 9999))
         self.state_count = 0
+        self.verbosity = 1  # System default is dots and error messages only
+        nltk.download('punkt')
+        self.nltk_loaded = True
         return None
 
     def add_arguments(self, parser):
@@ -103,6 +106,8 @@ class Command(BaseCommand):
         if options['skip']:
             self.skip = True
 
+        self.verbosity = options['verbosity']   # Default is 1
+
         if options['session_id']:
             self.session_id = options['session_id']
             self.state = None
@@ -114,6 +119,8 @@ class Command(BaseCommand):
         locations = Location.objects.filter(legiscan_id__gt=0)
 
         for loc in locations:
+            if self.verbosity:
+                self.dot.show()
             self.loc = loc
             state_id = loc.legiscan_id
             if state_id > 0:
@@ -131,6 +138,8 @@ class Command(BaseCommand):
             sessions = []
             found_list.sort(reverse=True)
             for json_name in found_list:
+                if self.verbosity:
+                    self.dot.show()
                 mo = self.fob.Dataset_search(json_name)
                 if mo:
                     state = mo.group(1)
@@ -149,6 +158,8 @@ class Command(BaseCommand):
             # the limit of bills to process is reached for this state.
             sessions.sort(reverse=True)
             for session_detail in sessions:
+                if self.verbosity:
+                    self.dot.show()
                 if self.limit > 0 and self.state_count >= self.limit:
                     break
                 session_id, json_name = session_detail
@@ -162,7 +173,6 @@ class Command(BaseCommand):
         json_str = self.fob.download_text(json_name)
 
         print('Checking: ', json_name)
-        dot = ShowProgress()
 
         # If the ZIP file already exists, use it, otherwise create it.
         zip_name = json_name.replace('.json', '.zip')
@@ -187,17 +197,19 @@ class Command(BaseCommand):
                 namelist = zf.namelist()
 
                 for path in namelist:
+                    if self.verbosity:
+                        self.dot.show()
                     if self.limit > 0 and self.state_count >= self.limit:
                         break
                     mo = billRegex.search(path)
                     if mo:
-                        dot.show()
+
                         json_data = zf.read(path).decode('UTF-8',
                                                          errors='ignore')
                         processed = self.process_source(mo, json_data)
                         self.state_count += processed
 
-        dot.end()
+        self.dot.end()
         return None
 
     def process_source(self, mo, json_data):
@@ -211,13 +223,12 @@ class Command(BaseCommand):
         # import pdb; pdb.set_trace()
 
         # If a bill has multiple versions, choose the latest one.
-        chosen = self.latest_text(texts)
+        earliest_year, chosen = self.latest_text(texts)
         extension = self.determine_extension(chosen['mime'])
-        bill_year = chosen['date'][:4]
 
         # Generate the key to be used to refer to this legislation.
         key = self.fob.BillText_key(bill_state, bill_number,
-                                    session_id, bill_year)
+                                    session_id, earliest_year)
         bill_id = bill_detail['bill_id']
         title = bill_detail['title']
         summary = bill_detail['description']
@@ -233,7 +244,10 @@ class Command(BaseCommand):
 
         # If we already have the final text file, honor the --skip parameter
         if self.fob.item_exists(text_name) and self.skip:
-            print('File {} already exists, skipping: ', text_name)
+            if self.verbosity >2:
+                print('File {} already exists, skipping'.format(text_name))
+            elif self.verbosity:
+                self.dot.show(char='>')
             processed = 0
         else:
             processed = self.process_bill(key, extension, bill_detail, chosen)
@@ -253,75 +267,70 @@ class Command(BaseCommand):
             FOB_source = True
 
         processed = 0
-        textdata = None
         bindata = None
+        source_file = bill_name
 
-        if extension == 'html':
+        if FOB_source:
+            bindata = self.fob.download_binary(bill_name)
+            source_file = "{} ({})".format(bill_name, settings.FOB_METHOD)
+        else:
+            params = {}
+            bill_bundle = DataBundle(bill_name)
+            source = urlparse(chosen['state_link'])
+            source_file = chosen['state_link']
 
-            if FOB_source:
-                textdata = self.fob.download_text(bill_name)
-            else:
-                params = {}
-                bill_bundle = DataBundle(bill_name)
-                source = urlparse(chosen['state_link'])
-                print(source.params)
-                response = bill_bundle.make_request(source.geturl,
-                                                    params)
-                result = bill_bundle.load_response(response)
-                if result:
-                    textdata = bill_bundle.text
-                    self.fob.upload_text(textdata, bill_name)
-
-            if textdata:
-                self.process_html(key, chosen['date'], bill_detail, textdata)
-                processed = 1
-            else:
-                print('Failure processing HTML source')
-
-        elif extension == 'pdf':
-            if FOB_source:
-                bindata = self.fob.download_binary(bill_name)
-            else:
-                params = {}
-                bill_bundle = DataBundle(bill_name)
-                source = urlparse(chosen['state_link'])
+            if source.query:
                 querylist = source.query.split('&')
                 for q in querylist:
                     qfragments = q.split('=')
-                    qkey, qvalue = qfragments
-                    params[qkey] = qvalue
-                scheme = source.scheme
-                stem = source.netloc + source.path
-                if scheme == '':
-                    scheme = 'http'
-                baseurl = '{}://{}'.format(scheme, stem)
-                response = bill_bundle.make_request(baseurl, params)
-                result = bill_bundle.load_response(response)
-                import pdb
-                pdb.set_trace()
-                if result and bill_bundle.content[:4] == b'%PDF':
-                    bindata = bill_bundle.content
-                    self.fob.upload_binary(bindata, bill_name)
-                elif self.api_limit > 0 and self.leg.api_ok:
-                    response = self.leg.getBillText(chosen['doc_id'])
-                    self.api_limit -= 1
-                    if response:
-                        json_data = json.loads(response)
-                        json_text = json_data['text']
-                        json_doc = json_text['doc']
-
-                        mimedata = json_doc.encode('UTF-8')
-                        bindata = base64.b64decode(mimedata)
-                    
+                    if len(qfragments) == 2:
+                        qkey, qvalue = qfragments
+                        params[qkey] = qvalue
+            scheme = source.scheme
+            stem = source.netloc + source.path
+            if scheme == '':
+                scheme = 'http'
+            baseurl = '{}://{}'.format(scheme, stem)
+            response = bill_bundle.make_request(baseurl, params)
+            result = bill_bundle.load_response(response)
+            # import pdb; pdb.set_trace()
+            if result:
+                bindata = bill_bundle.content
+                if extension == "pdf" and bindata[:4] != b'%PDF':
+                    print("Invalid PDF format found", bill_name)
+                    bindata = None
 
             if bindata:
-                self.process_pdf(key, chosen['date'], bill_detail, bindata)
-                processed = 1
-            else:
-                print('Failure processing PDF source')
+                self.fob.upload_binary(bindata, bill_name)
+                if self.verbosity > 2:
+                    print("Saving file: ", bill_name)
 
+            elif self.api_limit > 0 and self.leg.api_ok:
+                response = self.leg.getBillText(chosen['doc_id'])
+                source_file = "getBillText doc_id="+str(chosen['doc_id'])
+                self.api_limit -= 1
+                if response:
+                    json_data = json.loads(response)
+                    json_text = json_data['text']
+                    json_doc = json_text['doc']
+                    mimedata = json_doc.encode('UTF-8')
+                    bindata = base64.b64decode(mimedata)
+
+        # For HTML, convert to text.  Othewise leave binary for PDF.
+        if bindata and extension == 'html':
+            textdata = bindata.decode('UTF-8', errors='ignore')
+            self.process_html(key, chosen['date'], bill_detail, textdata)
+            processed = 1
+        elif bindata and extension == 'pdf':
+            self.process_pdf(key, chosen['date'], bill_detail, bindata)
+            processed = 1
+
+        # If successful, save the hash code to the cfc_app_hash table
         if processed:
             self.save_source_hash(bill_hash, bill_name, bill_detail, chosen)
+            self.dot.show()
+        else:
+            print('Failure processing source: ', source_file)
         return processed
 
     def save_source_hash(self, bill_hash, bill_name, bill_detail, chosen):
@@ -355,14 +364,19 @@ class Command(BaseCommand):
         bill_name = self.fob.BillText_name(key, 'html')
         text_name = self.fob.BillText_name(key, 'txt')
 
-        text_line = Oneline()
+        text_line = Oneline(nltk_loaded=True)
         title, summary = bill_detail['title'], bill_detail['description']
         text_line.add_text(HeadForm.format(bill_name, docdate, title, summary))
         self.parse_html(billtext, text_line)
         text_line.oneline = self.remove_section_numbers(text_line.oneline)
-        text_line.write_name(text_name)
-        print('Writing: ', text_name)
+        self.write_file(text_line, text_name)
         return self
+
+    def write_file(self, text_line, text_name):
+        text_line.split_sentences()
+        print('Writing: ', text_name)
+        self.fob.upload_text(text_line.oneline, text_name)
+        return
 
     def process_pdf(self, key, docdate, bill_detail, msg_bytes):
 
@@ -377,20 +391,19 @@ class Command(BaseCommand):
                                          delete=True) as temp_out:
             PDFtoTEXT(temp_path, temp_out.name)
             temp_out.seek(0)
-            input_str = temp_out.read().decode('UTF-8')
+            input_str = temp_out.read().decode('UTF-8', errors='ignore')
 
         bill_name = self.fob.BillText_name(key, 'pdf')
         title, summary = bill_detail['title'], bill_detail['description']
         header = HeadForm.format(bill_name, docdate, title, summary)
 
         text_name = self.fob.BillText_name(key, 'txt')
-        text_line = Oneline()
+        text_line = Oneline(nltk_loaded=True)
         text_line.add_text(header)
         if input_str:
             self.parse_intermediate(input_str, text_line)
             text_line.oneline = self.remove_section_numbers(text_line.oneline)
-        text_line.write_name(text_name)
-        print('Writing: ', text_name)
+        self.write_file(text_line, text_name)
         return self
 
     def form_sentence(self, line, charlimit):
@@ -436,38 +449,10 @@ class Command(BaseCommand):
 
         if extension == 'html':
             billtext = msg_bytes.decode('UTF-8', errors='ignore')
-            self.fob.upload_text(billname, billtext)
+            self.fob.upload_text(billtext, billname)
         elif extension == 'pdf':
-            self.fob.upload_binary(billname, msg_bytes)
+            self.fob.upload_binary(msg_bytes, billname)
 
-        return extension, msg_bytes
-
-    def read_from_fob(self, key):
-        extension, msg_bytes = '', b''
-        state = key[:2]
-        if state == 'AZ':
-            extension == 'html'  # Assume html for Arizona
-            billtext = ''
-            billname = '{}.{}'.format(key, extension)
-            if self.fob.item_exists(billname):
-                billtext = self.fob.download_text(billname)
-                msg_bytes = billtext.encode('UTF-8')
-            if billtext == '':
-                print('File not found: ', billname)
-                extension = ''
-            else:
-                print('Reading: ', billname)
-
-        elif state == 'OH':
-            extension = 'pdf'   # Assume html for Ohio
-            billname = '{}.{}'.format(key, extension)
-            if self.fob.item_exists(billname):
-                msg_bytes = self.fob.download_binary(billname)
-            if msg_bytes == b'':
-                print('File not found: ', billname)
-                extension = ''
-            else:
-                print('Reading: ', billname)
         return extension, msg_bytes
 
     def parse_html(self, in_line, out_line):
@@ -548,16 +533,19 @@ class Command(BaseCommand):
 
         LastDocid = 0
         LastEntry = None
+        earliest_year = 2999
         for entry in texts:
             this_date = self.date_type(entry['date'])
             this_docid = entry['doc_id']
+            if this_date.year < earliest_year:
+                earliest_year = this_date.year
             if (this_date > LastDate or
                     (this_date == LastDate and this_docid > LastDocid)):
                 LastDate = this_date
                 LastDocid = this_docid
                 LastEntry = entry
 
-        return LastEntry
+        return earliest_year, LastEntry
 
     def date_type(self, date_string):
         """ Convert "YYYY-MM-DD" string to datetime.date format """
