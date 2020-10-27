@@ -17,6 +17,9 @@ DSLregex = re.compile(r'^DatasetList-(\d\d\d\d-\d\d-\d\d).json$')
 DSNregex = re.compile(r'^([A-Z]{2})-Dataset-(\d\d\d\d).json$')
 BTregex = re.compile(r'^([A-Z]{2})-([A-Z0-9]*)-(\d\d\d\d)(.json|.pdf|.html)$')
 
+TEST_LIMIT = 10
+
+
 class FOB_Storage():
     """
     Support both Local File and Remote Object Storage
@@ -140,10 +143,10 @@ class FOB_Storage():
             for n in range(999):   # Avoid run-away tasks
                 if prefix:
                     response = self.cos.list_objects_v2(
-                                Bucket=self.cos_bucket,
-                                StartAfter=cursor, Prefix=prefix, 
-                                MaxKeys=objlimit)
-                    
+                        Bucket=self.cos_bucket,
+                        StartAfter=cursor, Prefix=prefix,
+                        MaxKeys=objlimit)
+
                 else:
                     response = self.cos.list_objects_v2(
                         Bucket=self.cos_bucket,
@@ -231,7 +234,7 @@ class FOB_Storage():
         key = "{}-{}-{}".format(state, bill_number, session_id)
         if len(key) <= 14:
             key += "-Y" + str(doc_year)
-        elif len(key)<=16:
+        elif len(key) <= 16:
             key += "-Y" + str(doc_year)[2:4]
         return key
 
@@ -282,42 +285,38 @@ class FOB_Storage():
                 os.remove(fullname)
         return self
 
-
-
-
     def test_with_empty(self):
-        TEST_LIMIT = 10
-    
+
         SAMPLE_BIN = b'How quickly daft jumping zebras vex'
         SAMPLE_TEXT = "The quick brown fox jumps over a lazy dog"
         UNICODE_TEXT = "ā <- abreve, ć <- c acute, ũ <- u tilde"
-    
+
         fob.upload_binary(SAMPLE_BIN, 'AAA-TEST.bin')
         fob.upload_text(SAMPLE_TEXT, 'AAA-TEST.txt')
         fob.upload_binary(SAMPLE_BIN, 'BBB-TEST.bin')
         fob.upload_text(UNICODE_TEXT, 'BBB-TEST.txt')
         fob.upload_binary(SAMPLE_BIN, 'CCC-TEST.bin')
         fob.upload_text(SAMPLE_TEXT, 'CCC-TEST.txt')
-    
+
         print('List all items:')
         print(fob.list_items(limit=0))
-    
+
         print('Limit=3:')
         print(fob.list_items(limit=3))
-    
+
         print("Prefix='BBB':")
         print(fob.list_items(prefix='BBB', limit=TESTLIMIT))
-    
+
         print("Suffix='.bin':")
         print(fob.list_items(suffix='.bin', limit=TESTLIMIT))
-    
+
         print("Prefix='B' and Suffix='.bin': ")
         print(fob.list_items(prefix='B', suffix='.bin', limit=TESTLIMIT))
-    
+
         # import pdb; pdb.set_trace()
         print("After='AAA-TEST.txt' ")
         print(fob.list_items(after='AAA-TEST.txt', limit=TESTLIMIT))
-    
+
         print("After='AAA-TEST.txt' Limit=3 ")
         print(fob.list_items(after='AAB-TEST.txt', limit=3))
 
@@ -326,29 +325,29 @@ class FOB_Storage():
         print(bin_test)
         if bin_test != SAMPLE_BIN:
             print('Error, binary data does not match')
-    
+
         print('Download text:')
         # import pdb; pdb.set_trace()
         text_data = fob.download_text('BBB-TEST.txt')
         print('=['+text_data+']=')
         if text_data != UNICODE_TEXT:
             print('Error, text data does not match')
-    
+
         text_data = fob.download_text('CCC-TEST.txt')
         print('=['+text_data+']=')
         if text_data != SAMPLE_TEXT:
             print('Error, text data does not match')
-    
+
         print('Test if BBB-TEST.txt exists')
         if fob.item_exists('BBB-TEST.txt'):
             print('--- BBB-TEST.txt exists!')
         else:
             print('Not found: BBB-TEST.txt')
-    
+
         print('Delete existing file BBB-TEST.txt:')
         fob.remove_item('BBB-TEST.txt')
         print(fob.list_items(limit=TESTLIMIT))
-    
+
         print('Delete non-existient file ZZZ-TEST.unk:')
         fob.remove_item('ZZZ-TEST.unk')
         print(fob.list_items(limit=TESTLIMIT))
@@ -360,7 +359,7 @@ class FOB_Storage():
         fob.remove_item('BBB-TEST.txt')
         fob.remove_item('CCC-TEST.bin')
         fob.remove_item('CCC-TEST.txt')
-        return None    
+        return None
 
 
 if __name__ == "__main__":
@@ -377,7 +376,7 @@ if __name__ == "__main__":
         sys.exit(4)
 
     print('Testing: ', sys.argv[0], mode)
-    
+
     # Test with empty structure first
     fob = FOB_Storage(mode, filesys='/tmp/FOB-TEST', bucket='fob-test')
     fob.test_with_empty()

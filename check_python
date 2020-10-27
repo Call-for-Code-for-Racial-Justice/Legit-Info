@@ -7,6 +7,6 @@ if [[ "$module" == "all" ]]; then
 find . -iname "*.py" -exec "$program" {} \;
 elif [[ ("$module" != *"$migs"*) && ("$module" != *"$inits"*) ]]; then
   echo "Check_python: $1"
-  pylint "$module"
+  # pylint "$module"
   flake8 "$module"
 fi

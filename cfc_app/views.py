@@ -42,61 +42,6 @@ def cte_query(loc):
     return loc_list
 
 
-def load_default_impacts():
-    # The 'None' option allows legislation to be hidden from all
-    # searches.  This is useful for legislation that is fetched
-    # through automation but mis-classified.  Setting impact=None
-    # will prevent automation from fetching updated versions of this.
-
-    # Impacts are displayed in the order they are added in this table.
-    # Any new impacts added will appear at the bottom of the list.
-    default_impacts = ['None', 'Healthcare', 'Safety', 'Environment',
-                       'Transportation', 'Jobs']
-    for entry in default_impacts:
-        new_impact = Impact()
-        new_impact.text = entry
-        new_impact.save()
-    return None
-
-
-def load_default_locations():
-    # The 'world' entry points to itself, so cannot be added using
-    # traditional Django administration.  To create it here, we have
-    # to create an entry with no parent, save it, then set the parent_id
-    # to 1.  This only works if the AUTOINCREMENT sequence is set to zero,
-    # for an empty database, or reset to zero if entries deleted.
-
-    world = Location()
-    world.desc = 'world'
-    world.shortname = 'world'
-    world.legiscan_id = 0
-    world.hierarchy = 'world'
-    world.govlevel = 'world'
-    world.save()
-    world.parent_id = 1
-    world.save()
-
-    # The concept of ancestor-search is confusing, so we create a few
-    # entries (usa, arizona, ohio) so people can understand the structure
-    # Note the legiscan_id is only needed for States in the United States.
-
-    usa = Location(desc='United States', shortname='usa', legiscan_id=52,
-                   hierarchy='world.usa', govlevel='country')
-    usa.parent = world
-    usa.save()
-
-    arizona = Location(desc='Arizona, USA', shortname='az', legiscan_id=3,
-                       hierarchy='world.usa.az', govlevel='state')
-    arizona.parent = usa
-    arizona.save()
-
-    ohio = Location(desc='Ohio, USA', shortname='oh', legiscan_id=35,
-                    hierarchy='world.usa.oh', govlevel='state')
-    ohio.parent = usa
-    ohio.save()
-    return None
-
-
 def make_csv(search_id, laws):
     """ Make Comma-Separated-Value (CSV) format file"""
     laws_table = []
@@ -221,7 +166,7 @@ def impacts(request):
     """Show all impacts."""
     impacts = Impact.objects.order_by('date_added')
     if len(impacts) == 0:
-        load_default_impacts()
+        Impact.load_defaults()
 
     # Do not display the None option for end-users
     impacts = Impact.objects.order_by('date_added').exclude(text='None')
@@ -259,7 +204,7 @@ def locations(request):
     # If database is empty, re-create the "world" entry that acts as
     # the master parent for the ancestor-search.
     if len(locations) == 0:
-        load_default_locations()
+        Location.load_defaults()
 
     locations = Location.objects.order_by('hierarchy').exclude(desc='world')
     context = {'locations': locations}

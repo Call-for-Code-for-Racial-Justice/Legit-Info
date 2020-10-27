@@ -49,6 +49,43 @@ class Location(models.Model):
         loc_string = self.padding() + self.desc
         return loc_string
 
+    def load_defaults():
+        # The 'world' entry points to itself, so cannot be added using
+        # traditional Django administration.  To create it here, we have
+        # to create an entry with no parent, save it, then set the parent_id
+        # to 1.  This only works if the AUTOINCREMENT sequence is set to zero,
+        # for an empty database, or reset to zero if entries deleted.
+
+        world = Location()
+        world.desc = 'world'
+        world.shortname = 'world'
+        world.legiscan_id = 0
+        world.hierarchy = 'world'
+        world.govlevel = 'world'
+        world.save()
+        world.parent_id = 1
+        world.save()
+
+        # The concept of ancestor-search is confusing, so we create a few
+        # entries (usa, arizona, ohio) so people can understand the structure
+        # Note the legiscan_id is only needed for States in the United States.
+
+        usa = Location(desc='United States', shortname='usa', legiscan_id=52,
+                   hierarchy='world.usa', govlevel='country')
+        usa.parent = world
+        usa.save()
+
+        arizona = Location(desc='Arizona, USA', shortname='az', legiscan_id=3,
+                       hierarchy='world.usa.az', govlevel='state')
+        arizona.parent = usa
+        arizona.save()
+
+        ohio = Location(desc='Ohio, USA', shortname='oh', legiscan_id=35,
+                        hierarchy='world.usa.oh', govlevel='state')
+        ohio.parent = usa
+        ohio.save()
+        return None
+
 
 class Impact(models.Model):
     """A location helps filter which legislation to look at."""
@@ -63,6 +100,22 @@ class Impact(models.Model):
     def __str__(self):
         """Return a string representation of the model."""
         return self.text
+
+    def load_defaults():
+    # The 'None' option allows legislation to be hidden from all
+    # searches.  This is useful for legislation that is fetched
+    # through automation but mis-classified.  Setting impact=None
+    # will prevent automation from fetching updated versions of this.
+
+    # Impacts are displayed in the order they are added in this table.
+    # Any new impacts added will appear at the bottom of the list.
+        default_impacts = ['None', 'Healthcare', 'Safety', 'Environment',
+                       'Transportation', 'Jobs']
+        for entry in default_impacts:
+            new_impact = Impact()
+            new_impact.text = entry
+            new_impact.save()
+        return None
 
 
 class Criteria(models.Model):
