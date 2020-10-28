@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7d1405714289228f73fafa988d496e782bb30eda9594866bd7f0348e038ddfc2"
+            "sha256": "4ee5c7b883f90498690484aba52288957de78e370644aa161d75a7a6a0221396"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -207,6 +207,14 @@
             "index": "pypi",
             "version": "==0.15.2"
         },
+        "gitchangelog": {
+            "hashes": [
+                "sha256:3d8d6a730450fbd5b0a9bc58d0dd3e269c967d7eb4fece0c5cff4372a3f77421",
+                "sha256:45f8b8e64cece0d9bb03a35ecd8ee62c1c7157f8dac0ef3cb68381bfcc1bde29"
+            ],
+            "index": "pypi",
+            "version": "==3.0.4"
+        },
         "gunicorn": {
             "hashes": [
                 "sha256:1904bb2b8a43658807108d59c3f3d56c2b6121a701161de0ddf9ad140073c626",
@@ -232,24 +240,24 @@
         },
         "ibm-cos-sdk": {
             "hashes": [
-                "sha256:998d8538e508c8ae50ea1ac52f4ed3ee8c62150e0e70365b96e4712199156108"
+                "sha256:175529800542faf3b363f9a0683990663442505730e429971e8bdf9733d0be9e"
             ],
             "index": "pypi",
-            "version": "==2.7.0"
+            "version": "==2.8.0"
         },
         "ibm-cos-sdk-core": {
             "hashes": [
-                "sha256:9cf2dcd5514b45a84bdf6bfcb8c9bf5d4ce9808f8cf8539ffe9ee863ccf667f9"
+                "sha256:55cf4279a2ea5310ba50f07ecab9088a0ee4e8bc13e9fd9156c859324aa0a219"
             ],
             "markers": "python_version ~= '3.5'",
-            "version": "==2.7.0"
+            "version": "==2.8.0"
         },
         "ibm-cos-sdk-s3transfer": {
             "hashes": [
-                "sha256:31fe288d641fcbf90e98a4741efbce93096fbf86096e9e2603fcc4d520868e97"
+                "sha256:6136588372064bd083da2b4d1424a448c4de38c41a70d3c1d25f959a352317fd"
             ],
             "markers": "python_version ~= '3.5'",
-            "version": "==2.7.0"
+            "version": "==2.8.0"
         },
         "ibm-watson": {
             "hashes": [

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""
 # LegiscanAPI.py -- Pull data from Legiscan.com API
 # By Uchechukwu Uboh and Tony Pearson, IBM, 2020
 #
@@ -10,10 +11,12 @@
 # See /docs/Legiscan/ for API manual and Entity relationship diagram (ERD)
 #
 # Debug with:  # import pdb; pdb.set_trace()
+"""
 
 import json
 import os
-from DataBundle import DataBundle
+
+from .DataBundle import DataBundle
 
 LEGISCAN_ID = {
     1: {"code": "AL", "name": "Alabama", "capital": "Montgomery"},
@@ -72,18 +75,20 @@ LEGISCAN_ID = {
 
 
 class LegiscanError(Exception):
+    """ Define exception for general Legiscan errors """
     pass
 
 
 class APIkeyError(LegiscanError):
+    """ Define exception for specific errors related to API key """
     pass
 
 
 class LegiscanAPI:
+    """ Constructor for LegiscanAPI. Checks if a LegiscanAPI apikey exists."""
 
     def __init__(self):
-        """Constructor for LegiscanAPI.
-           Checks if a LegiscanAPI apikey exists."""
+
         self.apiKey = os.getenv('LEGISCAN_API_KEY', None)
         if not self.apiKey:
             raise APIkeyError
@@ -278,7 +283,3 @@ if __name__ == "__main__":
     print('Test getDataset')
     r08 = leg.getDataset(session_id, access_key, apikey='Good')
     print('Result: ', len(r08))
-
-    print('Test getMasterList')
-    r09 = leg.getMasterList(session_id, apikey='Good')
-    print('Result: ', len(r09))

@@ -1,39 +1,34 @@
-# get_datasets.py
-# By Tony Pearson, IBM, 2020
-#
-# This is intended as an asynchronous background task
-#
-# You can invoke this in either "on demand" or as part of a "cron" job
-#
-# On Demand:
-# [..] $ pipenv shell
-# (cfc) $ ./stage1 get_datasets --api --state AZ --limit 10
-#
-# Cron Job:
-# /home/yourname/Develop/legit-info/cron1 get_datasets --api --limit 10
-#
-# The Legiscan.com API only allows 30,000 fetches per 30-day period, so
-# we have optimized this application to minimize API calls to Legiscan.
-#
-# If you leave out the --api, the Legiscan.com API will not be invoked,
-# this is useful to see the status of existing Dataset JSON files.
-#
-# This is Phase 1 of the weekly cron job, to run asynchronously to refresh
-# the Django database.  See CRON.md for more details.
-#
-# Debug with:  import pdb; pdb.set_trace()
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
+"""
+Get datasetlist, and datasets for selected sessions, from Legiscan.com API.
+
+This is phase 1 of weekly cron job.  See CRON.md for details.
+Invoke with ./stage1 get_datasets  or ./cron1 get_datasets
+Specify --help for details on parameters available.
+
+Written by Tony Pearson, IBM, 2020
+Licensed under Apache 2.0, see LICENSE for details
+"""
+
+# System imports
 import datetime as DT
 import json
+
+# Django and other third-party imports
 from django.core.management.base import BaseCommand, CommandError
+from django.conf import settings
+
+# Application imports
 from cfc_app.models import Location, Hash
 from cfc_app.LegiscanAPI import LegiscanAPI, LEGISCAN_ID, LegiscanError
 from cfc_app.FOB_Storage import FOB_Storage
-from cfc_app.views import load_default_locations
-from django.conf import settings
 
+# Debug with:  import pdb; pdb.set_trace()
 
 class Command(BaseCommand):
+    """ Get datasetlist, and datasets for selected sessions """
 
     StateForm = 'Session {} Year: {} Date: {} Size: {} bytes'
     VERSIONS = 5   # Number of weeks to keep DatasetLists from Legiscan
@@ -87,11 +82,11 @@ class Command(BaseCommand):
         try:
             Location.objects.get(shortname='usa')
         except Location.DoesNotExist:
-            load_default_locations()
+            Location.loads()
 
         locations = Location.objects.filter(legiscan_id__gt=0)
         if not locations:
-            load_default_locations()
+            Location.load_defaults()
             locations = Location.objects.filter(legiscan_id__gt=0)
 
         states = []
@@ -207,7 +202,7 @@ class Command(BaseCommand):
                                 and hashdate <= entry_date):
                             fetch_new = True
 
-                    if fetch_new and self.use_api and self.leg.api_ok):
+                    if fetch_new and self.use_api and self.leg.api_ok:
                         print('Fetching {}: {}'.format(state, session_id))
 
                         session_data = self.leg.getDataset(session_id,

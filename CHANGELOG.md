@@ -1,0 +1,284 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic 
+Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [V.R.M] - YYYY-MM-DD
+
+### Added – For any new features that have been added since the last version
+### Changed – To note any changes to the software’s existing functionality
+### Deprecated– To note any features that were once stable but are no longer
+### Fixed– Any bugs or errors that have been fixed should be so noted
+### Removed– This notes any features that have been deleted and removed
+### Security– This acts as an invitation to avoid any software vulnerabilities
+
+- Moved load_defaults from views.py to models.py. [Tony Pearson]
+- Cleanup sources/ directory. [Tony Pearson]
+- Added Open Source library NLTK support. [Tony Pearson]
+- Call getBillText if state_link broken. [Tony Pearson]
+- Remove unneeded imports LegiscanAPI. [Tony Pearson]
+- Add CC40-LICENSE just in case we need them. [Tony Pearson]
+- Add support for US Congress (Federal) laws. [Tony Pearson]
+- Update DESCRIPTION to point to screenshots. [Tony Pearson]
+- Updated CRON.md and re-organized docs directory. [Tony Pearson]
+- Rename scan_json to extract_files. [Tony Pearson]
+- Get_api_data renamed to get_datasets. [Tony Pearson]
+- Enhanced DESCRIPTION.md with screenshots. [Tony Pearson]
+- Merge branch 'main' of github.com:Call-for-Code-for-Racial-
+  Justice/Legit-Info into main. [Tony Pearson]
+- Merge pull request #37 from Call-for-Code-for-Racial-Justice/location.
+  [Tony Pearson]
+
+  Python script to extract location from bill
+- Fixed typos. [Thomas Adams]
+- Python script to extract location from bill. [THOMAS N. ADAMS]
+- Checking for previous in get_api_data. [Tony Pearson]
+- Rename Legiscan_API to LegiscanAPI to comply with PEP8. [Tony Pearson]
+- Place sample JSON Django Features in /sources. [Tony Pearson]
+- New docs/STYLE.md for Python PEP 8 standards. [Tony Pearson]
+- Updated FOB_Storage for situations > 1000 entries. [Tony Pearson]
+- Rewrote Legiscan_API and added DataBundle. [Tony Pearson]
+- #28 fixed fob_stats. [Tony Pearson]
+- #28 Added fob_sync and fob_stats. [Tony Pearson]
+- Explain seeding databases. [Tony Pearson]
+- More updates to DESCRIPTION.md. [Tony Pearson]
+- Updated DESCRIPTION with administration commands. [Tony Pearson]
+- Created cfc-seed.json fixture. [Tony Pearson]
+- Update scan_json to use requests instead. [Tony Pearson]
+- Fetch HTML/PDF directly from State websites. [Tony Pearson]
+- Update scan_json using new datasetlist. [Tony Pearson]
+- Documentation on Text Analytics moved to /docs. [Tony Pearson]
+- Merge branch 'main' of github.com:Call-for-Code-for-Racial-
+  Justice/Legit-Info into main. [Tony Pearson]
+- Updated analysis and data cleaning sections. [born_maverick]
+
+  Todo# impact area mapping and adding any sections as needed.
+- Creating a README file to include text analysis. [born_maverick]
+- Updated Location with Legiscan_id. [Tony Pearson]
+- Legiscan to use new GetDatasetList option. [Tony Pearson]
+- Merge branch 'main' of github.com:Call-for-Code-for-Racial-
+  Justice/Legit-Info into main. [Tony Pearson]
+- Merge pull request #26 from Call-for-Code-for-Racial-
+  Justice/Contributing. [John Walicki]
+
+  Contributing Guidelines
+- Contributing Guidelines. [John Walicki]
+- Fix Flake8 errors. [Tony Pearson]
+- Merge branch 'main' of github.com:Call-for-Code-for-Racial-
+  Justice/Legit-Info into main. [Tony Pearson]
+- Update README.md. [John Walicki]
+- Update README.md. [John Walicki]
+
+  Signed off by: John Walicki <walicki@us.ibm.com>
+- Correct syntax errors in wordmap.csv. [Tony Pearson]
+- Removed duplicate Legiscan.py files. [Tony Pearson]
+- Pip installed lxml and html5lib parsers. [Tony Pearson]
+- Moved Oneline and PDFtoTEXT to cfc_app. [Tony Pearson]
+- Moved Legiscan_API and ShowProgress to cfc_app. [Tony Pearson]
+- Celery settings cfc_project. [Tony Pearson]
+- Added celery settings. [Tony Pearson]
+- Add celery and wordmap.csv. [Tony Pearson]
+- Added support for NONE on Impacts. [Tony Pearson]
+- Script bestwords.py to scan for best terms. [Tony Pearson]
+- Change project to Legit-Info. [Tony Pearson]
+- Moved legislation to IBM COS. [Tony Pearson]
+- Showcos for Shilpi to iterate. [Tony Pearson]
+- Created makezip and uploadcos. [Tony Pearson]
+- Update gitignore to avoid uploading legislation. [Tony Pearson]
+- Chkjson and scanjson. [Tony Pearson]
+- Fix flake8 errors in sources. [Tony Pearson]
+- Updated Pipfile to add requests. [Tony Pearson]
+- Fixed Pipfile.lock conflicts. [Tony Pearson]
+- Merge branch 'cron' into main. [Tony Pearson]
+- Fix Pipfile.lock. [Tony Pearson]
+- New chkjson.py to validate string lengths. [Tony Pearson]
+- Update gitignore to avoid JSON uploads. [Tony Pearson]
+- Updated Dockerfile and Pipfile.lock. [Tony Pearson]
+- Update .gitignore. [Uchechukwu Uboh]
+
+  ignore .vscode
+- Delete settings.json. [Uchechukwu Uboh]
+
+  removed vscode setting
+- Updated bill object to include bill_text mime. [Ubsss]
+- Updated cron documentation. [Uchechukwu Uboh]
+- Created cron script. [Uchechukwu Uboh]
+- Turn off debug in settings.py. [Tony Pearson]
+- Updated Stage1 and Stage2 docs. [Tony Pearson]
+- Fix port-forward.sh. [Tony Pearson]
+- Rename fixpoldb to cfcappdb. [Tony Pearson]
+- Update Stage1.md for Sqlite3 requirements. [Tony Pearson]
+- Remove all quotation marks from txt files. [Tony Pearson]
+- Fix flake8 errors on html2txt.py. [Tony Pearson]
+- Add html2txt.py in sources. [Tony Pearson]
+- Rename fixpol to cfc_app. [Tony Pearson]
+- Resolves issue #22. [Tony Pearson]
+- Updates to Stage3. [Tony Pearson]
+- Removed unneeded variables. [Tony Pearson]
+- Improve comments. [Tony Pearson]
+- Fix manage.py. [Tony Pearson]
+- Update to STAGE1. [Tony Pearson]
+- Correct flake8 errors in cfc_project. [Tony Pearson]
+- Fixed flake8 errors in users subdirectory. [Tony Pearson]
+- Added favicon. [Tony Pearson]
+- Added Directions to take this to. [Tony Pearson]
+- Updates to STRUCTURE.md. [Tony Pearson]
+- Updated Stage3. [Tony Pearson]
+- Updated Stage2. [Tony Pearson]
+- Added ancestor search in DESCRIPTION. [Tony Pearson]
+- Added DESCRIPTION.md. [Tony Pearson]
+- Merge branch 'main' of github.com:embrace-call-for-code/fix-politics
+  into main. [Tony Pearson]
+- Move STAGEs to docs. [Tony Pearson]
+- README changes for starter kit. [Tony Pearson]
+- Updated architecture. [Tony Pearson]
+- Updates to STAGE1 for software. [Tony Pearson]
+- Verify version of pipenv. [Tony Pearson]
+- Updated Stage1 step 5. [Tony Pearson]
+- Update heading tags for Mailtrap.io. [Tony Pearson]
+- Put Mailtrap.io in main README. [Tony Pearson]
+- Added Stage 2 and 3. [Tony Pearson]
+- Split stages out of README. [Tony Pearson]
+- Setting up Dev workspace directory. [Tony Pearson]
+- Added staged deployment in README. [Tony Pearson]
+- Corrected spelling in RESULTS.md. [Tony Pearson]
+- Cleanup csv files. [Tony Pearson]
+- Alphabetized views in fixpol. [Tony Pearson]
+- Eliminate crash from duplicate criteria key. [Tony Pearson]
+- Added Admin tab for staff. [Tony Pearson]
+- Show hierarchy in search and locations pages. [Tony Pearson]
+- Merge branch 'main' of github.com:embrace-call-for-code/fix-politics
+  into main. [Tony Pearson]
+- Merge pull request #10 from tnadams/readme_update. [Tony Pearson]
+
+  Readme update
+- Update README.md. [tnadams]
+
+  Added directions for setting up a Mailtrap account
+- Update README.md. [tnadams]
+
+  Removed Cloud references and updated steps for a local deployment
+- Updated README.md. [THOMAS N. ADAMS]
+- Merge pull request #1 from embrace-call-for-code/main. [tnadams]
+
+  Updating from source
+- Fixed world usage in location. [Tony Pearson]
+- Resolve psycopg2 errors. [Tony Pearson]
+- Fixed loading psycopg2 error. [Jermaine Edwards]
+- Fixed Admin css. [Jermaine Edwards]
+- Pscopg2 and pscopg2-binary at 2.8.3 levels. [Tony Pearson]
+- Installed postgresql10-devel for libpq-fe.h. [Tony Pearson]
+- Added port-forwared and run-pg scripts. [Tony Pearson]
+- Added USE_SQLITE3 to run script. [Tony Pearson]
+- Merged settings.py and fixpol/views.py. [Tony Pearson]
+- Performed python manage.py collectstatic. [Jermaine Edwards]
+- Added tekton. [Jermaine Edwards]
+- Testing db environment variables, connectivity. [Jermaine Edwards]
+- Add /health support. [Jermaine Edwards]
+- Testing K8S support. [Jermaine Edwards]
+- Added docker support. [Jermaine Edwards]
+- Added postgresql support. [Jermaine Edwards]
+- Dumped datbases to loc.sql and law.sql. [Tony Pearson]
+- CSV dumps of law data in docs. [Tony Pearson]
+- Added backups directory for database. [Tony Pearson]
+- Tolerate if EMAIL_HOST not set. [Tony Pearson]
+- Added results/ into git. [Tony Pearson]
+- Updated powerpoint charts. [Tony Pearson]
+- Added cte-query for location search. [Tony Pearson]
+- Changed port to 3000 on run. [Tony Pearson]
+- Download csv file now works. [Tony Pearson]
+- Email sent returns to results page. [Tony Pearson]
+- Update email templates. [Tony Pearson]
+- Send email now works. [Tony Pearson]
+- Added email support. [Tony Pearson]
+- Setup mailtrap for email. [Tony Pearson]
+- Added key to fixpol_law table. [Tony Pearson]
+- Changed __str__ of criteria class. [Tony Pearson]
+- Search now uses profile defaults. [Tony Pearson]
+- Remove templatetags. [Tony Pearson]
+- Register button on right side. [Tony Pearson]
+- Responsive index.html. [Tony Pearson]
+- Responsive panels. [Tony Pearson]
+- New set_criteria method on profile. [Tony Pearson]
+- Updates to chart decks. [Tony Pearson]
+- Start cleanup. [Tony Pearson]
+- Added Aug06 Powerpoint to docs. [Tony Pearson]
+- Merge Beth's color scheme into Bootstrap4. [Tony Pearson]
+- Added Law database. [Tony Pearson]
+- Split base.html to base-beth and base-tony. [Tony Pearson]
+- Commented out pdb breakpoints. [Tony Pearson]
+- Updated pipenv pipfile.lock. [Tony Pearson]
+- Merge branch 'main' of github.com:embrace-call-for-code/fix-politics
+  into main Merge base.html CSS into main branch. [Tony Pearson]
+- Merge pull request #2 from bfm404/front-end-starter. [Tony Pearson]
+
+  Front end MVP
+- Stylised location and impacts to be more consistent. [Beth Morgan]
+- Changed colour of register button. [Beth Morgan]
+- Fixed results and search. [Beth Morgan]
+- Merge branch 'main' into front-end-starter. [Beth Morgan]
+- Written most of the front end code, MVP. [Beth Morgan]
+- Front end changes, still WIP. [Beth Morgan]
+- Merge branch 'main' of github.com:embrace-call-for-code/fix-politics
+  into main Included updates for README.md form Tommy Adams. [Tony
+  Pearson]
+- Merge pull request #1 from tnadams/tnadams-patch-1. [Tony Pearson]
+
+  Update README.md
+- Update README.md. [tnadams]
+
+  Changed `python manage.py start` to `python manage.py runserver`
+- Update README.md. [tnadams]
+
+  Updating README.md section for Native Application Development
+- Update views. [Tony Pearson]
+- New criteria model. [Tony Pearson]
+- Add criteria to profile. [Tony Pearson]
+- Set unique=true on database fields. [Tony Pearson]
+- Added text field for search criteria. [Tony Pearson]
+- Renamed SearchCriteria to Critera. [Tony Pearson]
+- Created search criteria model. [Tony Pearson]
+- Renamed prof_loc and prof_impact. [Tony Pearson]
+- Added results page. [Tony Pearson]
+- Added screenshots Aug04. [Tony Pearson]
+- New update.html for user profile. [Tony Pearson]
+- Sqlflush of all tables except fixpol. [Tony Pearson]
+- Rename build/run to build-docker run-docker. [Tony Pearson]
+- Remove tarball for learning_logs. [Tony Pearson]
+- Remove learing_logs test application. [Tony Pearson]
+- Remove learning log databases. [Tony Pearson]
+- Removed learning_logs test application. [Tony Pearson]
+- Added profile to users. [Tony Pearson]
+- Removing profiles temporarily. [Tony Pearson]
+- Removing learning_logs. [Tony Pearson]
+- Added Sign In/Sign out. [Tony Pearson]
+- Added docs directory for powerpoints and other materials. [Tony
+  Pearson]
+- Add architecture diagram. [Tony Pearson]
+- Created base.html for fixpol. [Tony Pearson]
+- Attempts at getting Dockerfile to work. [Tony Pearson]
+- Attempted tries on Dockerfile repair. [Tony Pearson]
+- Added tables for locations and impacts. [Tony Pearson]
+- Created superuser. [Tony Pearson]
+- Added fixpol app for new development. [Tony Pearson]
+- Fix dockerfile. [Tony Pearson]
+- Merge branch 'main' of github.com:embrace-call-for-code/fix-politics
+  into main. [Tony Pearson]
+- That was a mistake, gitignore back. [Tony Pearson]
+- Update gitignore to allow venv. [Tony Pearson]
+- Renamed learning_log project to cfc_project. [Tony Pearson]
+- Change to "soon" on index.html. [Tony Pearson]
+- Added two topics, changed index.html. [Tony Pearson]
+- Add secrets. [Tony Pearson]
+- Renamed db.sqlite3 to logsdb.sqlite3. [Tony Pearson]
+- New requirements. [Tony Pearson]
+- Create sqlite3. [Tony Pearson]
+- Changed index.html. [Tony Pearson]
+- Update build and run names. [Github pipeline]
+- Initial commit. [Matthew Perrins]
+
