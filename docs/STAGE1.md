@@ -127,8 +127,11 @@ has been simplified with a `manage.py` program to avoid dealing with
 configuring environment variables to run your app. 
 
 Several values are considered "secret" and should be stored in your 
-Operating System environment variables.  For Linux, these can be put
-in your `~/.bashrc` or `/etc/bashrc` files.
+Operating System environment variables instead of the Github repo.  In 
+other cases, it is convenient to be able to change these values dynamically
+while the system is running in production without have to modify the code.
+
+For Linux, these can be put in your `~/.bashrc` or `/etc/bashrc` files.
 
 ```bash
 SECRET_KEY
@@ -142,6 +145,9 @@ POSTGRESQL_PASSWORD
 POSTGRESQL_HOSTNAME
 POSTGRESQL_PORT
 LEGISCAN_API_KEY
+CFC_DEBUG
+CFC_LOGLEVEL_DEV
+CFC_LOGLEVEL_PROD
 
 ```
 

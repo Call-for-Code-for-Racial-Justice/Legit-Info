@@ -53,8 +53,10 @@ SECRET_KEY = os.getenv(
 # SECURITY WARNING: don't run with debug turned on in production!
 # Specify environment variable CFC_DEBUG='False' for Production
 DEBUG = False
+LOGLEVEL = os.getenv('CFC_LOGLEVEL_PROD', 'ERROR')
 if os.getenv('CFC_DEBUG', 'True') == 'True':
     DEBUG = True
+    LOGLEVEL = os.getenv('CFC_LOGLEVEL_DEV', 'DEBUG')
 
 LOGGING = {
     'version': 1,
@@ -133,7 +135,7 @@ LOGGING = {
         },
         'cfc_app': {
             'handlers': ['log_file'],
-            'level': 'INFO',
+            'level': LOGLEVEL,
             'propagate': False,
         },
         'cfc_app.management.commands': {
@@ -143,7 +145,7 @@ LOGGING = {
         },
         'users': {
             'handlers': ['log_file'],
-            'level': 'INFO',
+            'level': LOGLEVEL,
             'propagate': False,
         },
 
