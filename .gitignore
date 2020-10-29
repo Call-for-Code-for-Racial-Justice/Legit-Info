@@ -2,6 +2,8 @@
 .DS_Store
 *.pyc
 *.egg-info
+*.old
+*.bak
 server/localdev-config.json
 credentials.json
 localdev-config.json
@@ -19,6 +21,7 @@ sources/zipfiles/
 fob-storage/
 intermediate.file
 scan_json.pdf
+logs/
 
 # misc
 **/*DONOT_SAVE*.*

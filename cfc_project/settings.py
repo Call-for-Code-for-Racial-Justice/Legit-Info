@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import datetime as DT
 import os
 
+from django.utils.log import DEFAULT_LOGGING
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -53,6 +55,103 @@ SECRET_KEY = os.getenv(
 DEBUG = False
 if os.getenv('CFC_DEBUG', 'True') == 'True':
     DEBUG = True
+
+LOGGING = {
+    'version': 1,
+    # Version of logging
+    'disable_existing_loggers': False,
+ 
+    'filters':{
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+ 
+    'formatters':{
+        'django.server': {
+            '()': 'django.utils.log.ServerFormatter',
+            'format': '[{server_time}] {message}',
+            'style': '{',
+        },
+        'full':{
+            'format': '{asctime} {module}:{funcName} [{levelname}] {message}',
+            'datefmt': '%m-%d %H:%M:%S',                 # 24-hour clock UTC
+            'style': '{',
+        },
+    },
+
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter':'full'
+        },
+        'django.server': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'django.server',
+        },
+        'null': {
+            'level':'DEBUG',
+            'class':'logging.NullHandler',
+        },
+        'log_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'maxBytes': 1024 * 1024 * 1,  #1 MB
+            'backupCount': 7,
+            'filename': './logs/cfc_app.log',
+            'formatter':'full'
+        },
+
+    },
+    'loggers': {
+        '': {
+            'level': 'WARNING',
+            'handlers': ['console'],
+        },
+        'django.request': {
+            'handlers': ['console', 'log_file'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.security': {
+            'handlers': ['console', 'log_file'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.server': {
+            'handlers': ['django.server', 'log_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'py.warnings': {
+            'handlers': ['console'],
+        },
+        'cfc_app': {
+            'handlers': ['log_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'cfc_app.management.commands': {
+            'level': 'DEBUG',
+            'handlers': ['log_file'],
+            'propagate': False,
+        },
+        'users': {
+            'handlers': ['log_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+
+    },
+
+}
+
+
 ALLOWED_HOSTS = ['*', '127.0.0.1', 'localhost']
 
 # Application definition

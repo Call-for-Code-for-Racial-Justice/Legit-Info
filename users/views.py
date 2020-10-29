@@ -1,15 +1,34 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+users/views.py -- Register and Display user profile information
+
+Written by Tony Pearson, IBM, 2020
+Licensed under Apache 2.0, see LICENSE for details
+"""
+
+# System imports
+import logging
+logger = logging.getLogger(__name__)
+
+# Django and other third-party imports
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.contrib.auth.forms import UserCreationForm
+
+# Application imports
 from .forms import UserForm, ProfileForm
 
-# Create your views here.
+# import pdb; pdb.set_trace()
 
 
 def register(request):
     """Register a new user."""
+
+    logger.info("Line31: {} {}".format(request.method, request.user.username))
     if request.method != 'POST':
         # Display blank registration form.
         form = UserCreationForm()
@@ -31,6 +50,8 @@ def register(request):
 @login_required
 def show_profile(request):
     """Display user profile information."""
+
+    logger.info("Line51: {}".format(request.user.username))
     user = request.user
     # Display the location and impact preferences
     location = user.profile.location
@@ -46,6 +67,8 @@ def show_profile(request):
 @transaction.atomic
 def update_profile(request):
     """Update user profile information."""
+
+    logger.info("Line68: {} {}".format(request.method, request.user.username))
     if request.method != 'POST':
         # Pre-populate forms with previous information
         user_form = UserForm(instance=request.user)

@@ -152,7 +152,7 @@ class Command(BaseCommand):
             if self.state and (state != self.state):
                 continue
 
-            logger.info('Processing: {} ({})'.format(loc.desc, state))
+            logger.info('155:Processing: {} ({})'.format(loc.desc, state))
             self.state_count = 0
             found_list = self.fob.Dataset_items(state)
 
@@ -165,7 +165,7 @@ class Command(BaseCommand):
                 if mo:
                     state = mo.group(1)
                     session_id = mo.group(2)
-                    logger.debug('Session_id: '+session_id)
+                    logger.debug('168: Session_id: '+session_id)
                     # If you are only doing one session_id, and this one
                     # isn't it, continue to the next session_id.
                     if self.session_id and (session_id != self.session_id):
@@ -184,7 +184,7 @@ class Command(BaseCommand):
                 if self.limit > 0 and self.state_count >= self.limit:
                     break
                 session_id, json_name = session_detail
-                logger.debug("Session_id={} JSON={}".format(session_id, 
+                logger.debug("187:Session_id={} JSON={}".format(session_id, 
                                                             json_name))
                 self.process_json(state, session_id, json_name)
 
@@ -193,7 +193,7 @@ class Command(BaseCommand):
     def process_json(self, state, session_id, json_name):
         """ Process CC-Dataset-NNNN.json file """
 
-        logger.debug('Checking JSON: ', json_name)
+        logger.debug('196:Checking JSON: '+json_name)
         json_str = self.fob.download_text(json_name)
 
         # If the ZIP file already exists, use it, otherwise create it.
@@ -226,10 +226,10 @@ class Command(BaseCommand):
                         break
                     mo = billRegex.search(path)
                     if mo:
-                        logger.debug('PATH name: '+path)
+                        logger.debug('229:PATH name: '+path)
                         json_data = zf.read(path).decode('UTF-8',
                                                          errors='ignore')
-                        logger.debug('JD: '+json_data[:50])
+                        logger.debug('232:JD: '+json_data[:50])
                         processed = self.process_source(mo, json_data)
                         self.state_count += processed
 
@@ -238,7 +238,7 @@ class Command(BaseCommand):
 
     def process_source(self, mo, json_data):
 
-        logger.debug('IN process_source')
+        logger.debug('241:IN process_source')
         bill_state = mo.group(1)
         bill_number = mo.group(3)
         bill_json = json.loads(json_data)
@@ -264,7 +264,7 @@ class Command(BaseCommand):
         bill_detail['doc_size'] = chosen['text_size']
         law_record = Law.objects.filter(key=key).first()
         if law_record is None:
-            logger.debug('Creating LAW record '+key)
+            logger.debug('267:Creating LAW record '+key)
             law_record = Law(key=key, title=title, summary=summary,
                              bill_id=bill_id, doc_date=doc_date,
                              location=self.loc)
@@ -279,7 +279,7 @@ class Command(BaseCommand):
         if self.fob.item_exists(text_name):
             if self.skip:
                 skip_msg = 'File {} already exists, skipping'.format(text_name)
-                logger.debug(skip_msg)
+                logger.debug("282:"+skip_msg)
                 if self.verbosity > 2:
                     print(skip_msg)
                 elif self.verbosity:
@@ -302,7 +302,7 @@ class Command(BaseCommand):
     def process_bill(self, key, extension, bill_detail, chosen):
         """ process individual PDF/HTML bill """
 
-        logger.debug('IN process_bill')
+        logger.debug('305:IN process_bill')
         bill_name = self.fob.BillText_name(key, extension)
         bill_hash = Hash.find_item_name(bill_name)
 
@@ -349,18 +349,19 @@ class Command(BaseCommand):
             if result:
                 bindata = bill_bundle.content
                 if extension == "pdf" and bindata[:4] != b'%PDF':
-                    logger.error("Invalid PDF format found", bill_name)
+                    logger.error("352:Invalid PDF format found", bill_name)
                     bindata = None
 
             if bindata:
                 self.fob.upload_binary(bindata, bill_name)
                 saving_msg = "Saving file: ".format(bill_name)
-                logger.debug(saving_msg)
+                logger.debug("358:"+saving_msg)
                 if self.verbosity > 2:
                     print(saving_msg)
 
             elif self.api_limit > 0 and self.leg.api_ok:
-                logger.warning("Invoking Legiscan API: "+bill_name+" "+doc_id)
+                logger.warning("363:Invoking Legiscan API: ".format(bill_name, 
+                                                                    doc_id))
                 response = self.leg.getBillText(chosen['doc_id'])
                 source_file = "getBillText doc_id="+str(chosen['doc_id'])
                 if 'cite_url' not in bill_detail:
@@ -387,7 +388,7 @@ class Command(BaseCommand):
             self.save_source_hash(bill_hash, bill_name, bill_detail, chosen)
             self.dot.show()
         else:
-            logger.error('Failure processing source: ', source_file)
+            logger.error('391:Failure processing source: ', source_file)
         return processed
 
     def save_source_hash(self, bill_hash, bill_name, bill_detail, chosen):
@@ -424,14 +425,14 @@ class Command(BaseCommand):
 
     def write_file(self, text_line, text_name):
         text_line.split_sentences()
-        logger.info('Writing: '+ text_name)
+        logger.info('428:Writing: '+ text_name)
         self.fob.upload_text(text_line.oneline, text_name)
         return
 
     def process_pdf(self, key, docdate, bill_detail, msg_bytes):
         """ Parse PDF file to extract text """
 
-        logger.debug("In Process_pdf")
+        logger.debug("435:In Process_pdf")
         input_str = ""
 
         
@@ -447,7 +448,7 @@ class Command(BaseCommand):
  #           PDFtoTEXT(temp_path, temp_out.name)
  #           temp_out.seek(0)
  #           input_str = temp_out.read().decode('UTF-8', errors='ignore')
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         miner = PDFtoTEXT(temp_path)
         input_str = miner.convert_to_text()
 

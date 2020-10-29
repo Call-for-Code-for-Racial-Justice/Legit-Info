@@ -191,7 +191,8 @@ def impacts(request):
 
 def index(request):
     """The home page for this application."""
-    logger.debug('Home Page-DEBUG')
+
+    logger.info('195: username={}'.format(request.user.username))
     return render(request, 'index.html')
 
 

@@ -98,9 +98,9 @@ awareness of current and pending legislation and their ability to affect change
 through voting or other activism.
 
 
-## The architecture
+## The architecture / information flow
 
-![architecture](docs/Architecture-2020-10-15.png)
+![architecture](docs/legit-info-flow.png)
 
 
 ## Long description
