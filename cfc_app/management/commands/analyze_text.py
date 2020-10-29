@@ -1,30 +1,32 @@
-# Python Code
-# analyze_text.py -- Scan TXT files, assign Impact, Save into Django Database
-# By Shilpi Bhattacharyya and Tony Pearson, IBM, 2020
-# Requires: pip install -U ibm-cos-sdk ibm-watson
-#
-# This is intended as a background task
-#
-# You can invoke this in either "on demand" or as part of a "cron" job
-#
-# On Demand:
-# [...] $ pipenv shell
-# (cfc) $ ./stage1 analyze_text --api --state AZ --limit 10
-#
-# Cron Job:
-# /home/yourname/Develop/legit-info/cron1 anallyze_text --api --limit 10
-#
-# The IBM Watson Natural Language Understanding API is used for this.
-# See http://watson-developer-cloud.github.io/python-sdk/v3.0.2/apis/
-#     ibm_watson.natural_language_understanding_v1.html for details.
-#
-# If you leave out the --api, the IBM Watson NLU API will not be invoked,
-# this is useful to process TXT files using just the wordmap.csv file.
-#
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
+"""
+Scan TXT files, assign Impact, save into cfc_app_law database.
+
+This is phase 3 of weekly cron job.  See CRON.md for details.
+Invoke with ./stage1 get_datasets  or ./cron1 get_datasets
+Specify --help for details on parameters available.
+
+The IBM Watson Natural Language Understanding API is used for this.
+See http://watson-developer-cloud.github.io/python-sdk/v3.0.2/apis/
+         ibm_watson.natural_language_understanding_v1.html for details.
+
+If you leave out the --api, the IBM Watson NLU API will not be invoked,
+this is useful to process TXT files using just the wordmap.csv file.
+
+Written Shilpi Bhattacharyya and Tony Pearson, IBM, 2020
+Licensed under Apache 2.0, see LICENSE for details
+"""
+
+# System imports
+import json
 import os
 import re
-import json
+
+# Django and other third-party imports
+from django.core.management.base import BaseCommand
+from django.conf import settings
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
@@ -36,27 +38,24 @@ from ibm_watson.natural_language_understanding_v1 import (Features,
                                                           SyntaxOptionsTokens,
                                                           CategoriesOptions)
 
-from django.core.management.base import BaseCommand
-from django.conf import settings
-
+# Application imports
 from cfc_app.FOB_Storage import FOB_Storage
+from cfc_app.LegiscanAPI import LegiscanAPI, LEGISCAN_ID, LegiscanError
 from cfc_app.models import Location, Impact, Law
 from cfc_app.ShowProgress import ShowProgress
+from cfc_app.Oneline import Oneline
 
+# Debug with:  import pdb; pdb.set_trace()
 
 # Constants for IBM Watson NLU credentials in Environment Variables
 NLU_APIKEY = os.getenv('NLU_APIKEY', None)
 NLU_SERVICE_URL = os.getenv('NLU_SERVICE_URL', None)
 
 NameRegex = re.compile(r"^(\w\w-\w*-Y\d*).")
-HeadRegex1 = r"^(\w\w-\w*-Y\d*).\w*\s(\d\d\d\d-\d\d-\d\d)\s*"
-HeadRegex2 = r"_TITLE_\s*(.*)_SUMMARY_\s*(.*)_TEXT_"
-HeadRegex = re.compile(HeadRegex1+HeadRegex2)
 keyRegex = re.compile(r"^\w\w-(.*)-")
 mapRegex = re.compile(r'["](.*)["]\s*,\s*["](.*)["]')
 
-RLIMIT = 5   # number of phrases to be returned by IBM Watson NLU
-
+RLIMIT = 10   # number of phrases to be returned by IBM Watson NLU
 
 class Command(BaseCommand):
 
@@ -99,7 +98,14 @@ class Command(BaseCommand):
         self.fob = FOB_Storage(settings.FOB_METHOD)
         self.use_api = False
         self.after = None
-        self.limit = 0
+        self.limit = 10
+        self.rel_start = '(MAP)'
+        
+        state_id_table = {}
+        for state_id in LEGISCAN_ID:
+            state = LEGISCAN_ID[state_id]['code']
+            state_id_table[state] = state_id
+        self.id_table = state_id_table
         return None
 
     def add_arguments(self, parser):
@@ -107,7 +113,7 @@ class Command(BaseCommand):
                             help="Invoke IBM Watson NLU API")
         parser.add_argument("--state", help="Process single state: AZ, OH")
         parser.add_argument("--after", help="Start after this item name")
-        parser.add_argument("--limit", type=int, default=0,
+        parser.add_argument("--limit", type=int, default=self.limit,
                             help="Limit number of entries to detail")
 
         return None
@@ -117,54 +123,84 @@ class Command(BaseCommand):
         if options['after']:
             self.after = options['after']
 
-        if options['limit']:
-            self.limit = options['limit']
+        self.limit = options['limit']
 
         if options['api']:
             self.use_api = True
+            self.rel_start = '(NLU)'
             print('Analyzing with IBM Watson NLU API')
         else:
             print('Analyzing with internal Wordmap ONLY')
 
-        usa = Location.objects.get(shortname='usa')
-        locations = Location.objects.order_by('hierarchy').filter(parent=usa)
+        locations = Location.objects.filter(legiscan_id__gt=0)
         for loc in locations:
-            state = loc.shortname.upper()  # Convert state to UPPER CASE
+            state_id = loc.legiscan_id
+            if state_id > 0:
+                state = LEGISCAN_ID[state_id]['code']
+
             if options['state']:
                 if state != options['state']:
                     continue
 
-            print('Analyzing state: {} -- {}'.format(state, loc.desc))
+            print('Processing: {} ({})'.format(loc.desc, state))
             self.process_state(state)
         return None
 
     def process_state(self, state):
         # import pdb; pdb.set_trace()
 
-        json_name, json_data = '{}.json'.format(state), None
-        if self.fob.item_exists(json_name):
-            json_str = self.fob.download_text()
-            json_data = json.loads(json_str)
-
-        cursor, limit = self.after, self.limit
+        cursor = self.after
         items = self.fob.list_items(prefix=state, suffix=".txt",
-                                    after=cursor, limit=limit)
+                                    after=cursor)
 
         dot = ShowProgress()
         num = 0
+        items.sort()
         for filename in items:
-            self.process_legislation(filename, json_data)
-            dot.show()
-            num += 1
-            if self.limit > 0 and num >= self.limit:
-                break
+            textdata = self.fob.download_text(filename)
+            header = Oneline.parse_header(textdata)
+            if 'BILLID' in header:
+                bill_id = header['BILLID']
+                self.process_legislation(filename, textdata, header)
+                dot.show()
+                num += 1
+                if self.limit > 0 and num >= self.limit:
+                    break
+            else:
+                print('No bill_id found in header, removing: ', filename)
+                self.fob.remove_item(filename)
+                continue
+            
+
         dot.end()
         return None
 
-    # returns top 5 impact areas from
-    # the text extracted from bills
+    def process_legislation(self, filename, extracted_lines, header):
+
+        extracted_text = Oneline.join_sentences(extracted_lines)
+        extracted_text = extracted_text.replace('"', r'|').replace("'",r"|")
+
+        if self.use_api:
+            concept = self.Relevance_NLU(extracted_text)
+        else:
+            concept = self.Relevance_Wordmap(extracted_text)
+
+        revlist, impact_chosen = self.classify_impact(concept)
+
+        rel, connector = self.rel_start, ''
+        for r in revlist:
+            rel += connector + "'{}' => '{}'".format(r[0], r[1])
+            connector = ", "
+
+        print('Filename {}  Impact {}'.format(filename, impact_chosen))
+
+        key = filename.replace(".txt", "")
+        self.save_law(key, header, rel, impact_chosen)
+
+        return None
 
     def Relevance_NLU(self, text):
+        """ return top impact areas from extracted text using Watson NLU """
 
         authenticator = IAMAuthenticator(NLU_APIKEY)
         natural_language_understanding = NaturalLanguageUnderstandingV1(
@@ -190,6 +226,7 @@ class Command(BaseCommand):
         return concept
 
     def Relevance_Wordmap(self, extracted_text):
+        """ return top impact areas from extracted text using Wordmap """
         concept = []
 
         self.scan_extract(extracted_text, self.primary, concept)
@@ -209,60 +246,20 @@ class Command(BaseCommand):
                     break
         return None
 
-    def process_legislation(self, filename, json_data):
-        lob = FOB_Storage(settings.FOB_METHOD)
-        key = ''
-        mo = NameRegex.search(filename)
-        if mo:
-            key = mo.group(1)
-        doc_date = ''
-        title = ''
-        summary = ''
-        extracted_text = lob.download_text(filename)
-        mo = HeadRegex.search(extracted_text)
-        if mo:
-            if key == '':
-                key = mo.group(1)
-            doc_date = mo.group(2)
-            title = mo.group(3)
-            summary = mo.group(4)
-
-        if self.use_api:
-            concept = self.Relevance_NLU(extracted_text)
-        else:
-            concept = self.Relevance_Wordmap(extracted_text)
-
-        revlist, impact_chosen = self.classify_impact(concept)
-
-        rel = '(MAP)'
-        if self.use_api:
-            rel = '(NLU)'
-
-        connector = ''
-        for r in revlist:
-            rel += connector + "'{}' => '{}'".format(r[0], r[1])
-            connector = ", "
-
-        print('Filename {}  Impact {}'.format(filename, impact_chosen))
-
-        if key:
-            bill_id = self.get_bill_id(json_data, key)
-            self.save_law(key, bill_id, doc_date, title,
-                          summary, rel, impact_chosen)
-
-        return None
-
-    def save_law(self, key, bill_id, doc_date, title,
-                 summary, rel, impact_chosen):
+    def save_law(self, key, header, rel, impact_chosen):
 
         # If record exists, check if this is newer..
+        doc_date = header['DOCDATE']
+        # import pdb; pdb.set_trace()
         if Law.objects.filter(key=key).exists():
             law = Law.objects.get(key=key)
             # import pdb; pdb.set_trace()
 
             # If the record is up-to-date and matches the
             # impact chosen, leave it alone
-            if doc_date < law.doc_date and impact_chosen == law.impact.text:
+            if (law.doc_date 
+                    and doc_date < law.doc_date 
+                    and impact_chosen == law.impact.text):
                 return None
 
             result = 'Updated'
@@ -272,14 +269,17 @@ class Command(BaseCommand):
             law.key = key
             result = 'Created'
 
-        law.bill_id = bill_id
+        law.bill_id = header['BILLID']
         law.doc_date = doc_date
-        law.title = title
-        law.summary = summary
+        law.title = header['TITLE']
+        law.summary = header['SUMMARY']
 
-        state = key[:2].lower()
-        loc = Location.objects.get(shortname=state)
-        law.location = loc
+        state = key[:2]
+        if state in self.id_table:
+            state_id = self.id_table[state]
+            if state_id:
+                loc = Location.objects.get(legiscan_id=state_id)
+                law.location = loc
 
         imp = Impact.objects.get(text=impact_chosen)
         law.impact = imp
@@ -289,19 +289,6 @@ class Command(BaseCommand):
 
         print('Database record {} for {}'.format(result, key))
         return None
-
-    def get_bill_id(self, json_data, key):
-        bill_id = 'NOT FOUND'
-        mo = keyRegex.search(key)
-        if (mo is not None) and (json_data is not None):
-            bill_number = mo.group(1)
-            for entry in json_data:
-                bill = json_data[entry]
-                if bill_number == bill['bill_number']:
-                    bill_id = bill['bill_id']
-                    break
-
-        return bill_id
 
     def load_wordmap(self, impact_list):
         wordmap, categories = {}, []
@@ -329,7 +316,7 @@ class Command(BaseCommand):
             else:
                 print("Regex Error", line)
 
-        print('Impacts marked with * match Django database')
+        print('Impacts marked with * match cfc_app_impact table')
         secondary_list = []
         for impact in categories:
             marker = ' '
@@ -361,3 +348,4 @@ class Command(BaseCommand):
             impact_chosen = 'None'
 
         return revlist, impact_chosen
+    # End of module

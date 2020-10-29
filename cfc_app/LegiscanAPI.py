@@ -14,6 +14,8 @@
 """
 
 import json
+import logging
+logger = logging.getLogger(__name__)
 import os
 
 from .DataBundle import DataBundle
@@ -118,7 +120,7 @@ class LegiscanAPI:
                 dsl_bundle.status_code = 487
 
         if not dsl_bundle.ok:
-            print('Failure', dsl_bundle)
+            logger.error('Failure: {}'.format(dsl_bundle))
             self.api_ok = False
             list_data = None
         return list_data
@@ -143,7 +145,7 @@ class LegiscanAPI:
                 sesh_bundle.status_code = 487
 
         if not sesh_bundle.ok:
-            print('Failure', sesh_bundle)
+            logger.error('Failure: {}'.format(sesh_bundle))
             self.api_ok = False
             sesh_data = None
         return sesh_data
@@ -167,7 +169,7 @@ class LegiscanAPI:
                 bill_bundle.status_code = 487
 
         if not bill_bundle.ok:
-            print('Failure', bill_bundle)
+            logger.error('Failure: {}'.format(bill_bundle))
             self.api_ok = False
             bill_data = None
         return bill_data
@@ -201,7 +203,7 @@ class LegiscanAPI:
                         bundle.ok = False
                         bundle.status_code = 415
             except Exception as e:
-                print('Error {}'.format(e))
+                logger.error('Error {}'.format(e), exc_info=True)
                 self.api_ok = False
                 bundle.ok = False
                 bundle.status_code = 403

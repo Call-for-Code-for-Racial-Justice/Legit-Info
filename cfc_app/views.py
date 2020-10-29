@@ -1,8 +1,21 @@
-# views.py
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+cfc_app/views.py -- Search and Display legislation
+
+Written by Tony Pearson, IBM, 2020
+Licensed under Apache 2.0, see LICENSE for details
+"""
+
+# System imports
 import csv
 from datetime import datetime
+import logging
+logger = logging.getLogger(__name__)
 import os
 
+# Django and other third-party imports
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
@@ -12,6 +25,7 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 
+# Application imports
 from users.models import Profile
 from .models import Location, Impact, Criteria, Law
 from .models import impact_seq
@@ -19,7 +33,7 @@ from .forms import SearchForm
 
 # Debugging options
 # return HttpResponse({variable to inspect})
-# print {variable to inspect}
+# logger.debug {variable to inspect}
 # raise Exception({variable to inspect})
 # import pdb; pdb.set_trace()
 
@@ -177,6 +191,7 @@ def impacts(request):
 
 def index(request):
     """The home page for this application."""
+    logger.debug('Home Page-DEBUG')
     return render(request, 'index.html')
 
 

@@ -15,6 +15,8 @@ Licensed under Apache 2.0, see LICENSE for details
 # System imports
 import datetime as DT
 import json
+import logging
+logger = logging.getLogger(__name__)
 
 # Django and other third-party imports
 from django.core.management.base import BaseCommand, CommandError
@@ -68,12 +70,16 @@ class Command(BaseCommand):
 
         # If the Legiscan DatasetList is recent enough, use it,
         # otherwise, call Legiscan API to fetch a new one
-
+        starting = '====STARTING: get_datasets'
         if options['api']:
             self.use_api = True
+            starting += ' --api'
         if options['state']:
             self.state = options['state']
+            starting += ' --state '+self.state
         self.frequency = options['frequency']
+        starting= "{} --frequency {}".format(starting, self.frequency)
+        logger.info(starting)
 
         self.list_data = self.recent_enough()
 
@@ -100,7 +106,7 @@ class Command(BaseCommand):
                 if state != options['state']:
                     continue
 
-            print('Processing: {} ({})'.format(loc.desc, state))
+            logger.info('Processing: {} ({})'.format(loc.desc, state))
 
             # Get dataset and master files, up to the --limit set
 
@@ -131,7 +137,7 @@ class Command(BaseCommand):
         if self.use_api and latest_date < week_ago:
             today = self.now.strftime("%Y-%m-%d")
             self.list_name = self.fob.DatasetList_name(today)
-            print('Fetching Dataset: {}'.format(self.list_name))
+            logger.info('Fetching Dataset: {}'.format(self.list_name))
             self.list_data = self.leg.getDatasetList('Good')
 
             # If successful return from API, save this to a file
@@ -140,15 +146,15 @@ class Command(BaseCommand):
                 if self.list_name not in dsl_list:
                     dsl_list.append(self.list_name)
             else:
-                print('API Failed to get DatasetList from Legiscan')
+                logger.error('API Failed to get DatasetList from Legiscan')
 
         # API failure or not called, get the item from File/Object storage
         if latest_name and (not self.list_data):
-            print('Downloading: ', self.list_name)
+            logger.debug('Downloading: ' + self.list_name)
             self.list_data = self.fob.download_text(self.list_name)
 
         if self.list_data:
-            print('Verifying JSON contents of: ', self.list_name)
+            logger.debug('Verifying JSON contents of: ' + self.list_name)
             self.list_pkg = json.loads(self.list_data)
 
             # Validate this is a Legiscan DatasetList file
@@ -162,7 +168,7 @@ class Command(BaseCommand):
                         self.datasetlist = self.list_pkg['datasetlist']
 
         if not self.list_data:
-            print('DatasetList-YYYY-MM-DD.json not found')
+            logger.error('DatasetList-YYYY-MM-DD.json not found')
             if not self.use_api:
                 print('Did you forget the --api parameter?')
             raise CommandError('API failure, or DatasetList not Found')
@@ -174,7 +180,7 @@ class Command(BaseCommand):
             dsl_list.sort(reverse=True)
             for name in dsl_list[self.VERSIONS:]:
                 self.fob.remove_item(name)
-                print('Expiring: ', name)
+                logger.debug('Expiring: ', name)
 
         return
 
@@ -203,13 +209,13 @@ class Command(BaseCommand):
                             fetch_new = True
 
                     if fetch_new and self.use_api and self.leg.api_ok:
-                        print('Fetching {}: {}'.format(state, session_id))
+                        logger.info('Fetching {}: {}'.format(state, session_id))
 
                         session_data = self.leg.getDataset(session_id,
                                                            access_key)
                         if session_data:
                             if session_data.startswith('*ERROR*'):
-                                print(session_data)
+                                logger.error(session_data)
                             else:
                                 self.fob.upload_text(session_data,
                                                      session_name)
@@ -232,7 +238,7 @@ class Command(BaseCommand):
 
     def datasets_found(self, states):
         for state_data in states:
-            print(' ')
+
             state, state_id = state_data[0], state_data[1]
             found_list = self.fob.Dataset_items(state)
             for entry in self.datasetlist:
@@ -243,10 +249,10 @@ class Command(BaseCommand):
                     session_name = self.fob.Dataset_name(state, session_id)
                     if session_name in found_list:
                         self.show_results(session_name, entry)
-                        print('Found session dataset: ', session_name)
+                        print('Found session dataset: '+session_name)
                         self.save_to_database(session_name, entry)
                     else:
-                        print('Item not found: ', session_name)
+                        print('Item not found: '+session_name)
 
         return None
 
@@ -276,7 +282,7 @@ class Command(BaseCommand):
         if year_range != entry['year_end']:
             year_range += '-' + str(entry['year_end'])
 
-        print(self.StateForm.format(entry['session_id'],
+        logger.info(self.StateForm.format(entry['session_id'],
                                     year_range, entry['dataset_date'],
                                     entry['dataset_size']))
         return None

@@ -25,64 +25,79 @@ output it to plain text, html, xml or tags."""
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-
+# System imports
 import sys
+
+# Django and other third-party imports
 import pdfminer.high_level
 import pdfminer.layout
+from io import StringIO
 
-OUTPUT_TYPES = ((".htm", "html"),
-                (".html", "html"),
-                (".xml", "xml"),
-                (".tag", "tag"))
-
+from pdfminer.converter import TextConverter
+from pdfminer.layout import LAParams
+from pdfminer.pdfdocument import PDFDocument
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.pdfpage import PDFPage
+from pdfminer.pdfparser import PDFParser
 
 class PDFtoTEXT():
     """
     Class to handle PDF files
     """
 
-    def __init__(self, input_name, output_name):
-        """ Set characters to use for showing progress"""
+    def __init__(self, input_name):
+        """ Set save input file name """
         self.input_name = input_name
-        self.output_name = output_name
-        outfp = self.extract_text(files=[input_name], outfile=output_name)
-        outfp.close()
         return None
 
-    def extract_text(self, files=[], outfile='-',
-                     no_laparams=False, all_texts=None, detect_vertical=None,
-                     word_margin=None, char_margin=None, line_margin=None,
-                     boxes_flow=None, output_type='text', codec='utf-8',
-                     strip_control=False, maxpages=0, page_numbers=None,
-                     password="", scale=1.0, rotation=0, layoutmode='normal',
-                     output_dir=None, debug=False, disable_caching=False,
-                     **kwargs):
-        if not files:
-            raise ValueError("Must provide files to work upon!")
+    def convert_to_text(self):
+        """ Set save input file name """
+        output_string = StringIO()
+        with open(self.input_name, 'rb') as in_file:
+            parser = PDFParser(in_file)
+            doc = PDFDocument(parser)
+            rsrcmgr = PDFResourceManager()
+            device = TextConverter(rsrcmgr, output_string, laparams=LAParams())
+            interpreter = PDFPageInterpreter(rsrcmgr, device)
+            for page in PDFPage.create_pages(doc):
+                interpreter.process_page(page)
 
-        if not no_laparams:
-            laparams = pdfminer.layout.LAParams()
-            for param in ("all_texts", "detect_vertical", "word_margin",
-                          "char_margin", "line_margin", "boxes_flow"):
-                paramv = locals().get(param, None)
-                if paramv is not None:
-                    setattr(laparams, param, paramv)
-        else:
-            laparams = None
+        return output_string.getvalue()
 
-        if output_type == "text" and outfile != "-":
-            for override, alttype in OUTPUT_TYPES:
-                if outfile.endswith(override):
-                    output_type = alttype
+    def extract_text2fp(pdf_file, password='', page_numbers=None, maxpages=0,
+                 caching=True, codec='utf-8', laparams=None):
+        """Parse and return the text contained in a PDF file.
 
-        if outfile == "-":
-            outfp = sys.stdout
-            if outfp.encoding is not None:
-                codec = 'utf-8'
-        else:
-            outfp = open(outfile, "wb")
+        :param pdf_file: Either a file path or a file-like object for the PDF file
+            to be worked on.
+        :param password: For encrypted PDFs, the password to decrypt.
+        :param page_numbers: List of zero-indexed page numbers to extract.
+        :param maxpages: The maximum number of pages to parse
+        :param caching: If resources should be cached
+        :param codec: Text decoding codec
+        :param laparams: An LAParams object from pdfminer.layout. If None, uses
+            some default settings that often work well.
+        :return: a string containing all of the text extracted.
+        """
+        if laparams is None:
+            laparams = LAParams()
 
-        for fname in files:
-            with open(fname, "rb") as fp:
-                pdfminer.high_level.extract_text_to_fp(fp, **locals())
-        return outfp
+        with open_filename(pdf_file, "rb") as fp, StringIO() as output_string:
+            rsrcmgr = PDFResourceManager(caching=caching)
+            device = TextConverter(rsrcmgr, output_string, codec=codec,
+                               laparams=laparams)
+            interpreter = PDFPageInterpreter(rsrcmgr, device)
+    
+            for page in PDFPage.get_pages(
+                    fp,
+                    page_numbers,
+                    maxpages=maxpages,
+                    password=password,
+                    caching=caching,
+            ):
+                interpreter.process_page(page)
+
+        return output_string.getvalue()
+
+if __name__ == "__main__":
+    print('Thank you')

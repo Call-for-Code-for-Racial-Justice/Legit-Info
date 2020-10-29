@@ -29,7 +29,7 @@ class Command(BaseCommand):
         self.flist = []
         self.fob_object = FOB_Storage('OBJECT')
         self.olist = []
-        self.maxlimit = 1000
+        self.maxlimit = 5000
         self.count = 0
         return None
 

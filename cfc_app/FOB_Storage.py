@@ -220,7 +220,7 @@ class FOB_Storage():
         item_name = "{}-Dataset-{:04d}.json".format(state, state_id)
         return item_name
 
-    # Helpers for Legiscan BillText (SS-Dataset-NNNN.json)
+    # Helpers for Legiscan BillText (CC-BODY-SSSS-YNNNN.json)
     def BillText_items(self, state, extension):
         dsn_prefix = "{}-".format(state)
         dsl_list = self.list_items(prefix=dsn_prefix, suffix=extension)
