@@ -1,0 +1,502 @@
+﻿city,city_ascii,state_id,state_name,county_name,population
+Birmingham,Birmingham,AL,Alabama,Jefferson,739573
+Huntsville,Huntsville,AL,Alabama,Madison,319249
+Mobile,Mobile,AL,Alabama,Mobile,315502
+Montgomery,Montgomery,AL,Alabama,Montgomery,254634
+Tuscaloosa,Tuscaloosa,AL,Alabama,Tuscaloosa,155499
+Auburn,Auburn,AL,Alabama,Lee,92777
+Hoover,Hoover,AL,Alabama,Jefferson,85768
+Florence,Florence,AL,Alabama,Lauderdale,79964
+Anniston,Anniston,AL,Alabama,Calhoun,73501
+Dothan,Dothan,AL,Alabama,Houston,72396
+Anchorage,Anchorage,AK,Alaska,Anchorage,247949
+Fairbanks,Fairbanks,AK,Alaska,Fairbanks North Star,63245
+Juneau,Juneau,AK,Alaska,Juneau,25085
+Badger,Badger,AK,Alaska,Fairbanks North Star,18792
+Knik-Fairview,Knik-Fairview,AK,Alaska,Matanuska-Susitna,17513
+College,College,AK,Alaska,Fairbanks North Star,13709
+Wasilla,Wasilla,AK,Alaska,Matanuska-Susitna,10838
+Ketchikan,Ketchikan,AK,Alaska,Ketchikan Gateway,10652
+Tanaina,Tanaina,AK,Alaska,Matanuska-Susitna,10520
+Kodiak,Kodiak,AK,Alaska,Kodiak Island,8851
+Phoenix,Phoenix,AZ,Arizona,Maricopa,4219697
+Tucson,Tucson,AZ,Arizona,Pima,888486
+Mesa,Mesa,AZ,Arizona,Maricopa,518012
+Chandler,Chandler,AZ,Arizona,Maricopa,261165
+Scottsdale,Scottsdale,AZ,Arizona,Maricopa,258069
+Gilbert,Gilbert,AZ,Arizona,Maricopa,254114
+Glendale,Glendale,AZ,Arizona,Maricopa,252381
+Avondale,Avondale,AZ,Arizona,Maricopa,227289
+Tempe,Tempe,AZ,Arizona,Maricopa,195805
+Peoria,Peoria,AZ,Arizona,Maricopa,175961
+Little Rock,Little Rock,AR,Arkansas,Pulaski,439815
+Fayetteville,Fayetteville,AR,Arkansas,Washington,351246
+Fort Smith,Fort Smith,AR,Arkansas,Sebastian,125354
+Springdale,Springdale,AR,Arkansas,Washington,81125
+Jonesboro,Jonesboro,AR,Arkansas,Craighead,76247
+Conway,Conway,AR,Arkansas,Faulkner,74951
+Rogers,Rogers,AR,Arkansas,Benton,68669
+North Little Rock,North Little Rock,AR,Arkansas,Pulaski,65903
+Hot Springs,Hot Springs,AR,Arkansas,Garland,60767
+Bentonville,Bentonville,AR,Arkansas,Benton,54909
+Los Angeles,Los Angeles,CA,California,Los Angeles,12750807
+San Francisco,San Francisco,CA,California,San Francisco,3592294
+San Diego,San Diego,CA,California,San Diego,3220118
+Riverside,Riverside,CA,California,Riverside,2107852
+Sacramento,Sacramento,CA,California,Sacramento,1898019
+San Jose,San Jose,CA,California,Santa Clara,1798103
+Fresno,Fresno,CA,California,Fresno,703498
+Concord,Concord,CA,California,Contra Costa,652308
+Mission Viejo,Mission Viejo,CA,California,Orange,590249
+Bakersfield,Bakersfield,CA,California,Kern,579295
+Denver,Denver,CO,Colorado,Denver,2876625
+Colorado Springs,Colorado Springs,CO,Colorado,El Paso,642413
+Aurora,Aurora,CO,Colorado,Adams,379289
+Fort Collins,Fort Collins,CO,Colorado,Larimer,312666
+Lakewood,Lakewood,CO,Colorado,Jefferson,157935
+Pueblo,Pueblo,CO,Colorado,Pueblo,143932
+Thornton,Thornton,CO,Colorado,Adams,141464
+Grand Junction,Grand Junction,CO,Colorado,Mesa,139143
+Greeley,Greeley,CO,Colorado,Weld,137810
+Boulder,Boulder,CO,Colorado,Boulder,124345
+Bridgeport,Bridgeport,CT,Connecticut,Fairfield,924449
+Hartford,Hartford,CT,Connecticut,Hartford,905152
+New Haven,New Haven,CT,Connecticut,New Haven,564830
+Norwich,Norwich,CT,Connecticut,New London,200289
+Waterbury,Waterbury,CT,Connecticut,New Haven,189614
+Danbury,Danbury,CT,Connecticut,Fairfield,176030
+Stamford,Stamford,CT,Connecticut,Fairfield,129638
+Norwalk,Norwalk,CT,Connecticut,Fairfield,88816
+New Britain,New Britain,CT,Connecticut,Hartford,72495
+West Hartford,West Hartford,CT,Connecticut,Hartford,63127
+Dover,Dover,DE,Delaware,Kent,117282
+Wilmington,Wilmington,DE,Delaware,New Castle,70166
+Middletown,Middletown,DE,Delaware,New Castle,35695
+Newark,Newark,DE,Delaware,New Castle,33515
+Lewes,Lewes,DE,Delaware,Sussex,29187
+Milford,Milford,DE,Delaware,Sussex,22102
+Bear,Bear,DE,Delaware,New Castle,21362
+Ocean View,Ocean View,DE,Delaware,Sussex,14360
+Glasgow,Glasgow,DE,Delaware,New Castle,14342
+Hockessin,Hockessin,DE,Delaware,New Castle,13472
+Washington,Washington,DC,District of Columbia,District of Columbia,5379184
+Miami,Miami,FL,Florida,Miami-Dade,6445545
+Tampa,Tampa,FL,Florida,Hillsborough,2908063
+Orlando,Orlando,FL,Florida,Orange,1822394
+Jacksonville,Jacksonville,FL,Florida,Duval,1181496
+Sarasota,Sarasota,FL,Florida,Sarasota,722243
+Cape Coral,Cape Coral,FL,Florida,Lee,668382
+Palm Bay,Palm Bay,FL,Florida,Brevard,507002
+Port St. Lucie,Port St. Lucie,FL,Florida,St. Lucie,461152
+Bonita Springs,Bonita Springs,FL,Florida,Lee,421291
+Palm Coast,Palm Coast,FL,Florida,Flagler,417007
+Atlanta,Atlanta,GA,Georgia,Fulton,5449398
+Augusta,Augusta,GA,Georgia,Richmond,390809
+Savannah,Savannah,GA,Georgia,Chatham,276295
+Columbus,Columbus,GA,Georgia,Muscogee,261445
+Gainesville,Gainesville,GA,Georgia,Hall,167371
+Warner Robins,Warner Robins,GA,Georgia,Houston,155140
+Macon,Macon,GA,Georgia,Bibb,153159
+Athens,Athens,GA,Georgia,Clarke,141532
+Sandy Springs,Sandy Springs,GA,Georgia,Fulton,109452
+South Fulton,South Fulton,GA,Georgia,Fulton,99155
+Honolulu,Honolulu,HI,Hawaii,Honolulu,820987
+East Honolulu,East Honolulu,HI,Hawaii,Honolulu,47770
+Hilo,Hilo,HI,Hawaii,Hawaii,46284
+Pearl City,Pearl City,HI,Hawaii,Honolulu,46129
+Waipahu,Waipahu,HI,Hawaii,Honolulu,40427
+Kailua,Kailua,HI,Hawaii,Honolulu,36662
+Kaneohe,Kaneohe,HI,Hawaii,Honolulu,33739
+Kahului,Kahului,HI,Hawaii,Maui,32312
+Mililani Town,Mililani Town,HI,Hawaii,Honolulu,27926
+Ewa Gentry,Ewa Gentry,HI,Hawaii,Honolulu,25752
+Boise,Boise,ID,Idaho,Ada,389280
+Nampa,Nampa,ID,Idaho,Canyon,184428
+Coeur d'Alene,Coeur d'Alene,ID,Idaho,Kootenai,116834
+Meridian,Meridian,ID,Idaho,Ada,114161
+Idaho Falls,Idaho Falls,ID,Idaho,Bonneville,100442
+Pocatello,Pocatello,ID,Idaho,Bannock,72878
+Caldwell,Caldwell,ID,Idaho,Canyon,58481
+Twin Falls,Twin Falls,ID,Idaho,Twin Falls,55556
+Lewiston,Lewiston,ID,Idaho,Nez Perce,53384
+Post Falls,Post Falls,ID,Idaho,Kootenai,36250
+Chicago,Chicago,IL,Illinois,Cook,8604203
+Rockford,Rockford,IL,Illinois,Winnebago,282762
+Round Lake Beach,Round Lake Beach,IL,Illinois,Lake,279381
+Peoria,Peoria,IL,Illinois,Peoria,256286
+Aurora,Aurora,IL,Illinois,Kane,197757
+Champaign,Champaign,IL,Illinois,Champaign,159443
+Springfield,Springfield,IL,Illinois,Sangamon,158509
+Naperville,Naperville,IL,Illinois,DuPage,148449
+Joliet,Joliet,IL,Illinois,Will,147344
+Bloomington,Bloomington,IL,Illinois,McLean,133846
+Indianapolis,Indianapolis,IN,Indiana,Marion,1588961
+Fort Wayne,Fort Wayne,IN,Indiana,Allen,334122
+South Bend,South Bend,IN,Indiana,St. Joseph,280498
+Evansville,Evansville,IN,Indiana,Vanderburgh,230427
+Lafayette,Lafayette,IN,Indiana,Tippecanoe,157820
+Elkhart,Elkhart,IN,Indiana,Elkhart,147567
+Bloomington,Bloomington,IN,Indiana,Monroe,115884
+Carmel,Carmel,IN,Indiana,Hamilton,101068
+Fishers,Fishers,IN,Indiana,Hamilton,95310
+Terre Haute,Terre Haute,IN,Indiana,Vigo,92490
+Des Moines,Des Moines,IA,Iowa,Polk,473957
+Davenport,Davenport,IA,Iowa,Scott,285362
+Cedar Rapids,Cedar Rapids,IA,Iowa,Linn,188038
+Iowa City,Iowa City,IA,Iowa,Johnson,118041
+Waterloo,Waterloo,IA,Iowa,Black Hawk,111631
+Sioux City,Sioux City,IA,Iowa,Woodbury,106455
+Dubuque,Dubuque,IA,Iowa,Dubuque,68109
+Ames,Ames,IA,Iowa,Story,67910
+West Des Moines,West Des Moines,IA,Iowa,Polk,67899
+Ankeny,Ankeny,IA,Iowa,Polk,67355
+Wichita,Wichita,KS,Kansas,Sedgwick,482249
+Overland Park,Overland Park,KS,Kansas,Johnson,195494
+Kansas City,Kansas City,KS,Kansas,Wyandotte,152960
+Topeka,Topeka,KS,Kansas,Shawnee,147458
+Olathe,Olathe,KS,Kansas,Johnson,140545
+Lawrence,Lawrence,KS,Kansas,Douglas,98648
+Shawnee,Shawnee,KS,Kansas,Johnson,65807
+Manhattan,Manhattan,KS,Kansas,Riley,57046
+Lenexa,Lenexa,KS,Kansas,Johnson,55625
+Salina,Salina,KS,Kansas,Saline,46340
+Louisville,Louisville,KY,Kentucky,Jefferson,1005654
+Lexington,Lexington,KY,Kentucky,Fayette,317110
+Bowling Green,Bowling Green,KY,Kentucky,Warren,95135
+Elizabethtown,Elizabethtown,KY,Kentucky,Hardin,78002
+Owensboro,Owensboro,KY,Kentucky,Daviess,74068
+Paducah,Paducah,KY,Kentucky,McCracken,48481
+Richmond,Richmond,KY,Kentucky,Madison,40972
+Covington,Covington,KY,Kentucky,Kenton,40341
+Frankfort,Frankfort,KY,Kentucky,Franklin,38852
+London,London,KY,Kentucky,Laurel,37714
+New Orleans,New Orleans,LA,Louisiana,Orleans,1020886
+Baton Rouge,Baton Rouge,LA,Louisiana,East Baton Rouge,570308
+Shreveport,Shreveport,LA,Louisiana,Caddo,280062
+Lafayette,Lafayette,LA,Louisiana,Lafayette,264357
+Lake Charles,Lake Charles,LA,Louisiana,Calcasieu,156181
+Metairie,Metairie,LA,Louisiana,Jefferson,143481
+Houma,Houma,LA,Louisiana,Terrebonne,140469
+Monroe,Monroe,LA,Louisiana,Ouachita,112891
+Mandeville,Mandeville,LA,Louisiana,St. Tammany,95968
+Slidell,Slidell,LA,Louisiana,St. Tammany,93040
+Portland,Portland,ME,Maine,Cumberland,203969
+Bangor,Bangor,ME,Maine,Penobscot,59772
+Lewiston,Lewiston,ME,Maine,Androscoggin,58802
+Sanford,Sanford,ME,Maine,York,29535
+Waterville,Waterville,ME,Maine,Kennebec,27054
+South Portland,South Portland,ME,Maine,Cumberland,25532
+Auburn,Auburn,ME,Maine,Androscoggin,23414
+Augusta,Augusta,ME,Maine,Kennebec,22116
+Biddeford,Biddeford,ME,Maine,York,21504
+Saco,Saco,ME,Maine,York,19964
+Baltimore,Baltimore,MD,Maryland,Baltimore,2106068
+Hagerstown,Hagerstown,MD,Maryland,Washington,184755
+Frederick,Frederick,MD,Maryland,Frederick,156787
+Salisbury,Salisbury,MD,Maryland,Wicomico,106447
+Columbia,Columbia,MD,Maryland,Howard,103663
+Germantown,Germantown,MD,Maryland,Montgomery,90844
+Silver Spring,Silver Spring,MD,Maryland,Montgomery,79750
+Waldorf,Waldorf,MD,Maryland,Charles,74587
+Ellicott City,Ellicott City,MD,Maryland,Howard,72247
+Glen Burnie,Glen Burnie,MD,Maryland,Anne Arundel,69813
+Boston,Boston,MA,Massachusetts,Suffolk,4688346
+Springfield,Springfield,MA,Massachusetts,Hampden,623401
+Worcester,Worcester,MA,Massachusetts,Worcester,498328
+Barnstable Town,Barnstable Town,MA,Massachusetts,Barnstable,242847
+New Bedford,New Bedford,MA,Massachusetts,Bristol,149910
+Leominster,Leominster,MA,Massachusetts,Worcester,119690
+Cambridge,Cambridge,MA,Massachusetts,Middlesex,118927
+Lowell,Lowell,MA,Massachusetts,Middlesex,110997
+Brockton,Brockton,MA,Massachusetts,Plymouth,95708
+Quincy,Quincy,MA,Massachusetts,Norfolk,94470
+Detroit,Detroit,MI,Michigan,Wayne,3506126
+Grand Rapids,Grand Rapids,MI,Michigan,Kent,609314
+Flint,Flint,MI,Michigan,Genesee,332190
+Lansing,Lansing,MI,Michigan,Ingham,324286
+Ann Arbor,Ann Arbor,MI,Michigan,Washtenaw,322267
+Kalamazoo,Kalamazoo,MI,Michigan,Kalamazoo,215193
+Muskegon,Muskegon,MI,Michigan,Muskegon,153565
+Warren,Warren,MI,Michigan,Macomb,133943
+Sterling Heights,Sterling Heights,MI,Michigan,Macomb,132438
+South Lyon,South Lyon,MI,Michigan,Oakland,124694
+Minneapolis,Minneapolis,MN,Minnesota,Hennepin,2977172
+St. Paul,St. Paul,MN,Minnesota,Ramsey,308096
+Rochester,Rochester,MN,Minnesota,Olmsted,119942
+Duluth,Duluth,MN,Minnesota,St. Louis,119476
+St. Cloud,St. Cloud,MN,Minnesota,Stearns,115028
+Bloomington,Bloomington,MN,Minnesota,Hennepin,84943
+Brooklyn Park,Brooklyn Park,MN,Minnesota,Hennepin,80389
+Plymouth,Plymouth,MN,Minnesota,Hennepin,79768
+Woodbury,Woodbury,MN,Minnesota,Washington,72828
+Maple Grove,Maple Grove,MN,Minnesota,Hennepin,72622
+Jackson,Jackson,MS,Mississippi,Hinds,325350
+Gulfport,Gulfport,MS,Mississippi,Harrison,220987
+Hattiesburg,Hattiesburg,MS,Mississippi,Forrest,80138
+Southaven,Southaven,MS,Mississippi,DeSoto,55780
+Pascagoula,Pascagoula,MS,Mississippi,Jackson,48869
+Biloxi,Biloxi,MS,Mississippi,Harrison,46212
+Tupelo,Tupelo,MS,Mississippi,Lee,45466
+Olive Branch,Olive Branch,MS,Mississippi,DeSoto,38924
+Oxford,Oxford,MS,Mississippi,Lafayette,38310
+Meridian,Meridian,MS,Mississippi,Lauderdale,36686
+St. Louis,St. Louis,MO,Missouri,St. Louis,2024074
+Kansas City,Kansas City,MO,Missouri,Jackson,1636715
+Springfield,Springfield,MO,Missouri,Greene,288090
+Columbia,Columbia,MO,Missouri,Boone,141645
+Independence,Independence,MO,Missouri,Jackson,116672
+Lee's Summit,Lee's Summit,MO,Missouri,Jackson,92522
+O'Fallon,O'Fallon,MO,Missouri,St. Charles,88673
+Joplin,Joplin,MO,Missouri,Jasper,84048
+St. Joseph,St. Joseph,MO,Missouri,Buchanan,79161
+St. Charles,St. Charles,MO,Missouri,St. Charles,71028
+Billings,Billings,MT,Montana,Yellowstone,120728
+Missoula,Missoula,MT,Montana,Missoula,92895
+Great Falls,Great Falls,MT,Montana,Cascade,65131
+Bozeman,Bozeman,MT,Montana,Gallatin,57695
+Helena,Helena,MT,Montana,Lewis and Clark,52936
+Kalispell,Kalispell,MT,Montana,Flathead,39182
+Butte,Butte,MT,Montana,Silver Bow,30904
+Belgrade,Belgrade,MT,Montana,Gallatin,17743
+Havre,Havre,MT,Montana,Hill,10155
+Miles City,Miles City,MT,Montana,Custer,9436
+Omaha,Omaha,NE,Nebraska,Douglas,847819
+Lincoln,Lincoln,NE,Nebraska,Lancaster,289490
+Bellevue,Bellevue,NE,Nebraska,Sarpy,53544
+Grand Island,Grand Island,NE,Nebraska,Hall,53296
+Kearney,Kearney,NE,Nebraska,Buffalo,34418
+Fremont,Fremont,NE,Nebraska,Dodge,27456
+Norfolk,Norfolk,NE,Nebraska,Madison,27032
+Scottsbluff,Scottsbluff,NE,Nebraska,Scotts Bluff,25114
+Hastings,Hastings,NE,Nebraska,Adams,24101
+North Platte,North Platte,NE,Nebraska,Lincoln,24098
+Las Vegas,Las Vegas,NV,Nevada,Clark,2104198
+Reno,Reno,NV,Nevada,Washoe,445020
+Henderson,Henderson,NV,Nevada,Clark,320189
+North Las Vegas,North Las Vegas,NV,Nevada,Clark,251974
+Paradise,Paradise,NV,Nevada,Clark,233689
+Spring Valley,Spring Valley,NV,Nevada,Clark,199722
+Sunrise Manor,Sunrise Manor,NV,Nevada,Clark,192934
+Enterprise,Enterprise,NV,Nevada,Clark,164314
+Sparks,Sparks,NV,Nevada,Washoe,105006
+Carson City,Carson City,NV,Nevada,Carson City,58756
+Nashua,Nashua,NH,New Hampshire,Hillsborough,233917
+Manchester,Manchester,NH,New Hampshire,Hillsborough,162877
+Dover,Dover,NH,New Hampshire,Strafford,94563
+Portsmouth,Portsmouth,NH,New Hampshire,Rockingham,93069
+Concord,Concord,NH,New Hampshire,Merrimack,43542
+Rochester,Rochester,NH,New Hampshire,Strafford,31526
+Lebanon,Lebanon,NH,New Hampshire,Grafton,26666
+Derry,Derry,NH,New Hampshire,Rockingham,22381
+Keene,Keene,NH,New Hampshire,Cheshire,21911
+Laconia,Laconia,NH,New Hampshire,Belknap,19371
+Trenton,Trenton,NJ,New Jersey,Mercer,290716
+Newark,Newark,NJ,New Jersey,Essex,282011
+Jersey City,Jersey City,NJ,New Jersey,Hudson,262075
+Atlantic City,Atlantic City,NJ,New Jersey,Atlantic,237054
+Paterson,Paterson,NJ,New Jersey,Passaic,145233
+Elizabeth,Elizabeth,NJ,New Jersey,Union,129216
+Vineland,Vineland,NJ,New Jersey,Cumberland,93239
+Toms River,Toms River,NJ,New Jersey,Ocean,88712
+Clifton,Clifton,NJ,New Jersey,Passaic,85052
+Camden,Camden,NJ,New Jersey,Camden,73562
+Albuquerque,Albuquerque,NM,New Mexico,Bernalillo,761195
+Las Cruces,Las Cruces,NM,New Mexico,Doña Ana,136254
+Santa Fe,Santa Fe,NM,New Mexico,Santa Fe,111269
+Rio Rancho,Rio Rancho,NM,New Mexico,Sandoval,99178
+Los Lunas,Los Lunas,NM,New Mexico,Valencia,69020
+Farmington,Farmington,NM,New Mexico,San Juan,51309
+Roswell,Roswell,NM,New Mexico,Chaves,48889
+Clovis,Clovis,NM,New Mexico,Curry,42168
+Hobbs,Hobbs,NM,New Mexico,Lea,42095
+South Valley,South Valley,NM,New Mexico,Bernalillo,41011
+New York,New York,NY,New York,New York,18713220
+Brooklyn,Brooklyn,NY,New York,Kings,2559903
+Queens,Queens,NY,New York,Queens,2230722
+Manhattan,Manhattan,NY,New York,New York,1628706
+Bronx,Bronx,NY,New York,Bronx,1418207
+Buffalo,Buffalo,NY,New York,Erie,914341
+Rochester,Rochester,NY,New York,Monroe,703952
+Albany,Albany,NY,New York,Albany,586383
+Staten Island,Staten Island,NY,New York,Richmond,476143
+Syracuse,Syracuse,NY,New York,Onondaga,404223
+Charlotte,Charlotte,NC,North Carolina,Mecklenburg,1512923
+Raleigh,Raleigh,NC,North Carolina,Wake,1038738
+Durham,Durham,NC,North Carolina,Durham,424700
+Winston-Salem,Winston-Salem,NC,North Carolina,Forsyth,422269
+Greensboro,Greensboro,NC,North Carolina,Guilford,343090
+Fayetteville,Fayetteville,NC,North Carolina,Cumberland,327435
+Asheville,Asheville,NC,North Carolina,Buncombe,312507
+Concord,Concord,NC,North Carolina,Cabarrus,261801
+Wilmington,Wilmington,NC,North Carolina,New Hanover,255616
+Hickory,Hickory,NC,North Carolina,Catawba,218323
+Fargo,Fargo,ND,North Dakota,Cass,208675
+Bismarck,Bismarck,ND,North Dakota,Burleigh,98345
+Grand Forks,Grand Forks,ND,North Dakota,Grand Forks,64748
+Minot,Minot,ND,North Dakota,Ward,49425
+West Fargo,West Fargo,ND,North Dakota,Cass,37058
+Williston,Williston,ND,North Dakota,Williams,29844
+Dickinson,Dickinson,ND,North Dakota,Stark,22872
+Mandan,Mandan,ND,North Dakota,Morton,22752
+Jamestown,Jamestown,ND,North Dakota,Stutsman,14944
+Wahpeton,Wahpeton,ND,North Dakota,Richland,11067
+Cleveland,Cleveland,OH,Ohio,Cuyahoga,1710093
+Cincinnati,Cincinnati,OH,Ohio,Hamilton,1662691
+Columbus,Columbus,OH,Ohio,Franklin,1562009
+Dayton,Dayton,OH,Ohio,Montgomery,718353
+Akron,Akron,OH,Ohio,Summit,565208
+Toledo,Toledo,OH,Ohio,Lucas,482111
+Youngstown,Youngstown,OH,Ohio,Mahoning,378732
+Canton,Canton,OH,Ohio,Stark,269418
+Lorain,Lorain,OH,Ohio,Lorain,180279
+Middletown,Middletown,OH,Ohio,Butler,97730
+Oklahoma City,Oklahoma City,OK,Oklahoma,Oklahoma,972943
+Tulsa,Tulsa,OK,Oklahoma,Tulsa,671033
+Norman,Norman,OK,Oklahoma,Cleveland,116973
+Broken Arrow,Broken Arrow,OK,Oklahoma,Tulsa,110198
+Edmond,Edmond,OK,Oklahoma,Oklahoma,94054
+Lawton,Lawton,OK,Oklahoma,Comanche,90712
+Moore,Moore,OK,Oklahoma,Cleveland,62055
+Midwest City,Midwest City,OK,Oklahoma,Oklahoma,57407
+Stillwater,Stillwater,OK,Oklahoma,Payne,49008
+Enid,Enid,OK,Oklahoma,Garfield,47907
+Portland,Portland,OR,Oregon,Multnomah,2074775
+Eugene,Eugene,OR,Oregon,Lane,273439
+Salem,Salem,OR,Oregon,Marion,266804
+Medford,Medford,OR,Oregon,Jackson,170876
+Bend,Bend,OR,Oregon,Deschutes,109802
+Gresham,Gresham,OR,Oregon,Multnomah,109381
+Hillsboro,Hillsboro,OR,Oregon,Washington,109128
+Beaverton,Beaverton,OR,Oregon,Washington,99037
+Corvallis,Corvallis,OR,Oregon,Benton,67467
+Springfield,Springfield,OR,Oregon,Lane,63230
+Philadelphia,Philadelphia,PA,Pennsylvania,Philadelphia,5649300
+Pittsburgh,Pittsburgh,PA,Pennsylvania,Allegheny,1703266
+Allentown,Allentown,PA,Pennsylvania,Lehigh,683794
+Harrisburg,Harrisburg,PA,Pennsylvania,Dauphin,442289
+Lancaster,Lancaster,PA,Pennsylvania,Lancaster,401524
+Scranton,Scranton,PA,Pennsylvania,Lackawanna,384250
+Reading,Reading,PA,Pennsylvania,Berks,267155
+York,York,PA,Pennsylvania,York,233184
+Erie,Erie,PA,Pennsylvania,Erie,184484
+Pottstown,Pottstown,PA,Pennsylvania,Montgomery,108758
+Providence,Providence,RI,Rhode Island,Providence,1203230
+Cranston,Cranston,RI,Rhode Island,Providence,81456
+Warwick,Warwick,RI,Rhode Island,Kent,81004
+Pawtucket,Pawtucket,RI,Rhode Island,Providence,72117
+East Providence,East Providence,RI,Rhode Island,Providence,47618
+Woonsocket,Woonsocket,RI,Rhode Island,Providence,41751
+Newport,Newport,RI,Rhode Island,Newport,24334
+Central Falls,Central Falls,RI,Rhode Island,Providence,19568
+Westerly,Westerly,RI,Rhode Island,Washington,17435
+Valley Falls,Valley Falls,RI,Rhode Island,Providence,11828
+Charleston,Charleston,SC,South Carolina,Charleston,628377
+Columbia,Columbia,SC,South Carolina,Richland,560041
+Greenville,Greenville,SC,South Carolina,Greenville,484465
+Myrtle Beach,Myrtle Beach,SC,South Carolina,Horry,275579
+Spartanburg,Spartanburg,SC,South Carolina,Spartanburg,182701
+Mauldin,Mauldin,SC,South Carolina,Greenville,133872
+Rock Hill,Rock Hill,SC,South Carolina,York,119105
+North Charleston,North Charleston,SC,South Carolina,Charleston,115382
+Florence,Florence,SC,South Carolina,Florence,93131
+Mount Pleasant,Mount Pleasant,SC,South Carolina,Charleston,91684
+Sioux Falls,Sioux Falls,SD,South Dakota,Minnehaha,187239
+Rapid City,Rapid City,SD,South Dakota,Pennington,92664
+Aberdeen,Aberdeen,SD,South Dakota,Brown,28134
+Brookings,Brookings,SD,South Dakota,Brookings,24887
+Watertown,Watertown,SD,South Dakota,Codington,21790
+Mitchell,Mitchell,SD,South Dakota,Davison,15372
+Yankton,Yankton,SD,South Dakota,Yankton,14872
+Pierre,Pierre,SD,South Dakota,Hughes,14659
+Huron,Huron,SD,South Dakota,Beadle,13427
+Spearfish,Spearfish,SD,South Dakota,Lawrence,12836
+Nashville,Nashville,TN,Tennessee,Davidson,1081903
+Memphis,Memphis,TN,Tennessee,Shelby,1066967
+Knoxville,Knoxville,TN,Tennessee,Knox,586048
+Chattanooga,Chattanooga,TN,Tennessee,Hamilton,415501
+Clarksville,Clarksville,TN,Tennessee,Montgomery,188746
+Murfreesboro,Murfreesboro,TN,Tennessee,Rutherford,179951
+Johnson City,Johnson City,TN,Tennessee,Washington,127571
+Kingsport,Kingsport,TN,Tennessee,Sullivan,119666
+Franklin,Franklin,TN,Tennessee,Williamson,83097
+Jackson,Jackson,TN,Tennessee,Madison,74065
+Dallas,Dallas,TX,Texas,Dallas,5743938
+Houston,Houston,TX,Texas,Harris,5464251
+San Antonio,San Antonio,TX,Texas,Bexar,2049293
+Austin,Austin,TX,Texas,Travis,1687311
+Fort Worth,Fort Worth,TX,Texas,Tarrant,909585
+El Paso,El Paso,TX,Texas,El Paso,843386
+McAllen,McAllen,TX,Texas,Hidalgo,804114
+Denton,Denton,TX,Texas,Denton,457177
+Arlington,Arlington,TX,Texas,Tarrant,398854
+Corpus Christi,Corpus Christi,TX,Texas,Nueces,342464
+Salt Lake City,Salt Lake City,UT,Utah,Salt Lake,1098526
+Ogden,Ogden,UT,Utah,Weber,578523
+Provo,Provo,UT,Utah,Utah,500617
+West Valley City,West Valley City,UT,Utah,Salt Lake,135248
+St. George,St. George,UT,Utah,Washington,120899
+West Jordan,West Jordan,UT,Utah,Salt Lake,116480
+Logan,Logan,UT,Utah,Cache,101616
+Orem,Orem,UT,Utah,Utah,97828
+Sandy,Sandy,UT,Utah,Salt Lake,96380
+Layton,Layton,UT,Utah,Davis,78014
+Burlington,Burlington,VT,Vermont,Chittenden,109763
+Barre,Barre,VT,Vermont,Washington,20421
+South Burlington,South Burlington,VT,Vermont,Chittenden,19509
+Rutland,Rutland,VT,Vermont,Rutland,18131
+Essex Junction,Essex Junction,VT,Vermont,Chittenden,10852
+St. Albans,St. Albans,VT,Vermont,Franklin,8900
+Bennington,Bennington,VT,Vermont,Bennington,8836
+Montpelier,Montpelier,VT,Vermont,Washington,7372
+Winooski,Winooski,VT,Vermont,Chittenden,7333
+Middlebury,Middlebury,VT,Vermont,Addison,6855
+Virginia Beach,Virginia Beach,VA,Virginia,Virginia Beach,1478868
+Richmond,Richmond,VA,Virginia,Richmond,1075798
+Chesapeake,Chesapeake,VA,Virginia,Chesapeake,244835
+Norfolk,Norfolk,VA,Virginia,Norfolk,242742
+Arlington,Arlington,VA,Virginia,Arlington,231803
+Roanoke,Roanoke,VA,Virginia,Roanoke,214674
+Newport News,Newport News,VA,Virginia,Newport News,179225
+Fredericksburg,Fredericksburg,VA,Virginia,Fredericksburg,168909
+Alexandria,Alexandria,VA,Virginia,Alexandria,159428
+Hampton,Hampton,VA,Virginia,Hampton,134510
+Seattle,Seattle,WA,Washington,King,3789215
+Spokane,Spokane,WA,Washington,Spokane,412275
+Kennewick,Kennewick,WA,Washington,Benton,240735
+Bremerton,Bremerton,WA,Washington,Kitsap,218400
+Tacoma,Tacoma,WA,Washington,Pierce,217827
+Olympia,Olympia,WA,Washington,Thurston,200915
+Vancouver,Vancouver,WA,Washington,Clark,184463
+Marysville,Marysville,WA,Washington,Snohomish,170009
+Bellevue,Bellevue,WA,Washington,King,148164
+Yakima,Yakima,WA,Washington,Yakima,133191
+Huntington,Huntington,WV,West Virginia,Cabell,186034
+Charleston,Charleston,WV,West Virginia,Kanawha,138706
+Wheeling,Wheeling,WV,West Virginia,Ohio,75392
+Morgantown,Morgantown,WV,West Virginia,Monongalia,72458
+Weirton,Weirton,WV,West Virginia,Hancock,65578
+Parkersburg,Parkersburg,WV,West Virginia,Wood,62566
+Beckley,Beckley,WV,West Virginia,Raleigh,57942
+Bluefield,Bluefield,WV,West Virginia,Mercer,40640
+Clarksburg,Clarksburg,WV,West Virginia,Harrison,40403
+Fairmont,Fairmont,WV,West Virginia,Marion,32847
+Milwaukee,Milwaukee,WI,Wisconsin,Milwaukee,1365787
+Madison,Madison,WI,Wisconsin,Dane,447245
+Appleton,Appleton,WI,Wisconsin,Outagamie,220570
+Green Bay,Green Bay,WI,Wisconsin,Brown,207557
+Racine,Racine,WI,Wisconsin,Racine,130142
+Kenosha,Kenosha,WI,Wisconsin,Kenosha,124972
+Eau Claire,Eau Claire,WI,Wisconsin,Eau Claire,107404
+La Crosse,La Crosse,WI,Wisconsin,La Crosse,100693
+Oshkosh,Oshkosh,WI,Wisconsin,Winnebago,75536
+Wausau,Wausau,WI,Wisconsin,Marathon,73593
+Cheyenne,Cheyenne,WY,Wyoming,Laramie,79484
+Casper,Casper,WY,Wyoming,Natrona,67598
+Gillette,Gillette,WY,Wyoming,Campbell,36032
+Laramie,Laramie,WY,Wyoming,Albany,33929
+Rock Springs,Rock Springs,WY,Wyoming,Sweetwater,25913
+Sheridan,Sheridan,WY,Wyoming,Sheridan,19320
+Jackson,Jackson,WY,Wyoming,Teton,12576
+Riverton,Riverton,WY,Wyoming,Fremont,12445
+Green River,Green River,WY,Wyoming,Sweetwater,11906
+Evanston,Evanston,WY,Wyoming,Uinta,11319

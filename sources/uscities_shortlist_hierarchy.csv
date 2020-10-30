@@ -1,0 +1,502 @@
+﻿city,city_ascii,state_id,state_name,county_name,population,state_hierarchy,county_hierarchy,city_hierarchy
+Birmingham,Birmingham,AL,Alabama,Jefferson,739573,world.usa.alabama,world.usa.alabama.jefferson,world.usa.alabama.jefferson.birmingham
+Huntsville,Huntsville,AL,Alabama,Madison,319249,world.usa.alabama,world.usa.alabama.madison,world.usa.alabama.madison.huntsville
+Mobile,Mobile,AL,Alabama,Mobile,315502,world.usa.alabama,world.usa.alabama.mobile,world.usa.alabama.mobile.mobile
+Montgomery,Montgomery,AL,Alabama,Montgomery,254634,world.usa.alabama,world.usa.alabama.montgomery,world.usa.alabama.montgomery.montgomery
+Tuscaloosa,Tuscaloosa,AL,Alabama,Tuscaloosa,155499,world.usa.alabama,world.usa.alabama.tuscaloosa,world.usa.alabama.tuscaloosa.tuscaloosa
+Auburn,Auburn,AL,Alabama,Lee,92777,world.usa.alabama,world.usa.alabama.lee,world.usa.alabama.lee.auburn
+Hoover,Hoover,AL,Alabama,Jefferson,85768,world.usa.alabama,world.usa.alabama.jefferson,world.usa.alabama.jefferson.hoover
+Florence,Florence,AL,Alabama,Lauderdale,79964,world.usa.alabama,world.usa.alabama.lauderdale,world.usa.alabama.lauderdale.florence
+Anniston,Anniston,AL,Alabama,Calhoun,73501,world.usa.alabama,world.usa.alabama.calhoun,world.usa.alabama.calhoun.anniston
+Dothan,Dothan,AL,Alabama,Houston,72396,world.usa.alabama,world.usa.alabama.houston,world.usa.alabama.houston.dothan
+Anchorage,Anchorage,AK,Alaska,Anchorage,247949,world.usa.alaska,world.usa.alaska.anchorage,world.usa.alaska.anchorage.anchorage
+Fairbanks,Fairbanks,AK,Alaska,Fairbanks North Star,63245,world.usa.alaska,world.usa.alaska.fairbanks north star,world.usa.alaska.fairbanks north star.fairbanks
+Juneau,Juneau,AK,Alaska,Juneau,25085,world.usa.alaska,world.usa.alaska.juneau,world.usa.alaska.juneau.juneau
+Badger,Badger,AK,Alaska,Fairbanks North Star,18792,world.usa.alaska,world.usa.alaska.fairbanks north star,world.usa.alaska.fairbanks north star.badger
+Knik-Fairview,Knik-Fairview,AK,Alaska,Matanuska-Susitna,17513,world.usa.alaska,world.usa.alaska.matanuska-susitna,world.usa.alaska.matanuska-susitna.knik-fairview
+College,College,AK,Alaska,Fairbanks North Star,13709,world.usa.alaska,world.usa.alaska.fairbanks north star,world.usa.alaska.fairbanks north star.college
+Wasilla,Wasilla,AK,Alaska,Matanuska-Susitna,10838,world.usa.alaska,world.usa.alaska.matanuska-susitna,world.usa.alaska.matanuska-susitna.wasilla
+Ketchikan,Ketchikan,AK,Alaska,Ketchikan Gateway,10652,world.usa.alaska,world.usa.alaska.ketchikan gateway,world.usa.alaska.ketchikan gateway.ketchikan
+Tanaina,Tanaina,AK,Alaska,Matanuska-Susitna,10520,world.usa.alaska,world.usa.alaska.matanuska-susitna,world.usa.alaska.matanuska-susitna.tanaina
+Kodiak,Kodiak,AK,Alaska,Kodiak Island,8851,world.usa.alaska,world.usa.alaska.kodiak island,world.usa.alaska.kodiak island.kodiak
+Phoenix,Phoenix,AZ,Arizona,Maricopa,4219697,world.usa.arizona,world.usa.arizona.maricopa,world.usa.arizona.maricopa.phoenix
+Tucson,Tucson,AZ,Arizona,Pima,888486,world.usa.arizona,world.usa.arizona.pima,world.usa.arizona.pima.tucson
+Mesa,Mesa,AZ,Arizona,Maricopa,518012,world.usa.arizona,world.usa.arizona.maricopa,world.usa.arizona.maricopa.mesa
+Chandler,Chandler,AZ,Arizona,Maricopa,261165,world.usa.arizona,world.usa.arizona.maricopa,world.usa.arizona.maricopa.chandler
+Scottsdale,Scottsdale,AZ,Arizona,Maricopa,258069,world.usa.arizona,world.usa.arizona.maricopa,world.usa.arizona.maricopa.scottsdale
+Gilbert,Gilbert,AZ,Arizona,Maricopa,254114,world.usa.arizona,world.usa.arizona.maricopa,world.usa.arizona.maricopa.gilbert
+Glendale,Glendale,AZ,Arizona,Maricopa,252381,world.usa.arizona,world.usa.arizona.maricopa,world.usa.arizona.maricopa.glendale
+Avondale,Avondale,AZ,Arizona,Maricopa,227289,world.usa.arizona,world.usa.arizona.maricopa,world.usa.arizona.maricopa.avondale
+Tempe,Tempe,AZ,Arizona,Maricopa,195805,world.usa.arizona,world.usa.arizona.maricopa,world.usa.arizona.maricopa.tempe
+Peoria,Peoria,AZ,Arizona,Maricopa,175961,world.usa.arizona,world.usa.arizona.maricopa,world.usa.arizona.maricopa.peoria
+Little Rock,Little Rock,AR,Arkansas,Pulaski,439815,world.usa.arkansas,world.usa.arkansas.pulaski,world.usa.arkansas.pulaski.little rock
+Fayetteville,Fayetteville,AR,Arkansas,Washington,351246,world.usa.arkansas,world.usa.arkansas.washington,world.usa.arkansas.washington.fayetteville
+Fort Smith,Fort Smith,AR,Arkansas,Sebastian,125354,world.usa.arkansas,world.usa.arkansas.sebastian,world.usa.arkansas.sebastian.fort smith
+Springdale,Springdale,AR,Arkansas,Washington,81125,world.usa.arkansas,world.usa.arkansas.washington,world.usa.arkansas.washington.springdale
+Jonesboro,Jonesboro,AR,Arkansas,Craighead,76247,world.usa.arkansas,world.usa.arkansas.craighead,world.usa.arkansas.craighead.jonesboro
+Conway,Conway,AR,Arkansas,Faulkner,74951,world.usa.arkansas,world.usa.arkansas.faulkner,world.usa.arkansas.faulkner.conway
+Rogers,Rogers,AR,Arkansas,Benton,68669,world.usa.arkansas,world.usa.arkansas.benton,world.usa.arkansas.benton.rogers
+North Little Rock,North Little Rock,AR,Arkansas,Pulaski,65903,world.usa.arkansas,world.usa.arkansas.pulaski,world.usa.arkansas.pulaski.north little rock
+Hot Springs,Hot Springs,AR,Arkansas,Garland,60767,world.usa.arkansas,world.usa.arkansas.garland,world.usa.arkansas.garland.hot springs
+Bentonville,Bentonville,AR,Arkansas,Benton,54909,world.usa.arkansas,world.usa.arkansas.benton,world.usa.arkansas.benton.bentonville
+Los Angeles,Los Angeles,CA,California,Los Angeles,12750807,world.usa.california,world.usa.california.los angeles,world.usa.california.los angeles.los angeles
+San Francisco,San Francisco,CA,California,San Francisco,3592294,world.usa.california,world.usa.california.san francisco,world.usa.california.san francisco.san francisco
+San Diego,San Diego,CA,California,San Diego,3220118,world.usa.california,world.usa.california.san diego,world.usa.california.san diego.san diego
+Riverside,Riverside,CA,California,Riverside,2107852,world.usa.california,world.usa.california.riverside,world.usa.california.riverside.riverside
+Sacramento,Sacramento,CA,California,Sacramento,1898019,world.usa.california,world.usa.california.sacramento,world.usa.california.sacramento.sacramento
+San Jose,San Jose,CA,California,Santa Clara,1798103,world.usa.california,world.usa.california.santa clara,world.usa.california.santa clara.san jose
+Fresno,Fresno,CA,California,Fresno,703498,world.usa.california,world.usa.california.fresno,world.usa.california.fresno.fresno
+Concord,Concord,CA,California,Contra Costa,652308,world.usa.california,world.usa.california.contra costa,world.usa.california.contra costa.concord
+Mission Viejo,Mission Viejo,CA,California,Orange,590249,world.usa.california,world.usa.california.orange,world.usa.california.orange.mission viejo
+Bakersfield,Bakersfield,CA,California,Kern,579295,world.usa.california,world.usa.california.kern,world.usa.california.kern.bakersfield
+Denver,Denver,CO,Colorado,Denver,2876625,world.usa.colorado,world.usa.colorado.denver,world.usa.colorado.denver.denver
+Colorado Springs,Colorado Springs,CO,Colorado,El Paso,642413,world.usa.colorado,world.usa.colorado.el paso,world.usa.colorado.el paso.colorado springs
+Aurora,Aurora,CO,Colorado,Adams,379289,world.usa.colorado,world.usa.colorado.adams,world.usa.colorado.adams.aurora
+Fort Collins,Fort Collins,CO,Colorado,Larimer,312666,world.usa.colorado,world.usa.colorado.larimer,world.usa.colorado.larimer.fort collins
+Lakewood,Lakewood,CO,Colorado,Jefferson,157935,world.usa.colorado,world.usa.colorado.jefferson,world.usa.colorado.jefferson.lakewood
+Pueblo,Pueblo,CO,Colorado,Pueblo,143932,world.usa.colorado,world.usa.colorado.pueblo,world.usa.colorado.pueblo.pueblo
+Thornton,Thornton,CO,Colorado,Adams,141464,world.usa.colorado,world.usa.colorado.adams,world.usa.colorado.adams.thornton
+Grand Junction,Grand Junction,CO,Colorado,Mesa,139143,world.usa.colorado,world.usa.colorado.mesa,world.usa.colorado.mesa.grand junction
+Greeley,Greeley,CO,Colorado,Weld,137810,world.usa.colorado,world.usa.colorado.weld,world.usa.colorado.weld.greeley
+Boulder,Boulder,CO,Colorado,Boulder,124345,world.usa.colorado,world.usa.colorado.boulder,world.usa.colorado.boulder.boulder
+Bridgeport,Bridgeport,CT,Connecticut,Fairfield,924449,world.usa.connecticut,world.usa.connecticut.fairfield,world.usa.connecticut.fairfield.bridgeport
+Hartford,Hartford,CT,Connecticut,Hartford,905152,world.usa.connecticut,world.usa.connecticut.hartford,world.usa.connecticut.hartford.hartford
+New Haven,New Haven,CT,Connecticut,New Haven,564830,world.usa.connecticut,world.usa.connecticut.new haven,world.usa.connecticut.new haven.new haven
+Norwich,Norwich,CT,Connecticut,New London,200289,world.usa.connecticut,world.usa.connecticut.new london,world.usa.connecticut.new london.norwich
+Waterbury,Waterbury,CT,Connecticut,New Haven,189614,world.usa.connecticut,world.usa.connecticut.new haven,world.usa.connecticut.new haven.waterbury
+Danbury,Danbury,CT,Connecticut,Fairfield,176030,world.usa.connecticut,world.usa.connecticut.fairfield,world.usa.connecticut.fairfield.danbury
+Stamford,Stamford,CT,Connecticut,Fairfield,129638,world.usa.connecticut,world.usa.connecticut.fairfield,world.usa.connecticut.fairfield.stamford
+Norwalk,Norwalk,CT,Connecticut,Fairfield,88816,world.usa.connecticut,world.usa.connecticut.fairfield,world.usa.connecticut.fairfield.norwalk
+New Britain,New Britain,CT,Connecticut,Hartford,72495,world.usa.connecticut,world.usa.connecticut.hartford,world.usa.connecticut.hartford.new britain
+West Hartford,West Hartford,CT,Connecticut,Hartford,63127,world.usa.connecticut,world.usa.connecticut.hartford,world.usa.connecticut.hartford.west hartford
+Dover,Dover,DE,Delaware,Kent,117282,world.usa.delaware,world.usa.delaware.kent,world.usa.delaware.kent.dover
+Wilmington,Wilmington,DE,Delaware,New Castle,70166,world.usa.delaware,world.usa.delaware.new castle,world.usa.delaware.new castle.wilmington
+Middletown,Middletown,DE,Delaware,New Castle,35695,world.usa.delaware,world.usa.delaware.new castle,world.usa.delaware.new castle.middletown
+Newark,Newark,DE,Delaware,New Castle,33515,world.usa.delaware,world.usa.delaware.new castle,world.usa.delaware.new castle.newark
+Lewes,Lewes,DE,Delaware,Sussex,29187,world.usa.delaware,world.usa.delaware.sussex,world.usa.delaware.sussex.lewes
+Milford,Milford,DE,Delaware,Sussex,22102,world.usa.delaware,world.usa.delaware.sussex,world.usa.delaware.sussex.milford
+Bear,Bear,DE,Delaware,New Castle,21362,world.usa.delaware,world.usa.delaware.new castle,world.usa.delaware.new castle.bear
+Ocean View,Ocean View,DE,Delaware,Sussex,14360,world.usa.delaware,world.usa.delaware.sussex,world.usa.delaware.sussex.ocean view
+Glasgow,Glasgow,DE,Delaware,New Castle,14342,world.usa.delaware,world.usa.delaware.new castle,world.usa.delaware.new castle.glasgow
+Hockessin,Hockessin,DE,Delaware,New Castle,13472,world.usa.delaware,world.usa.delaware.new castle,world.usa.delaware.new castle.hockessin
+Washington,Washington,DC,District of Columbia,District of Columbia,5379184,world.usa.district of columbia,world.usa.district of columbia.district of columbia,world.usa.district of columbia.district of columbia.washington
+Miami,Miami,FL,Florida,Miami-Dade,6445545,world.usa.florida,world.usa.florida.miami-dade,world.usa.florida.miami-dade.miami
+Tampa,Tampa,FL,Florida,Hillsborough,2908063,world.usa.florida,world.usa.florida.hillsborough,world.usa.florida.hillsborough.tampa
+Orlando,Orlando,FL,Florida,Orange,1822394,world.usa.florida,world.usa.florida.orange,world.usa.florida.orange.orlando
+Jacksonville,Jacksonville,FL,Florida,Duval,1181496,world.usa.florida,world.usa.florida.duval,world.usa.florida.duval.jacksonville
+Sarasota,Sarasota,FL,Florida,Sarasota,722243,world.usa.florida,world.usa.florida.sarasota,world.usa.florida.sarasota.sarasota
+Cape Coral,Cape Coral,FL,Florida,Lee,668382,world.usa.florida,world.usa.florida.lee,world.usa.florida.lee.cape coral
+Palm Bay,Palm Bay,FL,Florida,Brevard,507002,world.usa.florida,world.usa.florida.brevard,world.usa.florida.brevard.palm bay
+Port St. Lucie,Port St. Lucie,FL,Florida,St. Lucie,461152,world.usa.florida,world.usa.florida.st. lucie,world.usa.florida.st. lucie.port st. lucie
+Bonita Springs,Bonita Springs,FL,Florida,Lee,421291,world.usa.florida,world.usa.florida.lee,world.usa.florida.lee.bonita springs
+Palm Coast,Palm Coast,FL,Florida,Flagler,417007,world.usa.florida,world.usa.florida.flagler,world.usa.florida.flagler.palm coast
+Atlanta,Atlanta,GA,Georgia,Fulton,5449398,world.usa.georgia,world.usa.georgia.fulton,world.usa.georgia.fulton.atlanta
+Augusta,Augusta,GA,Georgia,Richmond,390809,world.usa.georgia,world.usa.georgia.richmond,world.usa.georgia.richmond.augusta
+Savannah,Savannah,GA,Georgia,Chatham,276295,world.usa.georgia,world.usa.georgia.chatham,world.usa.georgia.chatham.savannah
+Columbus,Columbus,GA,Georgia,Muscogee,261445,world.usa.georgia,world.usa.georgia.muscogee,world.usa.georgia.muscogee.columbus
+Gainesville,Gainesville,GA,Georgia,Hall,167371,world.usa.georgia,world.usa.georgia.hall,world.usa.georgia.hall.gainesville
+Warner Robins,Warner Robins,GA,Georgia,Houston,155140,world.usa.georgia,world.usa.georgia.houston,world.usa.georgia.houston.warner robins
+Macon,Macon,GA,Georgia,Bibb,153159,world.usa.georgia,world.usa.georgia.bibb,world.usa.georgia.bibb.macon
+Athens,Athens,GA,Georgia,Clarke,141532,world.usa.georgia,world.usa.georgia.clarke,world.usa.georgia.clarke.athens
+Sandy Springs,Sandy Springs,GA,Georgia,Fulton,109452,world.usa.georgia,world.usa.georgia.fulton,world.usa.georgia.fulton.sandy springs
+South Fulton,South Fulton,GA,Georgia,Fulton,99155,world.usa.georgia,world.usa.georgia.fulton,world.usa.georgia.fulton.south fulton
+Honolulu,Honolulu,HI,Hawaii,Honolulu,820987,world.usa.hawaii,world.usa.hawaii.honolulu,world.usa.hawaii.honolulu.honolulu
+East Honolulu,East Honolulu,HI,Hawaii,Honolulu,47770,world.usa.hawaii,world.usa.hawaii.honolulu,world.usa.hawaii.honolulu.east honolulu
+Hilo,Hilo,HI,Hawaii,Hawaii,46284,world.usa.hawaii,world.usa.hawaii.hawaii,world.usa.hawaii.hawaii.hilo
+Pearl City,Pearl City,HI,Hawaii,Honolulu,46129,world.usa.hawaii,world.usa.hawaii.honolulu,world.usa.hawaii.honolulu.pearl city
+Waipahu,Waipahu,HI,Hawaii,Honolulu,40427,world.usa.hawaii,world.usa.hawaii.honolulu,world.usa.hawaii.honolulu.waipahu
+Kailua,Kailua,HI,Hawaii,Honolulu,36662,world.usa.hawaii,world.usa.hawaii.honolulu,world.usa.hawaii.honolulu.kailua
+Kaneohe,Kaneohe,HI,Hawaii,Honolulu,33739,world.usa.hawaii,world.usa.hawaii.honolulu,world.usa.hawaii.honolulu.kaneohe
+Kahului,Kahului,HI,Hawaii,Maui,32312,world.usa.hawaii,world.usa.hawaii.maui,world.usa.hawaii.maui.kahului
+Mililani Town,Mililani Town,HI,Hawaii,Honolulu,27926,world.usa.hawaii,world.usa.hawaii.honolulu,world.usa.hawaii.honolulu.mililani town
+Ewa Gentry,Ewa Gentry,HI,Hawaii,Honolulu,25752,world.usa.hawaii,world.usa.hawaii.honolulu,world.usa.hawaii.honolulu.ewa gentry
+Boise,Boise,ID,Idaho,Ada,389280,world.usa.idaho,world.usa.idaho.ada,world.usa.idaho.ada.boise
+Nampa,Nampa,ID,Idaho,Canyon,184428,world.usa.idaho,world.usa.idaho.canyon,world.usa.idaho.canyon.nampa
+Coeur d'Alene,Coeur d'Alene,ID,Idaho,Kootenai,116834,world.usa.idaho,world.usa.idaho.kootenai,world.usa.idaho.kootenai.coeur d'alene
+Meridian,Meridian,ID,Idaho,Ada,114161,world.usa.idaho,world.usa.idaho.ada,world.usa.idaho.ada.meridian
+Idaho Falls,Idaho Falls,ID,Idaho,Bonneville,100442,world.usa.idaho,world.usa.idaho.bonneville,world.usa.idaho.bonneville.idaho falls
+Pocatello,Pocatello,ID,Idaho,Bannock,72878,world.usa.idaho,world.usa.idaho.bannock,world.usa.idaho.bannock.pocatello
+Caldwell,Caldwell,ID,Idaho,Canyon,58481,world.usa.idaho,world.usa.idaho.canyon,world.usa.idaho.canyon.caldwell
+Twin Falls,Twin Falls,ID,Idaho,Twin Falls,55556,world.usa.idaho,world.usa.idaho.twin falls,world.usa.idaho.twin falls.twin falls
+Lewiston,Lewiston,ID,Idaho,Nez Perce,53384,world.usa.idaho,world.usa.idaho.nez perce,world.usa.idaho.nez perce.lewiston
+Post Falls,Post Falls,ID,Idaho,Kootenai,36250,world.usa.idaho,world.usa.idaho.kootenai,world.usa.idaho.kootenai.post falls
+Chicago,Chicago,IL,Illinois,Cook,8604203,world.usa.illinois,world.usa.illinois.cook,world.usa.illinois.cook.chicago
+Rockford,Rockford,IL,Illinois,Winnebago,282762,world.usa.illinois,world.usa.illinois.winnebago,world.usa.illinois.winnebago.rockford
+Round Lake Beach,Round Lake Beach,IL,Illinois,Lake,279381,world.usa.illinois,world.usa.illinois.lake,world.usa.illinois.lake.round lake beach
+Peoria,Peoria,IL,Illinois,Peoria,256286,world.usa.illinois,world.usa.illinois.peoria,world.usa.illinois.peoria.peoria
+Aurora,Aurora,IL,Illinois,Kane,197757,world.usa.illinois,world.usa.illinois.kane,world.usa.illinois.kane.aurora
+Champaign,Champaign,IL,Illinois,Champaign,159443,world.usa.illinois,world.usa.illinois.champaign,world.usa.illinois.champaign.champaign
+Springfield,Springfield,IL,Illinois,Sangamon,158509,world.usa.illinois,world.usa.illinois.sangamon,world.usa.illinois.sangamon.springfield
+Naperville,Naperville,IL,Illinois,DuPage,148449,world.usa.illinois,world.usa.illinois.dupage,world.usa.illinois.dupage.naperville
+Joliet,Joliet,IL,Illinois,Will,147344,world.usa.illinois,world.usa.illinois.will,world.usa.illinois.will.joliet
+Bloomington,Bloomington,IL,Illinois,McLean,133846,world.usa.illinois,world.usa.illinois.mclean,world.usa.illinois.mclean.bloomington
+Indianapolis,Indianapolis,IN,Indiana,Marion,1588961,world.usa.indiana,world.usa.indiana.marion,world.usa.indiana.marion.indianapolis
+Fort Wayne,Fort Wayne,IN,Indiana,Allen,334122,world.usa.indiana,world.usa.indiana.allen,world.usa.indiana.allen.fort wayne
+South Bend,South Bend,IN,Indiana,St. Joseph,280498,world.usa.indiana,world.usa.indiana.st. joseph,world.usa.indiana.st. joseph.south bend
+Evansville,Evansville,IN,Indiana,Vanderburgh,230427,world.usa.indiana,world.usa.indiana.vanderburgh,world.usa.indiana.vanderburgh.evansville
+Lafayette,Lafayette,IN,Indiana,Tippecanoe,157820,world.usa.indiana,world.usa.indiana.tippecanoe,world.usa.indiana.tippecanoe.lafayette
+Elkhart,Elkhart,IN,Indiana,Elkhart,147567,world.usa.indiana,world.usa.indiana.elkhart,world.usa.indiana.elkhart.elkhart
+Bloomington,Bloomington,IN,Indiana,Monroe,115884,world.usa.indiana,world.usa.indiana.monroe,world.usa.indiana.monroe.bloomington
+Carmel,Carmel,IN,Indiana,Hamilton,101068,world.usa.indiana,world.usa.indiana.hamilton,world.usa.indiana.hamilton.carmel
+Fishers,Fishers,IN,Indiana,Hamilton,95310,world.usa.indiana,world.usa.indiana.hamilton,world.usa.indiana.hamilton.fishers
+Terre Haute,Terre Haute,IN,Indiana,Vigo,92490,world.usa.indiana,world.usa.indiana.vigo,world.usa.indiana.vigo.terre haute
+Des Moines,Des Moines,IA,Iowa,Polk,473957,world.usa.iowa,world.usa.iowa.polk,world.usa.iowa.polk.des moines
+Davenport,Davenport,IA,Iowa,Scott,285362,world.usa.iowa,world.usa.iowa.scott,world.usa.iowa.scott.davenport
+Cedar Rapids,Cedar Rapids,IA,Iowa,Linn,188038,world.usa.iowa,world.usa.iowa.linn,world.usa.iowa.linn.cedar rapids
+Iowa City,Iowa City,IA,Iowa,Johnson,118041,world.usa.iowa,world.usa.iowa.johnson,world.usa.iowa.johnson.iowa city
+Waterloo,Waterloo,IA,Iowa,Black Hawk,111631,world.usa.iowa,world.usa.iowa.black hawk,world.usa.iowa.black hawk.waterloo
+Sioux City,Sioux City,IA,Iowa,Woodbury,106455,world.usa.iowa,world.usa.iowa.woodbury,world.usa.iowa.woodbury.sioux city
+Dubuque,Dubuque,IA,Iowa,Dubuque,68109,world.usa.iowa,world.usa.iowa.dubuque,world.usa.iowa.dubuque.dubuque
+Ames,Ames,IA,Iowa,Story,67910,world.usa.iowa,world.usa.iowa.story,world.usa.iowa.story.ames
+West Des Moines,West Des Moines,IA,Iowa,Polk,67899,world.usa.iowa,world.usa.iowa.polk,world.usa.iowa.polk.west des moines
+Ankeny,Ankeny,IA,Iowa,Polk,67355,world.usa.iowa,world.usa.iowa.polk,world.usa.iowa.polk.ankeny
+Wichita,Wichita,KS,Kansas,Sedgwick,482249,world.usa.kansas,world.usa.kansas.sedgwick,world.usa.kansas.sedgwick.wichita
+Overland Park,Overland Park,KS,Kansas,Johnson,195494,world.usa.kansas,world.usa.kansas.johnson,world.usa.kansas.johnson.overland park
+Kansas City,Kansas City,KS,Kansas,Wyandotte,152960,world.usa.kansas,world.usa.kansas.wyandotte,world.usa.kansas.wyandotte.kansas city
+Topeka,Topeka,KS,Kansas,Shawnee,147458,world.usa.kansas,world.usa.kansas.shawnee,world.usa.kansas.shawnee.topeka
+Olathe,Olathe,KS,Kansas,Johnson,140545,world.usa.kansas,world.usa.kansas.johnson,world.usa.kansas.johnson.olathe
+Lawrence,Lawrence,KS,Kansas,Douglas,98648,world.usa.kansas,world.usa.kansas.douglas,world.usa.kansas.douglas.lawrence
+Shawnee,Shawnee,KS,Kansas,Johnson,65807,world.usa.kansas,world.usa.kansas.johnson,world.usa.kansas.johnson.shawnee
+Manhattan,Manhattan,KS,Kansas,Riley,57046,world.usa.kansas,world.usa.kansas.riley,world.usa.kansas.riley.manhattan
+Lenexa,Lenexa,KS,Kansas,Johnson,55625,world.usa.kansas,world.usa.kansas.johnson,world.usa.kansas.johnson.lenexa
+Salina,Salina,KS,Kansas,Saline,46340,world.usa.kansas,world.usa.kansas.saline,world.usa.kansas.saline.salina
+Louisville,Louisville,KY,Kentucky,Jefferson,1005654,world.usa.kentucky,world.usa.kentucky.jefferson,world.usa.kentucky.jefferson.louisville
+Lexington,Lexington,KY,Kentucky,Fayette,317110,world.usa.kentucky,world.usa.kentucky.fayette,world.usa.kentucky.fayette.lexington
+Bowling Green,Bowling Green,KY,Kentucky,Warren,95135,world.usa.kentucky,world.usa.kentucky.warren,world.usa.kentucky.warren.bowling green
+Elizabethtown,Elizabethtown,KY,Kentucky,Hardin,78002,world.usa.kentucky,world.usa.kentucky.hardin,world.usa.kentucky.hardin.elizabethtown
+Owensboro,Owensboro,KY,Kentucky,Daviess,74068,world.usa.kentucky,world.usa.kentucky.daviess,world.usa.kentucky.daviess.owensboro
+Paducah,Paducah,KY,Kentucky,McCracken,48481,world.usa.kentucky,world.usa.kentucky.mccracken,world.usa.kentucky.mccracken.paducah
+Richmond,Richmond,KY,Kentucky,Madison,40972,world.usa.kentucky,world.usa.kentucky.madison,world.usa.kentucky.madison.richmond
+Covington,Covington,KY,Kentucky,Kenton,40341,world.usa.kentucky,world.usa.kentucky.kenton,world.usa.kentucky.kenton.covington
+Frankfort,Frankfort,KY,Kentucky,Franklin,38852,world.usa.kentucky,world.usa.kentucky.franklin,world.usa.kentucky.franklin.frankfort
+London,London,KY,Kentucky,Laurel,37714,world.usa.kentucky,world.usa.kentucky.laurel,world.usa.kentucky.laurel.london
+New Orleans,New Orleans,LA,Louisiana,Orleans,1020886,world.usa.louisiana,world.usa.louisiana.orleans,world.usa.louisiana.orleans.new orleans
+Baton Rouge,Baton Rouge,LA,Louisiana,East Baton Rouge,570308,world.usa.louisiana,world.usa.louisiana.east baton rouge,world.usa.louisiana.east baton rouge.baton rouge
+Shreveport,Shreveport,LA,Louisiana,Caddo,280062,world.usa.louisiana,world.usa.louisiana.caddo,world.usa.louisiana.caddo.shreveport
+Lafayette,Lafayette,LA,Louisiana,Lafayette,264357,world.usa.louisiana,world.usa.louisiana.lafayette,world.usa.louisiana.lafayette.lafayette
+Lake Charles,Lake Charles,LA,Louisiana,Calcasieu,156181,world.usa.louisiana,world.usa.louisiana.calcasieu,world.usa.louisiana.calcasieu.lake charles
+Metairie,Metairie,LA,Louisiana,Jefferson,143481,world.usa.louisiana,world.usa.louisiana.jefferson,world.usa.louisiana.jefferson.metairie
+Houma,Houma,LA,Louisiana,Terrebonne,140469,world.usa.louisiana,world.usa.louisiana.terrebonne,world.usa.louisiana.terrebonne.houma
+Monroe,Monroe,LA,Louisiana,Ouachita,112891,world.usa.louisiana,world.usa.louisiana.ouachita,world.usa.louisiana.ouachita.monroe
+Mandeville,Mandeville,LA,Louisiana,St. Tammany,95968,world.usa.louisiana,world.usa.louisiana.st. tammany,world.usa.louisiana.st. tammany.mandeville
+Slidell,Slidell,LA,Louisiana,St. Tammany,93040,world.usa.louisiana,world.usa.louisiana.st. tammany,world.usa.louisiana.st. tammany.slidell
+Portland,Portland,ME,Maine,Cumberland,203969,world.usa.maine,world.usa.maine.cumberland,world.usa.maine.cumberland.portland
+Bangor,Bangor,ME,Maine,Penobscot,59772,world.usa.maine,world.usa.maine.penobscot,world.usa.maine.penobscot.bangor
+Lewiston,Lewiston,ME,Maine,Androscoggin,58802,world.usa.maine,world.usa.maine.androscoggin,world.usa.maine.androscoggin.lewiston
+Sanford,Sanford,ME,Maine,York,29535,world.usa.maine,world.usa.maine.york,world.usa.maine.york.sanford
+Waterville,Waterville,ME,Maine,Kennebec,27054,world.usa.maine,world.usa.maine.kennebec,world.usa.maine.kennebec.waterville
+South Portland,South Portland,ME,Maine,Cumberland,25532,world.usa.maine,world.usa.maine.cumberland,world.usa.maine.cumberland.south portland
+Auburn,Auburn,ME,Maine,Androscoggin,23414,world.usa.maine,world.usa.maine.androscoggin,world.usa.maine.androscoggin.auburn
+Augusta,Augusta,ME,Maine,Kennebec,22116,world.usa.maine,world.usa.maine.kennebec,world.usa.maine.kennebec.augusta
+Biddeford,Biddeford,ME,Maine,York,21504,world.usa.maine,world.usa.maine.york,world.usa.maine.york.biddeford
+Saco,Saco,ME,Maine,York,19964,world.usa.maine,world.usa.maine.york,world.usa.maine.york.saco
+Baltimore,Baltimore,MD,Maryland,Baltimore,2106068,world.usa.maryland,world.usa.maryland.baltimore,world.usa.maryland.baltimore.baltimore
+Hagerstown,Hagerstown,MD,Maryland,Washington,184755,world.usa.maryland,world.usa.maryland.washington,world.usa.maryland.washington.hagerstown
+Frederick,Frederick,MD,Maryland,Frederick,156787,world.usa.maryland,world.usa.maryland.frederick,world.usa.maryland.frederick.frederick
+Salisbury,Salisbury,MD,Maryland,Wicomico,106447,world.usa.maryland,world.usa.maryland.wicomico,world.usa.maryland.wicomico.salisbury
+Columbia,Columbia,MD,Maryland,Howard,103663,world.usa.maryland,world.usa.maryland.howard,world.usa.maryland.howard.columbia
+Germantown,Germantown,MD,Maryland,Montgomery,90844,world.usa.maryland,world.usa.maryland.montgomery,world.usa.maryland.montgomery.germantown
+Silver Spring,Silver Spring,MD,Maryland,Montgomery,79750,world.usa.maryland,world.usa.maryland.montgomery,world.usa.maryland.montgomery.silver spring
+Waldorf,Waldorf,MD,Maryland,Charles,74587,world.usa.maryland,world.usa.maryland.charles,world.usa.maryland.charles.waldorf
+Ellicott City,Ellicott City,MD,Maryland,Howard,72247,world.usa.maryland,world.usa.maryland.howard,world.usa.maryland.howard.ellicott city
+Glen Burnie,Glen Burnie,MD,Maryland,Anne Arundel,69813,world.usa.maryland,world.usa.maryland.anne arundel,world.usa.maryland.anne arundel.glen burnie
+Boston,Boston,MA,Massachusetts,Suffolk,4688346,world.usa.massachusetts,world.usa.massachusetts.suffolk,world.usa.massachusetts.suffolk.boston
+Springfield,Springfield,MA,Massachusetts,Hampden,623401,world.usa.massachusetts,world.usa.massachusetts.hampden,world.usa.massachusetts.hampden.springfield
+Worcester,Worcester,MA,Massachusetts,Worcester,498328,world.usa.massachusetts,world.usa.massachusetts.worcester,world.usa.massachusetts.worcester.worcester
+Barnstable Town,Barnstable Town,MA,Massachusetts,Barnstable,242847,world.usa.massachusetts,world.usa.massachusetts.barnstable,world.usa.massachusetts.barnstable.barnstable town
+New Bedford,New Bedford,MA,Massachusetts,Bristol,149910,world.usa.massachusetts,world.usa.massachusetts.bristol,world.usa.massachusetts.bristol.new bedford
+Leominster,Leominster,MA,Massachusetts,Worcester,119690,world.usa.massachusetts,world.usa.massachusetts.worcester,world.usa.massachusetts.worcester.leominster
+Cambridge,Cambridge,MA,Massachusetts,Middlesex,118927,world.usa.massachusetts,world.usa.massachusetts.middlesex,world.usa.massachusetts.middlesex.cambridge
+Lowell,Lowell,MA,Massachusetts,Middlesex,110997,world.usa.massachusetts,world.usa.massachusetts.middlesex,world.usa.massachusetts.middlesex.lowell
+Brockton,Brockton,MA,Massachusetts,Plymouth,95708,world.usa.massachusetts,world.usa.massachusetts.plymouth,world.usa.massachusetts.plymouth.brockton
+Quincy,Quincy,MA,Massachusetts,Norfolk,94470,world.usa.massachusetts,world.usa.massachusetts.norfolk,world.usa.massachusetts.norfolk.quincy
+Detroit,Detroit,MI,Michigan,Wayne,3506126,world.usa.michigan,world.usa.michigan.wayne,world.usa.michigan.wayne.detroit
+Grand Rapids,Grand Rapids,MI,Michigan,Kent,609314,world.usa.michigan,world.usa.michigan.kent,world.usa.michigan.kent.grand rapids
+Flint,Flint,MI,Michigan,Genesee,332190,world.usa.michigan,world.usa.michigan.genesee,world.usa.michigan.genesee.flint
+Lansing,Lansing,MI,Michigan,Ingham,324286,world.usa.michigan,world.usa.michigan.ingham,world.usa.michigan.ingham.lansing
+Ann Arbor,Ann Arbor,MI,Michigan,Washtenaw,322267,world.usa.michigan,world.usa.michigan.washtenaw,world.usa.michigan.washtenaw.ann arbor
+Kalamazoo,Kalamazoo,MI,Michigan,Kalamazoo,215193,world.usa.michigan,world.usa.michigan.kalamazoo,world.usa.michigan.kalamazoo.kalamazoo
+Muskegon,Muskegon,MI,Michigan,Muskegon,153565,world.usa.michigan,world.usa.michigan.muskegon,world.usa.michigan.muskegon.muskegon
+Warren,Warren,MI,Michigan,Macomb,133943,world.usa.michigan,world.usa.michigan.macomb,world.usa.michigan.macomb.warren
+Sterling Heights,Sterling Heights,MI,Michigan,Macomb,132438,world.usa.michigan,world.usa.michigan.macomb,world.usa.michigan.macomb.sterling heights
+South Lyon,South Lyon,MI,Michigan,Oakland,124694,world.usa.michigan,world.usa.michigan.oakland,world.usa.michigan.oakland.south lyon
+Minneapolis,Minneapolis,MN,Minnesota,Hennepin,2977172,world.usa.minnesota,world.usa.minnesota.hennepin,world.usa.minnesota.hennepin.minneapolis
+St. Paul,St. Paul,MN,Minnesota,Ramsey,308096,world.usa.minnesota,world.usa.minnesota.ramsey,world.usa.minnesota.ramsey.st. paul
+Rochester,Rochester,MN,Minnesota,Olmsted,119942,world.usa.minnesota,world.usa.minnesota.olmsted,world.usa.minnesota.olmsted.rochester
+Duluth,Duluth,MN,Minnesota,St. Louis,119476,world.usa.minnesota,world.usa.minnesota.st. louis,world.usa.minnesota.st. louis.duluth
+St. Cloud,St. Cloud,MN,Minnesota,Stearns,115028,world.usa.minnesota,world.usa.minnesota.stearns,world.usa.minnesota.stearns.st. cloud
+Bloomington,Bloomington,MN,Minnesota,Hennepin,84943,world.usa.minnesota,world.usa.minnesota.hennepin,world.usa.minnesota.hennepin.bloomington
+Brooklyn Park,Brooklyn Park,MN,Minnesota,Hennepin,80389,world.usa.minnesota,world.usa.minnesota.hennepin,world.usa.minnesota.hennepin.brooklyn park
+Plymouth,Plymouth,MN,Minnesota,Hennepin,79768,world.usa.minnesota,world.usa.minnesota.hennepin,world.usa.minnesota.hennepin.plymouth
+Woodbury,Woodbury,MN,Minnesota,Washington,72828,world.usa.minnesota,world.usa.minnesota.washington,world.usa.minnesota.washington.woodbury
+Maple Grove,Maple Grove,MN,Minnesota,Hennepin,72622,world.usa.minnesota,world.usa.minnesota.hennepin,world.usa.minnesota.hennepin.maple grove
+Jackson,Jackson,MS,Mississippi,Hinds,325350,world.usa.mississippi,world.usa.mississippi.hinds,world.usa.mississippi.hinds.jackson
+Gulfport,Gulfport,MS,Mississippi,Harrison,220987,world.usa.mississippi,world.usa.mississippi.harrison,world.usa.mississippi.harrison.gulfport
+Hattiesburg,Hattiesburg,MS,Mississippi,Forrest,80138,world.usa.mississippi,world.usa.mississippi.forrest,world.usa.mississippi.forrest.hattiesburg
+Southaven,Southaven,MS,Mississippi,DeSoto,55780,world.usa.mississippi,world.usa.mississippi.desoto,world.usa.mississippi.desoto.southaven
+Pascagoula,Pascagoula,MS,Mississippi,Jackson,48869,world.usa.mississippi,world.usa.mississippi.jackson,world.usa.mississippi.jackson.pascagoula
+Biloxi,Biloxi,MS,Mississippi,Harrison,46212,world.usa.mississippi,world.usa.mississippi.harrison,world.usa.mississippi.harrison.biloxi
+Tupelo,Tupelo,MS,Mississippi,Lee,45466,world.usa.mississippi,world.usa.mississippi.lee,world.usa.mississippi.lee.tupelo
+Olive Branch,Olive Branch,MS,Mississippi,DeSoto,38924,world.usa.mississippi,world.usa.mississippi.desoto,world.usa.mississippi.desoto.olive branch
+Oxford,Oxford,MS,Mississippi,Lafayette,38310,world.usa.mississippi,world.usa.mississippi.lafayette,world.usa.mississippi.lafayette.oxford
+Meridian,Meridian,MS,Mississippi,Lauderdale,36686,world.usa.mississippi,world.usa.mississippi.lauderdale,world.usa.mississippi.lauderdale.meridian
+St. Louis,St. Louis,MO,Missouri,St. Louis,2024074,world.usa.missouri,world.usa.missouri.st. louis,world.usa.missouri.st. louis.st. louis
+Kansas City,Kansas City,MO,Missouri,Jackson,1636715,world.usa.missouri,world.usa.missouri.jackson,world.usa.missouri.jackson.kansas city
+Springfield,Springfield,MO,Missouri,Greene,288090,world.usa.missouri,world.usa.missouri.greene,world.usa.missouri.greene.springfield
+Columbia,Columbia,MO,Missouri,Boone,141645,world.usa.missouri,world.usa.missouri.boone,world.usa.missouri.boone.columbia
+Independence,Independence,MO,Missouri,Jackson,116672,world.usa.missouri,world.usa.missouri.jackson,world.usa.missouri.jackson.independence
+Lee's Summit,Lee's Summit,MO,Missouri,Jackson,92522,world.usa.missouri,world.usa.missouri.jackson,world.usa.missouri.jackson.lee's summit
+O'Fallon,O'Fallon,MO,Missouri,St. Charles,88673,world.usa.missouri,world.usa.missouri.st. charles,world.usa.missouri.st. charles.o'fallon
+Joplin,Joplin,MO,Missouri,Jasper,84048,world.usa.missouri,world.usa.missouri.jasper,world.usa.missouri.jasper.joplin
+St. Joseph,St. Joseph,MO,Missouri,Buchanan,79161,world.usa.missouri,world.usa.missouri.buchanan,world.usa.missouri.buchanan.st. joseph
+St. Charles,St. Charles,MO,Missouri,St. Charles,71028,world.usa.missouri,world.usa.missouri.st. charles,world.usa.missouri.st. charles.st. charles
+Billings,Billings,MT,Montana,Yellowstone,120728,world.usa.montana,world.usa.montana.yellowstone,world.usa.montana.yellowstone.billings
+Missoula,Missoula,MT,Montana,Missoula,92895,world.usa.montana,world.usa.montana.missoula,world.usa.montana.missoula.missoula
+Great Falls,Great Falls,MT,Montana,Cascade,65131,world.usa.montana,world.usa.montana.cascade,world.usa.montana.cascade.great falls
+Bozeman,Bozeman,MT,Montana,Gallatin,57695,world.usa.montana,world.usa.montana.gallatin,world.usa.montana.gallatin.bozeman
+Helena,Helena,MT,Montana,Lewis and Clark,52936,world.usa.montana,world.usa.montana.lewis and clark,world.usa.montana.lewis and clark.helena
+Kalispell,Kalispell,MT,Montana,Flathead,39182,world.usa.montana,world.usa.montana.flathead,world.usa.montana.flathead.kalispell
+Butte,Butte,MT,Montana,Silver Bow,30904,world.usa.montana,world.usa.montana.silver bow,world.usa.montana.silver bow.butte
+Belgrade,Belgrade,MT,Montana,Gallatin,17743,world.usa.montana,world.usa.montana.gallatin,world.usa.montana.gallatin.belgrade
+Havre,Havre,MT,Montana,Hill,10155,world.usa.montana,world.usa.montana.hill,world.usa.montana.hill.havre
+Miles City,Miles City,MT,Montana,Custer,9436,world.usa.montana,world.usa.montana.custer,world.usa.montana.custer.miles city
+Omaha,Omaha,NE,Nebraska,Douglas,847819,world.usa.nebraska,world.usa.nebraska.douglas,world.usa.nebraska.douglas.omaha
+Lincoln,Lincoln,NE,Nebraska,Lancaster,289490,world.usa.nebraska,world.usa.nebraska.lancaster,world.usa.nebraska.lancaster.lincoln
+Bellevue,Bellevue,NE,Nebraska,Sarpy,53544,world.usa.nebraska,world.usa.nebraska.sarpy,world.usa.nebraska.sarpy.bellevue
+Grand Island,Grand Island,NE,Nebraska,Hall,53296,world.usa.nebraska,world.usa.nebraska.hall,world.usa.nebraska.hall.grand island
+Kearney,Kearney,NE,Nebraska,Buffalo,34418,world.usa.nebraska,world.usa.nebraska.buffalo,world.usa.nebraska.buffalo.kearney
+Fremont,Fremont,NE,Nebraska,Dodge,27456,world.usa.nebraska,world.usa.nebraska.dodge,world.usa.nebraska.dodge.fremont
+Norfolk,Norfolk,NE,Nebraska,Madison,27032,world.usa.nebraska,world.usa.nebraska.madison,world.usa.nebraska.madison.norfolk
+Scottsbluff,Scottsbluff,NE,Nebraska,Scotts Bluff,25114,world.usa.nebraska,world.usa.nebraska.scotts bluff,world.usa.nebraska.scotts bluff.scottsbluff
+Hastings,Hastings,NE,Nebraska,Adams,24101,world.usa.nebraska,world.usa.nebraska.adams,world.usa.nebraska.adams.hastings
+North Platte,North Platte,NE,Nebraska,Lincoln,24098,world.usa.nebraska,world.usa.nebraska.lincoln,world.usa.nebraska.lincoln.north platte
+Las Vegas,Las Vegas,NV,Nevada,Clark,2104198,world.usa.nevada,world.usa.nevada.clark,world.usa.nevada.clark.las vegas
+Reno,Reno,NV,Nevada,Washoe,445020,world.usa.nevada,world.usa.nevada.washoe,world.usa.nevada.washoe.reno
+Henderson,Henderson,NV,Nevada,Clark,320189,world.usa.nevada,world.usa.nevada.clark,world.usa.nevada.clark.henderson
+North Las Vegas,North Las Vegas,NV,Nevada,Clark,251974,world.usa.nevada,world.usa.nevada.clark,world.usa.nevada.clark.north las vegas
+Paradise,Paradise,NV,Nevada,Clark,233689,world.usa.nevada,world.usa.nevada.clark,world.usa.nevada.clark.paradise
+Spring Valley,Spring Valley,NV,Nevada,Clark,199722,world.usa.nevada,world.usa.nevada.clark,world.usa.nevada.clark.spring valley
+Sunrise Manor,Sunrise Manor,NV,Nevada,Clark,192934,world.usa.nevada,world.usa.nevada.clark,world.usa.nevada.clark.sunrise manor
+Enterprise,Enterprise,NV,Nevada,Clark,164314,world.usa.nevada,world.usa.nevada.clark,world.usa.nevada.clark.enterprise
+Sparks,Sparks,NV,Nevada,Washoe,105006,world.usa.nevada,world.usa.nevada.washoe,world.usa.nevada.washoe.sparks
+Carson City,Carson City,NV,Nevada,Carson City,58756,world.usa.nevada,world.usa.nevada.carson city,world.usa.nevada.carson city.carson city
+Nashua,Nashua,NH,New Hampshire,Hillsborough,233917,world.usa.new hampshire,world.usa.new hampshire.hillsborough,world.usa.new hampshire.hillsborough.nashua
+Manchester,Manchester,NH,New Hampshire,Hillsborough,162877,world.usa.new hampshire,world.usa.new hampshire.hillsborough,world.usa.new hampshire.hillsborough.manchester
+Dover,Dover,NH,New Hampshire,Strafford,94563,world.usa.new hampshire,world.usa.new hampshire.strafford,world.usa.new hampshire.strafford.dover
+Portsmouth,Portsmouth,NH,New Hampshire,Rockingham,93069,world.usa.new hampshire,world.usa.new hampshire.rockingham,world.usa.new hampshire.rockingham.portsmouth
+Concord,Concord,NH,New Hampshire,Merrimack,43542,world.usa.new hampshire,world.usa.new hampshire.merrimack,world.usa.new hampshire.merrimack.concord
+Rochester,Rochester,NH,New Hampshire,Strafford,31526,world.usa.new hampshire,world.usa.new hampshire.strafford,world.usa.new hampshire.strafford.rochester
+Lebanon,Lebanon,NH,New Hampshire,Grafton,26666,world.usa.new hampshire,world.usa.new hampshire.grafton,world.usa.new hampshire.grafton.lebanon
+Derry,Derry,NH,New Hampshire,Rockingham,22381,world.usa.new hampshire,world.usa.new hampshire.rockingham,world.usa.new hampshire.rockingham.derry
+Keene,Keene,NH,New Hampshire,Cheshire,21911,world.usa.new hampshire,world.usa.new hampshire.cheshire,world.usa.new hampshire.cheshire.keene
+Laconia,Laconia,NH,New Hampshire,Belknap,19371,world.usa.new hampshire,world.usa.new hampshire.belknap,world.usa.new hampshire.belknap.laconia
+Trenton,Trenton,NJ,New Jersey,Mercer,290716,world.usa.new jersey,world.usa.new jersey.mercer,world.usa.new jersey.mercer.trenton
+Newark,Newark,NJ,New Jersey,Essex,282011,world.usa.new jersey,world.usa.new jersey.essex,world.usa.new jersey.essex.newark
+Jersey City,Jersey City,NJ,New Jersey,Hudson,262075,world.usa.new jersey,world.usa.new jersey.hudson,world.usa.new jersey.hudson.jersey city
+Atlantic City,Atlantic City,NJ,New Jersey,Atlantic,237054,world.usa.new jersey,world.usa.new jersey.atlantic,world.usa.new jersey.atlantic.atlantic city
+Paterson,Paterson,NJ,New Jersey,Passaic,145233,world.usa.new jersey,world.usa.new jersey.passaic,world.usa.new jersey.passaic.paterson
+Elizabeth,Elizabeth,NJ,New Jersey,Union,129216,world.usa.new jersey,world.usa.new jersey.union,world.usa.new jersey.union.elizabeth
+Vineland,Vineland,NJ,New Jersey,Cumberland,93239,world.usa.new jersey,world.usa.new jersey.cumberland,world.usa.new jersey.cumberland.vineland
+Toms River,Toms River,NJ,New Jersey,Ocean,88712,world.usa.new jersey,world.usa.new jersey.ocean,world.usa.new jersey.ocean.toms river
+Clifton,Clifton,NJ,New Jersey,Passaic,85052,world.usa.new jersey,world.usa.new jersey.passaic,world.usa.new jersey.passaic.clifton
+Camden,Camden,NJ,New Jersey,Camden,73562,world.usa.new jersey,world.usa.new jersey.camden,world.usa.new jersey.camden.camden
+Albuquerque,Albuquerque,NM,New Mexico,Bernalillo,761195,world.usa.new mexico,world.usa.new mexico.bernalillo,world.usa.new mexico.bernalillo.albuquerque
+Las Cruces,Las Cruces,NM,New Mexico,Doña Ana,136254,world.usa.new mexico,world.usa.new mexico.doña ana,world.usa.new mexico.doña ana.las cruces
+Santa Fe,Santa Fe,NM,New Mexico,Santa Fe,111269,world.usa.new mexico,world.usa.new mexico.santa fe,world.usa.new mexico.santa fe.santa fe
+Rio Rancho,Rio Rancho,NM,New Mexico,Sandoval,99178,world.usa.new mexico,world.usa.new mexico.sandoval,world.usa.new mexico.sandoval.rio rancho
+Los Lunas,Los Lunas,NM,New Mexico,Valencia,69020,world.usa.new mexico,world.usa.new mexico.valencia,world.usa.new mexico.valencia.los lunas
+Farmington,Farmington,NM,New Mexico,San Juan,51309,world.usa.new mexico,world.usa.new mexico.san juan,world.usa.new mexico.san juan.farmington
+Roswell,Roswell,NM,New Mexico,Chaves,48889,world.usa.new mexico,world.usa.new mexico.chaves,world.usa.new mexico.chaves.roswell
+Clovis,Clovis,NM,New Mexico,Curry,42168,world.usa.new mexico,world.usa.new mexico.curry,world.usa.new mexico.curry.clovis
+Hobbs,Hobbs,NM,New Mexico,Lea,42095,world.usa.new mexico,world.usa.new mexico.lea,world.usa.new mexico.lea.hobbs
+South Valley,South Valley,NM,New Mexico,Bernalillo,41011,world.usa.new mexico,world.usa.new mexico.bernalillo,world.usa.new mexico.bernalillo.south valley
+New York,New York,NY,New York,New York,18713220,world.usa.new york,world.usa.new york.new york,world.usa.new york.new york.new york
+Brooklyn,Brooklyn,NY,New York,Kings,2559903,world.usa.new york,world.usa.new york.kings,world.usa.new york.kings.brooklyn
+Queens,Queens,NY,New York,Queens,2230722,world.usa.new york,world.usa.new york.queens,world.usa.new york.queens.queens
+Manhattan,Manhattan,NY,New York,New York,1628706,world.usa.new york,world.usa.new york.new york,world.usa.new york.new york.manhattan
+Bronx,Bronx,NY,New York,Bronx,1418207,world.usa.new york,world.usa.new york.bronx,world.usa.new york.bronx.bronx
+Buffalo,Buffalo,NY,New York,Erie,914341,world.usa.new york,world.usa.new york.erie,world.usa.new york.erie.buffalo
+Rochester,Rochester,NY,New York,Monroe,703952,world.usa.new york,world.usa.new york.monroe,world.usa.new york.monroe.rochester
+Albany,Albany,NY,New York,Albany,586383,world.usa.new york,world.usa.new york.albany,world.usa.new york.albany.albany
+Staten Island,Staten Island,NY,New York,Richmond,476143,world.usa.new york,world.usa.new york.richmond,world.usa.new york.richmond.staten island
+Syracuse,Syracuse,NY,New York,Onondaga,404223,world.usa.new york,world.usa.new york.onondaga,world.usa.new york.onondaga.syracuse
+Charlotte,Charlotte,NC,North Carolina,Mecklenburg,1512923,world.usa.north carolina,world.usa.north carolina.mecklenburg,world.usa.north carolina.mecklenburg.charlotte
+Raleigh,Raleigh,NC,North Carolina,Wake,1038738,world.usa.north carolina,world.usa.north carolina.wake,world.usa.north carolina.wake.raleigh
+Durham,Durham,NC,North Carolina,Durham,424700,world.usa.north carolina,world.usa.north carolina.durham,world.usa.north carolina.durham.durham
+Winston-Salem,Winston-Salem,NC,North Carolina,Forsyth,422269,world.usa.north carolina,world.usa.north carolina.forsyth,world.usa.north carolina.forsyth.winston-salem
+Greensboro,Greensboro,NC,North Carolina,Guilford,343090,world.usa.north carolina,world.usa.north carolina.guilford,world.usa.north carolina.guilford.greensboro
+Fayetteville,Fayetteville,NC,North Carolina,Cumberland,327435,world.usa.north carolina,world.usa.north carolina.cumberland,world.usa.north carolina.cumberland.fayetteville
+Asheville,Asheville,NC,North Carolina,Buncombe,312507,world.usa.north carolina,world.usa.north carolina.buncombe,world.usa.north carolina.buncombe.asheville
+Concord,Concord,NC,North Carolina,Cabarrus,261801,world.usa.north carolina,world.usa.north carolina.cabarrus,world.usa.north carolina.cabarrus.concord
+Wilmington,Wilmington,NC,North Carolina,New Hanover,255616,world.usa.north carolina,world.usa.north carolina.new hanover,world.usa.north carolina.new hanover.wilmington
+Hickory,Hickory,NC,North Carolina,Catawba,218323,world.usa.north carolina,world.usa.north carolina.catawba,world.usa.north carolina.catawba.hickory
+Fargo,Fargo,ND,North Dakota,Cass,208675,world.usa.north dakota,world.usa.north dakota.cass,world.usa.north dakota.cass.fargo
+Bismarck,Bismarck,ND,North Dakota,Burleigh,98345,world.usa.north dakota,world.usa.north dakota.burleigh,world.usa.north dakota.burleigh.bismarck
+Grand Forks,Grand Forks,ND,North Dakota,Grand Forks,64748,world.usa.north dakota,world.usa.north dakota.grand forks,world.usa.north dakota.grand forks.grand forks
+Minot,Minot,ND,North Dakota,Ward,49425,world.usa.north dakota,world.usa.north dakota.ward,world.usa.north dakota.ward.minot
+West Fargo,West Fargo,ND,North Dakota,Cass,37058,world.usa.north dakota,world.usa.north dakota.cass,world.usa.north dakota.cass.west fargo
+Williston,Williston,ND,North Dakota,Williams,29844,world.usa.north dakota,world.usa.north dakota.williams,world.usa.north dakota.williams.williston
+Dickinson,Dickinson,ND,North Dakota,Stark,22872,world.usa.north dakota,world.usa.north dakota.stark,world.usa.north dakota.stark.dickinson
+Mandan,Mandan,ND,North Dakota,Morton,22752,world.usa.north dakota,world.usa.north dakota.morton,world.usa.north dakota.morton.mandan
+Jamestown,Jamestown,ND,North Dakota,Stutsman,14944,world.usa.north dakota,world.usa.north dakota.stutsman,world.usa.north dakota.stutsman.jamestown
+Wahpeton,Wahpeton,ND,North Dakota,Richland,11067,world.usa.north dakota,world.usa.north dakota.richland,world.usa.north dakota.richland.wahpeton
+Cleveland,Cleveland,OH,Ohio,Cuyahoga,1710093,world.usa.ohio,world.usa.ohio.cuyahoga,world.usa.ohio.cuyahoga.cleveland
+Cincinnati,Cincinnati,OH,Ohio,Hamilton,1662691,world.usa.ohio,world.usa.ohio.hamilton,world.usa.ohio.hamilton.cincinnati
+Columbus,Columbus,OH,Ohio,Franklin,1562009,world.usa.ohio,world.usa.ohio.franklin,world.usa.ohio.franklin.columbus
+Dayton,Dayton,OH,Ohio,Montgomery,718353,world.usa.ohio,world.usa.ohio.montgomery,world.usa.ohio.montgomery.dayton
+Akron,Akron,OH,Ohio,Summit,565208,world.usa.ohio,world.usa.ohio.summit,world.usa.ohio.summit.akron
+Toledo,Toledo,OH,Ohio,Lucas,482111,world.usa.ohio,world.usa.ohio.lucas,world.usa.ohio.lucas.toledo
+Youngstown,Youngstown,OH,Ohio,Mahoning,378732,world.usa.ohio,world.usa.ohio.mahoning,world.usa.ohio.mahoning.youngstown
+Canton,Canton,OH,Ohio,Stark,269418,world.usa.ohio,world.usa.ohio.stark,world.usa.ohio.stark.canton
+Lorain,Lorain,OH,Ohio,Lorain,180279,world.usa.ohio,world.usa.ohio.lorain,world.usa.ohio.lorain.lorain
+Middletown,Middletown,OH,Ohio,Butler,97730,world.usa.ohio,world.usa.ohio.butler,world.usa.ohio.butler.middletown
+Oklahoma City,Oklahoma City,OK,Oklahoma,Oklahoma,972943,world.usa.oklahoma,world.usa.oklahoma.oklahoma,world.usa.oklahoma.oklahoma.oklahoma city
+Tulsa,Tulsa,OK,Oklahoma,Tulsa,671033,world.usa.oklahoma,world.usa.oklahoma.tulsa,world.usa.oklahoma.tulsa.tulsa
+Norman,Norman,OK,Oklahoma,Cleveland,116973,world.usa.oklahoma,world.usa.oklahoma.cleveland,world.usa.oklahoma.cleveland.norman
+Broken Arrow,Broken Arrow,OK,Oklahoma,Tulsa,110198,world.usa.oklahoma,world.usa.oklahoma.tulsa,world.usa.oklahoma.tulsa.broken arrow
+Edmond,Edmond,OK,Oklahoma,Oklahoma,94054,world.usa.oklahoma,world.usa.oklahoma.oklahoma,world.usa.oklahoma.oklahoma.edmond
+Lawton,Lawton,OK,Oklahoma,Comanche,90712,world.usa.oklahoma,world.usa.oklahoma.comanche,world.usa.oklahoma.comanche.lawton
+Moore,Moore,OK,Oklahoma,Cleveland,62055,world.usa.oklahoma,world.usa.oklahoma.cleveland,world.usa.oklahoma.cleveland.moore
+Midwest City,Midwest City,OK,Oklahoma,Oklahoma,57407,world.usa.oklahoma,world.usa.oklahoma.oklahoma,world.usa.oklahoma.oklahoma.midwest city
+Stillwater,Stillwater,OK,Oklahoma,Payne,49008,world.usa.oklahoma,world.usa.oklahoma.payne,world.usa.oklahoma.payne.stillwater
+Enid,Enid,OK,Oklahoma,Garfield,47907,world.usa.oklahoma,world.usa.oklahoma.garfield,world.usa.oklahoma.garfield.enid
+Portland,Portland,OR,Oregon,Multnomah,2074775,world.usa.oregon,world.usa.oregon.multnomah,world.usa.oregon.multnomah.portland
+Eugene,Eugene,OR,Oregon,Lane,273439,world.usa.oregon,world.usa.oregon.lane,world.usa.oregon.lane.eugene
+Salem,Salem,OR,Oregon,Marion,266804,world.usa.oregon,world.usa.oregon.marion,world.usa.oregon.marion.salem
+Medford,Medford,OR,Oregon,Jackson,170876,world.usa.oregon,world.usa.oregon.jackson,world.usa.oregon.jackson.medford
+Bend,Bend,OR,Oregon,Deschutes,109802,world.usa.oregon,world.usa.oregon.deschutes,world.usa.oregon.deschutes.bend
+Gresham,Gresham,OR,Oregon,Multnomah,109381,world.usa.oregon,world.usa.oregon.multnomah,world.usa.oregon.multnomah.gresham
+Hillsboro,Hillsboro,OR,Oregon,Washington,109128,world.usa.oregon,world.usa.oregon.washington,world.usa.oregon.washington.hillsboro
+Beaverton,Beaverton,OR,Oregon,Washington,99037,world.usa.oregon,world.usa.oregon.washington,world.usa.oregon.washington.beaverton
+Corvallis,Corvallis,OR,Oregon,Benton,67467,world.usa.oregon,world.usa.oregon.benton,world.usa.oregon.benton.corvallis
+Springfield,Springfield,OR,Oregon,Lane,63230,world.usa.oregon,world.usa.oregon.lane,world.usa.oregon.lane.springfield
+Philadelphia,Philadelphia,PA,Pennsylvania,Philadelphia,5649300,world.usa.pennsylvania,world.usa.pennsylvania.philadelphia,world.usa.pennsylvania.philadelphia.philadelphia
+Pittsburgh,Pittsburgh,PA,Pennsylvania,Allegheny,1703266,world.usa.pennsylvania,world.usa.pennsylvania.allegheny,world.usa.pennsylvania.allegheny.pittsburgh
+Allentown,Allentown,PA,Pennsylvania,Lehigh,683794,world.usa.pennsylvania,world.usa.pennsylvania.lehigh,world.usa.pennsylvania.lehigh.allentown
+Harrisburg,Harrisburg,PA,Pennsylvania,Dauphin,442289,world.usa.pennsylvania,world.usa.pennsylvania.dauphin,world.usa.pennsylvania.dauphin.harrisburg
+Lancaster,Lancaster,PA,Pennsylvania,Lancaster,401524,world.usa.pennsylvania,world.usa.pennsylvania.lancaster,world.usa.pennsylvania.lancaster.lancaster
+Scranton,Scranton,PA,Pennsylvania,Lackawanna,384250,world.usa.pennsylvania,world.usa.pennsylvania.lackawanna,world.usa.pennsylvania.lackawanna.scranton
+Reading,Reading,PA,Pennsylvania,Berks,267155,world.usa.pennsylvania,world.usa.pennsylvania.berks,world.usa.pennsylvania.berks.reading
+York,York,PA,Pennsylvania,York,233184,world.usa.pennsylvania,world.usa.pennsylvania.york,world.usa.pennsylvania.york.york
+Erie,Erie,PA,Pennsylvania,Erie,184484,world.usa.pennsylvania,world.usa.pennsylvania.erie,world.usa.pennsylvania.erie.erie
+Pottstown,Pottstown,PA,Pennsylvania,Montgomery,108758,world.usa.pennsylvania,world.usa.pennsylvania.montgomery,world.usa.pennsylvania.montgomery.pottstown
+Providence,Providence,RI,Rhode Island,Providence,1203230,world.usa.rhode island,world.usa.rhode island.providence,world.usa.rhode island.providence.providence
+Cranston,Cranston,RI,Rhode Island,Providence,81456,world.usa.rhode island,world.usa.rhode island.providence,world.usa.rhode island.providence.cranston
+Warwick,Warwick,RI,Rhode Island,Kent,81004,world.usa.rhode island,world.usa.rhode island.kent,world.usa.rhode island.kent.warwick
+Pawtucket,Pawtucket,RI,Rhode Island,Providence,72117,world.usa.rhode island,world.usa.rhode island.providence,world.usa.rhode island.providence.pawtucket
+East Providence,East Providence,RI,Rhode Island,Providence,47618,world.usa.rhode island,world.usa.rhode island.providence,world.usa.rhode island.providence.east providence
+Woonsocket,Woonsocket,RI,Rhode Island,Providence,41751,world.usa.rhode island,world.usa.rhode island.providence,world.usa.rhode island.providence.woonsocket
+Newport,Newport,RI,Rhode Island,Newport,24334,world.usa.rhode island,world.usa.rhode island.newport,world.usa.rhode island.newport.newport
+Central Falls,Central Falls,RI,Rhode Island,Providence,19568,world.usa.rhode island,world.usa.rhode island.providence,world.usa.rhode island.providence.central falls
+Westerly,Westerly,RI,Rhode Island,Washington,17435,world.usa.rhode island,world.usa.rhode island.washington,world.usa.rhode island.washington.westerly
+Valley Falls,Valley Falls,RI,Rhode Island,Providence,11828,world.usa.rhode island,world.usa.rhode island.providence,world.usa.rhode island.providence.valley falls
+Charleston,Charleston,SC,South Carolina,Charleston,628377,world.usa.south carolina,world.usa.south carolina.charleston,world.usa.south carolina.charleston.charleston
+Columbia,Columbia,SC,South Carolina,Richland,560041,world.usa.south carolina,world.usa.south carolina.richland,world.usa.south carolina.richland.columbia
+Greenville,Greenville,SC,South Carolina,Greenville,484465,world.usa.south carolina,world.usa.south carolina.greenville,world.usa.south carolina.greenville.greenville
+Myrtle Beach,Myrtle Beach,SC,South Carolina,Horry,275579,world.usa.south carolina,world.usa.south carolina.horry,world.usa.south carolina.horry.myrtle beach
+Spartanburg,Spartanburg,SC,South Carolina,Spartanburg,182701,world.usa.south carolina,world.usa.south carolina.spartanburg,world.usa.south carolina.spartanburg.spartanburg
+Mauldin,Mauldin,SC,South Carolina,Greenville,133872,world.usa.south carolina,world.usa.south carolina.greenville,world.usa.south carolina.greenville.mauldin
+Rock Hill,Rock Hill,SC,South Carolina,York,119105,world.usa.south carolina,world.usa.south carolina.york,world.usa.south carolina.york.rock hill
+North Charleston,North Charleston,SC,South Carolina,Charleston,115382,world.usa.south carolina,world.usa.south carolina.charleston,world.usa.south carolina.charleston.north charleston
+Florence,Florence,SC,South Carolina,Florence,93131,world.usa.south carolina,world.usa.south carolina.florence,world.usa.south carolina.florence.florence
+Mount Pleasant,Mount Pleasant,SC,South Carolina,Charleston,91684,world.usa.south carolina,world.usa.south carolina.charleston,world.usa.south carolina.charleston.mount pleasant
+Sioux Falls,Sioux Falls,SD,South Dakota,Minnehaha,187239,world.usa.south dakota,world.usa.south dakota.minnehaha,world.usa.south dakota.minnehaha.sioux falls
+Rapid City,Rapid City,SD,South Dakota,Pennington,92664,world.usa.south dakota,world.usa.south dakota.pennington,world.usa.south dakota.pennington.rapid city
+Aberdeen,Aberdeen,SD,South Dakota,Brown,28134,world.usa.south dakota,world.usa.south dakota.brown,world.usa.south dakota.brown.aberdeen
+Brookings,Brookings,SD,South Dakota,Brookings,24887,world.usa.south dakota,world.usa.south dakota.brookings,world.usa.south dakota.brookings.brookings
+Watertown,Watertown,SD,South Dakota,Codington,21790,world.usa.south dakota,world.usa.south dakota.codington,world.usa.south dakota.codington.watertown
+Mitchell,Mitchell,SD,South Dakota,Davison,15372,world.usa.south dakota,world.usa.south dakota.davison,world.usa.south dakota.davison.mitchell
+Yankton,Yankton,SD,South Dakota,Yankton,14872,world.usa.south dakota,world.usa.south dakota.yankton,world.usa.south dakota.yankton.yankton
+Pierre,Pierre,SD,South Dakota,Hughes,14659,world.usa.south dakota,world.usa.south dakota.hughes,world.usa.south dakota.hughes.pierre
+Huron,Huron,SD,South Dakota,Beadle,13427,world.usa.south dakota,world.usa.south dakota.beadle,world.usa.south dakota.beadle.huron
+Spearfish,Spearfish,SD,South Dakota,Lawrence,12836,world.usa.south dakota,world.usa.south dakota.lawrence,world.usa.south dakota.lawrence.spearfish
+Nashville,Nashville,TN,Tennessee,Davidson,1081903,world.usa.tennessee,world.usa.tennessee.davidson,world.usa.tennessee.davidson.nashville
+Memphis,Memphis,TN,Tennessee,Shelby,1066967,world.usa.tennessee,world.usa.tennessee.shelby,world.usa.tennessee.shelby.memphis
+Knoxville,Knoxville,TN,Tennessee,Knox,586048,world.usa.tennessee,world.usa.tennessee.knox,world.usa.tennessee.knox.knoxville
+Chattanooga,Chattanooga,TN,Tennessee,Hamilton,415501,world.usa.tennessee,world.usa.tennessee.hamilton,world.usa.tennessee.hamilton.chattanooga
+Clarksville,Clarksville,TN,Tennessee,Montgomery,188746,world.usa.tennessee,world.usa.tennessee.montgomery,world.usa.tennessee.montgomery.clarksville
+Murfreesboro,Murfreesboro,TN,Tennessee,Rutherford,179951,world.usa.tennessee,world.usa.tennessee.rutherford,world.usa.tennessee.rutherford.murfreesboro
+Johnson City,Johnson City,TN,Tennessee,Washington,127571,world.usa.tennessee,world.usa.tennessee.washington,world.usa.tennessee.washington.johnson city
+Kingsport,Kingsport,TN,Tennessee,Sullivan,119666,world.usa.tennessee,world.usa.tennessee.sullivan,world.usa.tennessee.sullivan.kingsport
+Franklin,Franklin,TN,Tennessee,Williamson,83097,world.usa.tennessee,world.usa.tennessee.williamson,world.usa.tennessee.williamson.franklin
+Jackson,Jackson,TN,Tennessee,Madison,74065,world.usa.tennessee,world.usa.tennessee.madison,world.usa.tennessee.madison.jackson
+Dallas,Dallas,TX,Texas,Dallas,5743938,world.usa.texas,world.usa.texas.dallas,world.usa.texas.dallas.dallas
+Houston,Houston,TX,Texas,Harris,5464251,world.usa.texas,world.usa.texas.harris,world.usa.texas.harris.houston
+San Antonio,San Antonio,TX,Texas,Bexar,2049293,world.usa.texas,world.usa.texas.bexar,world.usa.texas.bexar.san antonio
+Austin,Austin,TX,Texas,Travis,1687311,world.usa.texas,world.usa.texas.travis,world.usa.texas.travis.austin
+Fort Worth,Fort Worth,TX,Texas,Tarrant,909585,world.usa.texas,world.usa.texas.tarrant,world.usa.texas.tarrant.fort worth
+El Paso,El Paso,TX,Texas,El Paso,843386,world.usa.texas,world.usa.texas.el paso,world.usa.texas.el paso.el paso
+McAllen,McAllen,TX,Texas,Hidalgo,804114,world.usa.texas,world.usa.texas.hidalgo,world.usa.texas.hidalgo.mcallen
+Denton,Denton,TX,Texas,Denton,457177,world.usa.texas,world.usa.texas.denton,world.usa.texas.denton.denton
+Arlington,Arlington,TX,Texas,Tarrant,398854,world.usa.texas,world.usa.texas.tarrant,world.usa.texas.tarrant.arlington
+Corpus Christi,Corpus Christi,TX,Texas,Nueces,342464,world.usa.texas,world.usa.texas.nueces,world.usa.texas.nueces.corpus christi
+Salt Lake City,Salt Lake City,UT,Utah,Salt Lake,1098526,world.usa.utah,world.usa.utah.salt lake,world.usa.utah.salt lake.salt lake city
+Ogden,Ogden,UT,Utah,Weber,578523,world.usa.utah,world.usa.utah.weber,world.usa.utah.weber.ogden
+Provo,Provo,UT,Utah,Utah,500617,world.usa.utah,world.usa.utah.utah,world.usa.utah.utah.provo
+West Valley City,West Valley City,UT,Utah,Salt Lake,135248,world.usa.utah,world.usa.utah.salt lake,world.usa.utah.salt lake.west valley city
+St. George,St. George,UT,Utah,Washington,120899,world.usa.utah,world.usa.utah.washington,world.usa.utah.washington.st. george
+West Jordan,West Jordan,UT,Utah,Salt Lake,116480,world.usa.utah,world.usa.utah.salt lake,world.usa.utah.salt lake.west jordan
+Logan,Logan,UT,Utah,Cache,101616,world.usa.utah,world.usa.utah.cache,world.usa.utah.cache.logan
+Orem,Orem,UT,Utah,Utah,97828,world.usa.utah,world.usa.utah.utah,world.usa.utah.utah.orem
+Sandy,Sandy,UT,Utah,Salt Lake,96380,world.usa.utah,world.usa.utah.salt lake,world.usa.utah.salt lake.sandy
+Layton,Layton,UT,Utah,Davis,78014,world.usa.utah,world.usa.utah.davis,world.usa.utah.davis.layton
+Burlington,Burlington,VT,Vermont,Chittenden,109763,world.usa.vermont,world.usa.vermont.chittenden,world.usa.vermont.chittenden.burlington
+Barre,Barre,VT,Vermont,Washington,20421,world.usa.vermont,world.usa.vermont.washington,world.usa.vermont.washington.barre
+South Burlington,South Burlington,VT,Vermont,Chittenden,19509,world.usa.vermont,world.usa.vermont.chittenden,world.usa.vermont.chittenden.south burlington
+Rutland,Rutland,VT,Vermont,Rutland,18131,world.usa.vermont,world.usa.vermont.rutland,world.usa.vermont.rutland.rutland
+Essex Junction,Essex Junction,VT,Vermont,Chittenden,10852,world.usa.vermont,world.usa.vermont.chittenden,world.usa.vermont.chittenden.essex junction
+St. Albans,St. Albans,VT,Vermont,Franklin,8900,world.usa.vermont,world.usa.vermont.franklin,world.usa.vermont.franklin.st. albans
+Bennington,Bennington,VT,Vermont,Bennington,8836,world.usa.vermont,world.usa.vermont.bennington,world.usa.vermont.bennington.bennington
+Montpelier,Montpelier,VT,Vermont,Washington,7372,world.usa.vermont,world.usa.vermont.washington,world.usa.vermont.washington.montpelier
+Winooski,Winooski,VT,Vermont,Chittenden,7333,world.usa.vermont,world.usa.vermont.chittenden,world.usa.vermont.chittenden.winooski
+Middlebury,Middlebury,VT,Vermont,Addison,6855,world.usa.vermont,world.usa.vermont.addison,world.usa.vermont.addison.middlebury
+Virginia Beach,Virginia Beach,VA,Virginia,Virginia Beach,1478868,world.usa.virginia,world.usa.virginia.virginia beach,world.usa.virginia.virginia beach.virginia beach
+Richmond,Richmond,VA,Virginia,Richmond,1075798,world.usa.virginia,world.usa.virginia.richmond,world.usa.virginia.richmond.richmond
+Chesapeake,Chesapeake,VA,Virginia,Chesapeake,244835,world.usa.virginia,world.usa.virginia.chesapeake,world.usa.virginia.chesapeake.chesapeake
+Norfolk,Norfolk,VA,Virginia,Norfolk,242742,world.usa.virginia,world.usa.virginia.norfolk,world.usa.virginia.norfolk.norfolk
+Arlington,Arlington,VA,Virginia,Arlington,231803,world.usa.virginia,world.usa.virginia.arlington,world.usa.virginia.arlington.arlington
+Roanoke,Roanoke,VA,Virginia,Roanoke,214674,world.usa.virginia,world.usa.virginia.roanoke,world.usa.virginia.roanoke.roanoke
+Newport News,Newport News,VA,Virginia,Newport News,179225,world.usa.virginia,world.usa.virginia.newport news,world.usa.virginia.newport news.newport news
+Fredericksburg,Fredericksburg,VA,Virginia,Fredericksburg,168909,world.usa.virginia,world.usa.virginia.fredericksburg,world.usa.virginia.fredericksburg.fredericksburg
+Alexandria,Alexandria,VA,Virginia,Alexandria,159428,world.usa.virginia,world.usa.virginia.alexandria,world.usa.virginia.alexandria.alexandria
+Hampton,Hampton,VA,Virginia,Hampton,134510,world.usa.virginia,world.usa.virginia.hampton,world.usa.virginia.hampton.hampton
+Seattle,Seattle,WA,Washington,King,3789215,world.usa.washington,world.usa.washington.king,world.usa.washington.king.seattle
+Spokane,Spokane,WA,Washington,Spokane,412275,world.usa.washington,world.usa.washington.spokane,world.usa.washington.spokane.spokane
+Kennewick,Kennewick,WA,Washington,Benton,240735,world.usa.washington,world.usa.washington.benton,world.usa.washington.benton.kennewick
+Bremerton,Bremerton,WA,Washington,Kitsap,218400,world.usa.washington,world.usa.washington.kitsap,world.usa.washington.kitsap.bremerton
+Tacoma,Tacoma,WA,Washington,Pierce,217827,world.usa.washington,world.usa.washington.pierce,world.usa.washington.pierce.tacoma
+Olympia,Olympia,WA,Washington,Thurston,200915,world.usa.washington,world.usa.washington.thurston,world.usa.washington.thurston.olympia
+Vancouver,Vancouver,WA,Washington,Clark,184463,world.usa.washington,world.usa.washington.clark,world.usa.washington.clark.vancouver
+Marysville,Marysville,WA,Washington,Snohomish,170009,world.usa.washington,world.usa.washington.snohomish,world.usa.washington.snohomish.marysville
+Bellevue,Bellevue,WA,Washington,King,148164,world.usa.washington,world.usa.washington.king,world.usa.washington.king.bellevue
+Yakima,Yakima,WA,Washington,Yakima,133191,world.usa.washington,world.usa.washington.yakima,world.usa.washington.yakima.yakima
+Huntington,Huntington,WV,West Virginia,Cabell,186034,world.usa.west virginia,world.usa.west virginia.cabell,world.usa.west virginia.cabell.huntington
+Charleston,Charleston,WV,West Virginia,Kanawha,138706,world.usa.west virginia,world.usa.west virginia.kanawha,world.usa.west virginia.kanawha.charleston
+Wheeling,Wheeling,WV,West Virginia,Ohio,75392,world.usa.west virginia,world.usa.west virginia.ohio,world.usa.west virginia.ohio.wheeling
+Morgantown,Morgantown,WV,West Virginia,Monongalia,72458,world.usa.west virginia,world.usa.west virginia.monongalia,world.usa.west virginia.monongalia.morgantown
+Weirton,Weirton,WV,West Virginia,Hancock,65578,world.usa.west virginia,world.usa.west virginia.hancock,world.usa.west virginia.hancock.weirton
+Parkersburg,Parkersburg,WV,West Virginia,Wood,62566,world.usa.west virginia,world.usa.west virginia.wood,world.usa.west virginia.wood.parkersburg
+Beckley,Beckley,WV,West Virginia,Raleigh,57942,world.usa.west virginia,world.usa.west virginia.raleigh,world.usa.west virginia.raleigh.beckley
+Bluefield,Bluefield,WV,West Virginia,Mercer,40640,world.usa.west virginia,world.usa.west virginia.mercer,world.usa.west virginia.mercer.bluefield
+Clarksburg,Clarksburg,WV,West Virginia,Harrison,40403,world.usa.west virginia,world.usa.west virginia.harrison,world.usa.west virginia.harrison.clarksburg
+Fairmont,Fairmont,WV,West Virginia,Marion,32847,world.usa.west virginia,world.usa.west virginia.marion,world.usa.west virginia.marion.fairmont
+Milwaukee,Milwaukee,WI,Wisconsin,Milwaukee,1365787,world.usa.wisconsin,world.usa.wisconsin.milwaukee,world.usa.wisconsin.milwaukee.milwaukee
+Madison,Madison,WI,Wisconsin,Dane,447245,world.usa.wisconsin,world.usa.wisconsin.dane,world.usa.wisconsin.dane.madison
+Appleton,Appleton,WI,Wisconsin,Outagamie,220570,world.usa.wisconsin,world.usa.wisconsin.outagamie,world.usa.wisconsin.outagamie.appleton
+Green Bay,Green Bay,WI,Wisconsin,Brown,207557,world.usa.wisconsin,world.usa.wisconsin.brown,world.usa.wisconsin.brown.green bay
+Racine,Racine,WI,Wisconsin,Racine,130142,world.usa.wisconsin,world.usa.wisconsin.racine,world.usa.wisconsin.racine.racine
+Kenosha,Kenosha,WI,Wisconsin,Kenosha,124972,world.usa.wisconsin,world.usa.wisconsin.kenosha,world.usa.wisconsin.kenosha.kenosha
+Eau Claire,Eau Claire,WI,Wisconsin,Eau Claire,107404,world.usa.wisconsin,world.usa.wisconsin.eau claire,world.usa.wisconsin.eau claire.eau claire
+La Crosse,La Crosse,WI,Wisconsin,La Crosse,100693,world.usa.wisconsin,world.usa.wisconsin.la crosse,world.usa.wisconsin.la crosse.la crosse
+Oshkosh,Oshkosh,WI,Wisconsin,Winnebago,75536,world.usa.wisconsin,world.usa.wisconsin.winnebago,world.usa.wisconsin.winnebago.oshkosh
+Wausau,Wausau,WI,Wisconsin,Marathon,73593,world.usa.wisconsin,world.usa.wisconsin.marathon,world.usa.wisconsin.marathon.wausau
+Cheyenne,Cheyenne,WY,Wyoming,Laramie,79484,world.usa.wyoming,world.usa.wyoming.laramie,world.usa.wyoming.laramie.cheyenne
+Casper,Casper,WY,Wyoming,Natrona,67598,world.usa.wyoming,world.usa.wyoming.natrona,world.usa.wyoming.natrona.casper
+Gillette,Gillette,WY,Wyoming,Campbell,36032,world.usa.wyoming,world.usa.wyoming.campbell,world.usa.wyoming.campbell.gillette
+Laramie,Laramie,WY,Wyoming,Albany,33929,world.usa.wyoming,world.usa.wyoming.albany,world.usa.wyoming.albany.laramie
+Rock Springs,Rock Springs,WY,Wyoming,Sweetwater,25913,world.usa.wyoming,world.usa.wyoming.sweetwater,world.usa.wyoming.sweetwater.rock springs
+Sheridan,Sheridan,WY,Wyoming,Sheridan,19320,world.usa.wyoming,world.usa.wyoming.sheridan,world.usa.wyoming.sheridan.sheridan
+Jackson,Jackson,WY,Wyoming,Teton,12576,world.usa.wyoming,world.usa.wyoming.teton,world.usa.wyoming.teton.jackson
+Riverton,Riverton,WY,Wyoming,Fremont,12445,world.usa.wyoming,world.usa.wyoming.fremont,world.usa.wyoming.fremont.riverton
+Green River,Green River,WY,Wyoming,Sweetwater,11906,world.usa.wyoming,world.usa.wyoming.sweetwater,world.usa.wyoming.sweetwater.green river
+Evanston,Evanston,WY,Wyoming,Uinta,11319,world.usa.wyoming,world.usa.wyoming.uinta,world.usa.wyoming.uinta.evanston
