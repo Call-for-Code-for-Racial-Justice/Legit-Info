@@ -81,7 +81,7 @@ class Command(BaseCommand):
         self.primray = None
         self.secondary = None
         self.tertiary = None
-        
+
         self.fob = FOB_Storage(settings.FOB_METHOD)
         self.use_api = False
         self.after = None
@@ -94,8 +94,6 @@ class Command(BaseCommand):
             state_id_table[state] = state_id
         self.id_table = state_id_table
         return None
-
-
 
     def add_arguments(self, parser):
         parser.add_argument("--api", action="store_true",
@@ -126,14 +124,14 @@ class Command(BaseCommand):
         for imp in impacts:
             impact_list.append(imp.text)
         self.impact_list = impact_list
-        
+
         try:
             self.load_wordmap(impact_list)
-        excep Exception as e:
+        except Exception as e:
             err_msg = "133:Load Wordmap: {}".format(e)
             logger.error(err_msg, exc_info=True)
             raise AnalyzeTextError(err_msg)
-        
+
         locations = Location.objects.filter(legiscan_id__gt=0)
         for loc in locations:
             state_id = loc.legiscan_id
@@ -192,13 +190,13 @@ class Command(BaseCommand):
             print(marker, impact)
 
         self.wordmap = wordmap
-        self.secondary_impacts = secondary_impacts
+        self.secondary_impacts = secondary_list
 
         primary, secondary, tertiary = [], [], []
         for term in wordmap:
             if wordmap[term] in impact_list:
                 primary.append([term, wordmap[term]])
-            elif wordmap[term] in secondary_impacts:
+            elif wordmap[term] in secondary_list:
                 secondary.append([term, wordmap[term]])
             else:
                 tertiary.append([term, wordmap[term]])

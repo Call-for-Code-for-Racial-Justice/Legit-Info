@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import datetime as DT
 import os
 
-from django.utils.log import DEFAULT_LOGGING
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -62,8 +60,8 @@ LOGGING = {
     'version': 1,
     # Version of logging
     'disable_existing_loggers': False,
- 
-    'filters':{
+
+    'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse',
         },
@@ -71,14 +69,14 @@ LOGGING = {
             '()': 'django.utils.log.RequireDebugTrue',
         },
     },
- 
-    'formatters':{
+
+    'formatters': {
         'django.server': {
             '()': 'django.utils.log.ServerFormatter',
             'format': '[{server_time}] {message}',
             'style': '{',
         },
-        'full':{
+        'full': {
             'format': '{asctime} {module}:{funcName} [{levelname}] {message}',
             'datefmt': '%m-%d %H:%M:%S',                 # 24-hour clock UTC
             'style': '{',
@@ -89,7 +87,7 @@ LOGGING = {
         'console': {
             'level': 'INFO',
             'class': 'logging.StreamHandler',
-            'formatter':'full'
+            'formatter': 'full'
         },
         'django.server': {
             'level': 'INFO',
@@ -97,16 +95,16 @@ LOGGING = {
             'formatter': 'django.server',
         },
         'null': {
-            'level':'DEBUG',
-            'class':'logging.NullHandler',
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
         },
         'log_file': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'maxBytes': 1024 * 1024 * 1,  #1 MB
+            'maxBytes': 1024 * 1024 * 1,  # 1 MB
             'backupCount': 7,
             'filename': './logs/cfc_app.log',
-            'formatter':'full'
+            'formatter': 'full'
         },
 
     },
@@ -258,7 +256,8 @@ else:
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME':
-        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        ('django.contrib.auth.password_validation'
+         '.UserAttributeSimilarityValidator'),
     },
     {
         'NAME':

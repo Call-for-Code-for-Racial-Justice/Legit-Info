@@ -19,7 +19,7 @@ class KeyCounter():
         self.dict = {}
         self.keys = []
         if not keys:
-            self.keys=keys
+            self.keys = keys
         self.keys_min = None
         self.keys_max = None
         self.count = 0
@@ -38,10 +38,10 @@ class KeyCounter():
         else:
             self.dict[key] = 1
 
-        if self.keys_max == None:
+        if self.keys_max is None:
             self.keys_min = key
             self.keys_max = key
-            
+
         elif key < self.keys_min:
             self.keys_min = key
 
@@ -55,8 +55,8 @@ class KeyCounter():
         print(self.name)
         print("Number considered: ", self.count)
         if self.count:
-            print("Minimum: [{}]  Maximum [{}]".format(self.keys_min, 
-                                                   self.keys_max))
+            print("Minimum: [{}]  Maximum [{}]".format(self.keys_min,
+                                                       self.keys_max))
 
             num = 0
             print(' ')
@@ -70,7 +70,6 @@ class KeyCounter():
                         break
         print(' ')
         return None
-            
 
 
 if __name__ == "__main__":
@@ -78,7 +77,7 @@ if __name__ == "__main__":
 
     counter = KeyCounter('Test1')
     counter.key_results()
-  
+
     counter = KeyCounter('Test2')
     counter.consider_key("Hello")
     counter.key_results()
@@ -90,7 +89,7 @@ if __name__ == "__main__":
 
     counter.toplist = False
     counter.key_results()
-  
+
     counter = KeyCounter("Test 4")
     for n in range(100):
         counter.consider_key(n)
@@ -111,4 +110,4 @@ if __name__ == "__main__":
     counter.limit = 5
     counter.key_results()
 
-#end
+# end

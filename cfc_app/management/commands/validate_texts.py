@@ -23,6 +23,7 @@ UpRegex = re.compile(r"^[A-Z][.]$")
 LowRegex = re.compile(r"^[a-z][.]$")
 FullRegex = re.compile(r"^[A-Z]\w* .*[a-z][.]$")
 
+
 class Command(BaseCommand):
 
     help = ("test1")
@@ -71,7 +72,7 @@ class Command(BaseCommand):
         up_line = False
         low_line = False
         numfull = 0
-        
+
         for line in lines:
             nlen = len(line)
             self.slen.consider_key(nlen)
@@ -108,8 +109,8 @@ class Command(BaseCommand):
                     low_line = True
 
         if (sec_line and dot_line
-            and num_line and up_line and low_line):
-                print("USE THIS: ",filename)
+                and num_line and up_line and low_line):
+            print("USE THIS: ", filename)
         numsen = len(lines)
         self.numsen.consider_key(numsen)
         self.fullsen.consider_key(numfull)

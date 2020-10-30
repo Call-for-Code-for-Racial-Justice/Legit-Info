@@ -118,8 +118,8 @@ class Command(BaseCommand):
             try:
                 self.fetch_dataset(state, state_id)
             except Exception as e:
-                err_msg = "117:Fetch Error {}".format(error)
-                logger.error(err_msg, exc_info=True)           
+                err_msg = "117:Fetch Error {}".format(e)
+                logger.error(err_msg, exc_info=True)
                 raise GetDatasetError
 
         # Show status of all files we expect to have now

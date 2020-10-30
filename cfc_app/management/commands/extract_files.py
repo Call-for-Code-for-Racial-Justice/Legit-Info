@@ -25,7 +25,6 @@ from titlecase import titlecase
 import tempfile
 import re
 from random import randint
-import os
 
 # Django and other third-party imports
 from django.core.management.base import BaseCommand, CommandError
@@ -112,7 +111,7 @@ class Command(BaseCommand):
         try:
             self.parse_options(options)
         except Exception as e:
-            err_msg = '116: Parse Error input options'
+            err_msg = '116: Parse Error input options. {}'.format(e)
             logger.error(err_msg, exc_info=True)
             raise ExtractError(err_msg)
 
@@ -175,7 +174,7 @@ class Command(BaseCommand):
                 try:
                     self.process_json(state, session_id, json_name)
                 except Exception as e:
-                    err_msg = '178: Process Error'
+                    err_msg = '178: Process Error. {}'.format(e)
                     logger.error(err_msg, exc_info=True)
                     raise ExtractError(err_msg)
 
@@ -216,7 +215,6 @@ class Command(BaseCommand):
         self.starting_msg = starting
 
         return None
-
 
     def process_json(self, state, session_id, json_name):
         """ Process CC-Dataset-NNNN.json file """
@@ -290,7 +288,8 @@ class Command(BaseCommand):
             extension = self.determine_extension(chosen['mime'])
         else:
             warn_msg = "293:No texts found for {}-{}-{}"
-            logger.warning(warn_msg.format(bill_state, bill_number, session_id))
+            logger.warning(warn_msg.format(
+                bill_state, bill_number, session_id))
             return processed
 
         # Generate the key to be used to refer to this legislation.
@@ -524,7 +523,7 @@ class Command(BaseCommand):
     def form_sentence(self, line, charlimit):
 
         # Remove trailing spaces, and add period at end of sentence.
-        newline = newline.strip()
+        newline = line.strip()
         if not newline.endswith('.'):
             newline = newline + '.'
 

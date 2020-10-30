@@ -45,8 +45,8 @@ class Oneline():
         newline = self.oneline
         header = ""
         if "\n" in newline:
-            newline = join_lines(newline)
-        
+            newline = Oneline.join_lines(newline)
+
         newline = Oneline.common_acronyms(newline)
 
         if "_TEXT_" in newline:
@@ -57,7 +57,7 @@ class Oneline():
                 summary = Oneline.common_acronyms(headings[1])
             else:
                 front, summary = sections[0], ""
-            
+
             header = "{} _SUMMARY {} _TEXT_ \n".format(front, summary)
             newline = Oneline.common_acronyms(sections[1])
 
@@ -65,15 +65,15 @@ class Oneline():
         c_list, merges = Oneline.merge_sentences(a_list)
         a_list = c_list
 
-        logger.debug("61:Merges={} Lines={}".format(merges,len(a_list)))
-            
+        logger.debug("61:Merges={} Lines={}".format(merges, len(a_list)))
+
         self.oneline = header + '\n'.join(a_list)
         return self
 
     def common_acronyms(line):
         newline = line.replace(r'\x91', '')
-        newline = re.sub(r"H.\s*B.\s*No.\s*(\d)", r"HB\1", newline)  
-        newline = re.sub(r"S.\s*B.\s*No.\s*(\d)", r"SB\1", newline)  
+        newline = re.sub(r"H.\s*B.\s*No.\s*(\d)", r"HB\1", newline)
+        newline = re.sub(r"S.\s*B.\s*No.\s*(\d)", r"SB\1", newline)
         newline = re.sub(r"H.\s*R.\s*No.\s*(\d)", r"HR\1", newline)
         newline = re.sub(r"S.\s*R.\s*No.\s*(\d)", r"SR\1", newline)
         newline = re.sub(r"C.\s*R.\s*No.\s*(\d)", r"CR\1", newline)
@@ -85,10 +85,10 @@ class Oneline():
         newline = re.sub(r"(st|nd|rd|th) G.A.", r"\1-GA ", newline)
         newline = re.sub(r"(Sec|Sub|SEC)[.]\s*([0-9]+)", r" \1#\2 ", newline)
         newline = re.sub(r"[(][0-9]+[.][ 0-9]+[)]", r" ", newline)
-        newline = re.sub(r"[0-9]+[.][0-9]+[,]? and [0-9]+[.][0-9]+", 
-                         r" ",newline)
+        newline = re.sub(r"[0-9]+[.][0-9]+[,]? and [0-9]+[.][0-9]+",
+                         r" ", newline)
         newline = re.sub(r"[0-9]+[.][0-9]+\s*[,]", r" ", newline)
-        newline = re.sub(r"ection[s]?\s*and\s*[Ss]ection[s]?", 
+        newline = re.sub(r"ection[s]?\s*and\s*[Ss]ection[s]?",
                          r"ections", newline)
         newline = re.sub(r"\s+;", ";", newline)
         newline = re.sub(r"\s+,", ",", newline)
@@ -98,17 +98,17 @@ class Oneline():
 
     def merge_sentences(a_list):
         if a_list:
-            b_list = [ "" ]
+            b_list = [""]
         merges = 0
         nextmerge = True
-        
+
         for n in range(len(a_list)):
             merge = False
             sentence = a_list[n].strip()
             if n > 0:
                 if sentence == "":
                     merge = True
-                if len(sentence)>0 and " " not in sentence:
+                if len(sentence) > 0 and " " not in sentence:
                     merge = True
 
             if merge:
@@ -124,7 +124,6 @@ class Oneline():
         if merges > 0:
             logger.debug("Merges: {}".format(merges))
         return b_list, merges
-
 
     def header_file_name(self, filename):
         self.add_text("_FILE_ "+filename)
@@ -177,7 +176,7 @@ class Oneline():
         header, sections = {}, []
         # import pdb; pdb.set_trace()
         newline = Oneline.join_lines(text)
-        
+
         if "_TEXT_" in newline:
             sections = newline.split('_TEXT_')
             logger.debug("Parsing: "+newline[:80])
@@ -270,7 +269,6 @@ if __name__ == "__main__":
     # p3.split_sentences()
     # print("==["+p3.oneline+"]==")
 
-
     # p4 = Oneline()
     # p4.add_text("This is a test.\n\n\n\nSec.\n\n3.\n\n\n5.\n\n\n"
     #             "has been withdrawn.")
@@ -284,9 +282,8 @@ if __name__ == "__main__":
           "133rd G.A., 134th G.A. Am. Sub. Sec. 3   Sub. 4  SEC. 5")
 
     print(t1)
-    
-    print(Oneline.common_acronyms(t1))
 
+    print(Oneline.common_acronyms(t1))
 
     with open("NLTK-sample.txt", "r") as in_file:
         textdata = in_file.read()
