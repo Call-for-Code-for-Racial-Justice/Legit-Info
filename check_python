@@ -1,12 +1,24 @@
 #!/bin/bash
-module="$1"
 program="$0"
+module="$1"
+help1="Usage: \t$program all       \t# all python modules in this dir and below"
+help2="       \t$program myprog.py \t# scan single program module only"
+if [[ "$#" == 0 ]] ; then
+    echo -e $help1
+    echo -e $help2
+    exit 4;
+elif [[ ${module:0:1} == "-" ]]; then 
+    echo -e $help1
+    echo -e $help2
+    exit 0
+else
 migs="migrations"
 inits="__init__."
-if [[ "$module" == "all" ]]; then
-find . -iname "*.py" -exec "$program" {} \;
-elif [[ ("$module" != *"$migs"*) && ("$module" != *"$inits"*) ]]; then
-  echo "Check_python: $1"
-  # pylint "$module"
-  flake8 "$module"
+    if [[ "$module" == "all" ]]; then
+    find . -iname "*.py" -exec "$program" {} \;
+    elif [[ ("$module" != *"$migs"*) && ("$module" != *"$inits"*) ]]; then
+    echo "Check_python: $1"
+    # pylint "$module"
+    flake8 "$module"
+    fi
 fi

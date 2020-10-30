@@ -20,12 +20,12 @@ Licensed under Apache 2.0, see LICENSE for details
 """
 
 # System imports
-import json
+import logging
 import os
 import re
 
 # Django and other third-party imports
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
@@ -40,12 +40,13 @@ from ibm_watson.natural_language_understanding_v1 import (Features,
 
 # Application imports
 from cfc_app.FOB_Storage import FOB_Storage
-from cfc_app.LegiscanAPI import LegiscanAPI, LEGISCAN_ID, LegiscanError
+from cfc_app.LegiscanAPI import LEGISCAN_ID
 from cfc_app.models import Location, Impact, Law
 from cfc_app.ShowProgress import ShowProgress
 from cfc_app.Oneline import Oneline
 
 # Debug with:  import pdb; pdb.set_trace()
+logger = logging.getLogger(__name__)
 
 # Constants for IBM Watson NLU credentials in Environment Variables
 NLU_APIKEY = os.getenv('NLU_APIKEY', None)
@@ -56,6 +57,11 @@ keyRegex = re.compile(r"^\w\w-(.*)-")
 mapRegex = re.compile(r'["](.*)["]\s*,\s*["](.*)["]')
 
 RLIMIT = 10   # number of phrases to be returned by IBM Watson NLU
+
+
+class AnalyzeTextError(CommandError):
+    pass
+
 
 class Command(BaseCommand):
 
@@ -69,44 +75,27 @@ class Command(BaseCommand):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        impacts = Impact.objects.all().exclude(text='None')
-        impact_list = []
-        for imp in impacts:
-            impact_list.append(imp.text)
-        self.impact_list = impact_list
-
-        wordmap, secondary_impacts = self.load_wordmap(impact_list)
-        self.wordmap = wordmap
-        self.secondary_impacts = secondary_impacts
-        primary, secondary, tertiary = [], [], []
-        for term in wordmap:
-            if wordmap[term] in impact_list:
-                primary.append([term, wordmap[term]])
-            elif wordmap[term] in secondary_impacts:
-                secondary.append([term, wordmap[term]])
-            else:
-                tertiary.append([term, wordmap[term]])
-        self.primary = primary
-        self.secondary = secondary
-        self.tertiary = tertiary
-
-        print('Primary: {}, with {} terms'.format(impact_list, len(primary)))
-        print('Secondary: {}, with {} terms'.format(secondary_impacts,
-                                                    len(secondary)))
-        print('Tertiary: {}, with {} terms'.format(['None'], len(tertiary)))
-
+        self.impact_list = None
+        self.wordmap = None
+        self.secondary_impacts = None
+        self.primray = None
+        self.secondary = None
+        self.tertiary = None
+        
         self.fob = FOB_Storage(settings.FOB_METHOD)
         self.use_api = False
         self.after = None
         self.limit = 10
         self.rel_start = '(MAP)'
-        
+
         state_id_table = {}
         for state_id in LEGISCAN_ID:
             state = LEGISCAN_ID[state_id]['code']
             state_id_table[state] = state_id
         self.id_table = state_id_table
         return None
+
+
 
     def add_arguments(self, parser):
         parser.add_argument("--api", action="store_true",
@@ -128,10 +117,23 @@ class Command(BaseCommand):
         if options['api']:
             self.use_api = True
             self.rel_start = '(NLU)'
-            print('Analyzing with IBM Watson NLU API')
+            logger.info('Analyzing with IBM Watson NLU API')
         else:
-            print('Analyzing with internal Wordmap ONLY')
+            logger.info('Analyzing with internal Wordmap ONLY')
 
+        impacts = Impact.objects.all().exclude(text='None')
+        impact_list = []
+        for imp in impacts:
+            impact_list.append(imp.text)
+        self.impact_list = impact_list
+        
+        try:
+            self.load_wordmap(impact_list)
+        excep Exception as e:
+            err_msg = "133:Load Wordmap: {}".format(e)
+            logger.error(err_msg, exc_info=True)
+            raise AnalyzeTextError(err_msg)
+        
         locations = Location.objects.filter(legiscan_id__gt=0)
         for loc in locations:
             state_id = loc.legiscan_id
@@ -142,8 +144,73 @@ class Command(BaseCommand):
                 if state != options['state']:
                     continue
 
-            print('Processing: {} ({})'.format(loc.desc, state))
-            self.process_state(state)
+            logger.info('153:Processing: {} ({})'.format(loc.desc, state))
+
+            try:
+                self.process_state(state)
+            except Exception as e:
+                err_msg = "158:Process State Error {}".format(e)
+                logger.error(err_msg, exc_info=True)
+                raise AnalyzeTextError(err_msg)
+
+        return None
+
+    def load_wordmap(self, impact_list):
+        wordmap, categories = {}, []
+        mapname = os.path.join(settings.SOURCE_ROOT, 'wordmap.csv')
+        print(mapname)
+
+        with open(mapname, 'r') as mapfile:
+            maplines = mapfile.readlines()
+
+        print(len(maplines))
+        for line in maplines:
+            mo = mapRegex.search(line)
+            if mo:
+                term = mo.group(1).strip()
+                impact_category = mo.group(2).strip()
+                if term == 'term' or impact_category == 'impact':
+                    continue
+                if impact_category.upper() in ['REMOVE']:
+                    continue
+                if impact_category.upper() in ['NONE']:
+                    impact_category = 'None'
+                wordmap[term] = impact_category
+                if impact_category not in categories:
+                    categories.append(impact_category)
+            else:
+                print("Regex Error", line)
+
+        print('Impacts marked with * match cfc_app_impact table')
+        secondary_list = []
+        for impact in categories:
+            marker = ' '
+            if impact in impact_list:
+                marker = '*'
+            elif impact != 'None':
+                secondary_list.append(impact)
+            print(marker, impact)
+
+        self.wordmap = wordmap
+        self.secondary_impacts = secondary_impacts
+
+        primary, secondary, tertiary = [], [], []
+        for term in wordmap:
+            if wordmap[term] in impact_list:
+                primary.append([term, wordmap[term]])
+            elif wordmap[term] in secondary_impacts:
+                secondary.append([term, wordmap[term]])
+            else:
+                tertiary.append([term, wordmap[term]])
+
+        status_msg = '{}: {}, with {} terms'
+        logger.debug(status_msg.format("Primary", primary, len(primary)))
+        logger.debug(status_msg.format("Secondary", secondary, len(secondary)))
+        logger.debug(status_msg.format("Tertiary", tertiary, len(tertiary)))
+
+        self.primary = primary
+        self.secondary = secondary
+        self.tertiary = tertiary
         return None
 
     def process_state(self, state):
@@ -161,16 +228,16 @@ class Command(BaseCommand):
             header = Oneline.parse_header(textdata)
             if 'BILLID' in header:
                 bill_id = header['BILLID']
+                logger.debug("166:bill_id={}".format(bill_id))
                 self.process_legislation(filename, textdata, header)
                 dot.show()
                 num += 1
                 if self.limit > 0 and num >= self.limit:
                     break
             else:
-                print('No bill_id found in header, removing: ', filename)
+                logger.info('No bill_id found in header, removing: ', filename)
                 self.fob.remove_item(filename)
                 continue
-            
 
         dot.end()
         return None
@@ -178,7 +245,7 @@ class Command(BaseCommand):
     def process_legislation(self, filename, extracted_lines, header):
 
         extracted_text = Oneline.join_sentences(extracted_lines)
-        extracted_text = extracted_text.replace('"', r'|').replace("'",r"|")
+        extracted_text = extracted_text.replace('"', r'|').replace("'", r"|")
 
         if self.use_api:
             concept = self.Relevance_NLU(extracted_text)
@@ -246,6 +313,27 @@ class Command(BaseCommand):
                     break
         return None
 
+    def classify_impact(self, concept):
+        impact_chosen = 'None'
+        revlist = []
+        for rel in concept:
+            term = rel['text'].strip()
+            if term in self.wordmap:
+                revlist.append([term, self.wordmap[term]])
+            else:
+                revlist.append([term, 'Unknown'])
+
+        # Choose the most relevant impact.
+        for rel in revlist:
+            impact = rel[1]
+            if impact_chosen not in self.impact_list:
+                impact_chosen = impact
+
+        if impact_chosen not in self.impact_list:
+            impact_chosen = 'None'
+
+        return revlist, impact_chosen
+
     def save_law(self, key, header, rel, impact_chosen):
 
         # If record exists, check if this is newer..
@@ -257,8 +345,8 @@ class Command(BaseCommand):
 
             # If the record is up-to-date and matches the
             # impact chosen, leave it alone
-            if (law.doc_date 
-                    and doc_date < law.doc_date 
+            if (law.doc_date
+                    and doc_date < law.doc_date
                     and impact_chosen == law.impact.text):
                 return None
 
@@ -290,62 +378,4 @@ class Command(BaseCommand):
         print('Database record {} for {}'.format(result, key))
         return None
 
-    def load_wordmap(self, impact_list):
-        wordmap, categories = {}, []
-        mapname = os.path.join(settings.SOURCE_ROOT, 'wordmap.csv')
-        print(mapname)
-
-        with open(mapname, 'r') as mapfile:
-            maplines = mapfile.readlines()
-
-        print(len(maplines))
-        for line in maplines:
-            mo = mapRegex.search(line)
-            if mo:
-                term = mo.group(1).strip()
-                impact_category = mo.group(2).strip()
-                if term == 'term' or impact_category == 'impact':
-                    continue
-                if impact_category.upper() in ['REMOVE']:
-                    continue
-                if impact_category.upper() in ['NONE']:
-                    impact_category = 'None'
-                wordmap[term] = impact_category
-                if impact_category not in categories:
-                    categories.append(impact_category)
-            else:
-                print("Regex Error", line)
-
-        print('Impacts marked with * match cfc_app_impact table')
-        secondary_list = []
-        for impact in categories:
-            marker = ' '
-            if impact in impact_list:
-                marker = '*'
-            elif impact != 'None':
-                secondary_list.append(impact)
-            print(marker, impact)
-
-        return wordmap, secondary_list
-
-    def classify_impact(self, concept):
-        impact_chosen = 'None'
-        revlist = []
-        for rel in concept:
-            term = rel['text'].strip()
-            if term in self.wordmap:
-                revlist.append([term, self.wordmap[term]])
-            else:
-                revlist.append([term, 'Unknown'])
-
-        # Choose the most relevant impact.
-        for rel in revlist:
-            impact = rel[1]
-            if impact_chosen not in self.impact_list:
-                impact_chosen = impact
-
-        if impact_chosen not in self.impact_list:
-            impact_chosen = 'None'
-
-        return revlist, impact_chosen
-    # End of module
+# End of module

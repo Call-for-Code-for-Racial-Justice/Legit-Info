@@ -16,18 +16,23 @@ Licensed under Apache 2.0, see LICENSE for details
 import datetime as DT
 import json
 import logging
-logger = logging.getLogger(__name__)
 
 # Django and other third-party imports
-from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
+from django.core.management.base import BaseCommand, CommandError
 
 # Application imports
-from cfc_app.models import Location, Hash
-from cfc_app.LegiscanAPI import LegiscanAPI, LEGISCAN_ID, LegiscanError
 from cfc_app.FOB_Storage import FOB_Storage
+from cfc_app.LegiscanAPI import LegiscanAPI, LEGISCAN_ID, LegiscanError
+from cfc_app.models import Location, Hash
 
 # Debug with:  import pdb; pdb.set_trace()
+logger = logging.getLogger(__name__)
+
+
+class GetDatasetError(CommandError):
+    pass
+
 
 class Command(BaseCommand):
     """ Get datasetlist, and datasets for selected sessions """
@@ -78,7 +83,7 @@ class Command(BaseCommand):
             self.state = options['state']
             starting += ' --state '+self.state
         self.frequency = options['frequency']
-        starting= "{} --frequency {}".format(starting, self.frequency)
+        starting = "{} --frequency {}".format(starting, self.frequency)
         logger.info(starting)
 
         self.list_data = self.recent_enough()
@@ -110,7 +115,12 @@ class Command(BaseCommand):
 
             # Get dataset and master files, up to the --limit set
 
-            self.fetch_dataset(state, state_id)
+            try:
+                self.fetch_dataset(state, state_id)
+            except Exception as e:
+                err_msg = "117:Fetch Error {}".format(error)
+                logger.error(err_msg, exc_info=True)           
+                raise GetDatasetError
 
         # Show status of all files we expect to have now
         self.datasets_found(states)
@@ -197,7 +207,7 @@ class Command(BaseCommand):
                     if self.fob.item_exists(session_name):
                         fetch_new = True
 
-                    else:   
+                    else:
                         entry_date = self.date_type(entry['dataset_date'])
                         hashcode, hashdate = '', settings.LONG_AGO
                         hash = Hash.find_item_name(session_name)
@@ -209,7 +219,8 @@ class Command(BaseCommand):
                             fetch_new = True
 
                     if fetch_new and self.use_api and self.leg.api_ok:
-                        logger.info('Fetching {}: {}'.format(state, session_id))
+                        logger.info('Fetching {}: {}'.format(
+                            state, session_id))
 
                         session_data = self.leg.getDataset(session_id,
                                                            access_key)
@@ -283,6 +294,6 @@ class Command(BaseCommand):
             year_range += '-' + str(entry['year_end'])
 
         logger.info(self.StateForm.format(entry['session_id'],
-                                    year_range, entry['dataset_date'],
-                                    entry['dataset_size']))
+                                          year_range, entry['dataset_date'],
+                                          entry['dataset_size']))
         return None

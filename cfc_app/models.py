@@ -71,12 +71,12 @@ class Location(models.Model):
         # Note the legiscan_id is only needed for States in the United States.
 
         usa = Location(desc='United States', shortname='usa', legiscan_id=52,
-                   hierarchy='world.usa', govlevel='country')
+                       hierarchy='world.usa', govlevel='country')
         usa.parent = world
         usa.save()
 
         arizona = Location(desc='Arizona, USA', shortname='az', legiscan_id=3,
-                       hierarchy='world.usa.az', govlevel='state')
+                           hierarchy='world.usa.az', govlevel='state')
         arizona.parent = usa
         arizona.save()
 
@@ -102,15 +102,15 @@ class Impact(models.Model):
         return self.text
 
     def load_defaults():
-    # The 'None' option allows legislation to be hidden from all
-    # searches.  This is useful for legislation that is fetched
-    # through automation but mis-classified.  Setting impact=None
-    # will prevent automation from fetching updated versions of this.
+        # The 'None' option allows legislation to be hidden from all
+        # searches.  This is useful for legislation that is fetched
+        # through automation but mis-classified.  Setting impact=None
+        # will prevent automation from fetching updated versions of this.
 
-    # Impacts are displayed in the order they are added in this table.
-    # Any new impacts added will appear at the bottom of the list.
+        # Impacts are displayed in the order they are added in this table.
+        # Any new impacts added will appear at the bottom of the list.
         default_impacts = ['None', 'Healthcare', 'Safety', 'Environment',
-                       'Transportation', 'Jobs']
+                           'Transportation', 'Jobs']
         for entry in default_impacts:
             new_impact = Impact()
             new_impact.text = entry

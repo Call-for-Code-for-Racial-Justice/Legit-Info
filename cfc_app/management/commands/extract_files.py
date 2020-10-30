@@ -17,32 +17,31 @@ import base64
 import datetime as DT
 import json
 import logging
-logger = logging.getLogger(__name__)
-import os
-from random import randint
-import re
-import tempfile
-from titlecase import titlecase
+from urllib.parse import urlparse
+import nltk
+from bs4 import BeautifulSoup
 import zipfile
+from titlecase import titlecase
+import tempfile
+import re
+from random import randint
+import os
 
 # Django and other third-party imports
-from bs4 import BeautifulSoup
+from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
-from django.core.management.base import BaseCommand
-import nltk
-import pdfminer
-from urllib.parse import urlparse
 
 # Application imports
-from cfc_app.FOB_Storage import FOB_Storage
-from cfc_app.ShowProgress import ShowProgress
-from cfc_app.PDFtoTEXT import PDFtoTEXT
-from cfc_app.models import Law, Location, Hash
-from cfc_app.LegiscanAPI import LegiscanAPI, LEGISCAN_ID, LegiscanError
-from cfc_app.Oneline import Oneline
 from cfc_app.DataBundle import DataBundle
+from cfc_app.Oneline import Oneline
+from cfc_app.LegiscanAPI import LegiscanAPI, LEGISCAN_ID, LegiscanError
+from cfc_app.models import Law, Location, Hash
+from cfc_app.PDFtoTEXT import PDFtoTEXT
+from cfc_app.ShowProgress import ShowProgress
+from cfc_app.FOB_Storage import FOB_Storage
 
 # Debug with:   import pdb; pdb.set_trace()
+logger = logging.getLogger(__name__)
 
 PARSER = "lxml"
 TITLE_LIMIT = 200
@@ -64,6 +63,10 @@ billRegex = re.compile(r"^([A-Z]{2})/\d\d\d\d-(\d\d\d\d).*/bill/(\w*).json$")
 nameForm = "{}.{}"
 
 
+class ExtractError(CommandError):
+    pass
+
+
 class Command(BaseCommand):
     help = ("For each state, scan the associated CC-Dataset-NNNN.json "
             "fetching the legislation as either HTML or PDF file, and "
@@ -79,6 +82,7 @@ class Command(BaseCommand):
         self.dot = ShowProgress()
         self.api_limit = 0
         self.state = None
+        self.billno = None
         self.session_id = None
         self.limit = 10
         self.skip = False
@@ -87,6 +91,7 @@ class Command(BaseCommand):
         self.verbosity = 1  # System default is dots and error messages only
         nltk.download('punkt')
         self.nltk_loaded = True
+        self.starting_msg = ""
         return None
 
     def add_arguments(self, parser):
@@ -94,6 +99,7 @@ class Command(BaseCommand):
                             help="Invoke Legiscan.com API, if needed")
         parser.add_argument("--state", help="Process single state: AZ, OH")
         parser.add_argument("--session_id", help="Process this session only")
+        parser.add_argument("--bill", help="Process this bill number only")
         parser.add_argument("--limit", type=int, default=self.limit,
                             help="Number of bills to extract per state")
         parser.add_argument("--skip", action="store_true",
@@ -102,36 +108,16 @@ class Command(BaseCommand):
         return None
 
     def handle(self, *args, **options):
-        
-        starting = '====STARTING: extract_files'
-        if options['api']:
-            self.api_limit = 10
-            starting += ' --api'
 
-        starting_state = ''
-        if options['state']:
-            self.state = options['state']
-            starting_state += ' --state '+self.state
-
-        self.limit = options['limit']
-        starting= "{} --limit {}".format(starting, self.limit)
-
-        if options['skip']:
-            self.skip = True    
-            starting += ' --skip'
-
-        self.verbosity = options['verbosity']   # Default is 1
-        starting= "{} --verbosity {}".format(starting, self.verbosity)
-
-        if options['session_id']:
-            self.session_id = options['session_id']
-            starting += ' --session_id '+self.session_id
-            self.state = None
-        else:
-            starting += starting_state
+        try:
+            self.parse_options(options)
+        except Exception as e:
+            err_msg = '116: Parse Error input options'
+            logger.error(err_msg, exc_info=True)
+            raise ExtractError(err_msg)
 
         # import pdb; pdb.set_trace()
-        logger.info(starting)
+        logger.info(self.starting_msg)
 
         # Use the Django "Location" database to get list of locations
         # listed with valid (non-zero) Legiscan_id.  For example,
@@ -184,11 +170,53 @@ class Command(BaseCommand):
                 if self.limit > 0 and self.state_count >= self.limit:
                     break
                 session_id, json_name = session_detail
-                logger.debug("187:Session_id={} JSON={}".format(session_id, 
-                                                            json_name))
-                self.process_json(state, session_id, json_name)
+                logger.debug("173:Session_id={} JSON={}".format(session_id,
+                                                                json_name))
+                try:
+                    self.process_json(state, session_id, json_name)
+                except Exception as e:
+                    err_msg = '178: Process Error'
+                    logger.error(err_msg, exc_info=True)
+                    raise ExtractError(err_msg)
 
         return None
+
+    def parse_options(self, options):
+        starting = '====STARTING: extract_files'
+        if options['api']:
+            self.api_limit = 10
+            starting += ' --api'
+
+        starting_state = ''
+        if options['state']:
+            self.state = options['state']
+            starting_state += ' --state '+self.state
+
+        self.limit = options['limit']
+        starting = "{} --limit {}".format(starting, self.limit)
+
+        if options['skip']:
+            self.skip = True
+            starting += ' --skip'
+
+        self.verbosity = options['verbosity']   # Default is 1
+        starting = "{} --verbosity {}".format(starting, self.verbosity)
+
+        if options['session_id']:
+            self.session_id = options['session_id']
+            starting += ' --session_id '+self.session_id
+            self.state = None
+        else:
+            starting += starting_state
+
+        if options["bill"]:
+            self.billno = options["bill"]
+            starting += self.billno
+
+        self.starting_msg = starting
+
+        return None
+
 
     def process_json(self, state, session_id, json_name):
         """ Process CC-Dataset-NNNN.json file """
@@ -219,17 +247,23 @@ class Command(BaseCommand):
                 namelist = zf.namelist()
 
                 for path in namelist:
-                    
-                    if self.verbosity:
-                        self.dot.show()
+
                     if self.limit > 0 and self.state_count >= self.limit:
                         break
                     mo = billRegex.search(path)
                     if mo:
+                        bill_number = mo.group(3)
+                        if self.billno and bill_number != self.billno:
+                            continue
+
+                        if self.verbosity:
+                            self.dot.show()
+
                         logger.debug('229:PATH name: '+path)
                         json_data = zf.read(path).decode('UTF-8',
                                                          errors='ignore')
-                        logger.debug('232:JD: '+json_data[:50])
+
+                        logger.debug('232:JD: '+json_data[:75])
                         processed = self.process_source(mo, json_data)
                         self.state_count += processed
 
@@ -237,24 +271,33 @@ class Command(BaseCommand):
         return None
 
     def process_source(self, mo, json_data):
-
-        logger.debug('241:IN process_source')
+        """ Process the PDF/HTML source file """
+        processed = 0
         bill_state = mo.group(1)
         bill_number = mo.group(3)
+
         bill_json = json.loads(json_data)
+        logger.debug('245:state={} bill_number={}'.format(bill_state,
+                                                          bill_number))
 
         bill_detail = bill_json['bill']
         session_id = bill_detail['session_id']
         texts = bill_detail['texts']
-        # import pdb; pdb.set_trace()
 
         # If a bill has multiple versions, choose the latest one.
-        earliest_year, chosen = self.latest_text(texts)
-        extension = self.determine_extension(chosen['mime'])
+        if texts:
+            earliest_year, chosen = self.latest_text(texts)
+            extension = self.determine_extension(chosen['mime'])
+        else:
+            warn_msg = "293:No texts found for {}-{}-{}"
+            logger.warning(warn_msg.format(bill_state, bill_number, session_id))
+            return processed
 
         # Generate the key to be used to refer to this legislation.
         key = self.fob.BillText_key(bill_state, bill_number,
                                     session_id, earliest_year)
+        bill_detail['bill_number'] = bill_number
+        bill_detail['key'] = key
         bill_id = bill_detail['bill_id']
         title = titlecase(bill_detail['title'])
         bill_detail['title'] = title
@@ -269,6 +312,8 @@ class Command(BaseCommand):
                              bill_id=bill_id, doc_date=doc_date,
                              location=self.loc)
             law_record.save()
+        else:
+            logger.debug("275:LAW record already exists "+key)
 
         text_name = self.fob.BillText_name(key, "txt")
 
@@ -289,11 +334,18 @@ class Command(BaseCommand):
             else:
                 textdata = self.fob.download_text(text_name)
                 headers = Oneline.parse_header(textdata)
-                if 'CITE' in headers:
+                if ('CITE' in headers
+                        and headers['CITE'][:8] != 'Legiscan'
+                        and headers['CITE'][-7:] != 'general'):
                     bill_detail['cite_url'] = headers['CITE']
-                else:
-                    # No URL found, remove it so it is re-built next time
-                    self.fob.remove_item(text_name)
+                    logger.debug('297:OLD CITE_URL={}'.format(headers['CITE']))
+                elif ('CITE' in headers
+                        and headers['CITE'][:8] == 'Legiscan'):
+                    # No URL found, remove it so it is re-built next
+                    cite = "http://legiscan.com/{}/{}/{}".format(
+                        bill_state, bill_number, bill_detail['doc_date'][:4])
+                    bill_detail['cite_url'] = cite
+                    logger.debug('297:NEW CITE_URL={}'.format(cite))
 
         if not skipping:
             processed = self.process_bill(key, extension, bill_detail, chosen)
@@ -302,9 +354,10 @@ class Command(BaseCommand):
     def process_bill(self, key, extension, bill_detail, chosen):
         """ process individual PDF/HTML bill """
 
-        logger.debug('305:IN process_bill')
         bill_name = self.fob.BillText_name(key, extension)
         bill_hash = Hash.find_item_name(bill_name)
+        logger.debug('311:bill_name={} bill_hash={}'.format(bill_name,
+                                                            bill_hash))
 
         # If the source PDF/HTML exists, and the hash code matches,
         # then it is up-to-date and we can use it directly.
@@ -320,15 +373,17 @@ class Command(BaseCommand):
         source_file = bill_name
 
         if FOB_source:
+            logger.debug('328:Reading existing: '+bill_name)
             bindata = self.fob.download_binary(bill_name)
             source_file = "{} ({})".format(bill_name, settings.FOB_METHOD)
-            
+
         else:
             params = {}
             bill_bundle = DataBundle(bill_name)
             source = urlparse(chosen['state_link'])
             source_file = chosen['state_link']
-            if cite_url not in bill_detail:
+            logger.debug('337:state_link={}'.format(chosen['state_link']))
+            if 'cite_url' not in bill_detail:
                 bill_detail['cite_url'] = source_file
 
             if source.query:
@@ -349,23 +404,26 @@ class Command(BaseCommand):
             if result:
                 bindata = bill_bundle.content
                 if extension == "pdf" and bindata[:4] != b'%PDF':
-                    logger.error("352:Invalid PDF format found", bill_name)
+                    logger.error("352:Invalid PDF format found: "+bill_name)
                     bindata = None
 
             if bindata:
                 self.fob.upload_binary(bindata, bill_name)
-                saving_msg = "Saving file: ".format(bill_name)
+                saving_msg = "Saving file: {}".format(bill_name)
                 logger.debug("358:"+saving_msg)
                 if self.verbosity > 2:
                     print(saving_msg)
 
             elif self.api_limit > 0 and self.leg.api_ok:
-                logger.warning("363:Invoking Legiscan API: ".format(bill_name, 
-                                                                    doc_id))
+                warn_msg = "363:Invoking Legiscan API: {} doc_id={}"
+                logger.warning(warn_msg.format(bill_name, chosen['doc_id']))
                 response = self.leg.getBillText(chosen['doc_id'])
                 source_file = "getBillText doc_id="+str(chosen['doc_id'])
                 if 'cite_url' not in bill_detail:
-                    bill_detail['cite_url']="http://legiscan.com/"
+                    cite = "http://legiscan.com/{}/{}/{}".format(
+                        key[:2], bill_detail['bill_number'],
+                        bill_detail['doc_date'][:4])
+                    bill_detail['cite_url'] = cite
                 self.api_limit -= 1
                 if response:
                     json_data = json.loads(response)
@@ -388,7 +446,7 @@ class Command(BaseCommand):
             self.save_source_hash(bill_hash, bill_name, bill_detail, chosen)
             self.dot.show()
         else:
-            logger.error('391:Failure processing source: ', source_file)
+            logger.error('391:Failure processing source: ' + source_file)
         return processed
 
     def save_source_hash(self, bill_hash, bill_name, bill_detail, chosen):
@@ -401,12 +459,14 @@ class Command(BaseCommand):
             hash.generated_date = bill_detail['doc_date']
             hash.hashcode = bill_detail['change_hash']
             hash.size = bill_detail['doc_size']
+            logger.debug('417:INSERT cfc_app_law:{}'.format(bill_name))
             hash.save()
 
         else:
             bill_hash.generated_date = bill_detail['doc_date']
             bill_hash.hashcode = bill_detail['change_hash']
             bill_hash.size = bill_detail['doc_size']
+            logger.debug('424:UPDATE cfc_app_law:{}'.format(bill_name))
             bill_hash.save()
 
         return None
@@ -419,49 +479,32 @@ class Command(BaseCommand):
 
         self.add_header(text_line, bill_name, bill_detail)
         self.parse_html(billtext, text_line)
-        text_line.oneline = self.remove_section_numbers(text_line.oneline)
         self.write_file(text_line, text_name)
         return self
 
     def write_file(self, text_line, text_name):
         text_line.split_sentences()
-        logger.info('428:Writing: '+ text_name)
+        logger.info('428:Writing: ' + text_name)
         self.fob.upload_text(text_line.oneline, text_name)
         return
 
     def process_pdf(self, key, docdate, bill_detail, msg_bytes):
         """ Parse PDF file to extract text """
 
-        logger.debug("435:In Process_pdf")
+        logger.debug("435:key={}".format(key))
         input_str = ""
 
-        
-        temp_name = self.rand_key + ".pdf"
-        temp_path = os.path.join(settings.SOURCE_ROOT, temp_name)
-        with open(temp_path, "wb") as outfile:
-            outfile.write(msg_bytes)
-
- #       with tempfile.NamedTemporaryFile(suffix='.txt', prefix='tmp-',
- #                                        delete=True) as temp_out:
- #           logger.debug('PDFtoTEXT '+temp_path+" "+temp_out.name)
- #           import pdb; pdb.set_trace()
- #           PDFtoTEXT(temp_path, temp_out.name)
- #           temp_out.seek(0)
- #           input_str = temp_out.read().decode('UTF-8', errors='ignore')
-        # import pdb; pdb.set_trace()
-        miner = PDFtoTEXT(temp_path)
+        bill_name = self.fob.BillText_name(key, 'pdf')
+        miner = PDFtoTEXT(bill_name, msg_bytes)
         input_str = miner.convert_to_text()
 
         if input_str:
-            bill_name = self.fob.BillText_name(key, 'pdf')
             text_name = self.fob.BillText_name(key, 'txt')
             text_line = Oneline(nltk_loaded=True)
             self.add_header(text_line, bill_name, bill_detail)
             self.parse_intermediate(input_str, text_line)
-            text_line.oneline = self.remove_section_numbers(text_line.oneline)
             self.write_file(text_line, text_name)
 
-        os.remove(temp_path)
         return self
 
     def add_header(self, text_line, bill_name, bill_detail):
@@ -479,7 +522,6 @@ class Command(BaseCommand):
         return None
 
     def form_sentence(self, line, charlimit):
-        newline = self.remove_section_numbers(line)
 
         # Remove trailing spaces, and add period at end of sentence.
         newline = newline.strip()
@@ -559,26 +601,6 @@ class Command(BaseCommand):
             if newline != '' and not newline.isdigit():
                 output_line.add_text(newline)
         return self
-
-    def remove_section_numbers(self, line):
-        newline = re.sub(r'and [-0-9]+[.][0-9]+\b\s*', '', line)
-        newline = re.sub(r'\([-0-9]+[.][0-9]+\)[,]?\s*', '', newline)
-        newline = re.sub(r'\b[-0-9]+[.][0-9]+\b[,]?\s*', '', newline)
-        newline = re.sub(
-            r'section[s]? and section[s]?\s*', 'sections', newline)
-        newline = re.sub(r'section[s]?\s*;\s*', '; ', newline)
-        newline = re.sub(r'amend; to amend,\s*', 'amend ', newline)
-        newline = newline.replace("'", "-").replace('"', '_')
-        newline = newline.replace(r'\x91', '')
-
-        # Collapse "H. B. No. 43" to just "HB43", for example
-        newline = newline.replace(r'H. B. No. ', 'HB')
-        newline = newline.replace(r'S. B. No. ', 'SB')
-        newline = newline.replace(r'H. R. No. ', 'HR')
-        newline = newline.replace(r'S. R. No. ', 'SR')
-        newline = newline.replace(r'C. R. No. ', 'CR')
-        newline = newline.replace(r'J. R. No. ', 'JR')
-        return newline
 
     def shrink_line(self, line, charlimit):
         newline = re.sub(r'^\W*\w*\W*', '', line[-charlimit:])

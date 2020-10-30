@@ -113,7 +113,7 @@ LOGGING = {
     'loggers': {
         '': {
             'level': 'WARNING',
-            'handlers': ['console'],
+            'handlers': ['console', 'log_file'],
         },
         'django.request': {
             'handlers': ['console', 'log_file'],
@@ -131,7 +131,7 @@ LOGGING = {
             'propagate': False,
         },
         'py.warnings': {
-            'handlers': ['console'],
+            'handlers': ['console', 'log_file'],
         },
         'cfc_app': {
             'handlers': ['log_file'],

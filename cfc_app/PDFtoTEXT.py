@@ -1,5 +1,9 @@
-"""A command line tool for extracting text and images from PDF and
-output it to plain text, html, xml or tags."""
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Extract text from PDF file.
+
+Modified slightly from PDFminer.six example by Tony Pearson, IBM, 2020
+"""
 # From https://github.com/pdfminer/pdfminer.six.git
 
 # Copyright (c) 2004-2016  Yusuke Shinyama <yusuke at shinyama dot jp>
@@ -26,12 +30,9 @@ output it to plain text, html, xml or tags."""
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 # System imports
-import sys
 
 # Django and other third-party imports
-import pdfminer.high_level
-import pdfminer.layout
-from io import StringIO
+from io import BytesIO, StringIO
 
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
@@ -40,20 +41,23 @@ from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.pdfpage import PDFPage
 from pdfminer.pdfparser import PDFParser
 
+
 class PDFtoTEXT():
     """
     Class to handle PDF files
     """
 
-    def __init__(self, input_name):
+    def __init__(self, input_name, binary_input):
         """ Set save input file name """
         self.input_name = input_name
+        self.binary_input = binary_input
         return None
 
     def convert_to_text(self):
         """ Set save input file name """
+        input_IO = BytesIO(self.binary_input)
         output_string = StringIO()
-        with open(self.input_name, 'rb') as in_file:
+        with input_IO as in_file:
             parser = PDFParser(in_file)
             doc = PDFDocument(parser)
             rsrcmgr = PDFResourceManager()
@@ -64,40 +68,18 @@ class PDFtoTEXT():
 
         return output_string.getvalue()
 
-    def extract_text2fp(pdf_file, password='', page_numbers=None, maxpages=0,
-                 caching=True, codec='utf-8', laparams=None):
-        """Parse and return the text contained in a PDF file.
-
-        :param pdf_file: Either a file path or a file-like object for the PDF file
-            to be worked on.
-        :param password: For encrypted PDFs, the password to decrypt.
-        :param page_numbers: List of zero-indexed page numbers to extract.
-        :param maxpages: The maximum number of pages to parse
-        :param caching: If resources should be cached
-        :param codec: Text decoding codec
-        :param laparams: An LAParams object from pdfminer.layout. If None, uses
-            some default settings that often work well.
-        :return: a string containing all of the text extracted.
-        """
-        if laparams is None:
-            laparams = LAParams()
-
-        with open_filename(pdf_file, "rb") as fp, StringIO() as output_string:
-            rsrcmgr = PDFResourceManager(caching=caching)
-            device = TextConverter(rsrcmgr, output_string, codec=codec,
-                               laparams=laparams)
-            interpreter = PDFPageInterpreter(rsrcmgr, device)
-    
-            for page in PDFPage.get_pages(
-                    fp,
-                    page_numbers,
-                    maxpages=maxpages,
-                    password=password,
-                    caching=caching,
-            ):
-                interpreter.process_page(page)
-
-        return output_string.getvalue()
 
 if __name__ == "__main__":
-    print('Thank you')
+    test_pdf = "PDFtoTEXT-test.pdf"
+    print('======================================= Converting: ', test_pdf)
+    with open(test_pdf, "rb") as in_file:
+        bindata = in_file.read()
+        miner = PDFtoTEXT(test_pdf, bindata)
+        textdata = miner.convert_to_text()
+        print(textdata[:300])
+        output_txt = test_pdf.replace(".pdf", ".txt")
+        with open(output_txt, "w") as out_file:
+            out_file.write(textdata)
+        print("====================== Output text file created: ", output_txt)
+
+    print('========================= Thank you ===========================')

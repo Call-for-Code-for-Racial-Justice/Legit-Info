@@ -34,19 +34,19 @@ class DataBundle():
         self.json_pkg = None
         return None
 
-    def __repr__(self):  
+    def __repr__(self):
         dispForm1 = "Bundle {}: OK={} Code={}"
         dispForm2 = '{}  {}{}'
         dispForm3 = '{}  Length={} bytes'
         display = dispForm1.format(self.name, self.ok, self.status_code)
         if self.ok:
             if self.extension:
-                display = dispForm2.format(display, 'ext:' , self.extension)
+                display = dispForm2.format(display, 'ext:', self.extension)
             else:
-                display = dispForm2.format(display, 'mime:', self.mime_type )
+                display = dispForm2.format(display, 'mime:', self.mime_type)
             if self.content:
                 display = dispForm3.format(display, len(self.content))
-        return display 
+        return display
 
     def make_request(self, url, params):
         response = requests.get(url, params)
@@ -59,14 +59,14 @@ class DataBundle():
         self.headers = response.headers
         self.mime_type = self.headers['Content-Type']
         self.content = response.content
-        if 'html' in  self.mime_type:
+        if 'html' in self.mime_type:
             self.extension = 'html'
             self.text = response.text
-        if 'json' in  self.mime_type:
+        if 'json' in self.mime_type:
             self.extension = 'json'
             self.json_pkg = response.json()
             self.text = response.text
-        if 'pdf' in  self.mime_type:
+        if 'pdf' in self.mime_type:
             self.extension = 'pdf'
             if self.content[:4] != b'%PDF':
                 self.ok = False

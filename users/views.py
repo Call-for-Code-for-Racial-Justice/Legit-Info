@@ -10,7 +10,6 @@ Licensed under Apache 2.0, see LICENSE for details
 
 # System imports
 import logging
-logger = logging.getLogger(__name__)
 
 # Django and other third-party imports
 from django.shortcuts import render, redirect
@@ -23,6 +22,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import UserForm, ProfileForm
 
 # import pdb; pdb.set_trace()
+logger = logging.getLogger(__name__)
 
 
 def register(request):

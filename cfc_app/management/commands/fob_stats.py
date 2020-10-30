@@ -71,8 +71,8 @@ class Command(BaseCommand):
         if after:
             cursor = after
 
-        by_state, state_list = {}, ['AZ', 'OH']
-        by_ext, ext_list = {}, ['.html', '.pdf', '.txt']
+        by_state, state_list = {}, ['AZ', 'OH', 'US']
+        by_ext, ext_list = {}, ['.html', 'json', '.pdf', '.txt', 'zip']
 
         item_list = fob.list_items(prefix=prefix, suffix=suffix,
                                    after=cursor, limit=0)

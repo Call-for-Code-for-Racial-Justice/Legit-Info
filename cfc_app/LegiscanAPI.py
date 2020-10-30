@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 # LegiscanAPI.py -- Pull data from Legiscan.com API
 # By Uchechukwu Uboh and Tony Pearson, IBM, 2020
@@ -12,13 +13,16 @@
 #
 # Debug with:  # import pdb; pdb.set_trace()
 """
-
+# System imports
 import json
 import logging
-logger = logging.getLogger(__name__)
 import os
 
+# Application imports
 from .DataBundle import DataBundle
+
+# import pdb; pdb.set_trace()
+logger = logging.getLogger(__name__)
 
 LEGISCAN_ID = {
     1: {"code": "AL", "name": "Alabama", "capital": "Montgomery"},
