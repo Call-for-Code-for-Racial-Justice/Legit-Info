@@ -373,6 +373,7 @@ class Command(BaseCommand):
         law.impact = imp
 
         law.relevance = rel
+        law.cite_url = header['CITE']
         law.save()
 
         print('Database record {} for {}'.format(result, key))

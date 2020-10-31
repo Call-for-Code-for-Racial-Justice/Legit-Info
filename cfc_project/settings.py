@@ -101,7 +101,7 @@ LOGGING = {
         'log_file': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'maxBytes': 1024 * 1024 * 1,  # 1 MB
+            'maxBytes': 1024 * 1024 * 100,  # 100 MB
             'backupCount': 7,
             'filename': './logs/cfc_app.log',
             'formatter': 'full'
