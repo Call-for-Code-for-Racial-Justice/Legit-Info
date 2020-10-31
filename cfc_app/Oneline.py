@@ -58,7 +58,7 @@ class Oneline():
             else:
                 front, summary = sections[0], ""
 
-            header = "{} _SUMMARY {} _TEXT_ \n".format(front, summary)
+            header = "{} _SUMMARY_ {} _TEXT_ \n".format(front, summary)
             newline = Oneline.common_acronyms(sections[1])
 
         a_list = nltk.tokenize.sent_tokenize(newline)
@@ -171,7 +171,7 @@ class Oneline():
         BILLID_REGEX = re.compile(r"_BILLID_\s*(.*?) _")
         CITE_REGEX = re.compile(r"_CITE_\s*(.*?) _")
         TITLE_REGEX = re.compile(r"_TITLE_\s*(.*?) _")
-        SUMMARY_REGEX = re.compile(r"_SUMMARY_\s*(.*?) _")
+        SUMMARY_REGEX = re.compile(r"_SUMMARY[_]?\s*(.*?) _")
 
         header, sections = {}, []
         # import pdb; pdb.set_trace()
@@ -185,7 +185,7 @@ class Oneline():
             logger.warning(warn_msg.format(newline[:80]))
 
         if len(sections) == 2:
-            head_text = sections[0] + "_TEXT_"
+            head_text = sections[0] + " _TEXT_"
             mo = FILE_REGEX.search(head_text)
             if mo:
                 header['FILE'] = mo.group(1).strip()

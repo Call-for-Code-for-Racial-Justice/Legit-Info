@@ -101,7 +101,7 @@ class Command(BaseCommand):
         parser.add_argument("--state", help="Process single state: AZ, OH")
         parser.add_argument("--after", help="Start after this item name")
         parser.add_argument("--limit", type=int, default=self.limit,
-                            help="Limit number of entries to detail")
+                            help="number of entries to analyze per state")
 
         return None
 
@@ -133,6 +133,7 @@ class Command(BaseCommand):
             raise AnalyzeTextError(err_msg)
 
         locations = Location.objects.filter(legiscan_id__gt=0)
+        locations = locations.order_by('hierarchy')
         for loc in locations:
             state_id = loc.legiscan_id
             if state_id > 0:
@@ -143,7 +144,7 @@ class Command(BaseCommand):
                     continue
 
             logger.info('153:Processing: {} ({})'.format(loc.desc, state))
-
+            import pdb; pdb.set_trace()
             try:
                 self.process_state(state)
             except Exception as e:
@@ -216,13 +217,14 @@ class Command(BaseCommand):
 
         cursor = self.after
         items = self.fob.list_items(prefix=state, suffix=".txt",
-                                    after=cursor)
+                                    after=cursor, limit=0)
 
         dot = ShowProgress()
         num = 0
         items.sort()
         for filename in items:
             textdata = self.fob.download_text(filename)
+            import pdb; pdb.set_trace()
             header = Oneline.parse_header(textdata)
             if 'BILLID' in header:
                 bill_id = header['BILLID']
@@ -242,7 +244,7 @@ class Command(BaseCommand):
 
     def process_legislation(self, filename, extracted_lines, header):
 
-        extracted_text = Oneline.join_sentences(extracted_lines)
+        extracted_text = Oneline.join_lines(extracted_lines)
         extracted_text = extracted_text.replace('"', r'|').replace("'", r"|")
 
         if self.use_api:

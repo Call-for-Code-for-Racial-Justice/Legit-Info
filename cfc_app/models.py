@@ -204,7 +204,9 @@ class Law(models.Model):
     impact = models.ForeignKey('cfc_app.Impact', null=True,
                                related_name='laws', on_delete=models.CASCADE)
 
-    relevance = models.CharField(max_length=250, null=True)
+    relevance = models.CharField(max_length=800, null=True)
+
+    cite_url = models.URLField(max_length=200, null=True)
 
     def __str__(self):
         """Return a string representation of the model."""
