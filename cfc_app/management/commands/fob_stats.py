@@ -1,26 +1,36 @@
-# Python code
-# fob_sync.py
-# By Tony Pearson, IBM, 2020
-#
-# This is intended as a one-time task for new database
-#
-# You can invoke this in either from Pipevn shell or native command line
-#
-# Pipenv Shell:
-# [..] $ pipenv shell
-# (cfc) $ ./stage1 seed_database
-#
-# Native Command Line:
-# [..] $ ./cron1 seed_database
-#
-#
-# Debug with:  import pdb; pdb.set_trace()
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
+"""
+Get datasetlist, and datasets for selected sessions, from Legiscan.com API.
+
+This is phase 1 of weekly cron job.  See CRON.md for details.
+Invoke with ./stage1 get_datasets  or ./cron1 get_datasets
+Specify --help for details on parameters available.
+
+Written by Tony Pearson, IBM, 2020
+Licensed under Apache 2.0, see LICENSE for details
+"""
+
+# System imports
+import logging
+
+# Django and other third-party imports
 from django.core.management.base import BaseCommand
+
+# Application imports
 from cfc_app.FOB_Storage import FOB_Storage
+from cfc_app.KeyCounter import KeyCounter
+
+# Debug with:  import pdb; pdb.set_trace()
+logger = logging.getLogger(__name__)
+
+STATE_LIST = ['AZ', 'OH', 'US']
 
 
 class Command(BaseCommand):
+    """ Python customized command: fob_stats """
+
     help = 'See Location and Impact database tables. '
 
     def __init__(self, *args, **kwargs):
@@ -30,6 +40,9 @@ class Command(BaseCommand):
         self.maxlimit = 400
         self.mode = "FILE"
         self.verbosity = 1
+        self.by_state = KeyCounter("By STATE")
+        self.by_ext = KeyCounter("By extension")
+        self.limit = 0
         return None
 
     def add_arguments(self, parser):
@@ -38,7 +51,7 @@ class Command(BaseCommand):
         parser.add_argument("--after", help="Start after this item name")
         parser.add_argument("--mode", help="From FILE, OBJECT, or BOTH")
         parser.add_argument("--limit", help="Number of items to process",
-                            type=int, default=0)  # 0 is UNLIMITED
+                            type=int, default=self.limit)  # 0 is UNLIMITED
         return None
 
     def handle(self, *args, **options):
@@ -53,76 +66,49 @@ class Command(BaseCommand):
         if mode in ['FILE', 'BOTH']:
             self.fob_file = FOB_Storage('FILE')
             fob = self.fob_file
-            self.show_stats(fob, 'FILE', prefix=options['prefix'],
-                            suffix=options['suffix'], after=options['after'],
-                            limit=options['limit'])
+            self.show_stats(fob, 'FILE', options)
 
         if mode in ['OBJECT', 'BOTH']:
             self.fob_object = FOB_Storage('OBJECT')
             fob = self.fob_object
-            self.show_stats(fob, 'OBJECT', prefix=options['prefix'],
-                            suffix=options['suffix'], after=options['after'],
-                            limit=options['limit'])
+            self.show_stats(fob, 'OBJECT', options)
+
+        self.limit = options['limit']
         return None
 
-    def show_stats(self, fob, mode, prefix=None, suffix=None, after=None,
-                   limit=10):
-        cursor = ''
-        if after:
-            cursor = after
+    def show_stats(self, fob, mode, options):
+        """ Display statistics gathered above """
 
-        by_state, state_list = {}, ['AZ', 'OH', 'US']
-        by_ext, ext_list = {}, ['.html', 'json', '.pdf', '.txt', 'zip']
-
-        item_list = fob.list_items(prefix=prefix, suffix=suffix,
-                                   after=cursor, limit=0)
+        item_list = fob.list_items(prefix=options['prefix'],
+                                   suffix=options['suffix'],
+                                   after=options['after'],
+                                   limit=options['limit'])
         count = 0
         print(' ')
         for name in item_list:
-            cursor = name
-            if self.verbosity == 3:
+            if self.verbosity == 2:
                 print(name)
 
             state = name[:2]
-            if state not in state_list:
+            if state not in STATE_LIST:
                 state = 'Other'
 
-            if state in by_state:
-                by_state[state] += 1
-            else:
-                by_state[state] = 1
+            self.by_state.consider_key(state)
 
-            extension = 'None'
             if '.' in name:
                 parts = name.rsplit('.', 1)
                 extension = '.' + parts[1]
-                if extension not in ext_list:
-                    ext_list.append(extension)
-
-            if extension in by_ext:
-                by_ext[extension] += 1
-            else:
-                by_ext[extension] = 1
+                self.by_ext.consider_key(extension)
 
             count += 1
-            if limit > 0 and count >= limit:
+            if self.limit > 0 and count >= self.limit:
                 break
 
         print('Mode = ', mode)
-        print('Total number of items processed: ', count)
 
-        print('Statistics by STATE prefix: ')
-        if 'Other' in by_state:
-            state_list.append('Other')
-        for state in state_list:
-            if state in by_state:
-                print(' ', state,  by_state[state])
-
-        print('Statistics by extension suffix: ')
-        if 'None' in by_ext:
-            ext_list.append('None')
-        for ext in ext_list:
-            if ext in by_ext:
-                print(' ', ext, by_ext[ext])
+        self.by_state.key_results()
+        self.by_ext.key_results()
 
         return None
+
+# End of module

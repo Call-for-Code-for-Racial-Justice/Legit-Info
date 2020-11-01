@@ -6,7 +6,6 @@ Scan TXT files, check for problems.
 """
 # System imports
 import re
-import sys
 
 # Django and other third-party imports
 from django.core.management.base import BaseCommand
@@ -73,8 +72,6 @@ class Command(BaseCommand):
         up_line = False
         low_line = False
         numfull = 0
-        first_accepts = '(0123456789$".'
-        last_accepts = '0123456789 '
 
         for line in lines:
             nlen = len(line)

@@ -80,7 +80,6 @@ class Command(BaseCommand):
         self.dot = ShowProgress()
         self.api_limit = 0
         self.state = None
-        self.billno = None
         self.session_id = None
         self.limit = 10
         self.skip = False
@@ -89,6 +88,7 @@ class Command(BaseCommand):
         nltk.download('punkt')
         self.nltk_loaded = True
         self.starting_msg = ""
+        self.after + None
         return None
 
     def add_arguments(self, parser):
@@ -96,7 +96,7 @@ class Command(BaseCommand):
                             help="Invoke Legiscan.com API, if needed")
         parser.add_argument("--state", help="Process single state: AZ, OH")
         parser.add_argument("--session_id", help="Process this session only")
-        parser.add_argument("--bill", help="Process this bill number only")
+        parser.add_argument("--after", help="Start after this item name")
         parser.add_argument("--limit", type=int, default=self.limit,
                             help="Number of bills to extract per state")
         parser.add_argument("--skip", action="store_true",
@@ -206,9 +206,9 @@ class Command(BaseCommand):
         else:
             starting += starting_state
 
-        if options["bill"]:
-            self.billno = options["bill"]
-            starting += self.billno
+        if options["after"]:
+            self.after = options["after"]
+            starting += ' --after '+self.after
 
         self.starting_msg = starting
 
@@ -248,10 +248,6 @@ class Command(BaseCommand):
                         break
                     mo = billRegex.search(path)
                     if mo:
-                        bill_number = mo.group(3)
-                        if self.billno and bill_number != self.billno:
-                            continue
-
                         if self.verbosity:
                             self.dot.show()
 
@@ -293,6 +289,10 @@ class Command(BaseCommand):
         # Generate the key to be used to refer to this legislation.
         key = self.fob.BillText_key(bill_state, bill_number,
                                     session_id, earliest_year)
+
+        if self.after and key < self.after:
+            return processed
+
         bill_detail['bill_number'] = bill_number
         bill_detail['key'] = key
         bill_id = bill_detail['bill_id']

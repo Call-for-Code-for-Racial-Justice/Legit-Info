@@ -74,7 +74,7 @@ class Command(BaseCommand):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
         self.wordmap = None
         self.impact_list = None
         self.secondary_impacts = None
@@ -94,7 +94,7 @@ class Command(BaseCommand):
             state_id_table[state] = state_id
         self.id_table = state_id_table
 
-        self.verbosity=1
+        self.verbosity = 1
         return None
 
     def add_arguments(self, parser):
@@ -121,7 +121,7 @@ class Command(BaseCommand):
         else:
             logger.info('120:Analyzing with internal Wordmap ONLY')
 
-        self.verbosity = options[verbosity]
+        self.verbosity = options['verbosity']
 
         impacts = Impact.objects.all().exclude(text='None')
         impact_list = []
@@ -147,9 +147,9 @@ class Command(BaseCommand):
                 if state != options['state']:
                     continue
 
-            logger.info('146:Processing: {} ({})'.format(loc.desc, state))
+            logger.info('150:Processing: {} ({})'.format(loc.desc, state))
             # import pdb; pdb.set_trace()
-            print("Processing: {} ({})".format(
+            print("Processing: {} ({})".format(loc.desc, state))
             try:
                 self.process_state(state)
             except Exception as e:
@@ -185,15 +185,18 @@ class Command(BaseCommand):
             else:
                 logger.error("181:Regex Error {}".format(line))
 
-        logger.debug('183:Impacts marked with * match cfc_app_impact table')
         secondary_list = []
+        topic_list = []
         for impact in categories:
             marker = ' '
             if impact in impact_list:
                 marker = '*'
             elif impact != 'None':
                 secondary_list.append(impact)
-            logger.debug("191:{} {}".format(marker, impact))
+            topic_list.append(marker+impact)
+
+        topic_msg = "Impacts marked with * match cfc_app_impact table"
+        logger.debug('200: {}: {}'.format(topic_msg, topic_list))
 
         self.wordmap = wordmap
         self.secondary_impacts = secondary_list
@@ -207,12 +210,10 @@ class Command(BaseCommand):
             else:
                 tertiary.append([term, wordmap[term]])
 
-        status_msg = '{}: {}, with {} terms'
-        logger.debug(status_msg.format("206:Primary", primary, len(primary)))
-        logger.debug(status_msg.format("207:Secondary", secondary, 
-                     len(secondary)))
-        logger.debug(status_msg.format("208:Tertiary", tertiary, 
-                     len(tertiary)))
+        status_msg = '{}: {} terms'
+        logger.debug(status_msg.format("215:Primary", len(primary)))
+        logger.debug(status_msg.format("216:Secondary", len(secondary)))
+        logger.debug(status_msg.format("217:Tertiary", len(tertiary)))
 
         self.primary = primary
         self.secondary = secondary
@@ -231,7 +232,7 @@ class Command(BaseCommand):
         items.sort()
         for filename in items:
             textdata = self.fob.download_text(filename)
-            
+
             header = Oneline.parse_header(textdata)
             if 'BILLID' in header:
                 bill_id = header['BILLID']
@@ -243,7 +244,7 @@ class Command(BaseCommand):
                 if self.limit > 0 and num >= self.limit:
                     break
             else:
-                logger.info('238:No bill_id found in header, removing: ', 
+                logger.info('238:No bill_id found in header, removing: ',
                             filename)
                 self.fob.remove_item(filename)
                 continue
@@ -256,30 +257,21 @@ class Command(BaseCommand):
         extracted_text = Oneline.join_lines(extracted_lines)
         extracted_text = extracted_text.replace('"', r'|').replace("'", r"|")
 
+        concept = {}
         if self.use_api:
-            concept = self.Relevance_NLU(extracted_text)
-            log_msg="255:Filename {} Concept:{}"
+            log_msg = "255:Filename {} Concept:{}"
             logger.debug(log_msg.format(filename, concept))
+            try:
+                concept = self.Relevance_NLU(extracted_text)
+            except Exception as e:
+                err_msg = "IBM Watson NLU failed, disabling --api: {}"
+                logger.error(err_msg.format(e))
+                self.use_api = False
         else:
             concept = self.Relevance_Wordmap(extracted_text)
 
-        revlist, impact_chosen = self.classify_impact(concept)
-
-        rel, connector = self.rel_start, ''
-        for r in revlist:
-            rel += connector + "'{}' => '{}'".format(r[0], r[1])
-            connector = ", "
-
-        log_msg="266:Filename {} Impact={} Rel:{}"
-        logger.debug(log_msg.format(filename, impact_chosen, rel))
-
-        key = filename.replace(".txt", "")
-
-        if self.verbosity > 1:
-            verb_msg = "Analyzed filename: {}  Impact chosen={}"
-            print(verb_msg.format(filename, impact))
-
-        self.save_law(key, header, rel, impact_chosen)
+        if concept:
+            self.save_relevance(filename, header, concept)
 
         return None
 
@@ -330,19 +322,39 @@ class Command(BaseCommand):
             if relcount:
                 relterms[term] = relcount
 
-        
-        num, score, best_term = 0, {}, {}
+        num = 0
         # import pdb; pdb.set_trace()
-        for term, count in sorted(relterms.items(), key=lambda item: item[1], 
+        for term, count in sorted(relterms.items(), key=lambda item: item[1],
                                   reverse=True):
-            logger.debug("328:WORDMAP {} {} {}".format(term, count, 
-                                                      self.wordmap[term]))
-            imp = self.wordmap[term]
+            logger.debug("328:WORDMAP {} {} {}".format(term, count,
+                                                       self.wordmap[term]))
+
             concept.append({'text': term, 'Reason': self.wordmap[term]})
             num += 1
             if num >= RLIMIT:
                 break
 
+        return None
+
+    def save_relevance(self, filename, header, concept):
+
+        revlist, impact_chosen = self.classify_impact(concept)
+
+        rel, connector = self.rel_start, ''
+        for r in revlist:
+            rel += connector + "'{}' => '{}'".format(r[0], r[1])
+            connector = ", "
+
+        log_msg = "351:Filename {} Impact={} Rel:{}"
+        logger.debug(log_msg.format(filename, impact_chosen, rel))
+
+        key = filename.replace(".txt", "")
+
+        if self.verbosity > 1:
+            verb_msg = "Analyzed filename: {}  Impact chosen={}"
+            print(verb_msg.format(filename, impact_chosen))
+
+        self.save_law(key, header, rel, impact_chosen)
         return None
 
     def classify_impact(self, concept):
@@ -378,8 +390,8 @@ class Command(BaseCommand):
             # If the record is up-to-date, leave it alone
             if (law.doc_date
                     and doc_date < law.doc_date):
-                msg = "374:Law left alone {} Existing={} Chosen={}"
-                logger.debug(msg.format(key,law.impact, impact_chosen))
+                msg = "396:Law left alone {} Existing={} Chosen={}"
+                logger.debug(msg.format(key, law.impact, impact_chosen))
                 return None
 
             result = 'Updated'

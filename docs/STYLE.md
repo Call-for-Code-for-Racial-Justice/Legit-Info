@@ -23,6 +23,11 @@
 > code) as soon as it is discovered.  Now is better than never." 
 > -- <cite>PEP 20</cite>
 
+> Beware of the Turing tar-pit in which everything is possible but nothing 
+> of interest is easy.  Fools ignore complexity. Pragmatists suffer it. Some 
+can avoid it. Geniuses remove it.
+> -- <cite>Alan Perlis, "Epigrams in Programming"</cite> 
+
 > Test ruthlessly. Write docs for new features.
 
 ## Character Set
@@ -139,6 +144,17 @@ changes!
 * Use triple-doublequotes """ to write docstrings for all public modules,
 functions, classes, and methods.
 
+**Functions and Methods**
+
+> "If you have a procedure with ten parameters, you probably missed some.
+> -- <cite>Alan Perlis, "Epigrams in Programming"</cite> 
+
+* Try to have five or fewer arguments to each function or method.  Consider
+putting related arguments into an object, array or dictionary that is passed 
+instead.
+
+## Syntax Checkers
+
 To check your code for consistency to these guidelines, use the 
 [flake8](https://pypi.org/project/flake8/) utility.  Any code that results
 in flake8 errors prevents the application from being deployed on IBM Cloud.
@@ -154,6 +170,11 @@ To better understand guideline violates flagged by flake8, use the
 $ pycodestyle  --show-source  --show-pep8  my_program.py
 ```
 
+A more rigorous test is pylint:
+
+```console
+$ pylint  my_program.py
+```
 
 Many guideline violations flagged by flake8 can be automatically corrected
 using [autopep8](https://pypi.org/project/autopep8) utility.  For example:

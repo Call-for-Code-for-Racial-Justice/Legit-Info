@@ -18,7 +18,9 @@ inits="__init__."
     find . -iname "*.py" -exec "$program" {} \;
     elif [[ ("$module" != *"$migs"*) && ("$module" != *"$inits"*) ]]; then
     echo "Check_python: $1"
-    # pylint "$module"
-    flake8 "$module"
+    pylint "$module"
+
+    # autopep8 -i "$module"
+    # flake8 "$module"
     fi
 fi
