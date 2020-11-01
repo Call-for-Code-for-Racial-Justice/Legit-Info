@@ -71,7 +71,10 @@ class Oneline():
         return self
 
     def common_acronyms(line):
+        """ Convert acronyms and bad character strings before NLTK """
         newline = line.replace(r'\x91', '')
+
+        # Convert "H. B. No. 3" to "HB3"
         newline = re.sub(r"H.\s*B.\s*No.\s*(\d)", r"HB\1", newline)
         newline = re.sub(r"S.\s*B.\s*No.\s*(\d)", r"SB\1", newline)
         newline = re.sub(r"H.\s*R.\s*No.\s*(\d)", r"HR\1", newline)
@@ -79,19 +82,41 @@ class Oneline():
         newline = re.sub(r"C.\s*R.\s*No.\s*(\d)", r"CR\1", newline)
         newline = re.sub(r"J.\s*R.\s*No.\s*(\d)", r"JR\1", newline)
 
+        # Convert "H. B. 3" to "HB3"
         newline = re.sub(r"H.\s*B.\s*(\d)", r"HB\1", newline)
         newline = re.sub(r"S.\s*B.\s*(\d)", r"SB\1", newline)
         newline = re.sub(r"Am.\sSub.", r"Am-Sub", newline)
+
+        # Convert General Assembly to avoid confusion with state of Georgia
         newline = re.sub(r"(st|nd|rd|th) G.A.", r"\1-GA ", newline)
+
+        # Convert Sec. Sub. etc. to Sec# Sub#
         newline = re.sub(r"(Sec|Sub|SEC)[.]\s*([0-9]+)", r" \1#\2 ", newline)
+
+        # Remove sections NN-NNNN.NN
+        newline = re.sub(r"[0-9]+[-][0-9]+[.][0-9]+", r" ", newline)
+
+        # Remove sections "(NNNN.MMM)"
         newline = re.sub(r"[(][0-9]+[.][ 0-9]+[)]", r" ", newline)
+
+        # Remove sections "NNNN.MMM and NNNN.MMM"
         newline = re.sub(r"[0-9]+[.][0-9]+[,]? and [0-9]+[.][0-9]+",
                          r" ", newline)
+
+        # Remove sections "NNNN.MMM,"
         newline = re.sub(r"[0-9]+[.][0-9]+\s*[,]", r" ", newline)
+
+        # Ordered lists are changed from "N." to "(N)"
+        newline = re.sub(r"[.]\s+([0-9]{1,2})[.]\s", r". (\1) ", newline)
+
+        # Change "sections and sections" to just "sections"
         newline = re.sub(r"ection[s]?\s*and\s*[Ss]ection[s]?",
                          r"ections", newline)
-        newline = re.sub(r"\s+;", ";", newline)
-        newline = re.sub(r"\s+,", ",", newline)
+
+        # remove all whitespace before certain punctuation marks
+        newline = re.sub(r"\s+[,;]", "\1", newline)
+
+        # shrink multiple spaces to a single space for readability
         newline = re.sub(r"\s+", " ", newline)
 
         return newline

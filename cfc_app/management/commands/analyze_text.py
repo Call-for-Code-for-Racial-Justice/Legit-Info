@@ -74,9 +74,9 @@ class Command(BaseCommand):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        self.impact_list = None
+        
         self.wordmap = None
+        self.impact_list = None
         self.secondary_impacts = None
         self.primray = None
         self.secondary = None
@@ -93,6 +93,8 @@ class Command(BaseCommand):
             state = LEGISCAN_ID[state_id]['code']
             state_id_table[state] = state_id
         self.id_table = state_id_table
+
+        self.verbosity=1
         return None
 
     def add_arguments(self, parser):
@@ -115,9 +117,11 @@ class Command(BaseCommand):
         if options['api']:
             self.use_api = True
             self.rel_start = '(NLU)'
-            logger.info('Analyzing with IBM Watson NLU API')
+            logger.info('118:Analyzing with IBM Watson NLU API')
         else:
-            logger.info('Analyzing with internal Wordmap ONLY')
+            logger.info('120:Analyzing with internal Wordmap ONLY')
+
+        self.verbosity = options[verbosity]
 
         impacts = Impact.objects.all().exclude(text='None')
         impact_list = []
@@ -143,12 +147,13 @@ class Command(BaseCommand):
                 if state != options['state']:
                     continue
 
-            logger.info('153:Processing: {} ({})'.format(loc.desc, state))
-            import pdb; pdb.set_trace()
+            logger.info('146:Processing: {} ({})'.format(loc.desc, state))
+            # import pdb; pdb.set_trace()
+            print("Processing: {} ({})".format(
             try:
                 self.process_state(state)
             except Exception as e:
-                err_msg = "158:Process State Error {}".format(e)
+                err_msg = "151:Process State Error {}".format(e)
                 logger.error(err_msg, exc_info=True)
                 raise AnalyzeTextError(err_msg)
 
@@ -157,12 +162,12 @@ class Command(BaseCommand):
     def load_wordmap(self, impact_list):
         wordmap, categories = {}, []
         mapname = os.path.join(settings.SOURCE_ROOT, 'wordmap.csv')
-        print(mapname)
+        logger.debug('160:Mapname: '+mapname)
 
         with open(mapname, 'r') as mapfile:
             maplines = mapfile.readlines()
 
-        print(len(maplines))
+        logger.debug("165:maplines {}".format(len(maplines)))
         for line in maplines:
             mo = mapRegex.search(line)
             if mo:
@@ -178,9 +183,9 @@ class Command(BaseCommand):
                 if impact_category not in categories:
                     categories.append(impact_category)
             else:
-                print("Regex Error", line)
+                logger.error("181:Regex Error {}".format(line))
 
-        print('Impacts marked with * match cfc_app_impact table')
+        logger.debug('183:Impacts marked with * match cfc_app_impact table')
         secondary_list = []
         for impact in categories:
             marker = ' '
@@ -188,7 +193,7 @@ class Command(BaseCommand):
                 marker = '*'
             elif impact != 'None':
                 secondary_list.append(impact)
-            print(marker, impact)
+            logger.debug("191:{} {}".format(marker, impact))
 
         self.wordmap = wordmap
         self.secondary_impacts = secondary_list
@@ -203,9 +208,11 @@ class Command(BaseCommand):
                 tertiary.append([term, wordmap[term]])
 
         status_msg = '{}: {}, with {} terms'
-        logger.debug(status_msg.format("Primary", primary, len(primary)))
-        logger.debug(status_msg.format("Secondary", secondary, len(secondary)))
-        logger.debug(status_msg.format("Tertiary", tertiary, len(tertiary)))
+        logger.debug(status_msg.format("206:Primary", primary, len(primary)))
+        logger.debug(status_msg.format("207:Secondary", secondary, 
+                     len(secondary)))
+        logger.debug(status_msg.format("208:Tertiary", tertiary, 
+                     len(tertiary)))
 
         self.primary = primary
         self.secondary = secondary
@@ -224,18 +231,20 @@ class Command(BaseCommand):
         items.sort()
         for filename in items:
             textdata = self.fob.download_text(filename)
-            import pdb; pdb.set_trace()
+            
             header = Oneline.parse_header(textdata)
             if 'BILLID' in header:
                 bill_id = header['BILLID']
-                logger.debug("166:bill_id={}".format(bill_id))
+                logger.debug("231:bill_id={}".format(bill_id))
                 self.process_legislation(filename, textdata, header)
-                dot.show()
+                if self.verbosity:
+                    dot.show()
                 num += 1
                 if self.limit > 0 and num >= self.limit:
                     break
             else:
-                logger.info('No bill_id found in header, removing: ', filename)
+                logger.info('238:No bill_id found in header, removing: ', 
+                            filename)
                 self.fob.remove_item(filename)
                 continue
 
@@ -249,6 +258,8 @@ class Command(BaseCommand):
 
         if self.use_api:
             concept = self.Relevance_NLU(extracted_text)
+            log_msg="255:Filename {} Concept:{}"
+            logger.debug(log_msg.format(filename, concept))
         else:
             concept = self.Relevance_Wordmap(extracted_text)
 
@@ -259,9 +270,15 @@ class Command(BaseCommand):
             rel += connector + "'{}' => '{}'".format(r[0], r[1])
             connector = ", "
 
-        print('Filename {}  Impact {}'.format(filename, impact_chosen))
+        log_msg="266:Filename {} Impact={} Rel:{}"
+        logger.debug(log_msg.format(filename, impact_chosen, rel))
 
         key = filename.replace(".txt", "")
+
+        if self.verbosity > 1:
+            verb_msg = "Analyzed filename: {}  Impact chosen={}"
+            print(verb_msg.format(filename, impact))
+
         self.save_law(key, header, rel, impact_chosen)
 
         return None
@@ -305,12 +322,27 @@ class Command(BaseCommand):
         return concept
 
     def scan_extract(self, extracted_text, category_list, concept):
+
+        relterms = {}
         for rel in category_list:
             term = rel[0]
-            if term in extracted_text:
-                concept.append({'text': term, 'Reason': self.wordmap[term]})
-                if len(concept) >= RLIMIT:
-                    break
+            relcount = extracted_text.count(term)
+            if relcount:
+                relterms[term] = relcount
+
+        
+        num, score, best_term = 0, {}, {}
+        # import pdb; pdb.set_trace()
+        for term, count in sorted(relterms.items(), key=lambda item: item[1], 
+                                  reverse=True):
+            logger.debug("328:WORDMAP {} {} {}".format(term, count, 
+                                                      self.wordmap[term]))
+            imp = self.wordmap[term]
+            concept.append({'text': term, 'Reason': self.wordmap[term]})
+            num += 1
+            if num >= RLIMIT:
+                break
+
         return None
 
     def classify_impact(self, concept):
@@ -343,11 +375,11 @@ class Command(BaseCommand):
             law = Law.objects.get(key=key)
             # import pdb; pdb.set_trace()
 
-            # If the record is up-to-date and matches the
-            # impact chosen, leave it alone
+            # If the record is up-to-date, leave it alone
             if (law.doc_date
-                    and doc_date < law.doc_date
-                    and impact_chosen == law.impact.text):
+                    and doc_date < law.doc_date):
+                msg = "374:Law left alone {} Existing={} Chosen={}"
+                logger.debug(msg.format(key,law.impact, impact_chosen))
                 return None
 
             result = 'Updated'
@@ -373,10 +405,11 @@ class Command(BaseCommand):
         law.impact = imp
 
         law.relevance = rel
-        law.cite_url = header['CITE']
+        if 'CITE' in header:
+            law.cite_url = header['CITE']
         law.save()
 
-        print('Database record {} for {}'.format(result, key))
+        logger.info('390:Database record {} for {}'.format(result, key))
         return None
 
 # End of module
