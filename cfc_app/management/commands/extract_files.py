@@ -24,7 +24,6 @@ import zipfile
 from titlecase import titlecase
 import tempfile
 import re
-from random import randint
 
 # Django and other third-party imports
 from django.core.management.base import BaseCommand, CommandError
@@ -85,7 +84,6 @@ class Command(BaseCommand):
         self.session_id = None
         self.limit = 10
         self.skip = False
-        self.rand_key = "tmp" + str(randint(1000, 9999))
         self.state_count = 0
         self.verbosity = 1  # System default is dots and error messages only
         nltk.download('punkt')
@@ -587,6 +585,8 @@ class Command(BaseCommand):
         for paragraph in paragraphs:
             pg = paragraph.string
             if pg:
+                pg = re.sub(r"^([0-9]{1,2})[.] ", r"(\1) ", pg)
+                pg = re.sub(r"^([A-Za-z])[.] ", r"(\1) ", pg)
                 out_line.add_text(pg)
 
         return self

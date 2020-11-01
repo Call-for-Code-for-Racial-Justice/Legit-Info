@@ -188,7 +188,7 @@ class Law(models.Model):
         verbose_name_plural = "laws"  # plural of legislation
         ordering = ['key']
 
-    key = models.CharField(max_length=20, null=False,
+    key = models.CharField(max_length=25, null=False,
                            unique=True, default=get_default_law_key)
 
     bill_id = models.CharField(max_length=15, null=True)

@@ -231,10 +231,19 @@ class FOB_Storage():
         return mo
 
     def BillText_key(self, state, bill_number, session_id, doc_year):
-        key = "{}-{}-{}".format(state, bill_number, session_id)
-        if len(key) <= 14:
+        BNregex = re.compile("([A-Z]*)([0-9]*)")
+        mo = BNregex.search(bill_number)
+        bill_no = bill_number
+        if mo:
+            body = mo.group(1)
+            bnum = mo.group(2)
+            if len(bnum) < 4:
+                bill_no = "{}{:0>4}".format(body,bnum)
+
+        key = "{}-{}-{}".format(state, bill_no, session_id)
+        if len(key) <= 19:
             key += "-Y" + str(doc_year)
-        elif len(key) <= 16:
+        elif len(key) <= 21:
             key += "-Y" + str(doc_year)[2:4]
         return key
 
@@ -385,5 +394,17 @@ if __name__ == "__main__":
     fob = FOB_Storage(mode)
     item_list = fob.list_items(limit=0)
     print(len(item_list))
+
+    state, bill_number, session_id, doc_year ="AZ", "HB1", "1234", "2016"
+    print(fob.BillText_key(state, bill_number, session_id, doc_year))
+
+    state, bill_number, session_id, doc_year ="AZ", "SB22", "1234", "2017"
+    print(fob.BillText_key(state, bill_number, session_id, doc_year))
+
+    state, bill_number, session_id, doc_year ="AZ", "HRJ333", "1234", "2018"
+    print(fob.BillText_key(state, bill_number, session_id, doc_year))
+
+    state, bill_number, session_id, doc_year ="AZ", "SRC4444", "1234", "2019"
+    print(fob.BillText_key(state, bill_number, session_id, doc_year))
 
     print('Congratulations')
