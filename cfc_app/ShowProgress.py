@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
-# ShowProgress.py -- print dots across the screen
-# By Tony Pearson, IBM, 2020
-#
+# -*- coding: utf-8 -*-
 
+"""
+ShowProgress.py -- print dots across the screen
 
+Written by Tony Pearson, IBM, 2020
+Licensed under Apache 2.0, see LICENSE for details
+"""
+
+# System imports
 import sys
 import time
+
+# Django and other third-party imports
+# Application imports
+# import pdb; pdb.set_trace()
 
 
 class ShowProgress():

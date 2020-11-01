@@ -23,9 +23,12 @@
 > code) as soon as it is discovered.  Now is better than never." 
 > -- <cite>PEP 20</cite>
 
+> When we write programs that "learn", it turns out that we do and they 
+> don't. If your computer speaks English, it was probably made in Japan.
+> A year spent in artificial intelligence is enough to make one believe in God.
 > Beware of the Turing tar-pit in which everything is possible but nothing 
 > of interest is easy.  Fools ignore complexity. Pragmatists suffer it. Some 
-can avoid it. Geniuses remove it.
+> can avoid it. Geniuses remove it.
 > -- <cite>Alan Perlis, "Epigrams in Programming"</cite> 
 
 > Test ruthlessly. Write docs for new features.

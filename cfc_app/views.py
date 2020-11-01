@@ -9,10 +9,12 @@ Licensed under Apache 2.0, see LICENSE for details
 """
 
 # System imports
-from .forms import SearchForm
-from .models import impact_seq
-from .models import Location, Impact, Criteria, Law
-from users.models import Profile
+import os
+import csv
+from datetime import datetime
+import logging
+
+# Django and other third-party imports
 from django.contrib.admin.views.decorators import staff_member_required
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -21,26 +23,23 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-import os
-import csv
-from datetime import datetime
-import logging
-logger = logging.getLogger(__name__)
-
-# Django and other third-party imports
 
 # Application imports
+from .forms import SearchForm
+from .models import impact_seq
+from .models import Location, Impact, Criteria, Law
+from users.models import Profile
 
 # Debugging options
 # return HttpResponse({variable to inspect})
 # logger.debug {variable to inspect}
 # raise Exception({variable to inspect})
 # import pdb; pdb.set_trace()
+logger = logging.getLogger(__name__)
 
 #########################
 # Support functions here
 #########################
-
 
 def cte_query(loc):
     """ Ancestor-search, find all parents to specified location"""

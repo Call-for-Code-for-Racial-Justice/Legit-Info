@@ -1,27 +1,41 @@
-# Python code
-# fob_sync.py
-# By Tony Pearson, IBM, 2020
-#
-# This is intended as a one-time task for new database
-#
-# You can invoke this in either from Pipevn shell or native command line
-#
-# Pipenv Shell:
-# [..] $ pipenv shell
-# (cfc) $ ./stage1 seed_database
-#
-# Native Command Line:
-# [..] $ ./cron1 seed_database
-#
-#
-# Debug with:  import pdb; pdb.set_trace()
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
+"""
+Synchronize items in File/Object Storage between FILE and OBJECT mode.
+
+Written by Tony Pearson, IBM, 2020
+Licensed under Apache 2.0, see LICENSE for details
+"""
+
+# System imports
+import logging
+
+# Django and other third-party imports
 from django.core.management.base import BaseCommand, CommandError
+
+# Application imports
 from cfc_app.FOB_Storage import FOB_Storage
+from cfc_app.LogTime import LogTime
+from cfc_app.models import Hash
+
+# Debug with:  import pdb; pdb.set_trace()
+logger = logging.getLogger(__name__)
+
+
+class FobSyncError(CommandError):
+    """ Errors raised in the fob_sync module """
+    pass
 
 
 class Command(BaseCommand):
-    help = 'See Location and Impact database tables. '
+    """ fob_sync command instance """
+
+    help = ("Synchronize items in File/Object Storage.  You can control "
+            "the direction by specifying --maxdel, --maxput and --maxget "
+            "parameters.  To make OBJECT look like FILE, use --maxdel and "
+            "--maxput only.  To make FILE look like OBJECT, use --maxget "
+            "only.")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -53,25 +67,24 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        prefix = options['prefix']
-        suffix = options['suffix']
-        after = options['after']
+        new_options = options
 
         # If --only specified, ignore prefix/suffix/after options
-        only_name = None
-        if options['only']:
-            only_name = options['only']
-            prefix = None
-            suffix = None
-            after = None
+        if new_options['only']:
+            new_options['prefix'] = None
+            new_options['suffix'] = None
+            new_options['after'] = None
+
+        timing = LogTime(__name__)
+        timing.start_time(options['verbosity'])
+
+        logger.debug(f"77:fob_sync: prefix={new_options['prefix']}")
 
         # Get a list of ALL files on FOB FILE that match criteria
-        self.flist = self.get_list(self.fob_file, prefix, suffix,
-                                   after, only_name)
+        self.flist = self.get_list(self.fob_file, new_options)
 
         # Get a list of ALL files on FOB FILE that match criteria
-        self.olist = self.get_list(self.fob_object, prefix, suffix,
-                                   after, only_name)
+        self.olist = self.get_list(self.fob_object, new_options)
 
         print('Number of files found:', len(self.flist))
         print('Number of objects found:', len(self.olist))
@@ -82,15 +95,15 @@ class Command(BaseCommand):
 
         del_count, put_count, get_count = 0, 0, 0
 
-        # Delete items from IBM Cloud Object Store if not found on FILE
+        # Delete items from IBM Cloud Object Store if not found on FILE.
+        # If --maxdel and --maxget are both specified, --maxdel presides.
         if maxdel > 0:
             self.count = 0
             self.delete_items(maxdel, found_in='OBJECT', but_not_in='FILE')
             del_count = self.count
 
             # Refresh list of ALL files on FOB FILE that match criteria
-            self.olist = self.get_list(self.fob_object, prefix, suffix,
-                                       after, only_name)
+            self.olist = self.get_list(self.fob_object, new_options)
 
         # Send Files to Object
         if maxput > 0:
@@ -101,16 +114,19 @@ class Command(BaseCommand):
         # Send Object to Files
         if maxget > 0:
             self.count = 0
-            self.get_count = self.copy_items(maxget, options,
-                                             from_fob='OBJECT', to_fob='FILE')
+            self.copy_items(maxget, options, from_fob='OBJECT', to_fob='FILE')
             get_count = self.count
 
-        print('Nunmber of DELETE requests from OBJECT: ', del_count)
-        print('Nunmber of PUT requests from OBJECT:    ', put_count)
-        print('Nunmber of GET requests from OBJECT:    ', get_count)
+        print('Number of DELETE requests from OBJECT: ', del_count)
+        print('Number of PUT requests from OBJECT:    ', put_count)
+        print('Number of GET requests from OBJECT:    ', get_count)
+        print(' ')
+
+        timing.end_time(options['verbosity'])
         return None
 
     def delete_items(self, maxcount, found_in=None, but_not_in=None):
+        """ delete items from OBJECT that do not exist in FILE """
         # import pdb; pdb.set_trace()
 
         if found_in == 'FILE' and but_not_in == 'OBJECT':
@@ -122,7 +138,7 @@ class Command(BaseCommand):
             other_list = self.flist
             remove_from = self.fob_object
         else:
-            raise CommandError('Invalid combination of parameters')
+            raise FobSyncError('Invalid combination of parameters')
 
         self.count = 0
         for name in item_list:
@@ -135,6 +151,9 @@ class Command(BaseCommand):
         return
 
     def copy_items(self, maxcount, options, from_fob=None, to_fob=None):
+        """ copy items from_fob to_fob if target does not exist,
+            or date/hash indicates copy is needed. """
+
         if (from_fob == 'FILE') and (to_fob == 'OBJECT'):
             item_list = self.flist
             other_list = self.olist
@@ -170,17 +189,31 @@ class Command(BaseCommand):
 
             else:
                 # perhaps we can compare files if both exist?
-                pass
+                self.both_exist(name, from_fob, to_fob)
 
         return None
 
-    def get_list(self, fob, prefix, suffix, after, only_name):
-        my_list = fob.list_items(prefix=prefix, suffix=suffix,
-                                 after=after, limit=0)
+    def get_list(self, fob, ops):
+        """ Get list of items that match criteria. """
+
+        my_list = fob.list_items(prefix=ops['prefix'], suffix=ops['suffix'],
+                                 after=ops['after'], limit=0)
+
+        only_name = ops['only']
         if only_name:
             if only_name in self.flist:
                 my_list = [only_name]
             else:
                 print('name {} not found in FILE'.format(only_name))
                 my_list = []
+
         return my_list
+
+    def both_exist(self, name, from_fob, to_fob):
+        parts = name.rsplit('.', maxsplit=1)
+        basename, extension = parts
+        print(f"{name} base={basename} extension=.{extension}")
+        import pdb; pdb.set_trace()
+        return None
+
+# end of module
