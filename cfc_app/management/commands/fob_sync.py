@@ -197,10 +197,10 @@ class Command(BaseCommand):
                 write_to.upload_binary(bindata, name)
                 self.count += 1
 
-                logger.info(f'File {name} copied to {to_fob}')
+                logger.info(f"File {name} copied to {to_fob}")
 
             elif options['skip']:
-                logger.debug(f'File {name} exists in both places, skipping')
+                logger.debug(f"File {name} exists in both places, skipping")
 
             else:
                 self.both_exist(name, read_from, write_to, from_fob, to_fob)
@@ -221,7 +221,7 @@ class Command(BaseCommand):
             if only_name in self.flist:
                 my_list = [only_name]
             else:
-                print('name {} not found in FILE'.format(only_name))
+                print(f"Name {only_name} not found in FILE storage")
                 my_list = []
 
         return my_list
@@ -258,7 +258,7 @@ class Command(BaseCommand):
         elif extension == "zip":
             pass
         else:
-            logger.warning(f"261:Unrecognized extension .{extension}"
+            logger.warning(f"261:Unrecognized extension .{extension}")
 
         return None
 
