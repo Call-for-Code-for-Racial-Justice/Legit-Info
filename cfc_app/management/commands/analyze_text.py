@@ -41,9 +41,10 @@ from ibm_watson.natural_language_understanding_v1 import (Features,
 # Application imports
 from cfc_app.FOB_Storage import FOB_Storage
 from cfc_app.LegiscanAPI import LEGISCAN_ID
+from cfc_app.LogTime import LogTime
 from cfc_app.models import Location, Impact, Law
-from cfc_app.ShowProgress import ShowProgress
 from cfc_app.Oneline import Oneline
+from cfc_app.ShowProgress import ShowProgress
 
 # Debug with:  import pdb; pdb.set_trace()
 logger = logging.getLogger(__name__)
@@ -109,6 +110,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
+        timing = LogTime("analyze_text")
+        timing.start_time(options['verbosity'])
+
         if options['after']:
             self.after = options['after']
 
@@ -132,7 +136,7 @@ class Command(BaseCommand):
         try:
             self.load_wordmap(impact_list)
         except Exception as e:
-            err_msg = "133:Load Wordmap: {}".format(e)
+            err_msg = f"133:Load Wordmap: {e}"
             logger.error(err_msg, exc_info=True)
             raise AnalyzeTextError(err_msg)
 
@@ -153,10 +157,11 @@ class Command(BaseCommand):
             try:
                 self.process_state(state)
             except Exception as e:
-                err_msg = "151:Process State Error {}".format(e)
+                err_msg = f"151:Process State Error: {e}"
                 logger.error(err_msg, exc_info=True)
                 raise AnalyzeTextError(err_msg)
 
+        timing.start_time(options['verbosity'])
         return None
 
     def load_wordmap(self, impact_list):

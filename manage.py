@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
+""" This is the main program for Django """
+
 import os
 import sys
 
 
 def is_venv():
+    """ Determine if we are running in Pipenv shell """
     return (hasattr(sys, 'real_prefix') or
             (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix))
 

@@ -1,28 +1,44 @@
-from django.db import models
-from datetime import datetime
-from django.conf import settings
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
+"""
+cfc_app/models.py -- Database ORM models used by cfc_app.
+
+Written by Tony Pearson, IBM, 2020
+Licensed under Apache 2.0, see LICENSE for details
+"""
+
+# System imports
+import datetime as DT
+
+# Django and other third-party imports
+from django.db import models
+from django.conf import settings
 
 LEFT_CORNER = u"\u2514\u2500\u2002"
 LEFT_PAD = u"\u2002\u2002\u2002\u2002"
 
-# default to 1 day from now
-# import pdb; pdb.set_trace()  -- use this for debugging
+# import pdb; pdb.set_trace()
+
+##############################################
+# Support functions must come first
+##############################################
 
 
 def get_default_law_key():
     """ Default key needs to be unique timestamp until changed """
-    x = str(datetime.now())
-    key = x[5:25]
+    today = str(DT.datetime.now())
+    key = today[5:25]
     return key
 
 # Create your models here.
 
 
 class Location(models.Model):
-    """A location helps filter which legislation to look at."""
+    """ A location helps filter which legislation to look at. """
 
     class Meta:
+        """ set ordering method """
         app_label = 'cfc_app'
         ordering = ['hierarchy']
 
@@ -37,7 +53,7 @@ class Location(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
 
     def padding(self):
-        """Return a string representation of the model."""
+        """ Return a string representation of the model. """
         level = self.hierarchy.count(".")
         padding = ''
         if level > 1:
@@ -45,16 +61,20 @@ class Location(models.Model):
         return padding
 
     def __str__(self):
-        """Return a string representation of the model."""
+        """ Return a string representation of the model. """
         loc_string = self.padding() + self.desc
         return loc_string
 
+    @staticmethod
     def load_defaults():
-        # The 'world' entry points to itself, so cannot be added using
-        # traditional Django administration.  To create it here, we have
-        # to create an entry with no parent, save it, then set the parent_id
-        # to 1.  This only works if the AUTOINCREMENT sequence is set to zero,
-        # for an empty database, or reset to zero if entries deleted.
+        """ set location defaults if cfc_seed.json not used
+
+        The 'world' entry points to itself, so cannot be added using
+        traditional Django administration.  To create it here, we have
+        to create an entry with no parent, save it, then set the parent_id
+        to 1.  This only works if the AUTOINCREMENT sequence is set to zero,
+        for an empty database, or reset to zero if entries deleted.
+        """
 
         world = Location()
         world.desc = 'world'
@@ -63,7 +83,7 @@ class Location(models.Model):
         world.hierarchy = 'world'
         world.govlevel = 'world'
         world.save()
-        world.parent_id = 1
+        world.parent = world
         world.save()
 
         # The concept of ancestor-search is confusing, so we create a few
@@ -91,6 +111,7 @@ class Impact(models.Model):
     """A location helps filter which legislation to look at."""
 
     class Meta:
+        """ set ordering method """
         app_label = 'cfc_app'
         ordering = ['date_added']
 
@@ -101,14 +122,19 @@ class Impact(models.Model):
         """Return a string representation of the model."""
         return self.text
 
+    @staticmethod
     def load_defaults():
-        # The 'None' option allows legislation to be hidden from all
-        # searches.  This is useful for legislation that is fetched
-        # through automation but mis-classified.  Setting impact=None
-        # will prevent automation from fetching updated versions of this.
+        """ load defaults for Impacts.
 
-        # Impacts are displayed in the order they are added in this table.
-        # Any new impacts added will appear at the bottom of the list.
+        The 'None' option allows legislation to be hidden from all
+        searches.  This is useful for legislation that is fetched
+        through automation but mis-classified.  Setting impact=None
+        will prevent automation from fetching updated versions of this.
+
+        Impacts are displayed in the order they are added in this table.
+        Any new impacts added will appear at the bottom of the list.
+        """
+
         default_impacts = ['None', 'Healthcare', 'Safety', 'Environment',
                            'Transportation', 'Jobs']
         for entry in default_impacts:
@@ -122,6 +148,7 @@ class Criteria(models.Model):
     """ Criteria of anonymous or user-profile search """
 
     class Meta:
+        """ set plurality """
         app_label = 'cfc_app'
         verbose_name_plural = "criteria"  # plural of criteria
 
@@ -184,6 +211,7 @@ class Law(models.Model):
     """Summary of legislation resulting from Machine Learning"""
 
     class Meta:
+        """ set plurality and ordering """
         app_label = 'cfc_app'
         verbose_name_plural = "laws"  # plural of legislation
         ordering = ['key']
@@ -210,10 +238,10 @@ class Law(models.Model):
 
     def __str__(self):
         """Return a string representation of the model."""
-        law_length = len(self.title)
-        law_string = self.title
+        law_string = str(self.title)
+        law_length = len(law_string)
         if law_length > 50:
-            law_string = self.title[:50]
+            law_string = law_string[:50]
             law_string = law_string.rsplit(' ', 1)[0]
             if len(law_string) < law_length:
                 law_string += " ..."
@@ -225,6 +253,8 @@ class Hash(models.Model):
     """ Track hash codes of files stored in FOB_Storage """
 
     class Meta:
+        """ set plurality and ordering method """
+
         app_label = 'cfc_app'
         verbose_name_plural = "hashcodes"  # plural of hash
         ordering = ['item_name']
@@ -242,7 +272,19 @@ class Hash(models.Model):
         desc = '{} ({})'.format(self.item_name, self.fob_method)
         return desc
 
+    @staticmethod
     def find_item_name(name, mode=settings.FOB_METHOD):
+        """ get item if exists, None if not """
+
         record = Hash.objects.filter(item_name=name,
                                      fob_method=mode).first()
         return record
+
+    @staticmethod
+    def delete_if_exists(name, mode=settings.FOB_METHOD):
+        """ delete item if exists """
+
+        Hash.objects.filter(item_name=name, fob_method=mode).delete()
+        return None
+
+# end of module

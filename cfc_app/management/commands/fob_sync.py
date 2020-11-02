@@ -60,12 +60,12 @@ class Command(BaseCommand):
                             help="Number of puts from OBJECT storage")
         parser.add_argument("--skip", action="store_true",
                             help="Skip copy if target exists already")
-        parser.add_argument("--readback", action="store_true",
-                            help="Read back and confirm data matches")
-
         return None
 
     def handle(self, *args, **options):
+
+        timing = LogTime("fob_sync")
+        timing.start_time(options['verbosity'])
 
         new_options = options
 
@@ -74,11 +74,16 @@ class Command(BaseCommand):
             new_options['prefix'] = None
             new_options['suffix'] = None
             new_options['after'] = None
-
-        timing = LogTime(__name__)
-        timing.start_time(options['verbosity'])
-
-        logger.debug(f"77:fob_sync: prefix={new_options['prefix']}")
+            logger.debug(f"80:fob_sync --only={new_options['only']} ")
+        else:
+            logger.debug(f"84:fob_sync --prefix {new_options['prefix']} "
+                         f"--suffix {new_options['suffix']} "
+                         f"--after {new_options['after']}")
+        maxdel = min(options['maxdel'], self.maxlimit)
+        maxput = min(options['maxput'], self.maxlimit)
+        maxget = min(options['maxget'], self.maxlimit)
+        logger.debug(f"--maxdel {maxdel}, --maxget {maxget} "
+                     f"--maxput {maxput} ")
 
         # Get a list of ALL files on FOB FILE that match criteria
         self.flist = self.get_list(self.fob_file, new_options)
@@ -86,12 +91,10 @@ class Command(BaseCommand):
         # Get a list of ALL files on FOB FILE that match criteria
         self.olist = self.get_list(self.fob_object, new_options)
 
-        print('Number of files found:', len(self.flist))
-        print('Number of objects found:', len(self.olist))
-
-        maxdel = min(options['maxdel'], self.maxlimit)
-        maxput = min(options['maxput'], self.maxlimit)
-        maxget = min(options['maxget'], self.maxlimit)
+        fnum, onum = len(self.flist), len(self.olist)
+        print('Number of files found:', fnum)
+        print('Number of objects found:', onum)
+        logger.debug(f"Number of files={fnum}, objects={onum}")
 
         del_count, put_count, get_count = 0, 0, 0
 
@@ -99,7 +102,12 @@ class Command(BaseCommand):
         # If --maxdel and --maxget are both specified, --maxdel presides.
         if maxdel > 0:
             self.count = 0
-            self.delete_items(maxdel, found_in='OBJECT', but_not_in='FILE')
+            try:
+                self.delete_items(maxdel, found_in='OBJECT', but_not_in='FILE')
+            except Exception as e:
+                logger.error(f"105:DELETE {e}", exc_info=True)
+                raise FobSyncError
+
             del_count = self.count
 
             # Refresh list of ALL files on FOB FILE that match criteria
@@ -108,13 +116,25 @@ class Command(BaseCommand):
         # Send Files to Object
         if maxput > 0:
             self.count = 0
-            self.copy_items(maxput, options, from_fob='FILE', to_fob='OBJECT')
+            try:
+                self.copy_items(maxput, options, from_fob='FILE',
+                                to_fob='OBJECT')
+            except Exception as e:
+                logger.error(f"119:PUT {e}", exc_info=True)
+                raise FobSyncError
+
             put_count = self.count
 
         # Send Object to Files
         if maxget > 0:
             self.count = 0
-            self.copy_items(maxget, options, from_fob='OBJECT', to_fob='FILE')
+            try:
+                self.copy_items(maxget, options, from_fob='OBJECT',
+                                to_fob='FILE')
+            except Exception as e:
+                logger.error(f"119:PUT {e}", exc_info=True)
+                raise FobSyncError
+
             get_count = self.count
 
         print('Number of DELETE requests from OBJECT: ', del_count)
@@ -127,7 +147,6 @@ class Command(BaseCommand):
 
     def delete_items(self, maxcount, found_in=None, but_not_in=None):
         """ delete items from OBJECT that do not exist in FILE """
-        # import pdb; pdb.set_trace()
 
         if found_in == 'FILE' and but_not_in == 'OBJECT':
             item_list = self.flist
@@ -144,7 +163,10 @@ class Command(BaseCommand):
         for name in item_list:
             if name not in other_list:
                 remove_from.remove_item(name)
-                print('Removed from {}: {}'.format(found_in, name))
+                Hash.delete_if_exists(name, mode=found_in)
+                logger.info(f"Removed from {found_in}: {name}")
+                import pdb
+                pdb.set_trace()
                 self.count += 1
                 if self.count >= maxcount:
                     break
@@ -175,21 +197,16 @@ class Command(BaseCommand):
                 write_to.upload_binary(bindata, name)
                 self.count += 1
 
-                if options['readback']:
-                    bindata2 = self.fob_object.download_binary(name)
-                    if bindata != bindata2:
-                        raise CommandError('Put failed '+name)
-                print('File ', name, 'copied to', to_fob)
-
-                if self.count >= maxcount:
-                    break
+                logger.info(f'File {name} copied to {to_fob}')
 
             elif options['skip']:
-                print('File ', name, 'exists in both places, skipping')
+                logger.debug(f'File {name} exists in both places, skipping')
 
             else:
-                # perhaps we can compare files if both exist?
-                self.both_exist(name, from_fob, to_fob)
+                self.both_exist(name, read_from, write_to, from_fob, to_fob)
+
+            if self.count >= maxcount:
+                break
 
         return None
 
@@ -209,11 +226,40 @@ class Command(BaseCommand):
 
         return my_list
 
-    def both_exist(self, name, from_fob, to_fob):
+    def both_exist(self, name, read_from, write_to, from_fob, to_fob):
         parts = name.rsplit('.', maxsplit=1)
         basename, extension = parts
-        print(f"{name} base={basename} extension=.{extension}")
-        import pdb; pdb.set_trace()
+        hash_from = Hash.find_item_name(name, from_fob)
+        if hash_from is None:
+            hash_from = self.source_hash(basename, extension, from_fob)
+        # hash_to = Hash.find_item_name(name, to_fob)
+        need_to_copy = False
+
+        if need_to_copy:
+            bindata = read_from.download_binary(name)
+            write_to.upload_binary(bindata, name)
+            logger.info(f'File {name} copied to {to_fob}')
+            self.count += 1
+
+        import pdb
+        pdb.set_trace()
+        return None
+
+    def source_hash(basename, extension, from_fob):
+
+        if extension == "json":
+            pass
+        elif extension == "zip":
+            pass
+        elif extension == "pdf":
+            pass
+        elif extension == "html":
+            pass
+        elif extension == "zip":
+            pass
+        else:
+            logger.warning(f"261:Unrecognized extension .{extension}"
+
         return None
 
 # end of module

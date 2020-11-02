@@ -25,10 +25,11 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 
 # Application imports
+from users.models import Profile
 from .forms import SearchForm
 from .models import impact_seq
 from .models import Location, Impact, Criteria, Law
-from users.models import Profile
+
 
 # Debugging options
 # return HttpResponse({variable to inspect})
@@ -41,10 +42,11 @@ logger = logging.getLogger(__name__)
 # Support functions here
 #########################
 
+
 def cte_query(loc):
     """ Ancestor-search, find all parents to specified location"""
     loc_list = [loc]
-    for n in range(10):
+    for _ in range(10):
         loc = loc.parent
         if loc:
             loc_list.append(loc)
@@ -154,6 +156,7 @@ def criterias(request):
 def download(request, search_id):
     """ Download results as CSV file """
 
+    logger.info(f"159:Download {request.user}")
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(content_type='text/csv')
     basename = results_basename(search_id)
@@ -171,12 +174,15 @@ def download(request, search_id):
 def health(request):
     """ Used by Docker/Tekton to confirm status """
 
+    logger.info(f"177:Health {request.user}")
     state = {"status": "UP"}
     return JsonResponse(state)
 
 
 def impacts(request):
     """Show all impacts."""
+
+    logger.info(f"185:Impacts {request.user}")
     impacts = Impact.objects.order_by('date_added')
     if len(impacts) == 0:
         Impact.load_defaults()
@@ -191,7 +197,7 @@ def impacts(request):
 def index(request):
     """The home page for this application."""
 
-    logger.info('195: username={}'.format(request.user.username))
+    logger.info(f"195: username={request.user.username}")
     return render(request, 'index.html')
 
 
@@ -199,6 +205,7 @@ def index(request):
 def lawdump(request):
     """ Download all legislation as CSV file, for staff use only """
 
+    logger.info(f"208:Lawdump username={request.user.username}")
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(content_type='text/csv')
     basename = 'lawdump.csv'
@@ -296,13 +303,11 @@ def sendmail(request, search_id):
     # Read the results set
     filename = results_filename(search_id)
     with open(filename, 'rt') as res_file:
-        resultsReader = csv.DictReader(res_file)
-        laws_found = list(resultsReader)
+        results_reader = csv.DictReader(res_file)
+        laws_found = list(results_reader)
         # import pdb; pdb.set_trace()
 
     # Specify email headers
-    subject = settings.APP_NAME + ' -- Search Results -- ' + gen_date
-    sender_email = 'CFCapp@ibm.com'
     user = request.user
     recipients = [recipient_format(user.first_name,
                                    user.last_name,
@@ -319,7 +324,8 @@ def sendmail(request, search_id):
             template_name='email-results.html',
             context=context, request=request)
 
-        sent = send_mail(subject, text_version, sender_email, recipients,
+        sent = send_mail(f"{settings.APP_NAME} --Search Results-- {gen_date}",
+                         text_version, 'CFCapp@ibm.com', recipients,
                          fail_silently=True, html_message=html_version)
 
         # the variable "sent" represents the number of emails successfully

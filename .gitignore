@@ -4,6 +4,7 @@
 *.egg-info
 *.old
 *.bak
+*.out
 server/localdev-config.json
 credentials.json
 localdev-config.json

@@ -31,12 +31,13 @@ from django.conf import settings
 
 # Application imports
 from cfc_app.DataBundle import DataBundle
-from cfc_app.Oneline import Oneline
+from cfc_app.FOB_Storage import FOB_Storage
 from cfc_app.LegiscanAPI import LegiscanAPI, LEGISCAN_ID, LegiscanError
+from cfc_app.LogTime import LogTime
 from cfc_app.models import Law, Location, Hash
+from cfc_app.Oneline import Oneline
 from cfc_app.PDFtoTEXT import PDFtoTEXT
 from cfc_app.ShowProgress import ShowProgress
-from cfc_app.FOB_Storage import FOB_Storage
 
 # Debug with:   import pdb; pdb.set_trace()
 logger = logging.getLogger(__name__)
@@ -87,7 +88,6 @@ class Command(BaseCommand):
         self.verbosity = 1  # System default is dots and error messages only
         nltk.download('punkt')
         self.nltk_loaded = True
-        self.starting_msg = ""
         self.after + None
         return None
 
@@ -106,10 +106,13 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
+        timing = LogTime("extract_files")
+        timing.start_time(options['verbosity'])
+
         try:
             self.parse_options(options)
         except Exception as e:
-            err_msg = '116: Parse Error input options. {}'.format(e)
+            err_msg = f"116: Parse Error input options: {e}"
             logger.error(err_msg, exc_info=True)
             raise ExtractError(err_msg)
 
@@ -172,45 +175,36 @@ class Command(BaseCommand):
                 try:
                     self.process_json(state, session_id, json_name)
                 except Exception as e:
-                    err_msg = '178: Process Error. {}'.format(e)
+                    err_msg = f"178: Process Error. {e}"
                     logger.error(err_msg, exc_info=True)
                     raise ExtractError(err_msg)
 
+        timing.end_time(options['verbosity'])
         return None
 
     def parse_options(self, options):
-        starting = '====STARTING: extract_files'
+
+        logger.debug(f"186:Options {options}")
+
         if options['api']:
             self.api_limit = 10
-            starting += ' --api'
 
-        starting_state = ''
         if options['state']:
             self.state = options['state']
-            starting_state += ' --state '+self.state
 
         self.limit = options['limit']
-        starting = "{} --limit {}".format(starting, self.limit)
 
         if options['skip']:
             self.skip = True
-            starting += ' --skip'
 
         self.verbosity = options['verbosity']   # Default is 1
-        starting = "{} --verbosity {}".format(starting, self.verbosity)
 
         if options['session_id']:
             self.session_id = options['session_id']
-            starting += ' --session_id '+self.session_id
             self.state = None
-        else:
-            starting += starting_state
 
         if options["after"]:
             self.after = options["after"]
-            starting += ' --after '+self.after
-
-        self.starting_msg = starting
 
         return None
 

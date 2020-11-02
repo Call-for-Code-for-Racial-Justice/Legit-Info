@@ -65,7 +65,7 @@ class Oneline():
         c_list, merges = Oneline.merge_sentences(a_list)
         a_list = c_list
 
-        logger.debug("61:Merges={} Lines={}".format(merges, len(a_list)))
+        logger.debug(f"61:Merges={merges} Lines={len(a_list)}")
 
         self.oneline = header + '\n'.join(a_list)
         return self
@@ -147,7 +147,7 @@ class Oneline():
                 b_list.append(sentence)
 
         if merges > 0:
-            logger.debug("Merges: {}".format(merges))
+            logger.debug(f"Merges: {merges}")
         return b_list, merges
 
     def header_file_name(self, filename):
@@ -204,10 +204,9 @@ class Oneline():
 
         if "_TEXT_" in newline:
             sections = newline.split('_TEXT_')
-            logger.debug("Parsing: "+newline[:80])
+            logger.debug(f"Parsing: {newline[:80]}")
         else:
-            warn_msg = "Headers not found in text file. {}"
-            logger.warning(warn_msg.format(newline[:80]))
+            logger.warning(f"Headers not found in text file. {newline[:80]}")
 
         if len(sections) == 2:
             head_text = sections[0] + " _TEXT_"

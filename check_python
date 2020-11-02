@@ -1,26 +1,40 @@
 #!/bin/bash
 program="$0"
 module="$1"
-help1="Usage: \t$program all       \t# all python modules in this dir and below"
-help2="       \t$program myprog.py \t# scan single program module only"
-if [[ "$#" == 0 ]] ; then
+method="$2"
+help1="Usage: \tcheck_python --pylint    \t# all modules with pylint"
+help2="       \tcheck_python --flake8    \t# all modules with flake8"
+help3="       \tcheck_python --autopep8  \t# all modules with autopep8 -i"
+help4="       \tcheck_python myprog.py \t# scan single program module only"
+if [[ "$#" == 0 || "$module" == "-h" || "$module" == "--help" ]]; then 
+    echo " "
     echo -e $help1
     echo -e $help2
+    echo -e $help3
+    echo -e $help4
+    echo " "
     exit 4;
-elif [[ ${module:0:1} == "-" ]]; then 
-    echo -e $help1
-    echo -e $help2
-    exit 0
 else
 migs="migrations"
 inits="__init__."
-    if [[ "$module" == "all" ]]; then
-    find . -iname "*.py" -exec "$program" {} \;
-    elif [[ ("$module" != *"$migs"*) && ("$module" != *"$inits"*) ]]; then
-    echo "Check_python: $1"
-    pylint "$module"
-
-    # autopep8 -i "$module"
-    # flake8 "$module"
+    if [[ "$module" == "--pylint" ]]; then
+    find . -iname "*.py" -exec "$program" {} --pylint \;
+    elif [[ "$module" == "--flake8" ]]; then
+    find . -iname "*.py" -exec "$program" {} --flake8 \;
+    elif [[ "$module" == "--autopep8" ]]; then
+    find . -iname "*.py" -exec "$program" {} --autopep8 \;
+    elif [[ ("$module" == *".py"*) 
+            && ("$module" != *"$migs"*) 
+            && ("$module" != *"$inits"*) ]]; then
+        echo "Check_python: $module"
+        if [[ "$method" == "--pylint" ]]; then
+        pylint "$module"
+        elif [[ "$method" == "--autopep8" ]]; then
+        autopep8 -i "$module"
+        else
+        flake8 "$module"
+        fi
+    else
+        echo "Python module $module -- skipped"
     fi
 fi

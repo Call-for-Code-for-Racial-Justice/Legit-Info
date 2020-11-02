@@ -16,4 +16,4 @@ urlpatterns = [
 
     # Profile update page.
     path('update/', views.update_profile, name='update'),
-    ]
+]

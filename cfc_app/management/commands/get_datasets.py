@@ -24,7 +24,9 @@ from django.core.management.base import BaseCommand, CommandError
 # Application imports
 from cfc_app.FOB_Storage import FOB_Storage
 from cfc_app.LegiscanAPI import LegiscanAPI, LEGISCAN_ID, LegiscanError
+from cfc_app.LogTime import LogTime
 from cfc_app.models import Location, Hash
+
 
 # Debug with:  import pdb; pdb.set_trace()
 logger = logging.getLogger(__name__)
@@ -37,7 +39,6 @@ class GetDatasetError(CommandError):
 class Command(BaseCommand):
     """ Get datasetlist, and datasets for selected sessions """
 
-    StateForm = 'Session {} Year: {} Date: {} Size: {} bytes'
     VERSIONS = 5   # Number of weeks to keep DatasetLists from Legiscan
 
     help = ("Fetches DatasetList-YYYY-MM-DD.json from Legiscan.com, then "
@@ -75,16 +76,15 @@ class Command(BaseCommand):
 
         # If the Legiscan DatasetList is recent enough, use it,
         # otherwise, call Legiscan API to fetch a new one
-        starting = '====STARTING: get_datasets'
+        timing = LogTime("get_datasets")
+        timing.start_time(options['verbosity'])
+
         if options['api']:
             self.use_api = True
-            starting += ' --api'
         if options['state']:
             self.state = options['state']
-            starting += ' --state '+self.state
         self.frequency = options['frequency']
-        starting = "{} --frequency {}".format(starting, self.frequency)
-        logger.info(starting)
+        logger.debug(f"85:Options {options}")
 
         self.list_data = self.recent_enough()
 
@@ -111,19 +111,20 @@ class Command(BaseCommand):
                 if state != options['state']:
                     continue
 
-            logger.info('Processing: {} ({})'.format(loc.desc, state))
+            logger.info(f"Processing: {loc.desc} ({state}")
 
             # Get dataset and master files, up to the --limit set
 
             try:
                 self.fetch_dataset(state, state_id)
             except Exception as e:
-                err_msg = "117:Fetch Error {}".format(e)
-                logger.error(err_msg, exc_info=True)
+                logger.error(f"120:Fetch Error {e}", exc_info=True)
                 raise GetDatasetError
 
         # Show status of all files we expect to have now
         self.datasets_found(states)
+
+        timing.end_time(options['verbosity'])
         return None
 
     def recent_enough(self):
@@ -147,7 +148,7 @@ class Command(BaseCommand):
         if self.use_api and latest_date < week_ago:
             today = self.now.strftime("%Y-%m-%d")
             self.list_name = self.fob.DatasetList_name(today)
-            logger.info('Fetching Dataset: {}'.format(self.list_name))
+            logger.info(f"Fetching Dataset: {self.list_name}")
             self.list_data = self.leg.getDatasetList('Good')
 
             # If successful return from API, save this to a file
@@ -160,11 +161,11 @@ class Command(BaseCommand):
 
         # API failure or not called, get the item from File/Object storage
         if latest_name and (not self.list_data):
-            logger.debug('Downloading: ' + self.list_name)
+            logger.debug(f"Downloading: {self.list_name}")
             self.list_data = self.fob.download_text(self.list_name)
 
         if self.list_data:
-            logger.debug('Verifying JSON contents of: ' + self.list_name)
+            logger.debug(f"Verifying JSON contents of: {self.list_name}")
             self.list_pkg = json.loads(self.list_data)
 
             # Validate this is a Legiscan DatasetList file
@@ -190,7 +191,7 @@ class Command(BaseCommand):
             dsl_list.sort(reverse=True)
             for name in dsl_list[self.VERSIONS:]:
                 self.fob.remove_item(name)
-                logger.debug('Expiring: ', name)
+                logger.debug(f"Expiring: {name}")
 
         return
 
@@ -219,20 +220,19 @@ class Command(BaseCommand):
                             fetch_new = True
 
                     if fetch_new and self.use_api and self.leg.api_ok:
-                        logger.info('Fetching {}: {}'.format(
-                            state, session_id))
+                        logger.info(f"Fetching {state}: {session_id}")
 
                         session_data = self.leg.getDataset(session_id,
                                                            access_key)
                         if session_data:
                             if session_data.startswith('*ERROR*'):
-                                logger.error(session_data)
+                                logger.error(f"228:{session_data}")
                             else:
                                 self.fob.upload_text(session_data,
                                                      session_name)
                         else:
                             err_msg = 'Fetch unsuccessful for: '+session_name
-                            raise LegiscanError(err_msg)
+                            raise LegiscanError(f"234:{err_msg}")
 
         return None
 
@@ -293,7 +293,7 @@ class Command(BaseCommand):
         if year_range != entry['year_end']:
             year_range += '-' + str(entry['year_end'])
 
-        logger.info(self.StateForm.format(entry['session_id'],
-                                          year_range, entry['dataset_date'],
-                                          entry['dataset_size']))
+        logger.info(f"Session {entry['session_id']} Year: {year_range} "
+                    f"Date: {entry['dataset_date']} "
+                    f"Size: {entry['dataset_size']} bytes")
         return None

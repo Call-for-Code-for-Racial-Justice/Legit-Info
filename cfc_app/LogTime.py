@@ -11,6 +11,7 @@ Licensed under Apache 2.0, see LICENSE for details
 # System imports
 import datetime as DT
 import logging
+import pytz
 import sys
 
 # Django and other third-party imports
@@ -19,6 +20,7 @@ import sys
 logger = logging.getLogger(__name__)
 
 VERBOSE = 1
+LOCAL_TIMEZONE = 'MST'
 
 
 class LogTime():
@@ -33,14 +35,14 @@ class LogTime():
                                       verbosity=verbosity)
         return self.start
 
-    def stop_time(self, verbosity=VERBOSE):
+    def end_time(self, verbosity=VERBOSE):
         self.end = LogTime.time_now(f"Ending {self.name}",
                                     verbosity=verbosity)
         return self.end
 
     def time_now(tag, verbosity=VERBOSE):
-        now = DT.datetime.today()
-        now_local = now.strftime("%Y-%m-%d %I:%M:%S %p %Z")
+        now = DT.datetime.now(pytz.timezone(LOCAL_TIMEZONE))
+        now_local = now.strftime("%b-%d %I:%M%p %Z")
         msg = f"{tag} at {now_local}"
         if verbosity > 0:
             print(msg)
