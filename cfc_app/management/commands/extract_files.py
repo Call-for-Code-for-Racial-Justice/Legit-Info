@@ -36,7 +36,7 @@ from cfc_app.LegiscanAPI import LegiscanAPI, LEGISCAN_ID, LegiscanError
 from cfc_app.LogTime import LogTime
 from cfc_app.models import Law, Location, Hash
 from cfc_app.Oneline import Oneline
-from cfc_app.PDFtoTEXT import PDFtoTEXT
+from cfc_app.pdf_to_text import pdf_to_text
 from cfc_app.ShowProgress import ShowProgress
 
 # Debug with:   import pdb; pdb.set_trace()
@@ -486,7 +486,7 @@ class Command(BaseCommand):
         input_str = ""
 
         bill_name = self.fob.BillText_name(key, 'pdf')
-        miner = PDFtoTEXT(bill_name, msg_bytes)
+        miner = pdf_to_text(bill_name, msg_bytes)
         input_str = miner.convert_to_text()
 
         if input_str:

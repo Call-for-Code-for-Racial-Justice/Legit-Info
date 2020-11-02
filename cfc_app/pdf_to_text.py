@@ -42,7 +42,7 @@ from pdfminer.pdfpage import PDFPage
 from pdfminer.pdfparser import PDFParser
 
 
-class PDFtoTEXT():
+class pdf_to_text():
     """
     Class to handle PDF files
     """
@@ -70,11 +70,11 @@ class PDFtoTEXT():
 
 
 if __name__ == "__main__":
-    test_pdf = "PDFtoTEXT-test.pdf"
+    test_pdf = "pdf_to_text_sample.pdf"
     print('======================================= Converting: ', test_pdf)
     with open(test_pdf, "rb") as in_file:
         bindata = in_file.read()
-        miner = PDFtoTEXT(test_pdf, bindata)
+        miner = pdf_to_text(test_pdf, bindata)
         textdata = miner.convert_to_text()
         print(textdata[:300])
         output_txt = test_pdf.replace(".pdf", ".txt")
