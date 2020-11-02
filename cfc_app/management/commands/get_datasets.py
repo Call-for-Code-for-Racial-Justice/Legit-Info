@@ -149,7 +149,7 @@ class Command(BaseCommand):
             today = self.now.strftime("%Y-%m-%d")
             self.list_name = self.fob.DatasetList_name(today)
             logger.info(f"Fetching Dataset: {self.list_name}")
-            self.list_data = self.leg.getDatasetList('Good')
+            self.list_data = self.leg.get_dataset_list('Good')
 
             # If successful return from API, save this to a file
             if self.list_data:
@@ -222,8 +222,8 @@ class Command(BaseCommand):
                     if fetch_new and self.use_api and self.leg.api_ok:
                         logger.info(f"Fetching {state}: {session_id}")
 
-                        session_data = self.leg.getDataset(session_id,
-                                                           access_key)
+                        session_data = self.leg.get_dataset(session_id,
+                                                            access_key)
                         if session_data:
                             if session_data.startswith('*ERROR*'):
                                 logger.error(f"228:{session_data}")

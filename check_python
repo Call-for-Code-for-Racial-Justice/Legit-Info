@@ -17,6 +17,8 @@ if [[ "$#" == 0 || "$module" == "-h" || "$module" == "--help" ]]; then
 else
 migs="migrations"
 inits="__init__."
+set="cfc_project.settings"
+plug="--load-plugins=pylint_django"
     if [[ "$module" == "--pylint" ]]; then
     find . -iname "*.py" -exec "$program" {} --pylint \;
     elif [[ "$module" == "--flake8" ]]; then
@@ -28,7 +30,7 @@ inits="__init__."
             && ("$module" != *"$inits"*) ]]; then
         echo "Check_python: $module"
         if [[ "$method" == "--pylint" ]]; then
-        pylint "$module"
+        DJANGO_SETTINGS_MODULE=$set pylint $plug "$module"
         elif [[ "$method" == "--autopep8" ]]; then
         autopep8 -i "$module"
         else

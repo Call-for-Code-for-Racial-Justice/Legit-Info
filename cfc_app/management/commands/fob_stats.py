@@ -20,7 +20,7 @@ from django.core.management.base import BaseCommand
 
 # Application imports
 from cfc_app.FOB_Storage import FOB_Storage
-from cfc_app.KeyCounter import KeyCounter
+from cfc_app.key_counter import KeyCounter
 
 # Debug with:  import pdb; pdb.set_trace()
 logger = logging.getLogger(__name__)

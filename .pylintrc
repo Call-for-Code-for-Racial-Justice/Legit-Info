@@ -146,6 +146,7 @@ disable=print-statement,
         redefined-outer-name,
         too-few-public-methods,
         no-member,
+        imported-auth-user,
         too-many-instance-attributes
 
 # Enable the message, report, category or checker with the given id(s). You can

@@ -42,7 +42,7 @@ from pdfminer.pdfpage import PDFPage
 from pdfminer.pdfparser import PDFParser
 
 
-class pdf_to_text():
+class PDFtoText():
     """
     Class to handle PDF files
     """
@@ -55,9 +55,9 @@ class pdf_to_text():
 
     def convert_to_text(self):
         """ Set save input file name """
-        input_IO = BytesIO(self.binary_input)
+        input_io = BytesIO(self.binary_input)
         output_string = StringIO()
-        with input_IO as in_file:
+        with input_io as in_file:
             parser = PDFParser(in_file)
             doc = PDFDocument(parser)
             rsrcmgr = PDFResourceManager()
@@ -70,16 +70,16 @@ class pdf_to_text():
 
 
 if __name__ == "__main__":
-    test_pdf = "pdf_to_text_sample.pdf"
-    print('======================================= Converting: ', test_pdf)
-    with open(test_pdf, "rb") as in_file:
+    TEST_PDF = "pdf_to_text_sample.pdf"
+    TEST_OUT = "pdf_to_text_sample.txt"
+    print('======================================= Converting: ', TEST_PDF)
+    with open(TEST_PDF, "rb") as in_file:
         bindata = in_file.read()
-        miner = pdf_to_text(test_pdf, bindata)
+        miner = PDFtoText(TEST_PDF, bindata)
         textdata = miner.convert_to_text()
         print(textdata[:300])
-        output_txt = test_pdf.replace(".pdf", ".txt")
-        with open(output_txt, "w") as out_file:
+        with open(TEST_OUT, "w") as out_file:
             out_file.write(textdata)
-        print("====================== Output text file created: ", output_txt)
+        print("====================== Output text file created: ", TEST_OUT)
 
     print('========================= Thank you ===========================')
