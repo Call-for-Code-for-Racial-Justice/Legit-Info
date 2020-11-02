@@ -48,25 +48,16 @@ SUMMARY_LIMIT = 1000
 
 # Put the original file name, doc date, title and summary ahead of text
 
-FileForm = "_FILE_ {}"
-HashForm = " _HASHCODE_ "
-DateForm = " _DOCDATE_ {}"
-BillForm = " _BILLID_ {}"
-CiteForm = " _CITE_ {}"
-TitleForm = " _TITLE_ {}"
-SumForm = " _SUMMARY_ {}"
-TextForm = " _TEXT_ "
-
 billRegex = re.compile(r"^([A-Z]{2})/\d\d\d\d-(\d\d\d\d).*/bill/(\w*).json$")
 
-nameForm = "{}.{}"
-
-
-class ExtractError(CommandError):
+class ExtractTextError(CommandError):
+    """ Customized Error class """
     pass
 
 
 class Command(BaseCommand):
+    """ Customized Django command for CRON job """
+
     help = ("For each state, scan the associated CC-Dataset-NNNN.json "
             "fetching the legislation as either HTML or PDF file, and "
             "extract to TEXT.  Both the original (HTML/PDF) and the "
@@ -75,6 +66,7 @@ class Command(BaseCommand):
             "the text analysis.")
 
     def __init__(self, *args, **kwargs):
+
         super().__init__(*args, **kwargs)
         self.fob = FOB_Storage(settings.FOB_METHOD)
         self.leg = LegiscanAPI()
@@ -92,6 +84,8 @@ class Command(BaseCommand):
         return None
 
     def add_arguments(self, parser):
+        """ Parse arguments """
+
         parser.add_argument("--api", action="store_true",
                             help="Invoke Legiscan.com API, if needed")
         parser.add_argument("--state", help="Process single state: AZ, OH")
@@ -105,6 +99,7 @@ class Command(BaseCommand):
         return None
 
     def handle(self, *args, **options):
+        """ Main handler for customized DJANGO command """
 
         timing = LogTime("extract_files")
         timing.start_time(options['verbosity'])
@@ -183,6 +178,7 @@ class Command(BaseCommand):
         return None
 
     def parse_options(self, options):
+        """ Validate processing options """
 
         logger.debug(f"186:Options {options}")
 
@@ -258,6 +254,7 @@ class Command(BaseCommand):
 
     def process_source(self, mo, json_data):
         """ Process the PDF/HTML source file """
+
         processed = 0
         bill_state = mo.group(1)
         bill_number = mo.group(3)
@@ -441,6 +438,7 @@ class Command(BaseCommand):
         return processed
 
     def save_source_hash(self, bill_hash, bill_name, bill_detail, chosen):
+        """ Save hashcode to cfc_app_hash table """
 
         if bill_hash is None:
             hash = Hash()
@@ -463,6 +461,8 @@ class Command(BaseCommand):
         return None
 
     def process_html(self, key, docdate, bill_detail, billtext):
+        """ Process HTML source file of legislation """
+
         bill_name = self.fob.BillText_name(key, 'html')
         text_name = self.fob.BillText_name(key, 'txt')
 
@@ -474,6 +474,8 @@ class Command(BaseCommand):
         return self
 
     def write_file(self, text_line, text_name):
+        """ Write text file as series of full sentences  """
+
         text_line.split_sentences()
         logger.info('428:Writing: ' + text_name)
         self.fob.upload_text(text_line.oneline, text_name)
@@ -513,6 +515,7 @@ class Command(BaseCommand):
         return None
 
     def form_sentence(self, line, charlimit):
+        """ Reduce title/summary to fit within character limits """
 
         # Remove trailing spaces, and add period at end of sentence.
         newline = line.strip()
@@ -531,12 +534,14 @@ class Command(BaseCommand):
         return newline
 
     def fetch_bill(self, bill, key):
+        """ If not available from the state, fetch from Legiscan.com API """
+
         extension, msg_bytes = '', b''
         docID = bill['doc_id']
         response = ''
         if self.api_limit > 0 and self.leg.api_ok:
             try:
-                response = self.leg.getBillText(docID)
+                response = self.leg.get_bill_text(docID)
             except Exception as e:
                 self.leg.api_ok = False
                 fetch_msg = "Unable to fetch bill: key={} DocID={} Msg:{}"
@@ -562,6 +567,8 @@ class Command(BaseCommand):
         return extension, msg_bytes
 
     def parse_html(self, in_line, out_line):
+        """ Use BeautifulSoup libraries to parse HTML """
+
         soup = BeautifulSoup(in_line, PARSER)
         title = soup.find('title')
         if title:
@@ -586,6 +593,8 @@ class Command(BaseCommand):
         return self
 
     def parse_intermediate(self, input_string, output_line):
+        """ Parse the intermediate file from pdf_to_text conversion """
+
         lines = input_string.splitlines()
         for line in lines:
             newline = line.replace('B I L L', 'BILL')
@@ -596,12 +605,16 @@ class Command(BaseCommand):
         return self
 
     def shrink_line(self, line, charlimit):
+        """ if chopping a line from the front, find next full word """
+
         newline = re.sub(r'^\W*\w*\W*', '', line[-charlimit:])
         newline = re.sub(r'^and ', '', newline)
         newline = newline[0].upper() + newline[1:]
         return newline
 
     def determine_extension(self, mime_type):
+        """ Determine extension to use for each mime_type """
+
         extension = 'unk'
         if mime_type == 'text/html':
             extension = 'html'
@@ -612,6 +625,8 @@ class Command(BaseCommand):
         return extension
 
     def latest_text(self, texts):
+        """ If legislation has two or more documents, pick the latest one """
+
         LastDate = settings.LONG_AGO
 
         LastDocid = 0
@@ -633,4 +648,4 @@ class Command(BaseCommand):
     def date_type(self, date_string):
         """ Convert "YYYY-MM-DD" string to datetime.date format """
         date_value = DT.datetime.strptime(date_string, "%Y-%m-%d").date()
-        return date_value
+        return date_valueh
