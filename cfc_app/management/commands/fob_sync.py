@@ -28,6 +28,15 @@ class FobSyncError(CommandError):
     pass
 
 
+class FobStruct():
+    """ Convenient structure to hold information about FOB """
+
+    def __init__(self, fob, method):
+        self.fob = fob
+        self.method = method
+        return None
+
+
 class Command(BaseCommand):
     """ fob_sync command instance """
 
@@ -44,10 +53,16 @@ class Command(BaseCommand):
         self.fob_object = FOB_Storage('OBJECT')
         self.olist = []
         self.maxlimit = 5000
+        self.maxdel = None
+        self.maxput = None
+        self.maxget = None
         self.count = 0
+        self.ops = None
         return None
 
     def add_arguments(self, parser):
+        """ add arguments """
+
         parser.add_argument("--prefix", help="Prefix of names")
         parser.add_argument("--suffix", help="Suffix of names")
         parser.add_argument("--after", help="Start after this name")
@@ -63,33 +78,18 @@ class Command(BaseCommand):
         return None
 
     def handle(self, *args, **options):
+        """ Handle the fob_sync command """
 
         timing = LogTime("fob_sync")
         timing.start_time(options['verbosity'])
 
-        new_options = options
-
-        # If --only specified, ignore prefix/suffix/after options
-        if new_options['only']:
-            new_options['prefix'] = None
-            new_options['suffix'] = None
-            new_options['after'] = None
-            logger.debug(f"80:fob_sync --only={new_options['only']} ")
-        else:
-            logger.debug(f"84:fob_sync --prefix {new_options['prefix']} "
-                         f"--suffix {new_options['suffix']} "
-                         f"--after {new_options['after']}")
-        maxdel = min(options['maxdel'], self.maxlimit)
-        maxput = min(options['maxput'], self.maxlimit)
-        maxget = min(options['maxget'], self.maxlimit)
-        logger.debug(f"--maxdel {maxdel}, --maxget {maxget} "
-                     f"--maxput {maxput} ")
+        self.parse_options(options)
 
         # Get a list of ALL files on FOB FILE that match criteria
-        self.flist = self.get_list(self.fob_file, new_options)
+        self.flist = self.get_list(self.fob_file)
 
         # Get a list of ALL files on FOB FILE that match criteria
-        self.olist = self.get_list(self.fob_object, new_options)
+        self.olist = self.get_list(self.fob_object)
 
         fnum, onum = len(self.flist), len(self.olist)
         print('Number of files found:', fnum)
@@ -100,24 +100,14 @@ class Command(BaseCommand):
 
         # Delete items from IBM Cloud Object Store if not found on FILE.
         # If --maxdel and --maxget are both specified, --maxdel presides.
-        if maxdel > 0:
-            self.count = 0
-            try:
-                self.delete_items(maxdel, found_in='OBJECT', but_not_in='FILE')
-            except Exception as e:
-                logger.error(f"105:DELETE {e}", exc_info=True)
-                raise FobSyncError
-
-            del_count = self.count
-
-            # Refresh list of ALL files on FOB FILE that match criteria
-            self.olist = self.get_list(self.fob_object, new_options)
+        if self.maxdel > 0:
+            del_count = self.process_deletes()
 
         # Send Files to Object
-        if maxput > 0:
+        if self.maxput > 0:
             self.count = 0
             try:
-                self.copy_items(maxput, options, from_fob='FILE',
+                self.copy_items(self.maxput, options, from_fob='FILE',
                                 to_fob='OBJECT')
             except Exception as e:
                 logger.error(f"119:PUT {e}", exc_info=True)
@@ -126,10 +116,10 @@ class Command(BaseCommand):
             put_count = self.count
 
         # Send Object to Files
-        if maxget > 0:
+        if self.maxget > 0:
             self.count = 0
             try:
-                self.copy_items(maxget, options, from_fob='OBJECT',
+                self.copy_items(self.maxget, options, from_fob='OBJECT',
                                 to_fob='FILE')
             except Exception as e:
                 logger.error(f"119:PUT {e}", exc_info=True)
@@ -144,6 +134,46 @@ class Command(BaseCommand):
 
         timing.end_time(options['verbosity'])
         return None
+
+    def parse_options(self, options):
+        """ Parse options """
+
+        self.ops = options
+
+        # If --only specified, ignore prefix/suffix/after options
+        if self.ops['only']:
+            self.ops['prefix'] = None
+            self.ops['suffix'] = None
+            self.ops['after'] = None
+            logger.debug(f"80:fob_sync --only={self.ops['only']} ")
+        else:
+            logger.debug(f"84:fob_sync --prefix {self.ops['prefix']} "
+                         f"--suffix {self.ops['suffix']} "
+                         f"--after {self.ops['after']}")
+
+        self.maxdel = min(options['maxdel'], self.maxlimit)
+        self.maxput = min(options['maxput'], self.maxlimit)
+        self.maxget = min(options['maxget'], self.maxlimit)
+        logger.debug(f"--maxdel {self.maxdel}, --maxget {self.maxget} "
+                     f"--maxput {self.maxput} ")
+
+        return None
+
+    def process_deletes(self):
+        """ Process deletes from OBJECT storage """
+
+        self.count = 0
+        try:
+            self.delete_items(self.maxdel, found_in='OBJECT',
+                              but_not_in='FILE')
+        except Exception as e:
+            logger.error(f"105:DELETE {e}", exc_info=True)
+            raise FobSyncError
+
+        # Refresh list of ALL files on FOB FILE that match criteria
+        self.olist = self.get_list(self.fob_object)
+        return self.count
+
 
     def delete_items(self, maxcount, found_in=None, but_not_in=None):
         """ delete items from OBJECT that do not exist in FILE """
@@ -165,8 +195,6 @@ class Command(BaseCommand):
                 remove_from.remove_item(name)
                 Hash.delete_if_exists(name, mode=found_in)
                 logger.info(f"Removed from {found_in}: {name}")
-                import pdb
-                pdb.set_trace()
                 self.count += 1
                 if self.count >= maxcount:
                     break
@@ -179,13 +207,13 @@ class Command(BaseCommand):
         if (from_fob == 'FILE') and (to_fob == 'OBJECT'):
             item_list = self.flist
             other_list = self.olist
-            read_from = self.fob_file
-            write_to = self.fob_object
+            read_from = FobStruct(self.fob_file, from_fob)
+            write_to = FobStruct(self.fob_object, to_fob)
         elif (from_fob == 'OBJECT') and (to_fob == 'FILE'):
             item_list = self.olist
             other_list = self.flist
-            read_from = self.fob_object
-            write_to = self.fob_file
+            read_from = FobStruct(self.fob_object, from_fob)
+            write_to = FobStruct(self.fob_file, to_fob)
         else:
             raise CommandError('Invalid combination of parameters')
 
@@ -193,8 +221,8 @@ class Command(BaseCommand):
         for name in item_list:
             if name not in other_list:
 
-                bindata = read_from.download_binary(name)
-                write_to.upload_binary(bindata, name)
+                bindata = read_from.fob.download_binary(name)
+                write_to.fob.upload_binary(bindata, name)
                 self.count += 1
 
                 logger.info(f"File {name} copied to {to_fob}")
@@ -203,16 +231,17 @@ class Command(BaseCommand):
                 logger.debug(f"File {name} exists in both places, skipping")
 
             else:
-                self.both_exist(name, read_from, write_to, from_fob, to_fob)
+                self.both_exist(name, read_from, write_to)
 
             if self.count >= maxcount:
                 break
 
         return None
 
-    def get_list(self, fob, ops):
+    def get_list(self, fob):
         """ Get list of items that match criteria. """
 
+        ops = self.ops
         my_list = fob.list_items(prefix=ops['prefix'], suffix=ops['suffix'],
                                  after=ops['after'], limit=0)
 
@@ -226,27 +255,30 @@ class Command(BaseCommand):
 
         return my_list
 
-    def both_exist(self, name, read_from, write_to, from_fob, to_fob):
+    def both_exist(self, name, read_from, write_to):
+        """ When both FILE and OBJECT exist, decide whether to copy """
+
         parts = name.rsplit('.', maxsplit=1)
         basename, extension = parts
-        hash_from = Hash.find_item_name(name, from_fob)
+        hash_from = Hash.find_item_name(name, read_from.method)
         if hash_from is None:
-            hash_from = self.source_hash(basename, extension, from_fob)
+            hash_from = Command.source_hash(basename, extension, read_from)
         # hash_to = Hash.find_item_name(name, to_fob)
         need_to_copy = False
 
         if need_to_copy:
-            bindata = read_from.download_binary(name)
-            write_to.upload_binary(bindata, name)
-            logger.info(f'File {name} copied to {to_fob}')
+            bindata = read_from.fob.download_binary(name)
+            write_to.fob.upload_binary(bindata, name)
+            logger.info(f'File {name} copied to {write_to.method}')
             self.count += 1
 
-        import pdb
-        pdb.set_trace()
         return None
 
-    def source_hash(self, basename, extension, from_fob):
+    @staticmethod
+    def source_hash(basename, extension, read_from):
+        """ Determine the hashcode of source file in copy """
 
+        item_name = f"{basename}.{extension}"
         if extension == "json":
             pass
         elif extension == "zip":
@@ -255,8 +287,8 @@ class Command(BaseCommand):
             pass
         elif extension == "html":
             pass
-        elif extension == "zip":
-            pass
+        elif extension == "txt":
+            read_from.fob.download_text(item_name)
         else:
             logger.warning(f"261:Unrecognized extension .{extension}")
 

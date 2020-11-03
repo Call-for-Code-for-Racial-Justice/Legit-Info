@@ -25,6 +25,7 @@ FullRegex = re.compile(r"^[A-Z]\w* .*[a-z][.]$")
 
 
 class Command(BaseCommand):
+    """ Customized command validate_texts """
 
     help = ("test1")
 
@@ -45,6 +46,7 @@ class Command(BaseCommand):
         return None
 
     def handle(self, *args, **options):
+        """ Handle validate_texts command """
 
         items = self.fob.list_items(suffix=".txt", limit=0)
         print("Number of text files: ", len(items))
@@ -66,11 +68,6 @@ class Command(BaseCommand):
         textdata = self.fob.download_text(filename)
         lines = textdata.splitlines()
 
-        sec_line = False
-        dot_line = False
-        num_line = False
-        up_line = False
-        low_line = False
         numfull = 0
 
         for line in lines:
@@ -84,32 +81,11 @@ class Command(BaseCommand):
                 lastchar = line[-2]
                 self.lasts.consider_key(lastchar)
 
-            mo = FullRegex.search(line)
-            if mo:
+            mop = FullRegex.search(line)
+            if mop:
                 self.full.consider_key(nlen)
                 numfull += 1
 
-            if nlen < 26:
-                self.stubs.consider_key(line)
-                mo = SecRegex.search(line)
-                if mo:
-                    sec_line = True
-                mo = DotRegex.search(line)
-                if mo:
-                    dot_line = True
-                mo = NumRegex.search(line)
-                if mo:
-                    num_line = True
-                mo = UpRegex.search(line)
-                if mo:
-                    up_line = True
-                mo = LowRegex.search(line)
-                if mo:
-                    low_line = True
-
-        if (sec_line and dot_line
-                and num_line and up_line and low_line):
-            print("USE THIS: ", filename)
         numsen = len(lines)
         self.numsen.consider_key(numsen)
         self.fullsen.consider_key(numfull)
@@ -117,6 +93,7 @@ class Command(BaseCommand):
         return None
 
     def show_results(self):
+        """ Show results """
 
         self.filenames.key_results()
         self.slen.key_results()

@@ -1,13 +1,20 @@
 #!/usr/bin/env python3
-# FOB_Storage.py -- Use FILE or OBJECT storage to hold legislation
-# By Tony Pearson, IBM, 2020
-#
-# requires:  pip install -U ibm-cos-sdk for IBM Cloud Object Storage
-#
+# -*- coding: utf-8 -*-
+
+"""
+File/Object Storage -- Use FILE or OBJECT storage to hold legislation
+
+Written by Tony Pearson, IBM, 2020
+Licensed under Apache 2.0, see LICENSE for details
+"""
+
+# System imports
 import os
 import re
 import sys
 import glob
+
+# Django and other third-party imports
 import ibm_boto3
 from ibm_botocore.client import Config, ClientError
 
@@ -20,13 +27,12 @@ BTregex = re.compile(r'^([A-Z]{2})-([A-Z0-9]*)-(\d\d\d\d)(.json|.pdf|.html)$')
 TEST_LIMIT = 10
 
 
-class FOB_Storage():
+class FobStorage():
     """
     Support both Local File and Remote Object Storage
     """
 
     def __init__(self, mode, filesys=None, bucket=None):
-        """ Set characters to use for showing progress"""
         self.mode = mode  # 'FILE' or 'OBJECT'
 
         self.cos = None
@@ -44,6 +50,8 @@ class FOB_Storage():
         return None
 
     def setup_cos(self, bucket=None):
+        """ Setup variables needed to access IBM Cloud Object Storage """
+
         # Connect to IBM Cloud Object Storage service
         self.cos_endpoint_url = os.environ['COS_ENDPOINT_URL']
         self.cos_api_key = os.environ['COS_API_KEY_ID']
@@ -85,6 +93,8 @@ class FOB_Storage():
         return self
 
     def setup_filesys(self, filesys=None):
+        """ Setup variables to access local or shared file system """
+
         if filesys:
             self.filesys = filesys
         else:
@@ -115,6 +125,7 @@ class FOB_Storage():
         return self
 
     def item_exists(self, item_name):
+        """ Check if item exists """
 
         items = self.list_items(prefix=item_name, limit=1)
         found = False
@@ -196,47 +207,63 @@ class FOB_Storage():
 
     # Helpers for Legiscan DatasetList (DatasetList-YYYY-MM-DD.json)
     def DatasetList_items(self):
+        """ Get all items that are datasetlists """
+
         dsl_list = self.list_items(prefix='DatasetList-', suffix='.json')
         return dsl_list
 
     def DatasetList_search(self, item_name):
-        mo = DSLregex.search(item_name)
-        return mo
+        """ Return REGEX search value of item """
+
+        mop = DSLregex.search(item_name)
+        return mop
 
     def DatasetList_name(self, today):
         return 'DatasetList-{}.json'.format(today)
 
     # Helpers for Legiscan Dataset (SS-Dataset-NNNN.json)
     def Dataset_items(self, state):
+        """ Get all items that are datasets """
+
         dsn_prefix = "{}-Dataset-".format(state)
         dsl_list = self.list_items(prefix=dsn_prefix, suffix='.json')
         return dsl_list
 
     def Dataset_search(self, item_name):
-        mo = DSNregex.search(item_name)
-        return mo
+        """ Return REGEX search value of item """
+
+        mop = DSNregex.search(item_name)
+        return mop
 
     def Dataset_name(self, state, state_id):
+        """ generate valid dataset filename """
+
         item_name = "{}-Dataset-{:04d}.json".format(state, state_id)
         return item_name
 
     # Helpers for Legiscan BillText (CC-BODY-SSSS-YNNNN.json)
     def BillText_items(self, state, extension):
+        """ Get all items that are individual laws (PDF/HTML/TXT) """
+
         dsn_prefix = "{}-".format(state)
         dsl_list = self.list_items(prefix=dsn_prefix, suffix=extension)
         return dsl_list
 
     def BillText_search(self, item_name):
-        mo = BTregex.search(item_name)
-        return mo
+        """ Return REGEX search value of item """
+
+        mop = BTregex.search(item_name)
+        return mop
 
     def BillText_key(self, state, bill_number, session_id, doc_year):
+        """ Generate key in correct format """
+
         BNregex = re.compile("([A-Z]*)([0-9]*)")
         mo = BNregex.search(bill_number)
         bill_no = bill_number
-        if mo:
-            body = mo.group(1)
-            bnum = mo.group(2)
+        if mop:
+            body = mop.group(1)
+            bnum = mop.group(2)
             if len(bnum) < 4:
                 bill_no = "{}{:0>4}".format(body, bnum)
 
@@ -248,12 +275,15 @@ class FOB_Storage():
         return key
 
     def BillText_name(self, key, extension):
+        """ Generate filename for legislation in correct format """
+
         ext = extension.lower()
         item_name = "{}.{}".format(key, ext)
         return item_name
 
     def download_binary(self, item_name):
         """ Upload binary file """
+
         fob_mode = self.mode
 
         bindata = b''
@@ -387,11 +417,11 @@ if __name__ == "__main__":
     print('Testing: ', sys.argv[0], mode)
 
     # Test with empty structure first
-    fob = FOB_Storage(mode, filesys='/tmp/FOB-TEST', bucket='fob-test')
+    fob = FobStorage(mode, filesys='/tmp/FOB-TEST', bucket='fob-test')
     fob.test_with_empty()
 
     # test_with_live copy
-    fob = FOB_Storage(mode)
+    fob = FobStorage(mode)
     item_list = fob.list_items(limit=0)
     print(len(item_list))
 

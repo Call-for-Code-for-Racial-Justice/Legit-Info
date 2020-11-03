@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 def register(request):
     """Register a new user."""
 
-    logger.info("Line31: {} {}".format(request.method, request.user.username))
+    logger.info(f"Line31: {request.method}, {request.user.username}")
     if request.method != 'POST':
         # Display blank registration form.
         form = UserCreationForm()
@@ -51,7 +51,7 @@ def register(request):
 def show_profile(request):
     """Display user profile information."""
 
-    logger.info("Line51: {}".format(request.user.username))
+    logger.info("Line51: {request.user.username}")
     user = request.user
     # Display the location and impact preferences
     location = user.profile.location
@@ -68,7 +68,7 @@ def show_profile(request):
 def update_profile(request):
     """Update user profile information."""
 
-    logger.info("Line68: {} {}".format(request.method, request.user.username))
+    logger.info("Line68: {request.method}, {request.user.username}")
     if request.method != 'POST':
         # Pre-populate forms with previous information
         user_form = UserForm(instance=request.user)

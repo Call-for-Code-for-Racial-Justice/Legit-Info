@@ -1,8 +1,25 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Find cities and counties in legislation.
+
+This is phase 1 of weekly cron job.  See CRON.md for details.
+Invoke with ./stage1 get_datasets  or ./cron1 get_datasets
+Specify --help for details on parameters available.
+
+Written by Tommy Adams, IBM, 2020
+Licensed under Apache 2.0, see LICENSE for details
+"""
+
+# System imports
 import sys
 import getopt
 
 
 def main(argv):
+    """ Find cities and counties in legislation. """
+
     bill_file = ''  # text file for the bill
     cities_file = ''  # text file of cities in the state, one per line
     counties_file = ''  # text file of counties in the state, one per line
@@ -22,6 +39,9 @@ def main(argv):
             cities_file = arg
         elif opt in ("-o", "--counties"):
             counties_file = arg
+
+    if args is None:
+        pass                # Eliminate pylint error
 
     # read the cities into array
     with open(cities_file, 'r') as file:

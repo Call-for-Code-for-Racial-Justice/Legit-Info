@@ -30,21 +30,16 @@ from django.conf import settings
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
-from ibm_watson.natural_language_understanding_v1 import (Features,
-                                                          SentimentOptions,
-                                                          KeywordsOptions,
-                                                          ConceptsOptions,
-                                                          SyntaxOptions,
-                                                          SyntaxOptionsTokens,
-                                                          CategoriesOptions)
+import ibm_watson.natural_language_understanding_v1 as NLU
 
 # Application imports
-from cfc_app.FOB_Storage import FOB_Storage
-from cfc_app.LegiscanAPI import LEGISCAN_ID
-from cfc_app.LogTime import LogTime
+from cfc_app.fob_storage import FOB_Storage
+from cfc_app.legiscan_api import LEGISCAN_ID
+from cfc_app.log_time import LogTime
 from cfc_app.models import Location, Impact, Law
 from cfc_app.Oneline import Oneline
-from cfc_app.ShowProgress import ShowProgress
+from cfc_app.show_progress import ShowProgress
+from cfc_app.word_map import WordMap
 
 # Debug with:  import pdb; pdb.set_trace()
 logger = logging.getLogger(__name__)
@@ -61,10 +56,12 @@ RLIMIT = 10   # number of phrases to be returned by IBM Watson NLU
 
 
 class AnalyzeTextError(CommandError):
+    """ customized error for this command. """
     pass
 
 
 class Command(BaseCommand):
+    """ Command handler for analyze_text """
 
     help = ("For all text files found in File/Object storage, run the "
             "IBM Watson Natural Language Understanding (NLU) API, generate "
@@ -76,14 +73,9 @@ class Command(BaseCommand):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.wordmap = None
         self.impact_list = None
-        self.secondary_impacts = None
-        self.primray = None
-        self.secondary = None
-        self.tertiary = None
-
         self.fob = FOB_Storage(settings.FOB_METHOD)
+        self.wordmap = None
         self.use_api = False
         self.after = None
         self.limit = 10
@@ -99,6 +91,8 @@ class Command(BaseCommand):
         return None
 
     def add_arguments(self, parser):
+        """ add arguments for parsing """
+
         parser.add_argument("--api", action="store_true",
                             help="Invoke IBM Watson NLU API")
         parser.add_argument("--state", help="Process single state: AZ, OH")
@@ -109,6 +103,7 @@ class Command(BaseCommand):
         return None
 
     def handle(self, *args, **options):
+        """ handle analyze_text command """
 
         timing = LogTime("analyze_text")
         timing.start_time(options['verbosity'])
@@ -133,12 +128,7 @@ class Command(BaseCommand):
             impact_list.append(imp.text)
         self.impact_list = impact_list
 
-        try:
-            self.load_wordmap(impact_list)
-        except Exception as e:
-            err_msg = f"133:Load Wordmap: {e}"
-            logger.error(err_msg, exc_info=True)
-            raise AnalyzeTextError(err_msg)
+        self.wordmap = WordMap()
 
         locations = Location.objects.filter(legiscan_id__gt=0)
         locations = locations.order_by('hierarchy')
@@ -151,82 +141,21 @@ class Command(BaseCommand):
                 if state != options['state']:
                     continue
 
-            logger.info('150:Processing: {} ({})'.format(loc.desc, state))
+            logger.info(f"150:Processing: {loc.desc} ({state})")
             # import pdb; pdb.set_trace()
             print("Processing: {} ({})".format(loc.desc, state))
             try:
                 self.process_state(state)
-            except Exception as e:
-                err_msg = f"151:Process State Error: {e}"
+            except Exception as exc:
+                err_msg = f"151:Process State Error: {exc}"
                 logger.error(err_msg, exc_info=True)
-                raise AnalyzeTextError(err_msg)
+                raise AnalyzeTextError(err_msg) from exc
 
         timing.start_time(options['verbosity'])
         return None
 
-    def load_wordmap(self, impact_list):
-        wordmap, categories = {}, []
-        mapname = os.path.join(settings.SOURCE_ROOT, 'wordmap.csv')
-        logger.debug('160:Mapname: '+mapname)
-
-        with open(mapname, 'r') as mapfile:
-            maplines = mapfile.readlines()
-
-        logger.debug("165:maplines {}".format(len(maplines)))
-        for line in maplines:
-            mo = mapRegex.search(line)
-            if mo:
-                term = mo.group(1).strip()
-                impact_category = mo.group(2).strip()
-                if term == 'term' or impact_category == 'impact':
-                    continue
-                if impact_category.upper() in ['REMOVE']:
-                    continue
-                if impact_category.upper() in ['NONE']:
-                    impact_category = 'None'
-                wordmap[term] = impact_category
-                if impact_category not in categories:
-                    categories.append(impact_category)
-            else:
-                logger.error("181:Regex Error {}".format(line))
-
-        secondary_list = []
-        topic_list = []
-        for impact in categories:
-            marker = ' '
-            if impact in impact_list:
-                marker = '*'
-            elif impact != 'None':
-                secondary_list.append(impact)
-            topic_list.append(marker+impact)
-
-        topic_msg = "Impacts marked with * match cfc_app_impact table"
-        logger.debug('200: {}: {}'.format(topic_msg, topic_list))
-
-        self.wordmap = wordmap
-        self.secondary_impacts = secondary_list
-
-        primary, secondary, tertiary = [], [], []
-        for term in wordmap:
-            if wordmap[term] in impact_list:
-                primary.append([term, wordmap[term]])
-            elif wordmap[term] in secondary_list:
-                secondary.append([term, wordmap[term]])
-            else:
-                tertiary.append([term, wordmap[term]])
-
-        status_msg = '{}: {} terms'
-        logger.debug(status_msg.format("215:Primary", len(primary)))
-        logger.debug(status_msg.format("216:Secondary", len(secondary)))
-        logger.debug(status_msg.format("217:Tertiary", len(tertiary)))
-
-        self.primary = primary
-        self.secondary = secondary
-        self.tertiary = tertiary
-        return None
-
     def process_state(self, state):
-        # import pdb; pdb.set_trace()
+        """ process specific state of United States """
 
         cursor = self.after
         items = self.fob.list_items(prefix=state, suffix=".txt",
@@ -241,7 +170,7 @@ class Command(BaseCommand):
             header = Oneline.parse_header(textdata)
             if 'BILLID' in header:
                 bill_id = header['BILLID']
-                logger.debug("231:bill_id={}".format(bill_id))
+                logger.debug(f"231:bill_id={bill_id}")
                 self.process_legislation(filename, textdata, header)
                 if self.verbosity:
                     dot.show()
@@ -249,8 +178,7 @@ class Command(BaseCommand):
                 if self.limit > 0 and num >= self.limit:
                     break
             else:
-                logger.info('238:No bill_id found in header, removing: ',
-                            filename)
+                logger.info(f"238:No bill_id found, removing: {filename}")
                 self.fob.remove_item(filename)
                 continue
 
@@ -258,90 +186,54 @@ class Command(BaseCommand):
         return None
 
     def process_legislation(self, filename, extracted_lines, header):
+        """ Process individual bill """
 
         extracted_text = Oneline.join_lines(extracted_lines)
         extracted_text = extracted_text.replace('"', r'|').replace("'", r"|")
 
         concept = {}
         if self.use_api:
-            log_msg = "255:Filename {} Concept:{}"
-            logger.debug(log_msg.format(filename, concept))
+            logger.debug(f"255:Filename {filename} Concept:{concept}")
             try:
                 concept = self.Relevance_NLU(extracted_text)
-            except Exception as e:
-                err_msg = "IBM Watson NLU failed, disabling --api: {}"
-                logger.error(err_msg.format(e))
+            except Exception as exc:
+                logger.error(f"IBM Watson NLU failed, disabling --api: {exc}")
                 self.use_api = False
         else:
-            concept = self.Relevance_Wordmap(extracted_text)
+            concept = self.wordmap.Relevance(extracted_text)
 
         if concept:
             self.save_relevance(filename, header, concept)
 
         return None
 
-    def Relevance_NLU(self, text):
+    @staticmethod
+    def Relevance_NLU(text):
         """ return top impact areas from extracted text using Watson NLU """
 
         authenticator = IAMAuthenticator(NLU_APIKEY)
-        natural_language_understanding = NaturalLanguageUnderstandingV1(
-            version='2019-07-12',
-            authenticator=authenticator
-        )
+        nlup = NaturalLanguageUnderstandingV1(
+            version='2019-07-12', authenticator=authenticator)
 
-        natural_language_understanding.set_service_url(NLU_SERVICE_URL)
+        nlup.set_service_url(NLU_SERVICE_URL)
 
-        tokens = SyntaxOptionsTokens(lemma=True, part_of_speech=True)
-        syntax = SyntaxOptions(tokens=tokens, sentences=True)
-        features = Features(categories=CategoriesOptions(limit=RLIMIT),
-                            sentiment=SentimentOptions(),
-                            concepts=ConceptsOptions(limit=RLIMIT),
-                            keywords=KeywordsOptions(sentiment=True, limit=10),
-                            syntax=syntax)
+        tokens = NLU.SyntaxOptionsTokens(lemma=True, part_of_speech=True)
+        syntax = NLU.SyntaxOptions(tokens=tokens, sentences=True)
+        features = NLU.Features(categories=NLU.CategoriesOptions(limit=RLIMIT),
+                                sentiment=NLU.SentimentOptions(),
+                                concepts=NLU.ConceptsOptions(limit=RLIMIT),
+                                keywords=NLU.KeywordsOptions(sentiment=True,
+                                                             limit=10),
+                                syntax=syntax)
 
-        response = natural_language_understanding.analyze(features, text=text,
-                                                          language='en')
+        response = nlup.analyze(features, text=text, language='en')
 
         result = response.get_result()
         concept = result.get("concepts")
         return concept
 
-    def Relevance_Wordmap(self, extracted_text):
-        """ return top impact areas from extracted text using Wordmap """
-        concept = []
-
-        self.scan_extract(extracted_text, self.primary, concept)
-        if len(concept) < RLIMIT:
-            self.scan_extract(extracted_text, self.secondary, concept)
-        if len(concept) < RLIMIT:
-            self.scan_extract(extracted_text, self.tertiary, concept)
-
-        return concept
-
-    def scan_extract(self, extracted_text, category_list, concept):
-
-        relterms = {}
-        for rel in category_list:
-            term = rel[0]
-            relcount = extracted_text.count(term)
-            if relcount:
-                relterms[term] = relcount
-
-        num = 0
-        # import pdb; pdb.set_trace()
-        for term, count in sorted(relterms.items(), key=lambda item: item[1],
-                                  reverse=True):
-            logger.debug("328:WORDMAP {} {} {}".format(term, count,
-                                                       self.wordmap[term]))
-
-            concept.append({'text': term, 'Reason': self.wordmap[term]})
-            num += 1
-            if num >= RLIMIT:
-                break
-
-        return None
-
     def save_relevance(self, filename, header, concept):
+        """ Save relevant words found for this bill """
 
         revlist, impact_chosen = self.classify_impact(concept)
 
@@ -350,19 +242,21 @@ class Command(BaseCommand):
             rel += connector + "'{}' => '{}'".format(r[0], r[1])
             connector = ", "
 
-        log_msg = "351:Filename {} Impact={} Rel:{}"
-        logger.debug(log_msg.format(filename, impact_chosen, rel))
+        log_msg = "351:Filename {filename} Impact={impact_chosen} Rel:{rel}"
+        logger.debug(log_msg)
 
         key = filename.replace(".txt", "")
 
         if self.verbosity > 1:
-            verb_msg = "Analyzed filename: {}  Impact chosen={}"
-            print(verb_msg.format(filename, impact_chosen))
+            print(f"Analyzed filename: {filename} "
+                  f"Impact chosen={impact_chosen}")
 
         self.save_law(key, header, rel, impact_chosen)
         return None
 
     def classify_impact(self, concept):
+        """ Classify the impact based on relevant terms """
+
         impact_chosen = 'None'
         revlist = []
         for rel in concept:
@@ -384,6 +278,7 @@ class Command(BaseCommand):
         return revlist, impact_chosen
 
     def save_law(self, key, header, rel, impact_chosen):
+        """ Save the results in cfc_app_law database table """
 
         # If record exists, check if this is newer..
         doc_date = header['DOCDATE']
@@ -395,8 +290,8 @@ class Command(BaseCommand):
             # If the record is up-to-date, leave it alone
             if (law.doc_date
                     and doc_date < law.doc_date):
-                msg = "396:Law left alone {} Existing={} Chosen={}"
-                logger.debug(msg.format(key, law.impact, impact_chosen))
+                logger.debug(f"396:Law left alone {key} "
+                             f"Existing={law.impact} Chosen={impact_chosen}")
                 return None
 
             result = 'Updated'
@@ -426,7 +321,7 @@ class Command(BaseCommand):
             law.cite_url = header['CITE']
         law.save()
 
-        logger.info('390:Database record {} for {}'.format(result, key))
+        logger.info(f"390:Database record {result} for {key}")
         return None
 
 # End of module
