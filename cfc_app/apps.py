@@ -14,6 +14,7 @@ Licensed under Apache 2.0, see LICENSE for details
 # Django and other third-party imports
 from django.apps import AppConfig
 
+
 class CFCappConfig(AppConfig):
     """ Set application name """
     name = 'cfc_app'

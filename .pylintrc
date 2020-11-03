@@ -148,8 +148,10 @@ disable=print-statement,
         no-member,
         imported-auth-user,
         super-with-arguments,
-        C0103,
         broad-except, 
+        chained-comparison,
+        invalid_name,
+        C0103,
         too-many-instance-attributes
 
 # Enable the message, report, category or checker with the given id(s). You can

@@ -27,6 +27,7 @@ CITE_REGEX = re.compile(r"_CITE_\s*(.*?) _")
 TITLE_REGEX = re.compile(r"_TITLE_\s*(.*?) _")
 SUMMARY_REGEX = re.compile(r"_SUMMARY[_]?\s*(.*?) _")
 
+
 class OnelineError(RuntimeError):
     """ Customize error for this class """
     pass

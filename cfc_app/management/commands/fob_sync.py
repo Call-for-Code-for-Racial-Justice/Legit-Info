@@ -109,9 +109,9 @@ class Command(BaseCommand):
             try:
                 self.copy_items(self.maxput, options, from_fob='FILE',
                                 to_fob='OBJECT')
-            except Exception as e:
-                logger.error(f"119:PUT {e}", exc_info=True)
-                raise FobSyncError
+            except Exception as exc:
+                logger.error(f"119:PUT {exc}", exc_info=True)
+                raise FobSyncError from exc
 
             put_count = self.count
 
@@ -121,9 +121,9 @@ class Command(BaseCommand):
             try:
                 self.copy_items(self.maxget, options, from_fob='OBJECT',
                                 to_fob='FILE')
-            except Exception as e:
-                logger.error(f"119:PUT {e}", exc_info=True)
-                raise FobSyncError
+            except Exception as exc:
+                logger.error(f"119:PUT {exc}", exc_info=True)
+                raise FobSyncError from exc
 
             get_count = self.count
 
@@ -166,14 +166,13 @@ class Command(BaseCommand):
         try:
             self.delete_items(self.maxdel, found_in='OBJECT',
                               but_not_in='FILE')
-        except Exception as e:
-            logger.error(f"105:DELETE {e}", exc_info=True)
-            raise FobSyncError
+        except Exception as exc:
+            logger.error(f"105:DELETE {exc}", exc_info=True)
+            raise FobSyncError from exc
 
         # Refresh list of ALL files on FOB FILE that match criteria
         self.olist = self.get_list(self.fob_object)
         return self.count
-
 
     def delete_items(self, maxcount, found_in=None, but_not_in=None):
         """ delete items from OBJECT that do not exist in FILE """

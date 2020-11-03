@@ -64,9 +64,10 @@ class KeyCounter():
             print(' ')
             if self.count > 1 and self.toplist:
                 print("Top {} List:".format(self.limit))
-                for k, v in sorted(self.dict.items(), key=lambda item: item[1],
-                                   reverse=True):
-                    print("[{}] had {} occurences".format(k, v))
+                for keyword, count in sorted(self.dict.items(),
+                                             key=lambda item: item[1],
+                                             reverse=True):
+                    print("[{}] had {} occurences".format(keyword, count))
                     num += 1
                     if num >= self.limit:
                         break

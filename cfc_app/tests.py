@@ -17,6 +17,7 @@ from django.test import Client
 
 client = Client()
 
+
 class HealthEndpointTests(SimpleTestCase):
     """ Health Endpoint used to validate Docker/Cloud deployment """
 

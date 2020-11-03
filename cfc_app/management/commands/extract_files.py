@@ -89,6 +89,7 @@ def determine_extension(mime_type):
         extension = 'doc'
     return extension
 
+
 def parse_url(bill_detail):
     """ parse state_link into baseurl and params """
 
@@ -113,6 +114,7 @@ def parse_url(bill_detail):
         baseurl = f"http://{source.netloc}{source.path}"
 
     return baseurl, params
+
 
 def save_source_hash(bill_hash, bill_name, bill_detail):
     """ Save hashcode to cfc_app_hash table """
@@ -561,7 +563,6 @@ class Command(BaseCommand):
             bindata = base64.b64decode(mimedata)
 
         return bindata
-
 
     def process_html(self, key, bill_detail, billtext):
         """ Process HTML source file of legislation """

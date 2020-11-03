@@ -196,7 +196,7 @@ class Command(BaseCommand):
         if self.use_api:
             logger.debug(f"255:Filename {filename} Concept:{concept}")
             try:
-                concept = self.Relevance_NLU(extracted_text)
+                concept = self.relevance_nlu(extracted_text)
             except Exception as exc:
                 logger.error(f"IBM Watson NLU failed, disabling --api: {exc}")
                 self.use_api = False
@@ -209,7 +209,7 @@ class Command(BaseCommand):
         return None
 
     @staticmethod
-    def Relevance_NLU(text):
+    def relevance_nlu(text):
         """ return top impact areas from extracted text using Watson NLU """
 
         authenticator = IAMAuthenticator(NLU_APIKEY)
@@ -239,8 +239,8 @@ class Command(BaseCommand):
         revlist, impact_chosen = self.classify_impact(concept)
 
         rel, connector = self.rel_start, ''
-        for r in revlist:
-            rel += connector + "'{}' => '{}'".format(r[0], r[1])
+        for rev in revlist:
+            rel += connector + "'{}' => '{}'".format(rev[0], rev[1])
             connector = ", "
 
         log_msg = "351:Filename {filename} Impact={impact_chosen} Rel:{rel}"

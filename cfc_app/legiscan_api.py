@@ -209,7 +209,6 @@ class LegiscanAPI:
         output_string = json.dumps(LEGISCAN_ID, indent=2)
         return output_string
 
-
     def check_result(self, bundle):
         """ check result matches expectations """
 
@@ -232,12 +231,13 @@ class LegiscanAPI:
 
         return None
 
+
 if __name__ == "__main__":
 
     leg = LegiscanAPI()
 
     out_str = leg.dump_id_table()
-    #with open("Legiscan_id.json", "w") as out_file:
+    # with open("Legiscan_id.json", "w") as out_file:
     #    out_file.write(out_str)
 
     leg.api_ok = False

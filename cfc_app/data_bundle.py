@@ -30,7 +30,7 @@ class DataBundle():
     def __init__(self, name):
 
         self.name = name
-        self.ok = False
+        self.status_ok = False
         self.status_code = None
         self.headers = None
         self.mime_type = None
@@ -42,17 +42,18 @@ class DataBundle():
 
     def __repr__(self):
         """ Representation in display format """
-        dispForm1 = "Bundle {}: OK={} Code={}"
-        dispForm2 = '{}  {}{}'
-        dispForm3 = '{}  Length={} bytes'
-        display = dispForm1.format(self.name, self.ok, self.status_code)
-        if self.ok:
+
+        display = (f"Bundle {self.name}: OK={self.status_ok} "
+                   f"Code={self.status_code} ")
+        if self.status_ok:
             if self.extension:
-                display = dispForm2.format(display, 'ext:', self.extension)
+                display += f"ext: {self.extension} "
             else:
-                display = dispForm2.format(display, 'mime:', self.mime_type)
+                display += f"mime: {self.mime_type} "
+
             if self.content:
-                display = dispForm3.format(display, len(self.content))
+                display += f"Length= {len(self.content)} bytes"
+
         return display
 
     def make_request(self, url, params):
@@ -65,7 +66,7 @@ class DataBundle():
     def load_response(self, response):
         """ save response values with data bundle """
 
-        self.ok = response.ok
+        self.status_ok = response.ok
         self.status_code = response.status_code
         self.headers = response.headers
         self.mime_type = self.headers['Content-Type']
@@ -80,11 +81,11 @@ class DataBundle():
         if 'pdf' in self.mime_type:
             self.extension = 'pdf'
             if self.content[:4] != b'%PDF':
-                self.ok = False
+                self.status_ok = False
                 self.extension = 'error'
                 self.name += " *NOT PDF*"
                 self.status_code = 406
-        return response.ok
+        return self.status_ok
 
 
 if __name__ == "__main__":
