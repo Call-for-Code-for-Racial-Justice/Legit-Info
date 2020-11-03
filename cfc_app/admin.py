@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-cfc_app/admin.py -- Search and Display legislation
+cfc_app/admin.py -- Decide what appears on Admin screen
 
 Written by Tony Pearson, IBM, 2020
 Licensed under Apache 2.0, see LICENSE for details

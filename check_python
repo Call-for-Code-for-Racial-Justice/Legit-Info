@@ -30,7 +30,8 @@ plug="--load-plugins=pylint_django"
             && ("$module" != *"$inits"*) ]]; then
         echo "Check_python: $module"
         if [[ "$method" == "--pylint" ]]; then
-        DJANGO_SETTINGS_MODULE=$set pylint $plug "$module"
+        # DJANGO_SETTINGS_MODULE=$set pylint $plug "$module"
+        pylint "$module"
         elif [[ "$method" == "--autopep8" ]]; then
         autopep8 -i "$module"
         else

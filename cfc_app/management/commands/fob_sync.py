@@ -245,7 +245,7 @@ class Command(BaseCommand):
         pdb.set_trace()
         return None
 
-    def source_hash(basename, extension, from_fob):
+    def source_hash(self, basename, extension, from_fob):
 
         if extension == "json":
             pass
