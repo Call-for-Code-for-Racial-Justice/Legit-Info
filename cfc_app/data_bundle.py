@@ -1,28 +1,34 @@
 #!/usr/bin/env python3
-# DataBundle.py -- to handle API requests / responses
-# By Tony Pearson, IBM, 2020
-#
-# Debug with:  import pdb; pdb.set_trace()
+# -*- coding: utf-8 -*-
 
-import requests
+"""
+Class to handle data resulting from API requests / responses
+
+Written by Tony Pearson, IBM, 2020
+Licensed under Apache 2.0, see LICENSE for details
+"""
+
+# System imports
+import logging
 import sys
+
+# Django and other third-party imports
+import requests
+
+# Application imports
+
+# import pdb; pdb.set_trace()
+logger = logging.getLogger(__name__)
 
 
 class DataBundle():
     """
-    Class to show progress in long-running tasks
+    Class to handle API requests / responses
 
-    from ShowProgress import ShowProgress
-    dot = ShowProgress()
-    dot.show()  # print a single character to show progress
-    dot.end()  # End the sequence, print newline
-
-    Default character is period(.), you can change the character:
-        dot = ShowProgress(dotchar="#")
     """
 
     def __init__(self, name):
-        """ Set characters to use for showing progress"""
+
         self.name = name
         self.ok = False
         self.status_code = None
@@ -35,6 +41,7 @@ class DataBundle():
         return None
 
     def __repr__(self):
+        """ Representation in display format """
         dispForm1 = "Bundle {}: OK={} Code={}"
         dispForm2 = '{}  {}{}'
         dispForm3 = '{}  Length={} bytes'
@@ -49,11 +56,15 @@ class DataBundle():
         return display
 
     def make_request(self, url, params):
+        """ Make API request and capture the response """
+
+        logger.debug(f"Make request {self.name}")
         response = requests.get(url, params)
         return response
 
     def load_response(self, response):
-        """ Display a single dot """
+        """ save response values with data bundle """
+
         self.ok = response.ok
         self.status_code = response.status_code
         self.headers = response.headers

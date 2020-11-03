@@ -19,7 +19,7 @@ import logging
 import os
 
 # Application imports
-from data_bundle import DataBundle
+from .data_bundle import DataBundle
 
 # import pdb; pdb.set_trace()
 logger = logging.getLogger(__name__)
@@ -106,7 +106,7 @@ class LegiscanAPI:
         # self.fob = FOB_Storage(settings.FOB_METHOD)
         return None
 
-    def get_dataset_list(self, apikey='Good'):
+    def get_datasetlist(self, apikey='Good'):
         """ Get list of datasets for all 50 states """
         key = self.bad_key
         if apikey == 'Good':
@@ -237,8 +237,8 @@ if __name__ == "__main__":
     leg = LegiscanAPI()
 
     out_str = leg.dump_id_table()
-    with open("Legiscan_id.json", "w") as out_file:
-        out_file.write(out_str)
+    #with open("Legiscan_id.json", "w") as out_file:
+    #    out_file.write(out_str)
 
     leg.api_ok = False
     params = {}
@@ -265,12 +265,12 @@ if __name__ == "__main__":
 
     # import pdb; pdb.set_trace()
     print('Test getDatasetList with bad API key')
-    r03 = leg.getDatasetList(apikey='Bad')
+    r03 = leg.get_datasetlist(apikey='Bad')
     print('Result: ', r03, 'API_OK=', leg.api_ok)
     leg.api_ok = True
 
     print('Test getDatasetList with good API key')
-    r04 = leg.getDatasetList(apikey='Good')
+    r04 = leg.get_datasetlist(apikey='Good')
     print('Result:', len(r04))
 
     r04_pkg = json.loads(r04)
@@ -282,20 +282,20 @@ if __name__ == "__main__":
     access_key = first_sesh['access_key']
 
     print('Test getDataset with bad API key')
-    r05 = leg.getDataset(session_id, access_key, apikey='Bad')
+    r05 = leg.get_dataset(session_id, access_key, apikey='Bad')
     print('Result: ', r05)
     leg.api_ok = True
 
     print('Test getDataset with invalid session id')
-    r06 = leg.getDataset(9999, access_key, apikey='Good')
+    r06 = leg.get_dataset(9999, access_key, apikey='Good')
     print('Result: ', r06)
 
     leg.api_ok = True
     print('Test getDataset with invalid access key')
-    r07 = leg.getDataset(session_id, '', apikey='Good')
+    r07 = leg.get_dataset(session_id, '', apikey='Good')
     print('Result: ', r07)
 
     leg.api_ok = True
     print('Test getDataset')
-    r08 = leg.getDataset(session_id, access_key, apikey='Good')
+    r08 = leg.get_dataset(session_id, access_key, apikey='Good')
     print('Result: ', len(r08))

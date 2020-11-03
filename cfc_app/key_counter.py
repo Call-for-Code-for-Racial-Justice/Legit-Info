@@ -24,10 +24,11 @@ class KeyCounter():
         self.keys_max = None
         self.count = 0
         self.toplist = toplist
-        self.limit = 10
+        self.limit = limit
         return None
 
     def consider_key(self, key):
+        """ Add this key to the count for statistics """
 
         self.count += 1
         if self.keys:
@@ -51,6 +52,7 @@ class KeyCounter():
         return None
 
     def key_results(self):
+        """ Show results for this key """
 
         print(self.name)
         print("Number considered: ", self.count)

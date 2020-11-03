@@ -10,9 +10,14 @@ Licensed under Apache 2.0, see LICENSE for details
 
 # System imports
 import logging
+import os
+import re
 
 # Django and other third-party imports
+from django.conf import settings
+
 # Application imports
+
 # import pdb; pdb.set_trace()
 logger = logging.getLogger(__name__)
 
@@ -25,19 +30,24 @@ class WordMapError(RuntimeError):
 class WordMap():
     """ Class to handle wordmap for analyze_text  """
 
-    def __init__(self):
+    def __init__(self, rlimit):
         """ Initialize wordmap """
         self.wordmap = None
         self.primary = None
         self.secondary = None
         self.tertiary = None
         self.secondary_impacts = None
+        self.rlimit = rlimit
+        self.regex = re.compile(r'["](.*)["]\s*,\s*["](.*)["]')
+        self.impact_list = None
+        self.categories = None
         return None
 
-    def load_wordmap(self, impact_list):
+    def load_csv(self, impact_list):
         """ load wordmap """
 
-        wordmap, categories = {}, []
+        self.impact_list = impact_list
+        self.wordmap, self.categories = {}, []
         mapname = os.path.join(settings.SOURCE_ROOT, 'wordmap.csv')
         logger.debug(f"171:Mapname: {mapname}")
 
@@ -46,27 +56,34 @@ class WordMap():
 
         logger.debug(f"165:maplines {len(maplines)}")
         for line in maplines:
-            mo = mapRegex.search(line)
-            if mo:
-                term = mo.group(1).strip()
-                impact_category = mo.group(2).strip()
+            mop = self.regex.search(line)
+            if mop:
+                term = mop.group(1).strip()
+                impact_category = mop.group(2).strip()
                 if term == 'term' or impact_category == 'impact':
                     continue
                 if impact_category.upper() in ['REMOVE']:
                     continue
                 if impact_category.upper() in ['NONE']:
                     impact_category = 'None'
-                wordmap[term] = impact_category
-                if impact_category not in categories:
-                    categories.append(impact_category)
+                self.wordmap[term] = impact_category
+                if impact_category not in self.categories:
+                    self.categories.append(impact_category)
             else:
                 logger.error(f"181:Regex Error {line}")
 
+        self.review_categories()
+
+        return None
+
+    def review_categories(self):
+        """ Review categories found """
+
         secondary_list = []
         topic_list = []
-        for impact in categories:
+        for impact in self.categories:
             marker = ' '
-            if impact in impact_list:
+            if impact in self.impact_list:
                 marker = '*'
             elif impact != 'None':
                 secondary_list.append(impact)
@@ -75,17 +92,16 @@ class WordMap():
         topic_msg = "Impacts marked with * match cfc_app_impact table"
         logger.debug(f"200: {topic_msg}: {topic_list}")
 
-        self.wordmap = wordmap
         self.secondary_impacts = secondary_list
 
         primary, secondary, tertiary = [], [], []
-        for term in wordmap:
-            if wordmap[term] in impact_list:
-                primary.append([term, wordmap[term]])
-            elif wordmap[term] in secondary_list:
-                secondary.append([term, wordmap[term]])
+        for term in self.wordmap:
+            if self.wordmap[term] in self.impact_list:
+                primary.append([term, self.wordmap[term]])
+            elif self.wordmap[term] in secondary_list:
+                secondary.append([term, self.wordmap[term]])
             else:
-                tertiary.append([term, wordmap[term]])
+                tertiary.append([term, self.wordmap[term]])
 
         logger.debug(f"215:Primary {len(primary)}")
         logger.debug(f"216:Secondary {len(secondary)}")
@@ -96,14 +112,14 @@ class WordMap():
         self.tertiary = tertiary
         return None
 
-    def Relevance(self, extracted_text):
-        """ return top impact areas from extracted text using Wordmap """
+    def relevance(self, extracted_text):
+        """ return top impact areas from extracted text """
         concept = []
 
         self.scan_extract(extracted_text, self.primary, concept)
-        if len(concept) < RLIMIT:
+        if len(concept) < self.rlimit:
             self.scan_extract(extracted_text, self.secondary, concept)
-        if len(concept) < RLIMIT:
+        if len(concept) < self.rlimit:
             self.scan_extract(extracted_text, self.tertiary, concept)
 
         return concept
@@ -126,7 +142,7 @@ class WordMap():
 
             concept.append({'text': term, 'Reason': self.wordmap[term]})
             num += 1
-            if num >= RLIMIT:
+            if num >= self.rlimit:
                 break
 
         return None

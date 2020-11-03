@@ -206,60 +206,60 @@ class FobStorage():
         return items
 
     # Helpers for Legiscan DatasetList (DatasetList-YYYY-MM-DD.json)
-    def DatasetList_items(self):
+    def datasetlist_items(self):
         """ Get all items that are datasetlists """
 
         dsl_list = self.list_items(prefix='DatasetList-', suffix='.json')
         return dsl_list
 
-    def DatasetList_search(self, item_name):
+    def datasetlist_search(self, item_name):
         """ Return REGEX search value of item """
 
         mop = DSLregex.search(item_name)
         return mop
 
-    def DatasetList_name(self, today):
+    def datasetlist_name(self, today):
         return 'DatasetList-{}.json'.format(today)
 
     # Helpers for Legiscan Dataset (SS-Dataset-NNNN.json)
-    def Dataset_items(self, state):
+    def dataset_items(self, state):
         """ Get all items that are datasets """
 
         dsn_prefix = "{}-Dataset-".format(state)
         dsl_list = self.list_items(prefix=dsn_prefix, suffix='.json')
         return dsl_list
 
-    def Dataset_search(self, item_name):
+    def dataset_search(self, item_name):
         """ Return REGEX search value of item """
 
         mop = DSNregex.search(item_name)
         return mop
 
-    def Dataset_name(self, state, state_id):
+    def dataset_name(self, state, state_id):
         """ generate valid dataset filename """
 
         item_name = "{}-Dataset-{:04d}.json".format(state, state_id)
         return item_name
 
     # Helpers for Legiscan BillText (CC-BODY-SSSS-YNNNN.json)
-    def BillText_items(self, state, extension):
+    def bill_text_items(self, state, extension):
         """ Get all items that are individual laws (PDF/HTML/TXT) """
 
         dsn_prefix = "{}-".format(state)
         dsl_list = self.list_items(prefix=dsn_prefix, suffix=extension)
         return dsl_list
 
-    def BillText_search(self, item_name):
+    def bill_text_search(self, item_name):
         """ Return REGEX search value of item """
 
         mop = BTregex.search(item_name)
         return mop
 
-    def BillText_key(self, state, bill_number, session_id, doc_year):
+    def bill_text_key(self, state, bill_number, session_id, doc_year):
         """ Generate key in correct format """
 
         BNregex = re.compile("([A-Z]*)([0-9]*)")
-        mo = BNregex.search(bill_number)
+        mop = BNregex.search(bill_number)
         bill_no = bill_number
         if mop:
             body = mop.group(1)
@@ -274,7 +274,7 @@ class FobStorage():
             key += "-Y" + str(doc_year)[2:4]
         return key
 
-    def BillText_name(self, key, extension):
+    def bill_text_name(self, key, extension):
         """ Generate filename for legislation in correct format """
 
         ext = extension.lower()
@@ -426,15 +426,15 @@ if __name__ == "__main__":
     print(len(item_list))
 
     state, bill_number, session_id, doc_year = "AZ", "HB1", "1234", "2016"
-    print(fob.BillText_key(state, bill_number, session_id, doc_year))
+    print(fob.bill_text_key(state, bill_number, session_id, doc_year))
 
     state, bill_number, session_id, doc_year = "AZ", "SB22", "1234", "2017"
-    print(fob.BillText_key(state, bill_number, session_id, doc_year))
+    print(fob.bill_text_key(state, bill_number, session_id, doc_year))
 
     state, bill_number, session_id, doc_year = "AZ", "HRJ333", "1234", "2018"
-    print(fob.BillText_key(state, bill_number, session_id, doc_year))
+    print(fob.bill_text_key(state, bill_number, session_id, doc_year))
 
     state, bill_number, session_id, doc_year = "AZ", "SRC4444", "1234", "2019"
-    print(fob.BillText_key(state, bill_number, session_id, doc_year))
+    print(fob.bill_text_key(state, bill_number, session_id, doc_year))
 
     print('Congratulations')

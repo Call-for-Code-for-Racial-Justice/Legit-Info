@@ -45,7 +45,7 @@ class ShowProgress():
 
     def end(self):
         """ End the sequence of dots """
-        print("")
+        print(self.dotchar)
         sys.stdout.flush()
         return None
 
@@ -67,11 +67,11 @@ if __name__ == "__main__":
     dash.end()
 
     print('Changing character midway')
-    hash = ShowProgress(dotchar="#")
+    hashtag = ShowProgress(dotchar="#")
     for n in range(50):
-        hash.show()
+        hashtag.show()
         if n > 27:
-            hash.dotchar = "@"
+            hashtag.dotchar = "@"
         time.sleep(0.1)
-    hash.end()
+    hashtag.end()
     print('Congratulations')

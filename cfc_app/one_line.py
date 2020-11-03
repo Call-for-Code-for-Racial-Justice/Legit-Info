@@ -129,7 +129,7 @@ class Oneline():
                          r"ections", newline)
 
         # remove all whitespace before certain punctuation marks
-        newline = re.sub(r"\s+[,;]", "\1", newline)
+        newline = re.sub(r"\s+([,;:])", r"\1", newline)
 
         # shrink multiple spaces to a single space for readability
         newline = re.sub(r"\s+", " ", newline)
@@ -341,13 +341,13 @@ if __name__ == "__main__":
 
     print(Oneline.common_acronyms(T1))
 
-    with open("NLTK-sample.txt", "r") as in_file:
+    with open("one_line_nltk.txt", "r") as in_file:
         textdata = in_file.read()
         p5 = Oneline()
         p5.add_text(textdata)
         # import pdb; pdb.set_trace()
         p5.split_sentences()
-        with open("NLTK-sample.out", "w") as out_file:
+        with open("one_line_nltk.out", "w") as out_file:
             out_file.write(p5.oneline)
         print("NLTK-sample.out created")
 

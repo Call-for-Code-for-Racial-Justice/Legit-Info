@@ -50,7 +50,7 @@ NLU_SERVICE_URL = os.getenv('NLU_SERVICE_URL', None)
 
 NameRegex = re.compile(r"^(\w\w-\w*-Y\d*).")
 keyRegex = re.compile(r"^\w\w-(.*)-")
-mapRegex = re.compile(r'["](.*)["]\s*,\s*["](.*)["]')
+
 
 RLIMIT = 10   # number of phrases to be returned by IBM Watson NLU
 
@@ -128,7 +128,8 @@ class Command(BaseCommand):
             impact_list.append(imp.text)
         self.impact_list = impact_list
 
-        self.wordmap = WordMap()
+        self.wordmap = WordMap(RLIMIT)
+        self.wordmap.load_csv(impact_list)
 
         locations = Location.objects.filter(legiscan_id__gt=0)
         locations = locations.order_by('hierarchy')
@@ -200,7 +201,7 @@ class Command(BaseCommand):
                 logger.error(f"IBM Watson NLU failed, disabling --api: {exc}")
                 self.use_api = False
         else:
-            concept = self.wordmap.Relevance(extracted_text)
+            concept = self.wordmap.relevance(extracted_text)
 
         if concept:
             self.save_relevance(filename, header, concept)

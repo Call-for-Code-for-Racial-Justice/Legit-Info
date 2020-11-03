@@ -71,7 +71,7 @@ if __name__ == "__main__":
     test1.start_time(verbosity=0)
     print('End Test Verbosity')
 
-    test1.stop_time(1)
+    test1.end_time(1)
 
 
 # end of module
