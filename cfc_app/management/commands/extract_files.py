@@ -19,7 +19,6 @@ import json
 import logging
 import re
 import tempfile
-from urllib.parse import urlparse
 import zipfile
 
 # Django and other third-party imports
@@ -31,11 +30,13 @@ from titlecase import titlecase
 
 
 # Application imports
+from cfc_app.bill_detail import BillDetail
 from cfc_app.data_bundle import DataBundle
-from cfc_app.fob_storage import FOB_Storage
+from cfc_app.fob_storage import FobStorage
+from cfc_app.fob_helper import FobHelper
 from cfc_app.legiscan_api import LegiscanAPI, LEGISCAN_ID, LegiscanError
 from cfc_app.log_time import LogTime
-from cfc_app.models import Law, Location, Hash
+from cfc_app.models import Law, Location, Hash, save_source_hash
 from cfc_app.one_line import Oneline
 from cfc_app.pdf_to_text import PDFtoText
 from cfc_app.show_progress import ShowProgress
@@ -56,97 +57,24 @@ billRegex = re.compile(r"^([A-Z]{2})/\d\d\d\d-(\d\d\d\d).*/bill/(\w*).json$")
 ###############################################
 
 
-def add_header(text_line, bill_name, bill_detail):
+def add_header(text_line, detail):
     """ Put header information in the text file itself """
 
-    text_line.header_file_name(bill_name)
-    text_line.header_bill_id(bill_detail['bill_id'])
-    text_line.header_doc_date(bill_detail['doc_date'])
-    text_line.header_hash_code(bill_detail['change_hash'])
-    if 'cite_url' in bill_detail:
-        text_line.header_cite_url(bill_detail['cite_url'])
-    text_line.header_title(bill_detail['title'])
-    text_line.header_summary(bill_detail['description'])
+    text_line.header_file_name(detail.bill_name)
+    text_line.header_bill_id(detail.bill_id)
+    text_line.header_doc_date(detail.doc_date)
+    text_line.header_hash_code(detail.hashcode)
+    if detail.cite_url is None:
+        if detail.state_link:
+            detail.cite_url = detail.state_link
+        else:
+            detail.cite_url = detail.url
+    if detail.cite_url:    
+        text_line.header_cite_url(detail.cite_url)
+    text_line.header_title(detail.title)
+    text_line.header_summary(detail.summary)
     text_line.header_end()
     return None
-
-
-def date_type(date_string):
-    """ Convert "YYYY-MM-DD" string to datetime.date format """
-    date_value = DT.datetime.strptime(date_string, "%Y-%m-%d").date()
-    return date_value
-
-
-def determine_extension(mime_type):
-    """ Determine extension to use for each mime_type """
-
-    extension = 'unk'
-    if mime_type == 'text/html':
-        extension = 'html'
-    elif mime_type == 'application/pdf':
-        extension = 'pdf'
-    elif mime_type == 'application/doc':
-        extension = 'doc'
-    return extension
-
-
-def parse_url(bill_detail):
-    """ parse state_link into baseurl and params """
-
-    state_link = bill_detail['chosen']['state_link']
-    source = urlparse(state_link)
-    logger.debug(f"96:state_link={state_link}")
-    if 'cite_url' not in bill_detail:
-        bill_detail['cite_url'] = state_link
-
-    params = {}
-    if source.query:
-        querylist = source.query.split('&')
-        for querystring in querylist:
-            qfragments = querystring.split('=')
-            if len(qfragments) == 2:
-                qkey, qvalue = qfragments
-                params[qkey] = qvalue
-
-    if source.scheme:
-        baseurl = f"{source.scheme}://{source.netloc}{source.path}"
-    else:
-        baseurl = f"http://{source.netloc}{source.path}"
-
-    return baseurl, params
-
-
-def save_source_hash(bill_hash, bill_name, bill_detail):
-    """ Save hashcode to cfc_app_hash table """
-
-    if bill_hash is None:
-        bill_hash = Hash()
-        bill_hash.item_name = bill_name
-        bill_hash.fob_method = settings.FOB_METHOD
-        bill_hash.desc = bill_detail['title']
-        bill_hash.generated_date = bill_detail['doc_date']
-        bill_hash.hashcode = bill_detail['change_hash']
-        bill_hash.size = bill_detail['doc_size']
-        logger.debug(f"449:INSERT cfc_app_law: {bill_name}")
-        bill_hash.save()
-
-    else:
-        bill_hash.generated_date = bill_detail['doc_date']
-        bill_hash.hashcode = bill_detail['change_hash']
-        bill_hash.size = bill_detail['doc_size']
-        logger.debug(f"456:UPDATE cfc_app_law: {bill_name}")
-        bill_hash.save()
-
-    return None
-
-
-def shrink_line(line, charlimit):
-    """ if chopping a line from the front, find next full word """
-
-    newline = re.sub(r'^\W*\w*\W*', '', line[-charlimit:])
-    newline = re.sub(r'^and ', '', newline)
-    newline = newline[0].upper() + newline[1:]
-    return newline
 
 
 class ExtractTextError(CommandError):
@@ -167,7 +95,8 @@ class Command(BaseCommand):
     def __init__(self, *args, **kwargs):
 
         super().__init__(*args, **kwargs)
-        self.fob = FOB_Storage(settings.FOB_METHOD)
+        self.fob = FobStorage(settings.FOB_METHOD)
+        self.fobhelp = FobHelper(self.fob)
         self.leg = LegiscanAPI()
         self.loc = None
         self.dot = ShowProgress()
@@ -211,9 +140,6 @@ class Command(BaseCommand):
             logger.error(err_msg, exc_info=True)
             raise ExtractTextError from exc
 
-        # import pdb; pdb.set_trace()
-        logger.info(self.starting_msg)
-
         # Use the Django "Location" database to get list of locations
         # listed with valid (non-zero) Legiscan_id.  For example,
         # Legiscan_id=3 for Arizona, and Legiscan_id=35 for Ohio.
@@ -232,7 +158,7 @@ class Command(BaseCommand):
             # If we are only processing one state, and this is
             # not it, continue to the next state.
             if (self.state is None) or (state == self.state):
-                logger.info(f"136:Processing: {loc.desc} ({state})")
+                logger.info(f"194:Processing: {loc.desc} ({state})")
                 self.process_location(state)
 
         timing.end_time(options['verbosity'])
@@ -242,18 +168,18 @@ class Command(BaseCommand):
         """ Extract files for this state """
 
         self.state_count = 0
-        found_list = self.fob.Dataset_items(state)
+        found_list = self.fobhelp.dataset_items(state)
 
         sessions = []
         found_list.sort(reverse=True)
         for json_name in found_list:
             if self.verbosity:
                 self.dot.show()
-            mop = self.fob.Dataset_search(json_name)
+            mop = self.fobhelp.dataset_search(json_name)
             if mop:
                 state = mop.group(1)
                 session_id = mop.group(2)
-                logger.debug(f"149: Session_id: {session_id}")
+                logger.debug(f"215: Session_id: {session_id}")
                 # If you are only doing one session_id, and this one
                 # isn't it, continue to the next session_id.
                 if self.session_id and (session_id != self.session_id):
@@ -269,14 +195,15 @@ class Command(BaseCommand):
         for session_detail in sessions:
             if self.verbosity:
                 self.dot.show()
+
             if self.limit > 0 and self.state_count >= self.limit:
                 break
             session_id, json_name = session_detail
-            logger.debug(f"168:Session_id={session_id} JSON={json_name}")
+            logger.debug(f"234:Session_id={session_id} JSON={json_name}")
             try:
                 self.process_json(json_name)
             except Exception as exc:
-                err_msg = f"172: Process Error. {exc}"
+                err_msg = f"238: Process Error. {exc}"
                 logger.error(err_msg, exc_info=True)
                 raise ExtractTextError(err_msg) from exc
 
@@ -351,82 +278,77 @@ class Command(BaseCommand):
                         break
                     mop = billRegex.search(path)
                     if mop:
-                        if self.verbosity:
-                            self.dot.show()
-
                         logger.debug(f"315:PATH name: {path}")
                         json_data = zipf.read(path).decode('UTF-8',
                                                            errors='ignore')
-
-                        logger.debug(f"247:JD: {json_data[:75]}")
-                        processed = self.process_source(mop, json_data)
+                        logger.debug(f"320:JD: {json_data[:75]}")
+                        processed = self.process_source(json_data)
                         self.state_count += processed
+
+                        # Verbosity: -v 0 no dots, -v 1 normal dots
+                        #            -v 2 dots + path every 100 entries
+                        #            -v 3 print every path that matches
+                        if self.verbosity:
+                            self.dot.show()
+                            if (((self.verbosity ==2) 
+                                    and (self.state_count > 0)
+                                    and (self.state_count % 100 == 0))
+                                    or self.verbosity == 3):
+                                print(path)
         return None
 
-    def process_source(self, mop, json_data):
+    def process_source(self, json_data):
         """ Process the PDF/HTML source file """
 
         processed = 0
         bill_json = json.loads(json_data)
-        bill_detail = bill_json['bill']
+        detail = BillDetail(bill_json['bill'])
 
-        bill_detail['state'] = mop.group(1)
-        bill_detail['bill_number'] = mop.group(3)
-        logger.debug(f"262:state={bill_detail['state']} "
-                     f"bill_number={bill_detail['bill_number']}")
-        texts = bill_detail['texts']
+        logger.debug(f"332:detail={detail}")
 
         # If a bill has multiple versions, choose the latest one.
-        if texts:
-            earliest_year, chosen = self.latest_text(texts)
-            bill_detail['chosen'] = chosen
-            bill_detail['extension'] = self.determine_extension(chosen['mime'])
-            bill_detail['doc_date'] = chosen['date']
-            bill_detail['doc_size'] = chosen['text_size']
+        if detail.texts:
+            earliest_year, chosen = detail.latest_text()
+            detail.choose_document(chosen)
 
             # Generate the key to be used to refer to this legislation.
-            key = self.fob.BillText_key(bill_detail['state'],
-                                        bill_detail['bill_number'],
-                                        bill_detail['session_id'],
-                                        earliest_year)
-            bill_detail['key'] = key
+            key = self.fobhelp.bill_text_key(detail.state, detail.bill_number,
+                                             detail.session_id, earliest_year)
+            detail.key = key
 
             if (self.after is None) or (self.after < key):
 
-                self.process_detail(bill_detail, key)
+                self.process_detail(detail)
                 # If we already have extracted the text file,
                 # honor the --skip parameter
-                text_name = self.fob.BillText_name(key, "txt")
-                processed = self.skip_if_exists(text_name, bill_detail)
+                text_name = self.fobhelp.bill_text_name(key, "txt")
+                processed = self.skip_if_exists(text_name, detail)
 
         else:
-            logger.warning(f"273:No texts found for {bill_detail['state']}-"
-                           f"{bill_detail['bill_number']}-"
-                           f"{bill_detail['session_id']}")
+            logger.warning(f"353:No texts found for {detail.state}-"
+                           f"{detail.bill_number}-"
+                           f"{detail.session_id}")
 
         return processed
 
-    def process_detail(self, bill_detail, key):
+    def process_detail(self, detail):
         """ Process bill detail """
 
-        bill_id = bill_detail['bill_id']
-        title = titlecase(bill_detail['title'])
-        bill_detail['title'] = title
-        summary = bill_detail['description']
+        detail.title = titlecase(detail.title)
 
-        law_record = Law.objects.filter(key=key).first()
+        law_record = Law.objects.filter(key=detail.key).first()
         if law_record is None:
-            logger.debug(f"296:Creating LAW record: {key}")
-            law_record = Law(key=key, title=title, summary=summary,
-                             bill_id=bill_id, location=self.loc,
-                             doc_date=bill_detail['description'])
+            logger.debug(f"366:Creating LAW record: {detail.key}")
+            law_record = Law(key=detail.key, title=detail.title,
+                             summary=detail.summary, bill_id=detail.bill_id,
+                             location=self.loc, doc_date=detail.doc_date)
             law_record.save()
         else:
-            logger.debug("302:LAW record already exists: {key}")
+            logger.debug("302:LAW record already exists: {detail.key}")
 
         return None
 
-    def skip_if_exists(self, text_name, bill_detail):
+    def skip_if_exists(self, text_name, detail):
         """ check if file exists """
 
         skipping = False
@@ -434,7 +356,7 @@ class Command(BaseCommand):
         if self.fob.item_exists(text_name):
             if self.skip:
                 skip_msg = f"File {text_name} already exists, skipping"
-                logger.debug("381:SKIP {skip_msg}")
+                logger.debug(f"381:SKIP {skip_msg}")
                 if self.verbosity > 2:
                     print(skip_msg)
                 elif self.verbosity:
@@ -447,113 +369,104 @@ class Command(BaseCommand):
                 if ('CITE' in headers
                         and headers['CITE'][:8] != 'Legiscan'
                         and headers['CITE'][-7:] != 'general'):
-                    bill_detail['cite_url'] = headers['CITE']
-                    logger.debug(f"327:OLD CITE_URL={headers['CITE']}")
+                    detail.cite_url = headers['CITE']
+                    logger.debug(f"327:OLD CITE_URL={detail.cite_url}")
                 elif (('CITE' in headers)
                       and (headers['CITE'][:8] == 'Legiscan')):
-                    # No URL found, remove it so it is re-built next
-                    cite = "http://legiscan.com/{}/{}/{}".format(
-                        bill_detail['state'], bill_detail['bill_number'],
-                        bill_detail['doc_date'][:4])
-                    bill_detail['cite_url'] = cite
-                    logger.debug(f"334:NEW CITE_URL={cite}")
+                    detail.cite_url = detail.url
+                    logger.debug(f"334:NEW CITE_URL={detail.cite_url}")
 
         if not skipping:
-            processed = self.process_bill(bill_detail)
+            processed = self.process_bill(detail)
 
         return processed
 
-    def process_bill(self, bill_detail):
+    def process_bill(self, detail):
         """ process individual PDF/HTML bill """
 
-        key = bill_detail['key']
-        bill_name = self.fob.BillText_name(key, bill_detail['extension'])
-        bill_hash = Hash.find_item_name(bill_name)
-        logger.debug(f"345:bill_name={bill_name} bill_hash={bill_hash}")
+        key = detail.key
+        detail.bill_name = self.fobhelp.bill_text_name(key, detail.extension)
+        bill_hash = Hash.find_item_name(detail.bill_name)
+        logger.debug(f"345:bill_name={detail.bill_name} bill_hash={bill_hash}")
 
         # If the source PDF/HTML exists, and the hash code matches,
         # then it is up-to-date and we can use it directly.
         fob_source = False
-        if (self.fob.item_exists(bill_name)
+        if (self.fob.item_exists(detail.bill_name)
                 and bill_hash is not None
-                and bill_hash.hashcode == bill_detail['change_hash']):
+                and bill_hash.hashcode == detail.hashcode):
             # read the existing PDF/HTML file we have in File/Object store
             fob_source = True
 
         processed = 0
         bindata = None
-        source_file = bill_name
+        source_file = detail.bill_name
 
         if fob_source:
-            logger.debug(f"361:Reading existing: {bill_name}")
-            bindata = self.fob.download_binary(bill_name)
-            source_file = "{} ({})".format(bill_name, settings.FOB_METHOD)
+            logger.debug(f"361:Reading existing: {detail.bill_name}")
+            bindata = self.fob.download_binary(detail.bill_name)
+            source_file = "{} ({})".format(detail.bill_name, 
+                                           settings.FOB_METHOD)
         else:
-            bindata = self.fetch_state_link(bill_detail)
+            bindata = self.fetch_state_link(detail)
 
         # For HTML, convert to text.  Othewise leave binary for PDF.
-        extension = bill_detail['extension']
-        if bindata and extension == 'html':
+        if bindata and detail.extension == 'html':
             textdata = bindata.decode('UTF-8', errors='ignore')
-            self.process_html(key, bill_detail, textdata)
+            self.process_html(key, detail, textdata)
             processed = 1
-        elif bindata and extension == 'pdf':
-            self.process_pdf(key, bill_detail, bindata)
+        elif bindata and detail.extension == 'pdf':
+            self.process_pdf(detail, bindata)
             processed = 1
 
         # If successful, save the hash code to the cfc_app_hash table
         if processed:
-            self.save_source_hash(bill_hash, bill_name, bill_detail)
+            save_source_hash(bill_hash, detail)
             self.dot.show()
         else:
             logger.error(f"435:Failure processing source: {source_file}")
         return processed
 
-    def fetch_state_link(self, bill_detail):
+    def fetch_state_link(self, detail):
         """ Fetch PDF/HTML from State Link or Legiscan.com API """
 
-        bill_name = bill_detail['bill_name']
-        bill_bundle = DataBundle(bill_name)
+        bindata = b''
+        bill_bundle = DataBundle(detail.bill_name)
 
-        baseurl, params = parse_url(bill_detail)
+        baseurl, params = detail.parse_url()
 
         response = bill_bundle.make_request(baseurl, params)
         result = bill_bundle.load_response(response)
         # import pdb; pdb.set_trace()
         if result:
             bindata = bill_bundle.content
-            if ((bill_detail['extension'] == "pdf")
+            if ((detail.extension == "pdf")
                     and (bindata[:4] != b'%PDF')):
-                logger.error(f"392:Invalid PDF format found: {bill_name}")
+                logger.error(f"392:Invalid PDF format found: "
+                             f"{detail.bill_name}")
                 bindata = None
 
         if bindata:
-            self.fob.upload_binary(bindata, bill_name)
-            saving_msg = f"Saving file: {bill_name}"
+            self.fob.upload_binary(bindata, detail.bill_name)
+            detail.cite_url = detail.state_link
+            saving_msg = f"Saving file: {detail.bill_name}"
             logger.debug(f"398: {saving_msg}")
             if self.verbosity > 2:
                 print(saving_msg)
 
         elif self.api_limit > 0 and self.leg.api_ok:
-            bindata = self.fetch_legiscan_api(bill_detail)
+            bindata = self.fetch_legiscan_api(detail)
 
         return bindata
 
-    def fetch_legiscan_api(self, bill_detail):
+    def fetch_legiscan_api(self, detail):
         """ Fetch from Legiscan API using getBillText command """
 
         bindata = b""
-        bill_name = bill_detail['bill_name']
-        state = bill_detail['state']
-        doc_id = bill_detail['chosen']['doc_id']
-        doc_year = bill_detail['doc_date'][:4]
-        logger.warning(f"403:Invoking Legiscan API: {bill_name} "
-                       f"doc_id={doc_id}")
-        response = self.leg.getBillText(doc_id)
-        if 'cite_url' not in bill_detail:
-            cite = (f"http://legiscan.com/{state}/"
-                    f"{bill_detail['bill_number']}/{doc_year}")
-            bill_detail['cite_url'] = cite
+        logger.warning(f"403:Invoking Legiscan API: {detail.bill_name} "
+                       f"doc_id={detail.doc_id}")
+        response = self.leg.get_bill_text(detail.doc_id)
+        detail.cite_url = detail.url
         self.api_limit -= 1
         if response:
             json_data = json.loads(response)
@@ -564,17 +477,17 @@ class Command(BaseCommand):
 
         return bindata
 
-    def process_html(self, key, bill_detail, billtext):
+    def process_html(self, key, detail, billtext):
         """ Process HTML source file of legislation """
 
-        bill_name = self.fob.BillText_name(key, 'html')
-        text_name = self.fob.BillText_name(key, 'txt')
+        text_name = self.fobhelp.bill_text_name(key, 'txt')
 
         text_line = Oneline(nltk_loaded=True)
+        add_header(text_line, detail)
 
-        self.add_header(text_line, bill_name, bill_detail)
         self.parse_html(billtext, text_line)
         self.write_file(text_line, text_name)
+
         return self
 
     def write_file(self, text_line, text_name):
@@ -585,43 +498,24 @@ class Command(BaseCommand):
         self.fob.upload_text(text_line.oneline, text_name)
         return
 
-    def process_pdf(self, key, bill_detail, msg_bytes):
+    def process_pdf(self, detail, msg_bytes):
         """ Parse PDF file to extract text """
 
-        logger.debug("485:key={key}")
+        logger.debug(f"485:key={detail.key}")
         input_str = ""
 
-        bill_name = self.fob.BillText_name(key, 'pdf')
-        miner = PDFtoText(bill_name, msg_bytes)
+        detail.bill_name = self.fobhelp.bill_text_name(detail.key, 'pdf')
+        miner = PDFtoText(detail.bill_name, msg_bytes)
         input_str = miner.convert_to_text()
 
         if input_str:
-            text_name = self.fob.BillText_name(key, 'txt')
+            text_name = self.fobhelp.bill_text_name(detail.key, 'txt')
             text_line = Oneline(nltk_loaded=True)
-            self.add_header(text_line, bill_name, bill_detail)
+            add_header(text_line, detail)
             self.parse_intermediate(input_str, text_line)
             self.write_file(text_line, text_name)
 
         return self
-
-    def form_sentence(self, line, charlimit):
-        """ Reduce title/summary to fit within character limits """
-
-        # Remove trailing spaces, and add period at end of sentence.
-        newline = line.strip()
-        if not newline.endswith('.'):
-            newline = newline + '.'
-
-        # If the line is longer than the limit, keep the number
-        # of characters from the end of the sentence.  If this
-        # results a word being chopped in half, remove the half-word
-
-        if len(newline) > charlimit:
-            self.shrink_line(newline, charlimit)
-
-        # Capitalize the (possibly new) first word in the sentence.
-        newline = newline[0].upper() + newline[1:]
-        return newline
 
     def fetch_bill(self, bill, key):
         """ If not available from the state, fetch from Legiscan.com API """
@@ -641,7 +535,7 @@ class Command(BaseCommand):
 
         if response:
             mime_type = response['mime_type']
-            extension = self.determine_extension(mime_type)
+            extension = BillDetail.determine_extension(mime_type)
 
             mimedata = response['doc'].encode('UTF-8')
             msg_bytes = base64.b64decode(mimedata)
@@ -694,26 +588,5 @@ class Command(BaseCommand):
             if newline != '' and not newline.isdigit():
                 output_line.add_text(newline)
         return self
-
-    def latest_text(self, texts):
-        """ If legislation has two or more documents, pick the latest one """
-
-        last_date = settings.LONG_AGO
-
-        last_docid = 0
-        last_entry = None
-        earliest_year = 2999
-        for entry in texts:
-            this_date = self.date_type(entry['date'])
-            this_docid = entry['doc_id']
-            if this_date.year < earliest_year:
-                earliest_year = this_date.year
-            if (this_date > last_date or
-                    (this_date == last_date and this_docid > last_docid)):
-                last_date = this_date
-                last_docid = this_docid
-                last_entry = entry
-
-        return earliest_year, last_entry
 
 # end of module

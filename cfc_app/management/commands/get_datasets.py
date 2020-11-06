@@ -23,9 +23,11 @@ from django.core.management.base import BaseCommand, CommandError
 
 # Application imports
 from cfc_app.fob_storage import FobStorage
+from cfc_app.fob_helper import FobHelper
 from cfc_app.legiscan_api import LegiscanAPI, LEGISCAN_ID, LegiscanError
 from cfc_app.log_time import LogTime
 from cfc_app.models import Location, Hash
+from cfc_app.bill_detail import date_type
 
 
 # Debug with:  import pdb; pdb.set_trace()
@@ -41,12 +43,6 @@ def check_hash(session_name):
     ds_hash = Hash.objects.filter(item_name=session_name,
                                   fob_method=settings.FOB_METHOD).first()
     return ds_hash
-
-
-def date_type(date_string):
-    """ Convert "YYYY-MM-DD" string to datetime.date format """
-    date_value = DT.datetime.strptime(date_string, "%Y-%m-%d").date()
-    return date_value
 
 
 def save_to_database(session_name, entry):
@@ -107,6 +103,7 @@ class Command(BaseCommand):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fob = FobStorage(settings.FOB_METHOD)
+        self.fobhelp = FobHelper(self.fob)
         self.leg = LegiscanAPI()
         self.use_api = False
         self.list_name = None
@@ -145,7 +142,7 @@ class Command(BaseCommand):
         if options['state']:
             self.state = options['state']
         self.frequency = options['frequency']
-        logger.debug(f"85:Options {options}")
+        logger.debug(f"150:Options {options}")
 
         self.recent_enough()
 
@@ -192,7 +189,8 @@ class Command(BaseCommand):
         """ Check of datasetlist is recent enough to use 'as is' """
 
         week_ago = self.now - DT.timedelta(days=self.frequency)
-        self.dsl_list = self.fob.datasetlist_items()
+        self.dsl_list = self.fobhelp.datasetlist_items()
+        logger.debug(f"198:DSL List: [{self.dsl_list}]")
         self.find_latest_dsl()
 
         # If --api is set, but file is more than a week old, get the latest
@@ -201,11 +199,12 @@ class Command(BaseCommand):
 
         # API failure or not called, get the item from File/Object storage
         if self.latest_name and (not self.list_data):
-            logger.debug(f"Downloading: {self.list_name}")
+            logger.debug(f"206:Downloading: [{self.list_name}]")
+            self.list_name = self.latest_name
             self.list_data = self.fob.download_text(self.list_name)
 
         if self.list_data:
-            logger.debug(f"Verifying JSON contents of: {self.list_name}")
+            logger.debug(f"210:Verifying JSON contents of: {self.list_name}")
             self.list_pkg = json.loads(self.list_data)
 
             # Validate this is a Legiscan DatasetList file
@@ -229,7 +228,7 @@ class Command(BaseCommand):
             self.dsl_list.sort(reverse=True)
             for name in self.dsl_list[self.VERSIONS:]:
                 self.fob.remove_item(name)
-                logger.debug(f"Expiring: {name}")
+                logger.debug(f"234:Expiring: {name}")
 
         return
 
@@ -239,7 +238,7 @@ class Command(BaseCommand):
         self.latest_date = settings.LONG_AGO  # Long ago in history
         self.latest_name = None
         for name in self.dsl_list:
-            mop = self.fob.datasetlist_search(name)
+            mop = self.fobhelp.datasetlist_search(name)
             if mop:
                 filedate = date_type(mop.group(1))
                 if filedate > self.latest_date:
@@ -251,10 +250,11 @@ class Command(BaseCommand):
     def fetch_dsl_api(self):
         """ Fetch datasetlist from Legiscan API """
 
-        today = self.now.strftime("%Y-%m-%d")
-        self.list_name = self.fob.datasetlist_name(today)
         logger.info(f"Fetching Dataset: {self.list_name}")
         self.list_data = self.leg.get_datasetlist('Good')
+
+        today = self.now.strftime("%Y-%m-%d")
+        self.list_name = self.fobhelp.datasetlist_name(today)
 
         # If successful return from API, save this to a file
         if self.list_data:
@@ -272,7 +272,7 @@ class Command(BaseCommand):
         for entry in self.datasetlist:
             if entry['state_id'] == state_id:
                 session_id = entry['session_id']
-                session_name = self.fob.dataset_name(state, session_id)
+                session_name = self.fobhelp.dataset_name(state, session_id)
                 if entry['year_end'] >= self.fromyear:
                     self.fetch_from_api(session_name, entry)
 
@@ -317,13 +317,13 @@ class Command(BaseCommand):
         for state_data in states:
 
             state, state_id = state_data[0], state_data[1]
-            found_list = self.fob.dataset_items(state)
+            found_list = self.fobhelp.dataset_items(state)
             for entry in self.datasetlist:
                 if (entry['state_id'] == state_id
                         and entry['year_end'] >= self.fromyear):
 
                     session_id = entry['session_id']
-                    session_name = self.fob.dataset_name(state, session_id)
+                    session_name = self.fobhelp.dataset_name(state, session_id)
                     if session_name in found_list:
                         show_results(entry)
                         print('Found session dataset: '+session_name)

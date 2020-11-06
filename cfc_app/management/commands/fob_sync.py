@@ -15,9 +15,9 @@ import logging
 from django.core.management.base import BaseCommand, CommandError
 
 # Application imports
-from cfc_app.FOB_Storage import FOB_Storage
-from cfc_app.LogTime import LogTime
-from cfc_app.models import Hash
+from cfc_app.fob_storage import FobStorage
+from cfc_app.log_time import LogTime
+from cfc_app.models import Hash, delete_if_exists
 
 # Debug with:  import pdb; pdb.set_trace()
 logger = logging.getLogger(__name__)
@@ -48,9 +48,9 @@ class Command(BaseCommand):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fob_file = FOB_Storage('FILE')
+        self.fob_file = FobStorage('FILE')
         self.flist = []
-        self.fob_object = FOB_Storage('OBJECT')
+        self.fob_object = FobStorage('OBJECT')
         self.olist = []
         self.maxlimit = 5000
         self.maxdel = None

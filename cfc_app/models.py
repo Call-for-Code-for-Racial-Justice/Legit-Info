@@ -10,6 +10,7 @@ Licensed under Apache 2.0, see LICENSE for details
 
 # System imports
 import datetime as DT
+import logging
 
 # Django and other third-party imports
 from django.db import models
@@ -19,6 +20,7 @@ LEFT_CORNER = u"\u2514\u2500\u2002"
 LEFT_PAD = u"\u2002\u2002\u2002\u2002"
 
 # import pdb; pdb.set_trace()
+logger = logging.getLogger(__name__)
 
 ##############################################
 # Support functions must come first
@@ -280,11 +282,34 @@ class Hash(models.Model):
                                      fob_method=mode).first()
         return record
 
-    @staticmethod
-    def delete_if_exists(name, mode=settings.FOB_METHOD):
-        """ delete item if exists """
+def delete_if_exists(name, mode=settings.FOB_METHOD):
+    """ delete item if exists """
 
-        Hash.objects.filter(item_name=name, fob_method=mode).delete()
-        return None
+    Hash.objects.filter(item_name=name, fob_method=mode).delete()
+    return None
+
+def save_source_hash(bill_hash, detail):
+    """ Save hashcode to cfc_app_hash table """
+
+    if bill_hash is None:
+        bill_hash = Hash()
+        bill_hash.item_name = detail.bill_name
+        bill_hash.fob_method = settings.FOB_METHOD
+        bill_hash.desc = detail.title
+        bill_hash.generated_date = detail.doc_date
+        bill_hash.hashcode = detail.hashcode
+        bill_hash.size = detail.doc_size
+        logger.debug(f"302:INSERT cfc_app_law: {detail.bill_name}")
+        bill_hash.save()
+
+    else:
+        bill_hash.generated_date = detail.doc_date
+        bill_hash.hashcode = detail.hashcode
+        bill_hash.size = detail.doc_size
+        logger.debug(f"309:UPDATE cfc_app_law: {detail.bill_name}")
+        bill_hash.save()
+
+    return None
+
 
 # end of module

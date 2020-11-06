@@ -239,6 +239,7 @@ class FobStorage():
             logger.error(f"307:Exception {exc}")
 
         if self.filesys and fob_mode == 'FILE':
+            logger.debug("242:PATH [{self.filesys}] [{item_name}]")
             fullname = os.path.join(self.filesys, item_name)
             try:
                 with open(fullname, 'rb') as infile:

@@ -33,11 +33,11 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 import ibm_watson.natural_language_understanding_v1 as NLU
 
 # Application imports
-from cfc_app.fob_storage import FOB_Storage
+from cfc_app.fob_storage import FobStorage
 from cfc_app.legiscan_api import LEGISCAN_ID
 from cfc_app.log_time import LogTime
 from cfc_app.models import Location, Impact, Law
-from cfc_app.Oneline import Oneline
+from cfc_app.one_line import Oneline
 from cfc_app.show_progress import ShowProgress
 from cfc_app.word_map import WordMap
 
@@ -74,8 +74,8 @@ class Command(BaseCommand):
         super().__init__(*args, **kwargs)
 
         self.impact_list = None
-        self.fob = FOB_Storage(settings.FOB_METHOD)
-        self.wordmap = None
+        self.fob = FobStorage(settings.FOB_METHOD)
+        self.womp = None
         self.use_api = False
         self.after = None
         self.limit = 10
@@ -128,8 +128,8 @@ class Command(BaseCommand):
             impact_list.append(imp.text)
         self.impact_list = impact_list
 
-        self.wordmap = WordMap(RLIMIT)
-        self.wordmap.load_csv(impact_list)
+        self.womp = WordMap(RLIMIT)
+        self.womp.load_csv(impact_list)
 
         locations = Location.objects.filter(legiscan_id__gt=0)
         locations = locations.order_by('hierarchy')
@@ -201,7 +201,7 @@ class Command(BaseCommand):
                 logger.error(f"IBM Watson NLU failed, disabling --api: {exc}")
                 self.use_api = False
         else:
-            concept = self.wordmap.relevance(extracted_text)
+            concept = self.womp.relevance(extracted_text)
 
         if concept:
             self.save_relevance(filename, header, concept)
@@ -260,10 +260,11 @@ class Command(BaseCommand):
 
         impact_chosen = 'None'
         revlist = []
+        map = self.womp.wordmap
         for rel in concept:
             term = rel['text'].strip()
-            if term in self.wordmap:
-                revlist.append([term, self.wordmap[term]])
+            if term in map:
+                revlist.append([term, map[term]])
             else:
                 revlist.append([term, 'Unknown'])
 

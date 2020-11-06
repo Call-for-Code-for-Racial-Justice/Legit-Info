@@ -19,7 +19,7 @@ import logging
 from django.core.management.base import BaseCommand
 
 # Application imports
-from cfc_app.FOB_Storage import FOB_Storage
+from cfc_app.fob_storage import FobStorage
 from cfc_app.key_counter import KeyCounter
 
 # Debug with:  import pdb; pdb.set_trace()
@@ -35,13 +35,11 @@ class Command(BaseCommand):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fob_file = FOB_Storage('FILE')
-        self.fob_object = FOB_Storage('OBJECT')
+        self.fob_file = FobStorage('FILE')
+        self.fob_object = FobStorage('OBJECT')
         self.maxlimit = 400
         self.mode = "FILE"
         self.verbosity = 1
-        self.by_state = KeyCounter("By STATE")
-        self.by_ext = KeyCounter("By extension")
         self.limit = 0
         return None
 
@@ -64,12 +62,12 @@ class Command(BaseCommand):
             self.verbosity = options['verbosity']
 
         if mode in ['FILE', 'BOTH']:
-            self.fob_file = FOB_Storage('FILE')
+            self.fob_file = FobStorage('FILE')
             fob = self.fob_file
             self.show_stats(fob, 'FILE', options)
 
         if mode in ['OBJECT', 'BOTH']:
-            self.fob_object = FOB_Storage('OBJECT')
+            self.fob_object = FobStorage('OBJECT')
             fob = self.fob_object
             self.show_stats(fob, 'OBJECT', options)
 
@@ -84,21 +82,24 @@ class Command(BaseCommand):
                                    after=options['after'],
                                    limit=options['limit'])
         count = 0
+        by_state = KeyCounter("By STATE")
+        by_ext = KeyCounter("By extension")
+
         print(' ')
         for name in item_list:
-            if self.verbosity == 2:
+            if self.verbosity >= 2:
                 print(name)
 
             state = name[:2]
             if state not in STATE_LIST:
                 state = 'Other'
 
-            self.by_state.consider_key(state)
+            by_state.consider_key(state)
 
             if '.' in name:
                 parts = name.rsplit('.', 1)
                 extension = '.' + parts[1]
-                self.by_ext.consider_key(extension)
+                by_ext.consider_key(extension)
 
             count += 1
             if self.limit > 0 and count >= self.limit:
@@ -106,8 +107,8 @@ class Command(BaseCommand):
 
         print('Mode = ', mode)
 
-        self.by_state.key_results()
-        self.by_ext.key_results()
+        by_state.key_results()
+        by_ext.key_results()
 
         return None
 
