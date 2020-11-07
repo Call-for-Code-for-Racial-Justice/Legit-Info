@@ -157,17 +157,20 @@ ALLOWED_HOSTS = ['*', '127.0.0.1', 'localhost']
 # Application definition
 
 INSTALLED_APPS = [
+    # Default django apps
+    'django.contrib.admin',
+    'django.contrib.auth',
+
     # My apps
-    'cfc_app',
     'users',
+    'cfc_app',
+
 
     # Third party apps.
     'bootstrap4',
     'django_extensions',
 
-    # Default django apps
-    'django.contrib.admin',
-    'django.contrib.auth',
+    # Other django apps
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',

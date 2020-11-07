@@ -224,9 +224,9 @@ class Law(models.Model):
     bill_id = models.CharField(max_length=15, null=True)
     doc_date = models.CharField(max_length=10, null=True)
 
-    title = models.CharField(max_length=200)
+    title = models.TextField(max_length=200)
 
-    summary = models.CharField(max_length=1000)
+    summary = models.TextField(max_length=1000)
 
     location = models.ForeignKey('cfc_app.Location', null=True,
                                  related_name='laws', on_delete=models.CASCADE)
@@ -234,7 +234,7 @@ class Law(models.Model):
     impact = models.ForeignKey('cfc_app.Impact', null=True,
                                related_name='laws', on_delete=models.CASCADE)
 
-    relevance = models.CharField(max_length=800, null=True)
+    relevance = models.TextField(max_length=800, null=True)
 
     cite_url = models.URLField(max_length=200, null=True)
 
