@@ -121,10 +121,10 @@ class LegiscanAPI:
             if 'datasetlist' in dsl_bundle.json_pkg:
                 list_data = json.dumps(dsl_bundle.json_pkg, indent=2)
             else:
-                dsl_bundle.ok = False
+                dsl_bundle.status_ok = False
                 dsl_bundle.status_code = 487
 
-        if not dsl_bundle.ok:
+        if not dsl_bundle.status_ok:
             logger.error(f"Failure: {dsl_bundle}")
             self.api_ok = False
             list_data = None
@@ -146,10 +146,10 @@ class LegiscanAPI:
             if 'dataset' in sesh_bundle.json_pkg:
                 sesh_data = json.dumps(sesh_bundle.json_pkg, indent=2)
             else:
-                sesh_bundle.ok = False
+                sesh_bundle.status_ok = False
                 sesh_bundle.status_code = 487
 
-        if not sesh_bundle.ok:
+        if not sesh_bundle.status_ok:
             logger.error(f"Failure: {sesh_bundle}")
             self.api_ok = False
             sesh_data = None
@@ -170,10 +170,10 @@ class LegiscanAPI:
             if 'text' in bill_bundle.json_pkg:
                 bill_data = json.dumps(bill_bundle.json_pkg, indent=2)
             else:
-                bill_bundle.ok = False
+                bill_bundle.status_ok = False
                 bill_bundle.status_code = 487
 
-        if not bill_bundle.ok:
+        if not bill_bundle.status_ok:
             logger.error(f"Failure: {bill_bundle}")
             self.api_ok = False
             bill_data = None
@@ -182,7 +182,7 @@ class LegiscanAPI:
     def invoke_api(self, bundle, params):
         """ Invoke the Legiscan API """
 
-        bundle.ok = False
+        bundle.status_ok = False
         result = None
         if self.api_ok:
             try:
@@ -191,7 +191,7 @@ class LegiscanAPI:
             except RuntimeError as exc:
                 logger.error(f"210:Error {exc}", exc_info=True)
                 self.api_ok = False
-                bundle.ok = False
+                bundle.status_ok = False
                 bundle.status_code = 403
                 result = None
 
@@ -200,7 +200,7 @@ class LegiscanAPI:
 
         else:
             bundle.status_code = 405
-        return bundle.ok
+        return bundle.status_ok
 
     @staticmethod
     def dump_id_table():
@@ -215,7 +215,7 @@ class LegiscanAPI:
         if bundle.extension == 'json':
             if bundle.json_pkg['status'] == 'ERROR':
                 self.api_ok = False
-                bundle.ok = False
+                bundle.status_ok = False
                 bundle.status_code = 406
                 pkg = bundle.json_pkg
                 if 'alert' in pkg:
@@ -226,7 +226,7 @@ class LegiscanAPI:
                         bundle.status_code = 429
                     raise LegiscanError(f"{bundle.name} {bundle.text}")
         else:
-            bundle.ok = False
+            bundle.status_ok = False
             bundle.status_code = 415
 
         return None

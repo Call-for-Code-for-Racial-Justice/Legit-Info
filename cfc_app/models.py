@@ -33,6 +33,7 @@ def get_default_law_key():
     key = today[5:25]
     return key
 
+
 # Create your models here.
 
 
@@ -311,5 +312,35 @@ def save_source_hash(bill_hash, detail):
 
     return None
 
+
+
+def check_hash(session_name):
+    """ Read the hash entry from Django cfc_app_hash database table """
+    ds_hash = Hash.objects.filter(item_name=session_name,
+                                  fob_method=settings.FOB_METHOD).first()
+    return ds_hash
+
+
+def save_entry_to_hash(session_name, entry):
+    """ Save hashcode in cfc_app_hash database table """
+
+    find_hash = Hash.find_item_name(session_name)
+    if find_hash is None:
+        find_hash = Hash()
+        find_hash.item_name = session_name
+        find_hash.fob_method = settings.FOB_METHOD
+        find_hash.desc = entry['session_name']
+        find_hash.generated_date = entry['dataset_date']
+        find_hash.hashcode = entry['dataset_hash']
+        find_hash.size = entry['dataset_size']
+        find_hash.save()
+
+    else:
+        find_hash.generated_date = entry['dataset_date']
+        find_hash.hashcode = entry['dataset_hash']
+        find_hash.size = entry['dataset_size']
+        find_hash.save()
+
+    return None
 
 # end of module

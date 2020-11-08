@@ -101,7 +101,11 @@ class Command(BaseCommand):
         # Delete items from IBM Cloud Object Store if not found on FILE.
         # If --maxdel and --maxget are both specified, --maxdel presides.
         if self.maxdel > 0:
-            del_count = self.process_deletes()
+            try:
+                del_count = self.process_deletes()
+            except Exception as exc:
+                logger.error(f"1O7:DELETE {exc}", exc_info=True)
+                raise FobSyncError from exc
 
         # Send Files to Object
         if self.maxput > 0:
@@ -192,7 +196,7 @@ class Command(BaseCommand):
         for name in item_list:
             if name not in other_list:
                 remove_from.remove_item(name)
-                Hash.delete_if_exists(name, mode=found_in)
+                delete_if_exists(name, mode=found_in)
                 logger.info(f"Removed from {found_in}: {name}")
                 self.count += 1
                 if self.count >= maxcount:

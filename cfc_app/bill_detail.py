@@ -74,8 +74,11 @@ class BillDetail():
 
         if jsondet:
             self.bill_id = jsondet['bill_id']
+            
             self.title = form_sentence(jsondet['title'], 200)
-            self.summary = form_sentence(jsondet['description'], 1000)
+            self.summary = form_sentence(jsondet['summary'], 1000)
+            if self.title == self.summary:
+                self.summary = ""
             self.hashcode = jsondet['change_hash']
             self.session_id = jsondet['session']['session_id']
             self.state = jsondet['state']

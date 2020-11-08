@@ -37,7 +37,7 @@ from cfc_app.fob_helper import FobHelper
 from cfc_app.legiscan_api import LegiscanAPI, LEGISCAN_ID, LegiscanError
 from cfc_app.log_time import LogTime
 from cfc_app.models import Law, Location, Hash, save_source_hash
-from cfc_app.one_line import Oneline
+from cfc_app.one_line import Oneline, add_header, parse_header
 from cfc_app.pdf_to_text import PDFtoText
 from cfc_app.show_progress import ShowProgress
 
@@ -55,26 +55,6 @@ billRegex = re.compile(r"^([A-Z]{2})/\d\d\d\d-(\d\d\d\d).*/bill/(\w*).json$")
 ###############################################
 #  Support functions
 ###############################################
-
-
-def add_header(text_line, detail):
-    """ Put header information in the text file itself """
-
-    text_line.header_file_name(detail.bill_name)
-    text_line.header_bill_id(detail.bill_id)
-    text_line.header_doc_date(detail.doc_date)
-    text_line.header_hash_code(detail.hashcode)
-    if detail.cite_url is None:
-        if detail.state_link:
-            detail.cite_url = detail.state_link
-        else:
-            detail.cite_url = detail.url
-    if detail.cite_url:    
-        text_line.header_cite_url(detail.cite_url)
-    text_line.header_title(detail.title)
-    text_line.header_summary(detail.summary)
-    text_line.header_end()
-    return None
 
 
 class ExtractTextError(CommandError):
@@ -110,6 +90,7 @@ class Command(BaseCommand):
         nltk.download('punkt')
         self.nltk_loaded = True
         self.after = None
+        self.fromyear = self.now.year - 2  # Back three years 2018, 2019, 2020
         return None
 
     def add_arguments(self, parser):
@@ -311,18 +292,24 @@ class Command(BaseCommand):
             earliest_year, chosen = detail.latest_text()
             detail.choose_document(chosen)
 
-            # Generate the key to be used to refer to this legislation.
-            key = self.fobhelp.bill_text_key(detail.state, detail.bill_number,
-                                             detail.session_id, earliest_year)
-            detail.key = key
+            if self.fromyear <= int(detail.doc_date[:4]):
 
-            if (self.after is None) or (self.after < key):
+                # Generate the key to be used to refer to this legislation.
+                key = self.fobhelp.bill_text_key(detail.state, 
+                                                 detail.bill_number,
+                                                 detail.session_id, 
+                                                 earliest_year)
+                detail.key = key
 
-                self.process_detail(detail)
-                # If we already have extracted the text file,
-                # honor the --skip parameter
-                text_name = self.fobhelp.bill_text_name(key, "txt")
-                processed = self.skip_if_exists(text_name, detail)
+                if (self.after is None) or (self.after < key):
+
+                    self.process_detail(detail)
+                    # If we already have extracted the text file,
+                    # honor the --skip parameter
+                    text_name = self.fobhelp.bill_text_name(key, "txt")
+                    processed = self.skip_if_exists(text_name, detail)
+            else:
+                logger.debug("312:Too old, skipping: {detail.doc_date}")
 
         else:
             logger.warning(f"353:No texts found for {detail.state}-"
@@ -365,7 +352,7 @@ class Command(BaseCommand):
                 skipping = True
             else:
                 textdata = self.fob.download_text(text_name)
-                headers = Oneline.parse_header(textdata)
+                headers = parse_header(textdata)
                 if ('CITE' in headers
                         and headers['CITE'][:8] != 'Legiscan'
                         and headers['CITE'][-7:] != 'general'):

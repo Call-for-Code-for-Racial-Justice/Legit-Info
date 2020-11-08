@@ -31,7 +31,7 @@ class Command(BaseCommand):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fob = FOB_Storage(settings.FOB_METHOD)
+        self.fob = FobStorage(settings.FOB_METHOD)
         self.filenames = KeyCounter('Filenames', toplist=False)
         self.slen = KeyCounter('Sentence Lengths', limit=25)
         self.numsen = KeyCounter('Number of Sentences', limit=25)
