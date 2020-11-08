@@ -17,7 +17,8 @@ from .models import Profile
 
 admin.site.unregister(Group)
 
+
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
+    """ Specify columns to display """
     list_display = ("user", "criteria")
-

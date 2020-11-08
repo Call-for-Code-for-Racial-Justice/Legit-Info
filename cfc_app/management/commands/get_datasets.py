@@ -26,7 +26,7 @@ from cfc_app.fob_storage import FobStorage
 from cfc_app.fob_helper import FobHelper
 from cfc_app.legiscan_api import LegiscanAPI, LEGISCAN_ID, LegiscanError
 from cfc_app.log_time import LogTime
-from cfc_app.models import Location, Hash, check_hash, save_entry_to_hash
+from cfc_app.models import Location, Hash, save_entry_to_hash
 from cfc_app.bill_detail import date_type
 
 
@@ -223,7 +223,7 @@ class Command(BaseCommand):
         today = self.now.strftime("%Y-%m-%d")
         self.list_name = self.fobhelp.datasetlist_name(today)
         logger.info(f"Fetching Dataset: {self.list_name}")
-        import pdb; pdb.set_trace()
+
         self.list_data = self.leg.get_datasetlist('Good')
         # If successful return from API, save this to a file
         if self.list_data:
@@ -237,7 +237,7 @@ class Command(BaseCommand):
 
     def fetch_dataset(self, state, state_id):
         """ Fetch dataset for specific legislative session """
-        
+
         for entry in self.datasetlist:
             if entry['state_id'] == state_id:
                 session_id = entry['session_id']

@@ -283,11 +283,13 @@ class Hash(models.Model):
                                      fob_method=mode).first()
         return record
 
+
 def delete_if_exists(name, mode=settings.FOB_METHOD):
     """ delete item if exists """
 
     Hash.objects.filter(item_name=name, fob_method=mode).delete()
     return None
+
 
 def save_source_hash(bill_hash, detail):
     """ Save hashcode to cfc_app_hash table """
@@ -311,14 +313,6 @@ def save_source_hash(bill_hash, detail):
         bill_hash.save()
 
     return None
-
-
-
-def check_hash(session_name):
-    """ Read the hash entry from Django cfc_app_hash database table """
-    ds_hash = Hash.objects.filter(item_name=session_name,
-                                  fob_method=settings.FOB_METHOD).first()
-    return ds_hash
 
 
 def save_entry_to_hash(session_name, entry):

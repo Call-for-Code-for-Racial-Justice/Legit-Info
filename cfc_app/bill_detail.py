@@ -17,10 +17,12 @@ from urllib.parse import urlparse
 from django.conf import settings
 logger = logging.getLogger(__name__)
 
+
 def date_type(date_string):
     """ Convert "YYYY-MM-DD" string to datetime.date format """
     date_value = DT.datetime.strptime(date_string, "%Y-%m-%d").date()
     return date_value
+
 
 def form_sentence(line, charlimit):
     """ Reduce title/summary to fit within character limits """
@@ -40,6 +42,7 @@ def form_sentence(line, charlimit):
     # Capitalize the (possibly new) first word in the sentence.
     newline = newline[0].upper() + newline[1:]
     return newline
+
 
 def shrink_line(line, charlimit):
     """ if chopping a line from the front, find next full word """
@@ -74,7 +77,7 @@ class BillDetail():
 
         if jsondet:
             self.bill_id = jsondet['bill_id']
-            
+
             self.title = form_sentence(jsondet['title'], 200)
             self.summary = form_sentence(jsondet['summary'], 1000)
             if self.title == self.summary:
@@ -152,8 +155,6 @@ class BillDetail():
                 last_entry = entry
 
         return earliest_year, last_entry
-
-
 
 
 # end of module

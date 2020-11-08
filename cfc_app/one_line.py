@@ -286,12 +286,13 @@ def add_header(text_line, detail):
             detail.cite_url = detail.state_link
         else:
             detail.cite_url = detail.url
-    if detail.cite_url:    
+    if detail.cite_url:
         text_line.header_cite_url(detail.cite_url)
     text_line.header_title(detail.title)
     text_line.header_summary(detail.summary)
     text_line.header_end()
     return None
+
 
 if __name__ == "__main__":
     print('Testing: ', sys.argv[0])

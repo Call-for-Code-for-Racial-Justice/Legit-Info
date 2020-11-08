@@ -14,7 +14,6 @@ Licensed under Apache 2.0, see LICENSE for details
 
 # System imports
 import base64
-import datetime as DT
 import json
 import logging
 import re
@@ -271,9 +270,9 @@ class Command(BaseCommand):
                         #            -v 3 print every path that matches
                         if self.verbosity:
                             self.dot.show()
-                            if (((self.verbosity ==2) 
-                                    and (self.state_count > 0)
-                                    and (self.state_count % 100 == 0))
+                            if (((self.verbosity == 2)
+                                 and (self.state_count > 0)
+                                 and (self.state_count % 100 == 0))
                                     or self.verbosity == 3):
                                 print(path)
         return None
@@ -295,9 +294,9 @@ class Command(BaseCommand):
             if self.fromyear <= int(detail.doc_date[:4]):
 
                 # Generate the key to be used to refer to this legislation.
-                key = self.fobhelp.bill_text_key(detail.state, 
+                key = self.fobhelp.bill_text_key(detail.state,
                                                  detail.bill_number,
-                                                 detail.session_id, 
+                                                 detail.session_id,
                                                  earliest_year)
                 detail.key = key
 
@@ -392,7 +391,7 @@ class Command(BaseCommand):
         if fob_source:
             logger.debug(f"361:Reading existing: {detail.bill_name}")
             bindata = self.fob.download_binary(detail.bill_name)
-            source_file = "{} ({})".format(detail.bill_name, 
+            source_file = "{} ({})".format(detail.bill_name,
                                            settings.FOB_METHOD)
         else:
             bindata = self.fetch_state_link(detail)

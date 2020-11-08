@@ -27,6 +27,7 @@ BTregex = re.compile(r'^([A-Z]{2})-([A-Z0-9]*)-(\d\d\d\d)(.json|.pdf|.html)$')
 
 BN_REGEX = re.compile("([A-Z]*)([0-9]*)")
 
+
 class FobHelper():
     """ Support both Local File and Remote Object Storage """
 
@@ -117,6 +118,7 @@ class FobHelper():
         ext = extension.lower()
         item_name = "{}.{}".format(key, ext)
         return item_name
+
 
 if __name__ == "__main__":
 

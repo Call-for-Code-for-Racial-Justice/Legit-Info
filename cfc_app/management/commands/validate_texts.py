@@ -12,7 +12,7 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 
 # Application imports
-from cfc_app.FOB_Storage import FOB_Storage
+from cfc_app.fob_storage import FobStorage
 from cfc_app.ShowProgress import ShowProgress
 from cfc_app.key_counter import KeyCounter
 

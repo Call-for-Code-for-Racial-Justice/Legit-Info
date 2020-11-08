@@ -260,11 +260,11 @@ class Command(BaseCommand):
 
         impact_chosen = 'None'
         revlist = []
-        map = self.womp.wordmap
+        w_map = self.womp.wordmap
         for rel in concept:
             term = rel['text'].strip()
-            if term in map:
-                revlist.append([term, map[term]])
+            if term in w_map:
+                revlist.append([term, w_map[term]])
             else:
                 revlist.append([term, 'Unknown'])
 

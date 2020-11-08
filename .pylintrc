@@ -150,9 +150,9 @@ disable=print-statement,
         super-with-arguments,
         broad-except, 
         chained-comparison,
-        invalid_name,
-        C0103,
-        too-many-instance-attributes
+        C0103, invalid-name,
+        relative-beyond-top-level,
+        R0902, too-many-instance-attributes
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
