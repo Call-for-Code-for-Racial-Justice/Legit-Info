@@ -87,12 +87,6 @@ If you are in the Pipenv shell, you can use stage1 or stage2, as well.
 (cfc) [legit-info]$ ./stage1 get_datasets --api --state AZ
 ```
 
-Cron Job:
-
-```console
-/home/yourname/Develop/legit-info/cron1 get_datasets --api
-```
-
 ### 1.3 Built-in Help for keywords and parameters
 
 ```console
