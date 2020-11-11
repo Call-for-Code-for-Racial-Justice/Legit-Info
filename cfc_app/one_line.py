@@ -16,6 +16,9 @@ import sys
 # Django and other third-party imports
 import nltk
 
+# Application imports
+from .bill_detail import BillDetail, MAX_TITLE, MAX_SUMMARY
+
 # Debug with:  import pdb; pdb.set_trace()
 logger = logging.getLogger(__name__)
 
@@ -204,11 +207,17 @@ class Oneline():
     def header_title(self, title):
         """ Add title to the header """
 
+        if len(title) > MAX_TITLE:
+            title = BillDetail.form_sentence(title, MAX_TITLE)
+
         self.add_text(" _TITLE_ "+title)
         return self
 
     def header_summary(self, summary):
         """ Add summar to the header """
+
+        if len(summary) > MAX_SUMMARY:
+            summary = BillDetail.form_sentence(summary, MAX_SUMMARY)
 
         self.add_text(" _SUMMARY_ "+summary)
         return self
@@ -227,51 +236,51 @@ class Oneline():
         line = ' '.join(newlines)
         return line
 
+    @staticmethod
+    def parse_header(text):
+        """ Parse headers at the beginning of text file """
 
-def parse_header(text):
-    """ Parse headers at the beginning of text file """
-
-    header, sections = {}, []
-    # import pdb; pdb.set_trace()
-    newline = Oneline.join_lines(text)
-
-    if "_TEXT_" in newline:
-        sections = newline.split('_TEXT_')
-        logger.debug(f"Parsing: {newline[:80]}")
-    else:
-        logger.warning(f"Headers not found in text file. {newline[:80]}")
-
-    if len(sections) == 2:
-        head_text = sections[0] + " _TEXT_"
-        mop = FILE_REGEX.search(head_text)
-        if mop:
-            header['FILE'] = mop.group(1).strip()
-
-        mop = DOCDATE_REGEX.search(head_text)
-        if mop:
-            header['DOCDATE'] = mop.group(1).strip()
-
-        mop = HASHCODE_REGEX.search(head_text)
-        if mop:
-            header['HASHCODE'] = mop.group(1).strip()
-
-        mop = BILLID_REGEX.search(head_text)
-        if mop:
-            header['BILLID'] = mop.group(1).strip()
-
-        mop = CITE_REGEX.search(head_text)
-        if mop:
-            header['CITE'] = mop.group(1).strip()
-
-        mop = TITLE_REGEX.search(head_text)
-        if mop:
-            header['TITLE'] = mop.group(1).strip()
-
-        mop = SUMMARY_REGEX.search(head_text)
-        if mop:
-            header['SUMMARY'] = mop.group(1).strip()
+        header, sections = {}, []
         # import pdb; pdb.set_trace()
-    return header
+        newline = Oneline.join_lines(text)
+
+        if "_TEXT_" in newline:
+            sections = newline.split('_TEXT_')
+            logger.debug(f"Parsing: {newline[:80]}")
+        else:
+            logger.warning(f"Headers not found in text file. {newline[:80]}")
+
+        if len(sections) == 2:
+            head_text = sections[0] + " _TEXT_"
+            mop = FILE_REGEX.search(head_text)
+            if mop:
+                header['FILE'] = mop.group(1).strip()
+
+            mop = DOCDATE_REGEX.search(head_text)
+            if mop:
+                header['DOCDATE'] = mop.group(1).strip()
+
+            mop = HASHCODE_REGEX.search(head_text)
+            if mop:
+                header['HASHCODE'] = mop.group(1).strip()
+
+            mop = BILLID_REGEX.search(head_text)
+            if mop:
+                header['BILLID'] = mop.group(1).strip()
+
+            mop = CITE_REGEX.search(head_text)
+            if mop:
+                header['CITE'] = mop.group(1).strip()
+
+            mop = TITLE_REGEX.search(head_text)
+            if mop:
+                header['TITLE'] = mop.group(1).strip()
+
+            mop = SUMMARY_REGEX.search(head_text)
+            if mop:
+                header['SUMMARY'] = mop.group(1).strip()
+
+        return header
 
 
 def add_header(text_line, detail):

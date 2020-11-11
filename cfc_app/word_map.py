@@ -114,25 +114,27 @@ class WordMap():
 
     def relevance(self, extracted_text):
         """ return top impact areas from extracted text """
-        concept = []
 
-        self.scan_extract(extracted_text, self.primary, concept)
+        concept = self.scan_extract(extracted_text, self.primary)
         if len(concept) < self.rlimit:
-            self.scan_extract(extracted_text, self.secondary, concept)
-        if len(concept) < self.rlimit:
-            self.scan_extract(extracted_text, self.tertiary, concept)
+            concept += self.scan_extract(extracted_text, self.secondary)
+
+        # If we have already found primary/secondary, do not bother with NONE
+        if len(concept) == 0:
+            concept += self.scan_extract(extracted_text, self.tertiary)
 
         return concept
 
-    def scan_extract(self, extracted_text, category_list, concept):
+    def scan_extract(self, extracted_text, category_list):
         """ Scan extracted text for relevant keywords """
 
-        relterms = {}
+        relterms, concept = {}, []
         for rel in category_list:
             term = rel[0]
-            relcount = extracted_text.count(term)
-            if relcount:
-                relterms[term] = relcount
+            rec = re.compile(r"\b"+term+r"\b", re.IGNORECASE)
+            matches = rec.findall(extracted_text)
+            if matches:
+                relterms[term] = len(matches)
 
         num = 0
         # import pdb; pdb.set_trace()
@@ -145,6 +147,6 @@ class WordMap():
             if num >= self.rlimit:
                 break
 
-        return None
+        return concept
 
 # end of module

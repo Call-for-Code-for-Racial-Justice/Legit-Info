@@ -53,6 +53,11 @@ keyRegex = re.compile(r"^\w\w-(.*)-")
 
 
 RLIMIT = 10   # number of phrases to be returned by IBM Watson NLU
+NLUST = "(NLU)"
+MAPST = "(MAP)"
+BOTH_REGEX = re.compile("[(]NLU[)](.*)[(]MAP[)](.*)")
+NLU_REGEX = re.compile("[(]NLU[)](.*)")
+MAP_REGEX = re.compile("[(]MAP[)](.*)")
 
 
 class AnalyzeTextError(CommandError):
@@ -79,8 +84,6 @@ class Command(BaseCommand):
         self.use_api = False
         self.after = None
         self.limit = 10
-        self.rel_start = '(MAP)'
-
         state_id_table = {}
         for state_id in LEGISCAN_ID:
             state = LEGISCAN_ID[state_id]['code']
@@ -88,6 +91,9 @@ class Command(BaseCommand):
         self.id_table = state_id_table
 
         self.verbosity = 1
+        self.skip = False
+        self.compare = False
+        self.count = 0
         return None
 
     def add_arguments(self, parser):
@@ -95,6 +101,10 @@ class Command(BaseCommand):
 
         parser.add_argument("--api", action="store_true",
                             help="Invoke IBM Watson NLU API")
+        parser.add_argument("--skip", action="store_true",
+                            help="Skip if NLU relevance already exists")
+        parser.add_argument("--compare", action="store_true",
+                            help="Compare NLU and MAP analyses")
         parser.add_argument("--state", help="Process single state: AZ, OH")
         parser.add_argument("--after", help="Start after this item name")
         parser.add_argument("--limit", type=int, default=self.limit,
@@ -111,16 +121,19 @@ class Command(BaseCommand):
         if options['after']:
             self.after = options['after']
 
+        if options['skip']:
+            self.skip = True
+
+        if options['compare']:
+            self.compare = True
+
         self.limit = options['limit']
 
         if options['api']:
             self.use_api = True
-            self.rel_start = '(NLU)'
-            logger.info('118:Analyzing with IBM Watson NLU API')
-        else:
-            logger.info('120:Analyzing with internal Wordmap ONLY')
 
         self.verbosity = options['verbosity']
+        logger.debug(f"134:Options {options}")
 
         impacts = Impact.objects.all().exclude(text='None')
         impact_list = []
@@ -152,7 +165,7 @@ class Command(BaseCommand):
                 logger.error(err_msg, exc_info=True)
                 raise AnalyzeTextError(err_msg) from exc
 
-        timing.start_time(options['verbosity'])
+        timing.end_time(options['verbosity'])
         return None
 
     def process_state(self, state):
@@ -163,7 +176,7 @@ class Command(BaseCommand):
                                     after=cursor, limit=0)
 
         dot = ShowProgress()
-        num = 0
+        self.count = 0
         items.sort()
         for filename in items:
             textdata = self.fob.download_text(filename)
@@ -171,12 +184,11 @@ class Command(BaseCommand):
             header = Oneline.parse_header(textdata)
             if 'BILLID' in header:
                 bill_id = header['BILLID']
-                logger.debug(f"231:bill_id={bill_id}")
+                logger.debug(f"231:bill_id={bill_id} {filename}")
                 self.process_legislation(filename, textdata, header)
                 if self.verbosity:
                     dot.show()
-                num += 1
-                if self.limit > 0 and num >= self.limit:
+                if self.limit > 0 and self.count >= self.limit:
                     break
             else:
                 logger.info(f"238:No bill_id found, removing: {filename}")
@@ -192,19 +204,69 @@ class Command(BaseCommand):
         extracted_text = Oneline.join_lines(extracted_lines)
         extracted_text = extracted_text.replace('"', r'|').replace("'", r"|")
 
-        concept = {}
-        if self.use_api:
-            logger.debug(f"255:Filename {filename} Concept:{concept}")
-            try:
-                concept = self.relevance_nlu(extracted_text)
-            except Exception as exc:
-                logger.error(f"IBM Watson NLU failed, disabling --api: {exc}")
-                self.use_api = False
-        else:
-            concept = self.womp.relevance(extracted_text)
+        skipping = False
+        key = filename.replace(".txt", "")
+        impact_nlu, impact_map = "", ""
+        rel_nlu, rel_map = "", ""
+        if self.skip or self.compare:
+            law = Law.objects.filter(key=key).first()
+            if (law is not None
+                    and (law.impact is not None)
+                    and law.relevance is not None):
+                mop1 = BOTH_REGEX.search(law.relevance)
+                mop2 = NLU_REGEX.search(law.relevance)
+                mop3 = MAP_REGEX.search(law.relevance)
+                if mop1:
+                    rel_nlu = NLUST + mop1.group(1)
+                    rel_map = MAPST + mop1.group(2)
+                    impact_nlu = law.impact.text
+                    impact_map = law.impact.text
+                elif mop2:
+                    rel_nlu = NLUST + mop2.group(1)
+                    impact_nlu = law.impact.text
+                elif mop3:
+                    rel_map = MAPST + mop3.group(1)
+                    impact_map = law.impact.text
+                if self.skip and (impact_nlu != ""):
+                    logger.debug(f"209:Skipping {filename}")
+                    skipping = True
 
-        if concept:
-            self.save_relevance(filename, header, concept)
+        if not skipping:
+            self.count += 1
+            if self.use_api:
+                try:
+                    concept_nlu = self.relevance_nlu(extracted_text)
+                    revlist, impact_nlu = self.classify_impact(concept_nlu)
+                    rel_nlu = self.format_rel(NLUST, revlist)
+                except Exception as exc:
+                    logger.error(f"IBM Watson NLU failed, "
+                                 f"disabling --api: {exc}")
+                    self.use_api = False
+
+            if (not self.use_api) or self.compare:
+                concept_map = self.womp.relevance(extracted_text)
+                revlist, impact_map = self.classify_impact(concept_map)
+                rel_map = self.format_rel(MAPST, revlist)
+
+            rel = rel_nlu + rel_map
+            if (impact_nlu not in ["", "None"]
+                    and (impact_map not in ["", "None"])):
+                if impact_nlu != impact_map:
+                    logger.debug(f"254:Impacts don't match {filename} "
+                                 f"NLU={impact_nlu} MAP={impact_map}")
+                else:
+                    logger.debug(f"257:Impacts match {filename} "
+                                 f"NLU={impact_nlu} MAP={impact_map}")
+            if impact_nlu != "":
+                imp_chosen = impact_nlu
+            elif impact_map != "":
+                imp_chosen = impact_map
+            else:
+                imp_chosen = "None"
+
+            if rel:
+                logger.debug(f"229:Filename {filename} Impact={imp_chosen}")
+                self.save_law(key, header, rel, imp_chosen)
 
         return None
 
@@ -233,27 +295,19 @@ class Command(BaseCommand):
         concept = result.get("concepts")
         return concept
 
-    def save_relevance(self, filename, header, concept):
+    def format_rel(self, rel_start, revlist):
         """ Save relevant words found for this bill """
 
-        revlist, impact_chosen = self.classify_impact(concept)
-
-        rel, connector = self.rel_start, ''
+        rel, connector = rel_start, ''
         for rev in revlist:
             rel += connector + "'{}' => '{}'".format(rev[0], rev[1])
+            if rev[1] == "Unknown":
+                logger.debug(f'304:"{rev[0]}", "{rev[1]}"')
             connector = ", "
 
-        log_msg = "351:Filename {filename} Impact={impact_chosen} Rel:{rel}"
-        logger.debug(log_msg)
+        logger.debug(f"303:{rel_start}: {rel}")
 
-        key = filename.replace(".txt", "")
-
-        if self.verbosity > 1:
-            print(f"Analyzed filename: {filename} "
-                  f"Impact chosen={impact_chosen}")
-
-        self.save_law(key, header, rel, impact_chosen)
-        return None
+        return rel
 
     def classify_impact(self, concept):
         """ Classify the impact based on relevant terms """
@@ -287,15 +341,6 @@ class Command(BaseCommand):
         # import pdb; pdb.set_trace()
         if Law.objects.filter(key=key).exists():
             law = Law.objects.get(key=key)
-            # import pdb; pdb.set_trace()
-
-            # If the record is up-to-date, leave it alone
-            if (law.doc_date
-                    and doc_date < law.doc_date):
-                logger.debug(f"396:Law left alone {key} "
-                             f"Existing={law.impact} Chosen={impact_chosen}")
-                return None
-
             result = 'Updated'
         # otherwise, this is a new record.
         else:

@@ -14,6 +14,7 @@ Licensed under Apache 2.0, see LICENSE for details
 
 # System imports
 import base64
+import datetime as DT
 import json
 import logging
 import re
@@ -89,6 +90,7 @@ class Command(BaseCommand):
         nltk.download('punkt')
         self.nltk_loaded = True
         self.after = None
+        self.now = DT.datetime.today().date()
         self.fromyear = self.now.year - 2  # Back three years 2018, 2019, 2020
         return None
 
@@ -222,10 +224,25 @@ class Command(BaseCommand):
         logger.debug(f"209:Checking JSON: {json_name}")
         json_str = self.fob.download_text(json_name)
 
-        # If the ZIP file already exists, use it, otherwise create it.
+        source_hash = Hash.find_item_name(json_name)
+
         zip_name = json_name.replace('.json', '.zip')
+        target_hash = Hash.find_item_name(zip_name)
+        if target_hash is None:
+            target_hash = Hash(item_name=zip_name,
+                               fob_method=settings.FOB_METHOD,
+                               generated_date=source_hash.generated_date,
+                               hashcode=source_hash.hashcode,
+                               size=source_hash.size,
+                               desc=source_hash.desc)
+            logger.debug(f"Hashcode for {zip_name} saved.")
+            target_hash.save()
+
+        # If the ZIP file already exists, use it, otherwise create it.
+
         msg_bytes = b""
-        if self.fob.item_exists(zip_name):
+        if (self.fob.item_exists(zip_name)
+                and source_hash.generated_date <= target_hash.generated_date):
             msg_bytes = self.fob.download_binary(zip_name)
         else:
             package = json.loads(json_str)
@@ -284,7 +301,7 @@ class Command(BaseCommand):
         bill_json = json.loads(json_data)
         detail = BillDetail(bill_json['bill'])
 
-        logger.debug(f"332:detail={detail}")
+        logger.debug(f"289:detail={detail}")
 
         # If a bill has multiple versions, choose the latest one.
         if detail.texts:
@@ -308,10 +325,10 @@ class Command(BaseCommand):
                     text_name = self.fobhelp.bill_text_name(key, "txt")
                     processed = self.skip_if_exists(text_name, detail)
             else:
-                logger.debug("312:Too old, skipping: {detail.doc_date}")
+                logger.debug(f"312:Too old, skipping: {detail.doc_date}")
 
         else:
-            logger.warning(f"353:No texts found for {detail.state}-"
+            logger.warning(f"318:No texts found for {detail.state}-"
                            f"{detail.bill_number}-"
                            f"{detail.session_id}")
 
@@ -330,7 +347,7 @@ class Command(BaseCommand):
                              location=self.loc, doc_date=detail.doc_date)
             law_record.save()
         else:
-            logger.debug("302:LAW record already exists: {detail.key}")
+            logger.debug(f"302:LAW record already exists: {detail.key}")
 
         return None
 
