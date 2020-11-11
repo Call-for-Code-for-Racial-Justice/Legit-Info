@@ -1,0 +1,273 @@
+Testing:  ./github_api.py
+Accessing Github.com Repository:  Call-for-Code-for-Racial-Justice/Legit-Info
+Congratulations, you have connected to: Legit-Info
+46 2020-11-11 13:31:06 36779ff Updated CRON.md and FOB.md documents 429cd2a
+46 2020-11-11 00:23:17 429cd2a created weekly.sh as cron job 483fa70
+45 2020-11-08 14:11:59 483fa70 Update admin.py to correct pylint errors c0ed245
+45 2020-11-08 13:27:50 c0ed245 change bundle.ok to bundle.status_ok 0cd6906
+45 2020-11-07 15:20:44 0cd6906 #35 widen TextField areas for cfc_app_law 26c77a5
+45 2020-11-06 19:49:59 26c77a5 Created bill_detail class bb786d9
+45 2020-11-03 22:15:26 bb786d9 Split fob_storage methods to fob_helper b453e23
+45 2020-11-03 19:33:04 b453e23 new:created tests_show.py a59b308
+45 2020-11-03 15:23:07 a59b308 Separate word_map.py from analyze_text 8e604c5
+45 2020-11-03 06:59:17 8e604c5 refactor get_datasets to address pylint errors a34006b
+45 2020-11-03 05:56:31 a34006b update users/admin.py for pylint errors 09f3b5c
+45 2020-11-02 23:56:50 09f3b5c Add docstrings to admin and extract_files d00db6e
+45 2020-11-02 22:26:35 d00db6e Installed pylint-django library 5529cce
+45 2020-11-02 18:41:14 5529cce Update .pylintrc for check_python d9d65b0
+45 2020-11-02 16:27:29 d9d65b0 renamed PDFtoTEXT to pdf_to_text to comply with Python style 35348e4
+45 2020-11-02 16:20:49 35348e4 Install pylint to check for syntax errors 0bbf7b2
+44 2020-11-01 22:31:23 0bbf7b2 new: added LogTime class 145c830
+44 2020-11-01 15:09:50 145c830 Enhanced check_python to invoke pylint, autopep8, flake8 a39f3c3
+44 2020-11-01 00:30:11 a39f3c3 new:#35 support verbosity levels be2e735
+44 2020-11-01 00:20:33 be2e735 Increase key size to 25 chars 8ffacbc
+44 2020-11-01 00:12:43 8ffacbc doc:#45 Added pipenv instructions c36800e
+44 2020-10-31 00:50:43 c36800e Added TROUBLESHOOT.md for debug, testing and troubleshooting hints and tips 3c1caae
+44 2020-10-31 00:20:06 3c1caae new:#39 New field cfc_app_law cite_url to hold source URL 5cc0006
+44 2020-10-30 22:11:00 5cc0006 Merge pull request #46 from Call-for-Code-for-Racial-Justice/cities  source files for US cities and counties cd48869, 85874fb
+44 2020-10-30 19:59:47 cd48869 renamed test1.py to validate_texts 6fa2bc7
+44 2020-10-30 19:21:11 6fa2bc7 Added KeyCounter.py to evaluate quality of text files 67fdaf2
+44 2020-10-29 18:36:31 85874fb added files with hierarchy defined 1dc9f03
+44 2020-10-29 13:29:23 67fdaf2 New environment variables CFC_DEBUG, CFC_LOGLEVEL_{prod/dev} c52a86d
+44 2020-10-29 13:12:13 c52a86d New information flow Archictecture PNG 65c4520
+44 2020-10-29 12:02:18 65c4520 Activated Django Python logging 70ac023
+44 2020-10-28 19:18:35 1dc9f03 source files for US cities and counties fe8e2d0
+44 2020-10-28 01:20:48 70ac023 Installed pystache, .gitchangelog.rc to generate directly in Markdown fe8e2d0
+44 2020-10-28 00:49:16 fe8e2d0 new:doc:Installed gitchangelog and created CHANGELOG.md eac1d3f
+44 2020-10-27 22:49:03 eac1d3f Moved load_defaults from views.py to models.py 555f6d0
+44 2020-10-27 21:20:56 555f6d0 cleanup sources/ directory 91ae006
+44 2020-10-27 13:23:39 91ae006 Added Open Source library NLTK support 97278df
+44 2020-10-26 17:56:29 97278df Call getBillText if state_link broken f60a559
+44 2020-10-26 10:41:14 f60a559 remove unneeded imports LegiscanAPI 41581d4
+44 2020-10-26 04:41:33 41581d4 Add CC40-LICENSE just in case we need them 9f7bb23
+43 2020-10-25 14:56:20 9f7bb23 Add support for US Congress (Federal) laws 181ea87
+43 2020-10-24 23:44:28 181ea87 Update DESCRIPTION to point to screenshots 8f69982
+43 2020-10-24 23:42:12 8f69982 Updated CRON.md and re-organized docs directory 5a27a4c
+43 2020-10-24 19:27:41 5a27a4c Rename scan_json to extract_files 4a1af92
+43 2020-10-24 15:45:03 4a1af92 get_api_data renamed to get_datasets c434be3
+43 2020-10-24 14:06:46 c434be3 Enhanced DESCRIPTION.md with screenshots e089326
+43 2020-10-24 00:11:09 e089326 Merge branch 'main' of github.com:Call-for-Code-for-Racial-Justice/Legit-Info into main bf0b8d8, c3a3745
+43 2020-10-24 00:10:57 bf0b8d8 Checking for previous in get_api_data d459fcf
+43 2020-10-22 20:15:52 c3a3745 Merge pull request #37 from Call-for-Code-for-Racial-Justice/location  Python script to extract location from bill d459fcf, dcdd2b5
+43 2020-10-22 19:57:50 d459fcf Rename Legiscan_API to LegiscanAPI to comply with PEP8 7911da4
+43 2020-10-22 19:52:25 7911da4 Place sample JSON Django Features in /sources fd54660
+43 2020-10-22 13:22:52 fd54660 New docs/STYLE.md for Python PEP 8 standards fa3e9be
+43 2020-10-22 05:13:46 fa3e9be Updated FOB_Storage for situations > 1000 entries b11882a
+43 2020-10-22 02:51:09 b11882a Rewrote Legiscan_API and added DataBundle 0c47e0b
+43 2020-10-22 02:26:05 dcdd2b5 Fixed typos 7e3c31c
+43 2020-10-22 02:18:26 7e3c31c Python script to extract location from bill 4b4cfda
+43 2020-10-21 14:28:09 0c47e0b #28 fixed fob_stats 4b4cfda
+43 2020-10-21 14:13:18 4b4cfda #28 Added fob_sync and fob_stats 798d3e9
+43 2020-10-20 19:32:45 798d3e9 Explain seeding databases 3a5277d
+43 2020-10-20 19:19:27 3a5277d More updates to DESCRIPTION.md 3128f5e
+43 2020-10-20 18:52:45 3128f5e Updated DESCRIPTION with administration commands f57cdf5
+43 2020-10-20 17:19:06 f57cdf5 Created cfc-seed.json fixture 420c416
+43 2020-10-20 04:07:23 420c416 update scan_json to use requests instead e275faf
+43 2020-10-20 03:19:44 e275faf fetch HTML/PDF directly from State websites e7e2c15
+43 2020-10-20 01:17:35 e7e2c15 Update scan_json using new datasetlist 360beba
+43 2020-10-19 23:21:34 360beba Documentation on Text Analytics moved to /docs 3da4de2
+43 2020-10-19 23:10:22 3da4de2 Merge branch 'main' of github.com:Call-for-Code-for-Racial-Justice/Legit-Info into main 48335bb, e536454
+43 2020-10-19 23:10:11 48335bb updated Location with Legiscan_id 0807a7e
+43 2020-10-19 21:59:49 e536454 Updated analysis and data cleaning sections.  Todo# impact area mapping and adding any sections as needed. 5d402d3
+43 2020-10-19 21:50:38 5d402d3 Creating a README file to include text analysis b9e18b1
+43 2020-10-19 17:31:46 0807a7e Legiscan to use new GetDatasetList option b9e18b1
+43 2020-10-19 07:13:43 b9e18b1 Merge branch 'main' of github.com:Call-for-Code-for-Racial-Justice/Legit-Info into main 9412739, 65904ed
+43 2020-10-19 07:13:28 9412739 fix Flake8 errors d81b8f9
+43 2020-10-19 03:45:15 65904ed Merge pull request #26 from Call-for-Code-for-Racial-Justice/Contributing  Contributing Guidelines d81b8f9, da69776
+43 2020-10-19 03:44:14 da69776 Contributing Guidelines  Signed-off-by: John Walicki <walicki@us.ibm.com> d81b8f9
+43 2020-10-19 03:27:39 d81b8f9 Merge branch 'main' of github.com:Call-for-Code-for-Racial-Justice/Legit-Info into main b12d6eb, 99f5ce8
+43 2020-10-19 03:27:26 b12d6eb correct syntax errors in wordmap.csv 2e1c1eb
+42 2020-10-18 21:23:09 2e1c1eb removed duplicate Legiscan.py files 6ee641a
+42 2020-10-17 21:40:25 99f5ce8 Update README.md c69551a
+42 2020-10-17 21:39:17 c69551a Update README.md  Signed off by: John Walicki <walicki@us.ibm.com> 6ee641a
+42 2020-10-17 04:30:29 6ee641a pip installed lxml and html5lib parsers c543710
+42 2020-10-17 02:52:06 c543710 moved Oneline and PDFtoTEXT to cfc_app 6b83f81
+42 2020-10-17 00:24:56 6b83f81 moved Legiscan_API and ShowProgress to cfc_app 6df8277
+42 2020-10-16 22:27:29 6df8277 celery settings cfc_project bd50948
+42 2020-10-16 22:11:25 bd50948 added celery settings 1eed8ca
+42 2020-10-16 19:28:20 1eed8ca add celery and wordmap.csv dae72fd
+42 2020-10-16 17:28:28 dae72fd Added support for NONE on Impacts 806ddcb
+42 2020-10-16 13:03:56 806ddcb Script bestwords.py to scan for best terms a152fbd
+42 2020-10-16 02:52:51 a152fbd change project to Legit-Info bf17ce1
+42 2020-10-15 23:43:37 bf17ce1 moved legislation to IBM COS a90d961
+42 2020-10-15 23:37:35 a90d961 showcos for Shilpi to iterate 29552ed
+42 2020-10-15 22:01:55 29552ed created makezip and uploadcos 7062a6b
+42 2020-10-15 12:52:29 7062a6b update gitignore to avoid uploading legislation 11426ac
+42 2020-10-15 02:37:23 11426ac chkjson and scanjson f584b12
+42 2020-10-14 23:26:48 f584b12 fix flake8 errors in sources 2ecc6f3
+42 2020-10-14 23:11:31 2ecc6f3 Updated Pipfile to add requests 211cc68
+42 2020-10-14 17:01:04 211cc68 Fixed Pipfile.lock conflicts edd6fa6
+42 2020-10-14 16:58:21 edd6fa6 Merge branch 'cron' into main 6c7a8ee, 2ad4808
+42 2020-10-14 16:57:48 2ad4808 fix Pipfile.lock 3c9616c, 6c7a8ee
+42 2020-10-14 16:54:24 6c7a8ee new chkjson.py to validate string lengths dcc9442
+42 2020-10-14 16:36:10 3c9616c Update .gitignore  ignore .vscode 53bdad3
+42 2020-10-14 16:34:40 53bdad3 Delete settings.json  removed vscode setting 2361dfb
+42 2020-10-14 16:29:20 2361dfb updated bill object to include bill_text mime 9784922
+42 2020-10-14 15:47:58 dcc9442 Update gitignore to avoid JSON uploads dcd6969
+42 2020-10-14 15:17:12 dcd6969 updated Dockerfile and Pipfile.lock 3aa0f52
+42 2020-10-14 13:55:52 9784922 updated cron documentation a099a3e
+42 2020-10-14 13:27:02 a099a3e created cron script 3aa0f52
+
+42 2020-10-13 23:37:46 3aa0f52 Turn off debug in settings.py 1b7623a
+42 2020-10-13 23:21:38 1b7623a updated Stage1 and Stage2 docs c0adbdd
+42 2020-10-13 21:28:18 c0adbdd fix port-forward.sh e117d17
+42 2020-10-13 18:52:13 e117d17 rename fixpoldb to cfcappdb dd2920e
+42 2020-10-13 14:40:11 dd2920e update Stage1.md for Sqlite3 requirements 493bbe0
+
+42 2020-10-12 16:35:32 493bbe0 remove all quotation marks from txt files 2b296e1
+41 2020-10-11 12:35:20 2b296e1 fix flake8 errors on html2txt.py d06a6fb
+41 2020-10-10 15:28:56 d06a6fb add html2txt.py in sources e068a3a
+41 2020-10-10 13:23:59 e068a3a rename fixpol to cfc_app 79e4063
+41 2020-10-09 16:54:22 79e4063 Resolves issue #22 4981f54
+41 2020-10-07 20:44:22 4981f54 updates to Stage3 782fb9e
+
+35 2020-08-29 18:51:41 782fb9e removed unneeded variables 2c2654f
+35 2020-08-29 15:53:17 2c2654f improve comments dbbf412
+35 2020-08-29 14:07:57 dbbf412 fix manage.py 5f9ae59
+35 2020-08-29 13:24:01 5f9ae59 update to STAGE1 c0af739
+35 2020-08-27 22:27:13 c0af739 correct flake8 errors in cfc_project e98b9e5
+35 2020-08-27 22:02:03 e98b9e5 fixed flake8 errors in users subdirectory 271759b
+35 2020-08-27 21:39:01 271759b added favicon 65e739a
+35 2020-08-27 20:57:40 65e739a added Directions to take this to 449a25e
+35 2020-08-27 20:17:46 449a25e Updates to STRUCTURE.md da49bb1
+35 2020-08-26 23:59:38 da49bb1 updated Stage3 6c05a51
+35 2020-08-26 22:47:47 6c05a51 Updated Stage2 e6403a8
+35 2020-08-24 13:13:46 e6403a8 Added ancestor search in DESCRIPTION c38508f
+35 2020-08-24 01:32:11 c38508f Added DESCRIPTION.md 0661d62
+34 2020-08-23 19:41:48 0661d62 Merge branch 'main' of github.com:embrace-call-for-code/fix-politics into main badda22, cb2b6a6
+34 2020-08-23 19:41:11 badda22 README changes for starter kit 99ff65b
+34 2020-08-23 19:05:55 99ff65b updated architecture e207d67
+
+33 2020-08-16 13:02:13 cb2b6a6 move STAGEs to docs e207d67
+33 2020-08-15 16:44:32 e207d67 Updates to STAGE1 for software 5a9475c
+33 2020-08-15 16:25:02 5a9475c verify version of pipenv ee5e238
+33 2020-08-15 16:21:33 ee5e238 updated Stage1 step 5 8d99a8a
+33 2020-08-15 15:59:52 8d99a8a Update heading tags for Mailtrap.io 4fb8f96
+33 2020-08-15 15:56:22 4fb8f96 Put Mailtrap.io in main README 9243302
+33 2020-08-15 15:53:09 9243302 Added Stage 2 and 3 a92e597
+33 2020-08-15 15:37:42 a92e597 split stages out of README 90a0569
+33 2020-08-15 15:30:12 90a0569 Setting up Dev workspace directory f3166d4
+33 2020-08-15 14:10:42 f3166d4 Added staged deployment in README b8f1fbc
+33 2020-08-14 15:15:34 b8f1fbc corrected spelling in RESULTS.md 62f323f
+33 2020-08-14 15:13:45 62f323f cleanup csv files 9b3be06
+33 2020-08-14 13:06:06 9b3be06 alphabetized views in fixpol e497d0b
+
+33 2020-08-13 22:05:37 e497d0b eliminate crash from duplicate criteria key 85e9d4e
+33 2020-08-13 20:54:35 85e9d4e added Admin tab for staff 8ce29ff
+33 2020-08-13 19:26:30 8ce29ff show hierarchy in search and locations pages 85e9b4e
+33 2020-08-13 17:50:43 85e9b4e Merge branch 'main' of github.com:embrace-call-for-code/fix-politics into main e291f5a, 8f718e0
+33 2020-08-13 17:50:15 e291f5a fixed world usage in location ee3871a
+33 2020-08-13 14:18:39 8f718e0 Merge pull request #10 from tnadams/readme_update  Readme update ee3871a, 498d1b0
+33 2020-08-12 21:55:05 498d1b0 Update README.md  Added directions for setting up a Mailtrap account 92d5324
+
+33 2020-08-12 21:37:29 92d5324 Update README.md  Removed Cloud references and updated steps for a local deployment fe4b991
+33 2020-08-12 20:50:12 fe4b991 Updated README.md f2d7465
+33 2020-08-12 20:20:51 f2d7465 Merge pull request #1 from embrace-call-for-code/main  Updating from source 2fe2a17, ee3871a
+33 2020-08-12 14:30:43 ee3871a Resolve psycopg2 errors 40b4f6b, 4776bf4
+33 2020-08-12 14:09:33 40b4f6b pscopg2 and pscopg2-binary at 2.8.3 levels 7939ec9
+33 2020-08-12 14:07:51 4776bf4 Fixed loading psycopg2 error aa02e80
+33 2020-08-12 14:07:21 aa02e80 Fixed Admin css 7939ec9
+33 2020-08-12 13:55:29 7939ec9 installed postgresql10-devel for libpq-fe.h 1688f30
+33 2020-08-12 06:04:49 1688f30 added port-forwared and run-pg scripts cedb19b
+33 2020-08-12 02:38:46 cedb19b Added USE_SQLITE3 to run script afce3be
+33 2020-08-12 02:33:46 afce3be merged settings.py and fixpol/views.py f821f04, 736d0d7
+33 2020-08-12 02:11:11 736d0d7 performed python manage.py collectstatic 6bfaff8
+33 2020-08-12 02:05:05 f821f04 dumped datbases to loc.sql and law.sql 325c515
+33 2020-08-12 00:00:34 6bfaff8 added tekton 3570008
+
+33 2020-08-11 23:48:23 3570008 Testing db environment variables, connectivity 1e9ccdf
+33 2020-08-11 23:15:53 325c515 CSV dumps of law data in docs cc8694f
+33 2020-08-11 23:07:51 1e9ccdf Add /health support 4efebf5
+33 2020-08-11 22:53:03 4efebf5 testing K8S support d64f147
+33 2020-08-11 22:22:44 d64f147 Added docker support b422b44
+33 2020-08-11 21:25:18 b422b44 added postgresql support 9d26e0a
+33 2020-08-11 20:03:23 cc8694f added backups directory for database d79e0d9
+33 2020-08-11 18:33:12 d79e0d9 tolerate if EMAIL_HOST not set 9d26e0a
+33 2020-08-11 17:44:59 9d26e0a added results/ into git bc372aa
+33 2020-08-11 14:28:15 bc372aa updated powerpoint charts 2d4bf79
+33 2020-08-10 22:12:19 2d4bf79 added cte-query for location search 33309b3
+33 2020-08-10 21:46:42 33309b3 changed port to 3000 on run 5544196
+33 2020-08-10 19:19:14 5544196 download csv file now works cf34415
+33 2020-08-10 16:01:31 cf34415 email sent returns to results page 6981736
+33 2020-08-10 14:48:01 6981736 Update email templates 59c9d9a
+33 2020-08-10 00:52:55 59c9d9a send email now works d586517
+
+
+32 2020-08-09 18:06:02 d586517 added email support fcc6001
+32 2020-08-09 16:04:31 fcc6001 setup mailtrap for email a7962ca
+32 2020-08-09 15:24:45 a7962ca added key to fixpol_law table 47ebcc2
+32 2020-08-09 13:53:33 47ebcc2 changed __str__ of criteria class cfa0c46
+32 2020-08-08 23:35:42 cfa0c46 search now uses profile defaults b7db52a
+32 2020-08-08 17:59:03 b7db52a remove templatetags 32bf38d
+32 2020-08-08 17:42:18 32bf38d register button on right side 6c2b585
+32 2020-08-08 17:09:07 6c2b585 responsive index.html 8ceda89
+32 2020-08-08 15:48:05 8ceda89 responsive panels 2b9c794
+
+
+32 2020-08-07 18:57:15 2b9c794 new set_criteria method on profile 01a6320
+32 2020-08-07 17:30:19 01a6320 updates to chart decks 41b129b
+32 2020-08-07 14:38:38 41b129b start cleanup 3fff89c
+32 2020-08-07 13:46:03 3fff89c Added Aug06 Powerpoint to docs 6296033
+32 2020-08-07 06:22:45 6296033 Merge Beth's color scheme into Bootstrap4 1887369
+32 2020-08-07 02:38:38 1887369 added Law database 763bdf8
+32 2020-08-06 23:53:48 763bdf8 split base.html to base-beth and base-tony c8d2a58
+32 2020-08-06 18:07:55 c8d2a58 commented out pdb breakpoints d75f5cd
+32 2020-08-06 17:28:02 d75f5cd Updated pipenv pipfile.lock 10d9c35
+32 2020-08-06 16:30:17 10d9c35 Merge branch 'main' of github.com:embrace-call-for-code/fix-politics into main Merge base.html CSS into main branch. 28e7dde, 1e50170
+32 2020-08-06 16:29:45 1e50170 Merge pull request #2 from bfm404/front-end-starter  Front end MVP 0984d08, e7260b2
+32 2020-08-06 16:27:23 28e7dde Merge branch 'main' of github.com:embrace-call-for-code/fix-politics into main Included updates for README.md form Tommy Adams 3267a60, 0984d08
+32 2020-08-06 16:27:07 0984d08 Merge pull request #1 from tnadams/tnadams-patch-1  Update README.md ec3cc87, 8819653
+32 2020-08-06 16:26:17 3267a60 update views ec3cc87
+32 2020-08-06 15:00:02 e7260b2 Stylised location and impacts to be more consistent ef5c7ad
+32 2020-08-06 14:50:42 ef5c7ad Changed colour of register button a90a10d
+32 2020-08-06 14:40:48 a90a10d Fixed results and search 7f7f91d
+32 2020-08-06 14:29:22 7f7f91d Merge branch 'main' into front-end-starter 2e982fb, ec3cc87
+32 2020-08-06 14:19:12 2e982fb Written most of the front end code, MVP 735066d
+32 2020-08-06 13:40:15 735066d Front end changes, still WIP 8b51a07
+32 2020-08-06 06:30:03 ec3cc87 new criteria model 8a30b6a
+32 2020-08-06 05:01:28 8a30b6a add criteria to profile 78d998f
+32 2020-08-06 02:39:16 78d998f Set unique=true on database fields 2fe2a17
+
+32 2020-08-05 21:43:10 8819653 Update README.md  Changed `python manage.py start` to `python manage.py runserver` 68d13b8
+32 2020-08-05 21:35:12 68d13b8 Update README.md  Updating README.md section for Native Application Development 2fe2a17
+32 2020-08-05 19:40:25 2fe2a17 Added text field for search criteria f092496
+32 2020-08-05 19:27:15 f092496 renamed SearchCriteria to Critera 710c116
+32 2020-08-05 19:03:33 710c116 created search criteria model 2e39848
+32 2020-08-05 18:55:55 2e39848 renamed prof_loc and prof_impact 8b51a07
+32 2020-08-05 08:58:38 8b51a07 added results page a066b8b
+
+32 2020-08-04 23:04:19 a066b8b Added screenshots Aug04 583f86b
+32 2020-08-04 18:51:41 583f86b New update.html for user profile d198c30
+32 2020-08-04 17:48:07 d198c30 sqlflush of all tables except fixpol 4710204
+32 2020-08-04 16:55:03 4710204 rename build/run to build-docker run-docker a187f48
+32 2020-08-04 14:07:43 a187f48 remove tarball for learning_logs 85b1d98
+32 2020-08-04 14:07:08 85b1d98 remove learing_logs test application 56421d4
+32 2020-08-04 14:05:33 56421d4 remove learning log databases 37b7f12
+32 2020-08-04 13:39:41 37b7f12 removed learning_logs test application f7db1f2
+32 2020-08-04 13:32:04 f7db1f2 Added profile to users 92a5a82
+32 2020-08-04 03:27:08 92a5a82 removing profiles temporarily e0ebcf4
+32 2020-08-04 03:24:35 e0ebcf4 removing learning_logs a8714e3
+32 2020-08-04 01:38:16 a8714e3 added Sign In/Sign out 6462455
+32 2020-08-03 22:14:13 6462455 added docs directory for powerpoints and other materials 49385b6
+32 2020-08-03 20:21:17 49385b6 add architecture diagram 1d9d8de
+32 2020-08-03 05:37:39 1d9d8de created base.html for fixpol bf90c5f
+32 2020-08-03 04:46:16 bf90c5f Attempts at getting Dockerfile to work bc1f7ad
+
+31 2020-07-31 22:33:47 bc1f7ad Attempted tries on Dockerfile repair 89538d2
+31 2020-07-31 19:07:33 89538d2 added tables for locations and impacts 3670ec4
+31 2020-07-31 17:58:08 3670ec4 created superuser 0da540b
+31 2020-07-31 17:34:19 0da540b added fixpol app for new development 2a67372
+31 2020-07-31 17:19:06 2a67372 fix dockerfile 8f72646
+31 2020-07-31 16:54:58 8f72646 Merge branch 'main' of github.com:embrace-call-for-code/fix-politics into main f0ebfc2, 39844a3
+31 2020-07-31 16:54:38 f0ebfc2 renamed learning_log project to cfc_project ec5e9b4
+31 2020-07-31 15:29:38 39844a3 that was a mistake, gitignore back 3b99ebe
+31 2020-07-31 15:23:43 3b99ebe Update gitignore to allow venv ec5e9b4
+31 2020-07-31 14:21:06 ec5e9b4 change to "soon" on index.html 9a32742
+31 2020-07-31 14:18:00 9a32742 added two topics, changed index.html 28e33fd
+31 2020-07-31 14:04:33 28e33fd add secrets caf497f
+31 2020-07-31 13:43:00 caf497f renamed db.sqlite3 to logsdb.sqlite3 661ae40
+31 2020-07-31 04:04:13 661ae40 new requirements c782bad
+31 2020-07-31 02:32:48 c782bad create sqlite3 18a3544
+31 2020-07-31 02:01:22 18a3544 changed index.html 8b59b02
+31 2020-07-31 01:44:45 8b59b02 Update build and run names 8ff465f
+31 2020-07-31 01:40:09 8ff465f Initial commit 

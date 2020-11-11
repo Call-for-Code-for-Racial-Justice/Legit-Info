@@ -5,6 +5,7 @@
 *.old
 *.bak
 *.out
+*.token
 server/localdev-config.json
 credentials.json
 localdev-config.json
