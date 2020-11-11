@@ -13,10 +13,10 @@ export FOB_METHOD='FILE'
 
 ## File Storage
 
-The files can be stored on a local or shared file system.  Set the
-environment variable FOB_STORAGE to the directory you want to store
-files in.  It is recommended that this be outside your GIT application
-root directory to avoid git issues.
+The files can be stored on a local or shared file system.  All items
+are stored in a single directory.  Set the environment variable FOB_STORAGE 
+to the directory you want to store files in.  It is recommended that this be 
+outside your GIT application root directory to avoid git issues.
 
 ```console
 export FOB_STORAGE="/home/yourname/Develop/fob-storage"
@@ -24,17 +24,16 @@ export FOB_STORAGE="/home/yourname/Develop/fob-storage"
 
 ## Object Storage
 
-The files can be stored on a local or shared file system.  Set the
-environment variable FOB_STORAGE to the directory you want to store
-files in.  It is recommended that this be outside your GIT application
-root directory to avoid git issues.
+The objects can be stored on IBM Cloud Object Storage.  All items are
+stored in a single bucket.  Specify the ENDPOINT_URL, API_KEY and INSTANCE
+variables provided by your administrator.
 
-This application was tested with IBM Cloud Object Storage:
 
+```console
 export COS_ENDPOINT_URL="https://<cloud.domain>"
 export COS_API_KEY_ID="<your api key>"
 export COS_INSTANCE="<instance>"
-
+```
 
 ## fob_stats: Show statistics about File/Object Storage
 
@@ -196,3 +195,9 @@ Starting fob_sync at Nov-11 06:17AM MST
 Number of files found: 47028
 Number of objects found: 47028
 
+Number of DELETE requests from OBJECT:  0
+Number of PUT requests from OBJECT:     0
+Number of GET requests from OBJECT:     0
+ 
+Ending fob_sync at Nov-11 06:20AM MST
+```

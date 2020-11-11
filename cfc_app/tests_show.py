@@ -26,7 +26,7 @@ class TestShowProgress(SimpleTestCase):
     def test_dot_gets_to_stdout(self):
         """ Verify standard dots """
 
-        expected_out = "...\n"
+        expected_out = "....\n"
 
         with patch('sys.stdout', new=StringIO()) as fake_out:
             dot = ShowProgress()
@@ -39,7 +39,7 @@ class TestShowProgress(SimpleTestCase):
     def test_dotchar_gets_to_stdout(self):
         """ Override default character with hashtag (#) instead """
 
-        expected_out = "###\n"
+        expected_out = "####\n"
         with patch('sys.stdout', new=StringIO()) as fake_out:
             dash = ShowProgress(dotchar='#')
             for _ in range(3):
@@ -51,7 +51,7 @@ class TestShowProgress(SimpleTestCase):
     def test_change_midway(self):
         """ Change character midway to show progress """
 
-        expected_out = "####@@@@@@\n"
+        expected_out = "####@@@@@@@\n"
         with patch('sys.stdout', new=StringIO()) as fake_out:
             hashtag = ShowProgress(dotchar="#")
             for num in range(10):
