@@ -23,7 +23,7 @@ sources/zipfiles/
 fob-storage/
 intermediate.file
 scan_json.pdf
-logs/
+logs/cfc_app.*
 
 # misc
 **/*DONOT_SAVE*.*
