@@ -7,9 +7,7 @@ github_api.py -- Authenticate with Github.com
 Written by Tony Pearson, IBM, 2020
 """
 
-import datetime as DT
 import logging
-import os
 import sys
 
 from github import Github
@@ -22,7 +20,6 @@ TOKENFILE = "github_api.token"
 
 # Github Repository name.
 REPONAME = "Call-for-Code-for-Racial-Justice/Legit-Info"
-
 
 
 class GithubError(RuntimeError):
@@ -83,6 +80,7 @@ class GithubConnect():
 
         return self
 
+
 def get_message(commit):
     """ Get message for this commit """
 
@@ -113,10 +111,5 @@ if __name__ == "__main__":
         for parent in parents:
             pstring += connector + parent.sha[:7]
             connector = ", "
-            
+
         print(weeknum, cdate, sha, msg, pstring)
-
-
-
-
-
