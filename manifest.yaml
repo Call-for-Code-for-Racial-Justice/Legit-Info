@@ -8,5 +8,5 @@ applications:
   memory: 64M
   random-route: true
   env:
-    PATH: /tmp/contents104339419/deps/0/python/bin
+    PATH: /tmp/contents514520844/deps/0/python/bin
 
