@@ -3,10 +3,12 @@ applications:
 - instances: 1
   timeout: 180
   name: legit_info
-  buildpack: python_buildpack
+  buildpacks: 
+    - https://github.com/cloudfoundry/python-buildpak.git
   command: gunicorn -b 0.0.0.0:$PORT --env DJANGO_SETTINGS_MODULE=cfc_project.settings cfc_project.wsgi
   memory: 64M
   random-route: true
   env:
     PATH: /tmp/contents514520844/deps/0/python/bin
+    CRYPTOGRAPHY_DONT_BUILD_RUST: 1
 
