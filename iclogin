@@ -1,0 +1,4 @@
+#!/bin/bash
+ibmcloud login --apikey @~/.ibmcloud_api_key_cf
+ibmcloud target -g cfc-team-legit-info
+ibmcloud target --cf
