@@ -28,6 +28,55 @@ by critical applications like YUM.  DO NOT UNINSTALL Sqlite 3.7.17, but rather
 install Sqlite3 in /usr/local, and set LD_LIBRARY_PATH to /usr/local/lib
 so that Django can use the updated level.  This app was tested with 3.24 level.
 
+```bash
+$ which sqlite3
+/usr/bin/sqlite3
+
+$ sqlite3 --version
+3.26.0 2018-12-01 12:34:55 bf8c1b2b7a5960c282e543b9c293686dccff272512d08865f4600fb58238alt1
+
+$ mkdir Sqlite3_24
+$ cd Sqlite3_24 
+
+Sqlite3_24 $ wget https://www.sqlite.org/2018/sqlite-autoconf-3240000.tar.gz
+Sqlite3_24 $ tar xvfz sqlite-autoconf-3240000.tar.gz
+Sqlite3_24 $ cd sqlite-autoconf-3240000
+
+make
+make install
+Sqlite3_24 $ unzip sqlite-amalgamation-3240000.zip
+Sqlite3_24 $ cd sqlite-amalgamation-3240000
+
+sqlite-amalgamation-3240000 $ ./configure --prefix=/usr/local
+sqlite-amalgamation-3240000 $ make
+sqlite-amalgamation-3240000 $ sudo make install
+```
+
+Update your OS environment variables.  For example, add the following to 
+your ~/.bash_profile or /etc/bashrc file:
+
+```
+export PATH=/usr/local/sqlite/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/sqlite/lib:$LD_LIBRARY_PATH
+export LD_RUN_PATH=/usr/local/sqlite/lib:$LD_RUN_PATH
+```
+
+This will set the variables the next time you login.  Do refresh them
+now, use the "source" command.  Confirm the version is now 3.24:
+
+```bash
+$ source ~/.bash_profile
+$ sqlite3 --version
+3.24.0 2018-06-04 19:24:41 c7ee0833225bfd8c5ec2f9bf62b97c4e04d03bd9566366d5221ac8fb199a87ca
+
+
+```
+
+
+
+
+
+
 
 * [Python](https://www.python.org/downloads/)
 
