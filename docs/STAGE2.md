@@ -49,6 +49,13 @@ export POSTGRESQL_PASSWORD='<password here>'
 export PGPASSWORD=$POSTGRSQL_PASSWORD
 ```
 
+* POSTGRESQL_DATABASE
+* POSTGRESQL_USER
+* POSTGRESQL_PASSWORD
+* POSTGRESQL_HOSTNAME
+* POSTGRESQL_PORT
+* CFC_LOGLEVEL_PROD
+
 4. Forward the port 5432 to the IBM Cloud instance.  5432 is the standard
 port for Postgresql.  Do not close this terminal, it will run indefinitely,
 so push it aside, and use other terminal windows for the other tasks.
