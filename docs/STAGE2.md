@@ -6,30 +6,44 @@
 
 * [Gunicorn](https://docs.gunicorn.org/en/stable/index.html)
 
+2. Install all of the IBM Cloud / Cloud Foundry command line tools. 
 
-2. Install all of the IBM Cloud and OpenShift command line tools.  Create
-a file in your home directory called `.ibmcloud.yaml' that will contain
-your IBM Cloud API token.
+Log into [IBM Cloud](https://cloud.ibm.com) select Manage->Access (IAM)
+in the upper right menu.  Then select "API Keys" from the left panel.
+Choose "Create an IBM Cloud API Key", and download the "apikey.json" file
+created.
 
+Move this to your home user directory and rename as follows:
 ```bash
-[ ~]$ cat .ibmcloud.yaml
-accounts:
-  sandbox: <your IBM Cloud API token here>
-clusters:
-  embrace:
-    region: us-east
-    resourceGroup: emb-race-team
-    cluster: embrace-dev-ocp43-vpc
-    account: sandbox
+mv ~/Downloads/apikey.json ~/.ibmcloud_api_key_cf
 ```
 
-With this in place, you can login to both IBM Cloud and OpenShift
-with a single command:
+DO NOT put your credentials into the Django application Github repo!
+
+Once this API key is available, there is a script to login and set 
+all of the Cloud Foundry resources for this application:
 
 ```bash
-[ legit-info]$ icc embrace
-Logging into ibmcloud: us-east/emb-race-team
-Logging into OpenShift cluster: embrace-dev-ocp43-vpc
+(env) [Legit-Info]$ ./iclogin
+
+API endpoint: https://cloud.ibm.com
+Region: us-east
+Authenticating...
+OK
+
+Targeted account Call for Code Deployment Team (d86af7367f70fba4f306d3c19c799841) <-> 2243326
+Targeted Cloud Foundry (https://api.us-east.cf.cloud.ibm.com)
+Targeted org cfc-team-external-apps
+Targeted space cfc-legit-info-space
+                      
+API endpoint:      https://cloud.ibm.com   
+Region:            us-east   
+User:              tpearson@us.ibm.com   
+Account:           Call for Code Deployment Team (d86af7367f70fba4f306d3c19c799841) <-> 2243326   
+Resource group:    cfc-team-legit-info   
+CF API endpoint:   https://api.us-east.cf.cloud.ibm.com (API version: 2.161.0)   
+Org:               cfc-team-external-apps   
+Space:             cfc-legit-info-space   
 ```
 
 3. Create a Postgresql pod on IBM Cloud.  For our system, we created
@@ -41,34 +55,12 @@ Postgresql username:  pguser
 Postgresql password:  <provide an appropriate password>
 ```
 
-Export the following OS Environment variables:
+4. Export the following OS Environment variables:
 
 ```bash
 export POSTGRESQL_USER='pguser'
 export POSTGRESQL_PASSWORD='<password here>'
 export PGPASSWORD=$POSTGRSQL_PASSWORD
-```
-
-4. Forward the port 5432 to the IBM Cloud instance.  5432 is the standard
-port for Postgresql.  Do not close this terminal, it will run indefinitely,
-so push it aside, and use other terminal windows for the other tasks.
-
-```bash
-[ legit-info]$ ./port-forward.sh
-Use 'icc embrace' to log into IBM Cloud and OpenShift
-API endpoint:      https://cloud.ibm.com
-Region:            us-east
-User:              cfcadmin@us.ibm.com
-Account:           GSI Labs - IBM (7e341a8be8c9464e8778c7107b2bcccc) <-> 1924691
-Resource group:    emb-race-team
-CF API endpoint:
-Org:
-Space:
-Using project "legit-info" on server
-      "https://c100-e.us-east.containers.cloud.ibm.com:31358".
-We will port forward 5432, do not close this terminal
-Forwarding from 127.0.0.1:5432 -> 5432
-Forwarding from [::1]:5432 -> 5432
 ```
 
 5. Verify connection with command line
@@ -113,7 +105,8 @@ SQlite3 to Postgresql, we will have to re-enter all the data using the
 application.  To get us started, we need to re-create the superuser 'cfcadmin'
 
 ```
-(env) [ legit-info]$ ./stage2 createsuperuser
+(env) [legit-info]$ ./stage2 migrate
+(env) [legit-info]$ ./stage2 createsuperuser
 **Using Postgresql**
 Username (leave blank to use 'yourname'): cfcadmin
 Email address: yourname@us.ibm.com

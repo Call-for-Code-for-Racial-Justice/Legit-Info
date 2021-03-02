@@ -3,11 +3,11 @@ applications:
   buildpacks:
   - python_buildpack
   - https://github.com/ELD/rust-buildpack.git
-  command: gunicorn -b 0.0.0.0:$PORT --env DJANGO_SETTINGS_MODULE=cfc_project.settings
+  command: USE_SQLITE3='False' gunicorn -b 0.0.0.0:$PORT --env DJANGO_SETTINGS_MODULE=cfc_project.settings
     cfc_project.wsgi
   disk_quota: 1G
   instances: 1
-  memory: 64M
+  memory: 256M
   routes:
   - route: legitinfo-friendly-jackal-sg.us-east.mybluemix.net
   stack: cflinuxfs3
