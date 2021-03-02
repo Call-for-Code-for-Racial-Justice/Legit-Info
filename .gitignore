@@ -24,6 +24,7 @@ fob-storage/
 intermediate.file
 scan_json.pdf
 logs/cfc_app.*
+db.sqlite3
 
 # misc
 **/*DONOT_SAVE*.*
