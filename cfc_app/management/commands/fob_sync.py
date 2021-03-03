@@ -234,7 +234,7 @@ class Command(BaseCommand):
                 new_hashcode = hashlib.md5(bindata).hexdigest()
                 source_hash = Hash(item_name=name, fob_method=from_fob,
                                    generated_date=self.now,
-                                   hashcode=new_hashcode, size=len(bindata),
+                                   hashcode=new_hashcode, objsize=len(bindata),
                                    legdesc=GENDESC)
                 logger.debug(f"239:Hashcode for {name} for {from_fob} saved.")
                 source_hash.save()

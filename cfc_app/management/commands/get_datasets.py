@@ -139,7 +139,7 @@ class Command(BaseCommand):
                 if state != options['state']:
                     continue
 
-            logger.info(f"Processing: {loc.desc} ({state})")
+            logger.info(f"Processing: {loc.longname} ({state})")
 
             # Get dataset and master files, up to the --limit set
 

@@ -37,7 +37,7 @@ from cfc_app.fob_storage import FobStorage
 from cfc_app.legiscan_api import LEGISCAN_ID
 from cfc_app.log_time import LogTime
 from cfc_app.models import Location, Impact, Law
-from cfc_app.one_line import Oneline
+from cfc_app.Oneline import Oneline
 from cfc_app.show_progress import ShowProgress
 from cfc_app.word_map import WordMap
 
@@ -155,9 +155,9 @@ class Command(BaseCommand):
                 if state != options['state']:
                     continue
 
-            logger.info(f"150:Processing: {loc.desc} ({state})")
+            logger.info(f"150:Processing: {loc.longname} ({state})")
             # import pdb; pdb.set_trace()
-            print("Processing: {} ({})".format(loc.desc, state))
+            print("Processing: {} ({})".format(loc.longname, state))
             try:
                 self.process_state(state)
             except Exception as exc:
@@ -181,7 +181,7 @@ class Command(BaseCommand):
         for filename in items:
             textdata = self.fob.download_text(filename)
 
-            header = Oneline.parse_header(textdata)
+            header = Oneline.Oneline_parse_header(textdata)
             if 'BILLID' in header:
                 bill_id = header['BILLID']
                 logger.debug(f"231:bill_id={bill_id} {filename}")

@@ -23,7 +23,7 @@ sources/zipfiles/
 fob-storage/
 intermediate.file
 scan_json.pdf
-logs/cfc_app.*
+logs/*.log
 db.sqlite3
 
 # misc

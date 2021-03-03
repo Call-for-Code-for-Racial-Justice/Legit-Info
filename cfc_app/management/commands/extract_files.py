@@ -37,7 +37,7 @@ from cfc_app.fob_helper import FobHelper
 from cfc_app.legiscan_api import LegiscanAPI, LEGISCAN_ID, LegiscanError
 from cfc_app.log_time import LogTime
 from cfc_app.models import Law, Location, Hash, save_source_hash
-from cfc_app.one_line import Oneline, add_header, parse_header
+from cfc_app.Oneline import Oneline, Oneline_add_header
 from cfc_app.pdf_to_text import PDFtoText
 from cfc_app.show_progress import ShowProgress
 
@@ -140,7 +140,7 @@ class Command(BaseCommand):
             # If we are only processing one state, and this is
             # not it, continue to the next state.
             if (self.state is None) or (state == self.state):
-                logger.info(f"194:Processing: {loc.desc} ({state})")
+                logger.info(f"194:Processing: {loc.longname} ({state})")
                 self.process_location(state)
 
         timing.end_time(options['verbosity'])
@@ -233,8 +233,8 @@ class Command(BaseCommand):
                                fob_method=settings.FOB_METHOD,
                                generated_date=source_hash.generated_date,
                                hashcode=source_hash.hashcode,
-                               size=source_hash.size,
-                               desc=source_hash.desc)
+                               objsize=source_hash.objsize,
+                               legdesc=source_hash.legdesc)
             logger.debug(f"Hashcode for {zip_name} saved.")
             target_hash.save()
 
@@ -368,7 +368,7 @@ class Command(BaseCommand):
                 skipping = True
             else:
                 textdata = self.fob.download_text(text_name)
-                headers = parse_header(textdata)
+                headers = Oneline.Oneline_parse_header(textdata)
                 if ('CITE' in headers
                         and headers['CITE'][:8] != 'Legiscan'
                         and headers['CITE'][-7:] != 'general'):
@@ -486,7 +486,7 @@ class Command(BaseCommand):
         text_name = self.fobhelp.bill_text_name(key, 'txt')
 
         text_line = Oneline(nltk_loaded=True)
-        add_header(text_line, detail)
+        Oneline_add_header(text_line, detail)
 
         self.parse_html(billtext, text_line)
         self.write_file(text_line, text_name)
@@ -514,7 +514,7 @@ class Command(BaseCommand):
         if input_str:
             text_name = self.fobhelp.bill_text_name(detail.key, 'txt')
             text_line = Oneline(nltk_loaded=True)
-            add_header(text_line, detail)
+            Oneline_add_header(text_line, detail)
             self.parse_intermediate(input_str, text_line)
             self.write_file(text_line, text_name)
 

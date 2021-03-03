@@ -237,7 +237,7 @@ class Oneline():
         return line
 
     @staticmethod
-    def parse_header(text):
+    def Oneline_parse_header(text):
         """ Parse headers at the beginning of text file """
 
         header, sections = {}, []
@@ -283,7 +283,7 @@ class Oneline():
         return header
 
 
-def add_header(text_line, detail):
+def Oneline_add_header(text_line, detail):
     """ Put header information in the text file itself """
 
     text_line.header_file_name(detail.bill_name)
@@ -343,7 +343,7 @@ if __name__ == "__main__":
           "class. _TEXT_  As Adopted by the Senate 133rd General Assembly "
           "Regular Session 2019-2020 SR99 Senator Kunze A")
 
-    head = Oneline.parse_header(P2)
+    head = Oneline.Oneline_parse_header(P2)
     print(head)
 
     print(" ")
