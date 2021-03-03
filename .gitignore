@@ -25,11 +25,11 @@ intermediate.file
 scan_json.pdf
 logs/*.log
 db.sqlite3
+backups/
 
 # misc
 **/*DONOT_SAVE*.*
 **/*DONOT_SAVE*
 **/Thumbs.db
-secret-db-fix-politics.env
 cron/*.json
 .vscode

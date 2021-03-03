@@ -1,2 +1,13 @@
 .pyc
 .egg-info
+results/*.csv
+sources/*.html
+sources/*.pdf
+sources/*.txt
+sources/*.zip
+sources/*.file
+sources/drafts/
+sources/curated/
+sources/zipfiles/
+logs/*.log
+db.sqlite3
