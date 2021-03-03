@@ -13,8 +13,8 @@ Start the Docker daemon.
 2. Build Docker container from Dockerfile
 
 ```bash
-[ Dev]$ cd legit-info
-[ legit-info]$ ./build-docker 
+[Dev]$ cd Legit-Info
+[Legit-Info]$ ./build-docker 
 Building legit-info:1.0.0
 Sending build context to Docker daemon 38.22 MB
 Step 1/24 : FROM registry.access.redhat.com/ubi8
@@ -246,8 +246,8 @@ Successfully built 6177f65fdaf4
 3. Verify Docker Image built
 
 ```bash
-[ Dev]$ cd legit-info
-[ legit-info]$ docker image ls
+[Dev]$ cd Legit-Info
+[Legit-Info]$ docker image ls
 REPOSITORY      TAG     IMAGE ID          CREATED             SIZE
 legit-info    1.0.0   6177f65fdaf4      14 minutes ago      420 MB
 ```
@@ -257,8 +257,8 @@ legit-info    1.0.0   6177f65fdaf4      14 minutes ago      420 MB
 Confirm that you can start the docker image locally.,
 
 ```bash
-[ Dev]$ cd legit-info
-[ legit-info]$ ./run-docker 
+[Dev]$ cd Legit-Info
+[Legit-Info]$ ./run-docker 
 21ca1ad1ec07863f090f57b27af71e3964b712abe3e3a961d3d3659fd1354665
 ```
 
@@ -270,10 +270,10 @@ To stop the application, you need to find the container id with `docker ps`
 command, then use `docker stop` command with that value.
 
 ```bash
-[ legit-info]$ docker ps
+[Legit-Info]$ docker ps
 CONTAINER ID        IMAGE                COMMAND                  CREATED             STATUS              PORTS                    NAMES
 21ca1ad1ec07        legit-info:1.0.0   "gunicorn -b 0.0.0..."   5 seconds ago       Up 3 seconds        0.0.0.0:3000->3000/tcp   peaceful_snyder
-[ legit-info]$ docker stop 21ca1ad1ec07
+[Legit-Info]$ docker stop 21ca1ad1ec07
 21ca1ad1ec07
 
 ```

@@ -9,7 +9,14 @@
 # cron1 get_api_data    Invokes Legiscan.API and creates AZ.json, OH.json
 # cron1 scan_json       Scans AZ.json and OH.json, converts PDF/HTML -> TXT
 # cron1 analyze_text    Analyzes TXT files, assigns IMPACT, loads database
+# cron1 update_seed     Update sources/cfc-seed.json file
 #
 parms="$@"
 export USE_SQLITE3='True'
-cd ~/Develop/legit-info && pipenv run python manage.py $parms
+if [[ "$#" == 1 && "$1" == "update_seed" ]] ; then 
+tables="auth.user users.profile cfc_app.criteria cfc_app.impact cfc_app.location"
+outfile="--output sources/cfc-seed.json"
+parms="dumpdata $tables $outfile"
+fi
+echo $parms
+cd ~/Develop/Legit-Info && pipenv run python manage.py $parms

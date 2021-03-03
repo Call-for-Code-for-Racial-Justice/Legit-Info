@@ -45,7 +45,7 @@ class Location(models.Model):
         app_label = 'cfc_app'
         ordering = ['hierarchy']
 
-    desc = models.CharField(max_length=80)
+    longname = models.CharField(max_length=80)
     shortname = models.CharField(max_length=20)
     legiscan_id = models.IntegerField()
     hierarchy = models.CharField(max_length=200)
@@ -65,7 +65,7 @@ class Location(models.Model):
 
     def __str__(self):
         """ Return a string representation of the model. """
-        loc_string = self.padding() + self.desc
+        loc_string = self.padding() + self.longname
         return loc_string
 
     @staticmethod
@@ -80,7 +80,7 @@ class Location(models.Model):
         """
 
         world = Location()
-        world.desc = 'world'
+        world.longname = 'world'
         world.shortname = 'world'
         world.legiscan_id = 0
         world.hierarchy = 'world'
@@ -93,17 +93,17 @@ class Location(models.Model):
         # entries (usa, arizona, ohio) so people can understand the structure
         # Note the legiscan_id is only needed for States in the United States.
 
-        usa = Location(desc='United States', shortname='usa', legiscan_id=52,
-                       hierarchy='world.usa', govlevel='country')
+        usa = Location(longname='United States', shortname='usa', 
+                  legiscan_id=52, hierarchy='world.usa', govlevel='country')
         usa.parent = world
         usa.save()
 
-        arizona = Location(desc='Arizona, USA', shortname='az', legiscan_id=3,
-                           hierarchy='world.usa.az', govlevel='state')
+        arizona = Location(longname='Arizona, USA', shortname='az', 
+                    legiscan_id=3, hierarchy='world.usa.az', govlevel='state')
         arizona.parent = usa
         arizona.save()
 
-        ohio = Location(desc='Ohio, USA', shortname='oh', legiscan_id=35,
+        ohio = Location(longname='Ohio, USA', shortname='oh', legiscan_id=35,
                         hierarchy='world.usa.oh', govlevel='state')
         ohio.parent = usa
         ohio.save()
@@ -118,12 +118,12 @@ class Impact(models.Model):
         app_label = 'cfc_app'
         ordering = ['date_added']
 
-    text = models.CharField(max_length=80, unique=True)
+    iname = models.CharField(max_length=80, unique=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         """Return a string representation of the model."""
-        return self.text
+        return self.iname
 
     @staticmethod
     def load_defaults():
@@ -142,7 +142,7 @@ class Impact(models.Model):
                            'Transportation', 'Jobs']
         for entry in default_impacts:
             new_impact = Impact()
-            new_impact.text = entry
+            new_impact.iname = entry
             new_impact.save()
         return None
 
@@ -155,7 +155,7 @@ class Criteria(models.Model):
         app_label = 'cfc_app'
         verbose_name_plural = "criteria"  # plural of criteria
 
-    text = models.CharField(max_length=200, null=True, blank=True)
+    crtext = models.CharField(max_length=200, null=True, blank=True)
 
     location = models.ForeignKey('cfc_app.Location', null=True,
                                  related_name='criteria',
@@ -166,15 +166,15 @@ class Criteria(models.Model):
     def __str__(self):
         """Return a string representation of the model."""
         key = str(self.id)
-        if self.text:
-            key += ':' + self.text
+        if self.crtext:
+            key += ':' + self.crtext
         return key
 
     def set_text(self):
         """ Combine location and impacts into a single text string """
         crit_text = criteria_string(self.location, self.impacts.all())
-        self.text = crit_text
-        return self.text
+        self.crtext = crit_text
+        return self.crtext
 
 
 def criteria_string(location, impact_list):
@@ -205,7 +205,7 @@ def impact_seq(impact_list):
     impact_string = ''
     connector = '-'
     for impact in impact_list:
-        impact_string += connector + impact.text.strip()
+        impact_string += connector + impact.iname.strip()
 
     return impact_string
 
@@ -267,13 +267,13 @@ class Hash(models.Model):
     fob_method = models.CharField(max_length=6, null=False)
     generated_date = models.DateField(null=False)
     hashcode = models.CharField(max_length=32, null=False)
-    size = models.PositiveIntegerField(null=False)
-    desc = models.CharField(max_length=255, null=True)
+    objsize = models.PositiveIntegerField(null=False)
+    legdesc = models.CharField(max_length=255, null=True)
 
     def __str__(self):
         """Return a string representation of the model."""
-        desc = '{} ({})'.format(self.item_name, self.fob_method)
-        return desc
+        legdesc = '{} ({})'.format(self.item_name, self.fob_method)
+        return legdesc
 
     @staticmethod
     def find_item_name(name, mode=settings.FOB_METHOD):
@@ -298,17 +298,17 @@ def save_source_hash(bill_hash, detail):
         bill_hash = Hash()
         bill_hash.item_name = detail.bill_name
         bill_hash.fob_method = settings.FOB_METHOD
-        bill_hash.desc = detail.title
+        bill_hash.legdesc = detail.title
         bill_hash.generated_date = detail.doc_date
         bill_hash.hashcode = detail.hashcode
-        bill_hash.size = detail.doc_size
+        bill_hash.objsize = detail.doc_size
         logger.debug(f"302:INSERT cfc_app_law: {detail.bill_name}")
         bill_hash.save()
 
     else:
         bill_hash.generated_date = detail.doc_date
         bill_hash.hashcode = detail.hashcode
-        bill_hash.size = detail.doc_size
+        bill_hash.objsize = detail.doc_size
         logger.debug(f"309:UPDATE cfc_app_law: {detail.bill_name}")
         bill_hash.save()
 
@@ -323,16 +323,16 @@ def save_entry_to_hash(session_name, entry):
         find_hash = Hash()
         find_hash.item_name = session_name
         find_hash.fob_method = settings.FOB_METHOD
-        find_hash.desc = entry['session_name']
+        find_hash.legdesc = entry['session_name']
         find_hash.generated_date = entry['dataset_date']
         find_hash.hashcode = entry['dataset_hash']
-        find_hash.size = entry['dataset_size']
+        find_hash.objsize = entry['dataset_size']
         find_hash.save()
 
     else:
         find_hash.generated_date = entry['dataset_date']
         find_hash.hashcode = entry['dataset_hash']
-        find_hash.size = entry['dataset_size']
+        find_hash.objsize = entry['dataset_size']
         find_hash.save()
 
     return None

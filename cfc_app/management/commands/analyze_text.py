@@ -138,7 +138,7 @@ class Command(BaseCommand):
         impacts = Impact.objects.all().exclude(text='None')
         impact_list = []
         for imp in impacts:
-            impact_list.append(imp.text)
+            impact_list.append(imp.iname)
         self.impact_list = impact_list
 
         self.womp = WordMap(RLIMIT)
@@ -219,14 +219,14 @@ class Command(BaseCommand):
                 if mop1:
                     rel_nlu = NLUST + mop1.group(1)
                     rel_map = MAPST + mop1.group(2)
-                    impact_nlu = law.impact.text
-                    impact_map = law.impact.text
+                    impact_nlu = law.impact.iname
+                    impact_map = law.impact.iname
                 elif mop2:
                     rel_nlu = NLUST + mop2.group(1)
-                    impact_nlu = law.impact.text
+                    impact_nlu = law.impact.iname
                 elif mop3:
                     rel_map = MAPST + mop3.group(1)
-                    impact_map = law.impact.text
+                    impact_map = law.impact.iname
                 if self.skip and (impact_nlu != ""):
                     logger.debug(f"209:Skipping {filename}")
                     skipping = True
@@ -360,7 +360,7 @@ class Command(BaseCommand):
                 loc = Location.objects.get(legiscan_id=state_id)
                 law.location = loc
 
-        imp = Impact.objects.get(text=impact_chosen)
+        imp = Impact.objects.get(iname=impact_chosen)
         law.impact = imp
 
         law.relevance = rel

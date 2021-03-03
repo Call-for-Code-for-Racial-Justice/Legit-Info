@@ -23,7 +23,7 @@ class CriteriaAdmin(admin.ModelAdmin):
 class HashAdmin(admin.ModelAdmin):
     """ Admin for cfc_app_hash """
     list_display = ("item_name", "fob_method", "generated_date", "hashcode",
-                    "size")
+                    "objsize")
     search_fields = ("item_name", "generated_date")
 
 
@@ -42,11 +42,11 @@ class LawAdmin(admin.ModelAdmin):
               "summary", "doc_date", "bill_id")
 
     def loc_desc(self, obj):
-        """ Get location description """
+        """ Get location longname description """
         if self is None:
             pass
         loc = obj.location
-        return loc.desc
+        return loc.longname
 
     def formfield_for_dbfield(self, db_field, request, **kwargs):
         """ Override formfield for text areas """
@@ -65,8 +65,8 @@ class LawAdmin(admin.ModelAdmin):
 class LocationAdmin(admin.ModelAdmin):
     """ Admin for cfc_app_location """
 
-    list_display = ("desc", "govlevel", "hierarchy", "legiscan_id")
-    fields = ("desc", "shortname", "govlevel", "legiscan_id", "hierarchy",
+    list_display = ("longname", "govlevel", "hierarchy", "legiscan_id")
+    fields = ("longname", "shortname", "govlevel", "legiscan_id", "hierarchy",
               "parent")
 
 

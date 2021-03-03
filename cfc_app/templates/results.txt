@@ -2,7 +2,7 @@
 {% app_name register %} -- Search Results -- {{ gen_date }}
 
 {% for law in laws %}
-{{ law.title }}  [{{ law.key }} | {{ law.location.desc }} | {{ law.impact.text }}]
+{{ law.title }}  [{{ law.key }} | {{ law.location.longname }} | {{ law.impact.iname }}]
 {{ law.summary }}
 {% empty %}
 No legislation found.

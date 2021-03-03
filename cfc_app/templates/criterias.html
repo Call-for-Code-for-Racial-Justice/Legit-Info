@@ -40,7 +40,7 @@ Tables for Users, Profiles, and Criterias
     {% for profile in prof %}
     <tr> 
         <td>{{ profile.0 }}</td>
-        <td>{{ profile.1.desc }}</td>
+        <td>{{ profile.1.longname }}</td>
         <td>{{ profile.2 }}</td>
         <td>{{ profile.3 }}</td>
     </tr>
@@ -63,7 +63,7 @@ Tables for Users, Profiles, and Criterias
     <tr> 
         <td>{{ criteria.0 }}</td>
         <td>{{ criteria.1 }}</td>
-        <td>{{ criteria.2.desc }}</td>
+        <td>{{ criteria.2.longname }}</td>
         <td>{{ criteria.3 }}</td>
     </tr>
     {% empty %}

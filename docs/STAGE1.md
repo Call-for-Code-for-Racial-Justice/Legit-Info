@@ -106,7 +106,7 @@ package dependencies at different levels.
 You can verify your level of pipenv with this command:
 
 ```bash
-[legit-info]$ pipenv --version
+[Legit-Info]$ pipenv --version
 pipenv, version 2020.6.2
 ```
 
@@ -143,11 +143,11 @@ adjustments to some commands.
 3. Clone this GitHub repo to your local environment.
 
 Run the git command in your Development workspace directory.  This will create
-a new directory `/Dev/legit-info` which we will refer to as "project root" 
+a new directory `/Dev/Legit-Info` which we will refer to as "project root" 
 
 ```bash
 [ ~]$ cd Dev
-[ Dev]$ git clone https://github.com/Call-for-Code-for-Racial-Justice/Legit-Info.git
+[Dev]$ git clone https://github.com/Call-for-Code-for-Racial-Justice/Legit-Info.git
 ```
 
 IBM encourages everyone to use two-factor authorization for Github.  Generate
@@ -168,7 +168,7 @@ dependencies into your virtual environment (virtualenv) with:
 
 ```bash
 [ Dev]$ cd legit-Info
-[ Legit-Info]$ pipenv install
+[Legit-Info]$ pipenv install
 ```
 
 5. Develop and test in this virtual environment.  Running Django applications
@@ -205,7 +205,7 @@ virtual environment.  If you were using "python3" in your normal shell,
 you only need to use "python" within your virtualenv.
 
 ```bash
-[ legit-info]$ pipenv shell
+[Legit-Info]$ pipenv shell
 Launching subshell in virtual environment…
 
 We have created "stage1" script as a shortcut for 
@@ -214,7 +214,7 @@ the `python manage.py` command.
 Create Superuser on Postgresql.  You need at least one user to login
 as andministrator.  For example, create "cfcadmin" and acceptable password.
 
-(env) [ legit-info]$ ./stage1 createsuperuser
+(env) [Legit-Info]$ ./stage1 createsuperuser
 **Using SQLITE3**
 Username (leave blank to use 'yourname'): cfcadmin
 Email address: yourname@us.ibm.com
@@ -226,8 +226,8 @@ Superuser created successfully.
 To generate SECRET_KEY, use this command:
 
 ```bash
-[ legit-info]$ pipenv shell
-(env) [ Legit-Info]$ python3
+[Legit-Info]$ pipenv shell
+(env) [Legit-Info]$ python3
 >>> from django.core.management.utils import get_random_secret_key
 >>> print(get_random_secret_key())
 r&3)a(64!9z_ftemuctw!whc_55(co-psxf1lj=w^x1a!ccqgb
@@ -254,15 +254,15 @@ To start up the webserver for the application, use the "stage1" script:
 Now you are ready to run the application server.  Django provides a simple
 webserver you can launch with a single one-line command.
 
-(env) [legit-info]$ ./stage1 runserver localhost:3000
+(env) [Legit-Info]$ ./stage1 runserver localhost:3000
 **Using SQLite3**
 Performing system checks...
 Django version 3.0.8, using settings 'cfc_project.settings'
 Starting development server at http://localhost:3000/
 Quit the server with CONTROL-C.
 
-^C (env) [legit-info]$ exit
-[ legit-info]$
+^C (env) [Legit-Info]$ exit
+[Legit-Info]$
 
 ```
 

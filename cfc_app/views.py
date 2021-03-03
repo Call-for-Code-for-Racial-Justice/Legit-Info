@@ -62,8 +62,8 @@ def make_csv(search_id, laws):
     laws_table = []
     for law in laws:
         laws_table.append({'key': law.key,
-                           'location': law.location.desc,
-                           'impact': law.impact.text,
+                           'location': law.location.longname,
+                           'impact': law.impact.iname,
                            'title': law.title,
                            'summary': law.summary})
 
@@ -144,7 +144,7 @@ def criterias(request):
     crit = []
     for criteria in criterias:
         impact_string3 = impact_seq(criteria.impacts.all())
-        crit.append([criteria.id, criteria.text,
+        crit.append([criteria.id, criteria.crtext,
                      criteria.location, impact_string3])
 
     context = {'users': users,
@@ -188,7 +188,7 @@ def impacts(request):
         Impact.load_defaults()
 
     # Do not display the None option for end-users
-    impacts = Impact.objects.order_by('date_added').exclude(text='None')
+    impacts = Impact.objects.order_by('date_added').exclude(iname='None')
 
     context = {'impacts': impacts}
     return render(request, 'impacts.html', context)
@@ -214,7 +214,7 @@ def lawdump(request):
     writer = csv.writer(response)
     writer.writerow(['key', 'location', 'impact', 'title', 'summary'])
     for law in Law.objects.all():
-        writer.writerow([law.key, law.location.desc, law.impact.text,
+        writer.writerow([law.key, law.location.longname, law.impact.iname,
                          law.title, law.summary])
     return response
 
@@ -228,7 +228,7 @@ def locations(request):
     if len(locations) == 0:
         Location.load_defaults()
 
-    locations = Location.objects.order_by('hierarchy').exclude(desc='world')
+    locations = Location.objects.order_by('hierarchy').exclude(longname='world')
     context = {'locations': locations}
     return render(request, 'locations.html', context)
 
@@ -247,7 +247,7 @@ def results(request, search_id):
 
     gen_date = datetime.now().strftime("%B %-d, %Y")
 
-    context = {'heading': criteria.text,
+    context = {'heading': criteria.crtext,
                'laws': laws,
                'numlaws': len(laws),
                'search_id': search_id,

@@ -36,7 +36,7 @@ class DataBundle():
         self.mime_type = None
         self.extension = None
         self.content = None
-        self.text = None
+        self.msgtext = None
         self.json_pkg = None
         return None
 
@@ -73,11 +73,11 @@ class DataBundle():
         self.content = response.content
         if 'html' in self.mime_type:
             self.extension = 'html'
-            self.text = response.text
+            self.msgtext = response.text
         if 'json' in self.mime_type:
             self.extension = 'json'
             self.json_pkg = response.json()
-            self.text = response.text
+            self.msgtext = response.text
         if 'pdf' in self.mime_type:
             self.extension = 'pdf'
             if self.content[:4] != b'%PDF':

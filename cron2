@@ -12,4 +12,9 @@
 #
 parms="$@"
 export USE_SQLITE3='False'
-cd ~/Develop/legit-info && pipenv run python manage.py $parms
+if [[ "$#" == 1 && "$1" == "update_seed" ]] ; then 
+tables="auth.user users.profile cfc_app.criteria cfc_app.impact cfc_app.location"
+outfile="--output sources/cfc-seed.json"
+parms="dumpdata $tables $outfile"
+fi
+cd ~/Develop/Legit-Info && pipenv run python manage.py $parms

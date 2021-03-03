@@ -21,7 +21,7 @@
         <dl>
         {% for law in laws %}
         <dt>{{ law.title }}  
-        [{{ law.key }} | {{ law.location.desc }} | {{ law.impact.text }}]</dt>
+        [{{ law.key }} | {{ law.location.longname }} | {{ law.impact.iname }}]</dt>
         <dd><p>{{ law.summary }}</p></dt>
         {% empty %}
         <p>No legislation found.</p>

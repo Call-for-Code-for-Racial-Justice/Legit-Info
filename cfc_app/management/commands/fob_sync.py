@@ -235,7 +235,7 @@ class Command(BaseCommand):
                 source_hash = Hash(item_name=name, fob_method=from_fob,
                                    generated_date=self.now,
                                    hashcode=new_hashcode, size=len(bindata),
-                                   desc=GENDESC)
+                                   legdesc=GENDESC)
                 logger.debug(f"239:Hashcode for {name} for {from_fob} saved.")
                 source_hash.save()
 
@@ -245,10 +245,10 @@ class Command(BaseCommand):
                 target_hash = Hash(item_name=name, fob_method=to_fob,
                                    generated_date=source_hash.generated_date,
                                    hashcode=source_hash.hashcode,
-                                   size=source_hash.size,
-                                   desc=source_hash.desc)
-                if target_hash.desc == GENDESC:
-                    target_hash.desc = COPYDESC
+                                   objsize=source_hash.objsize,
+                                   legdesc=source_hash.desc)
+                if target_hash.legdesc == GENDESC:
+                    target_hash.legdesc = COPYDESC
                 logger.debug(f"252:Hashcode for {name} for {to_fob} saved.")
                 target_hash.save()
 
@@ -272,7 +272,7 @@ class Command(BaseCommand):
                         bindata = read_from.fob.download_binary(name)
                         write_to.fob.upload_binary(bindata, name)
                         target_hash.hashcode = source_hash.hashcode
-                        target_hash.size = source_hash.size
+                        target_hash.objsize = source_hash.objsize
                         logger.info(f"Item {name} copied to {to_fob}")
                         self.count += 1
                     target_hash.generated_date = source_hash.generated_date

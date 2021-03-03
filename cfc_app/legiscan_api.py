@@ -220,11 +220,11 @@ class LegiscanAPI:
                 pkg = bundle.json_pkg
                 if 'alert' in pkg:
                     bundle.name += ' *ERROR*'
-                    bundle.text = (f"[ERROR] {pkg['alert']['message']} "
+                    bundle.msgtext = (f"[ERROR] {pkg['alert']['message']} "
                                    f"{self.url} {json.dumps(params)}")
-                    if EXCEEDED in bundle.text:
+                    if EXCEEDED in bundle.msgtext:
                         bundle.status_code = 429
-                    raise LegiscanError(f"{bundle.name} {bundle.text}")
+                    raise LegiscanError(f"{bundle.name} {bundle.msgtext}")
         else:
             bundle.status_ok = False
             bundle.status_code = 415

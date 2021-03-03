@@ -42,5 +42,5 @@ class ProfileForm(forms.ModelForm):
 
     impacts = forms.ModelMultipleChoiceField(
         widget=forms.CheckboxSelectMultiple,
-        queryset=Impact.objects.all().exclude(text='None')
+        queryset=Impact.objects.all().exclude(iname='None')
     )

@@ -105,8 +105,8 @@ SQlite3 to Postgresql, we will have to re-enter all the data using the
 application.  To get us started, we need to re-create the superuser 'cfcadmin'
 
 ```
-(env) [legit-info]$ ./stage2 migrate
-(env) [legit-info]$ ./stage2 createsuperuser
+(env) [Legit-Info]$ ./stage2 migrate
+(env) [Legit-Info]$ ./stage2 createsuperuser
 **Using Postgresql**
 Username (leave blank to use 'yourname'): cfcadmin
 Email address: yourname@us.ibm.com
@@ -128,7 +128,7 @@ a shortcut "app.sh" to run Gunicorn locally.  Gunicorn can be used with
 local SQLite3 or remoe Postgresql, by specifying USE_SQLITE3 accordingly.
 
 ```
-(env) [ legit-info]$ USE_SQLITE3=False ./app.sh
+(env) [Legit-Info]$ USE_SQLITE3=False ./app.sh
 [2020-08-26 14:24:42 -0700] [23322] [INFO] Starting gunicorn 20.0.4
 [2020-08-26 14:24:42 -0700] [23322] [INFO] Listening at: http://0.0.0.0:3000 (23322)
 [2020-08-26 14:24:42 -0700] [23322] [INFO] Using worker: sync

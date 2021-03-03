@@ -152,7 +152,10 @@ that allows you to pre-populate the data with sample impacts, locations,
 and a single superuser "cfcadmin" / "Call4Code"
 
 ```console
-$ ./cron1 ./stage1 loaddata sources/cfc-seed.json
+[Legit-Info]$ ./cron1 loaddata sources/cfc-seed.json
+**Using SQLite3**
+Installed 45 object(s) from 1 fixture(s)
+
 ```
 
 To access admin panels, add "/admin" to the main website.  For local
@@ -163,16 +166,25 @@ you will find an "Admin" tab on the upper right of the navigation bar.
 
 To change this fixture, or create your own with updated settings, use:
 
-```console
+```bash
+$ ./cron1 update_seed
+```
+<!--
 $ ./cron1 dumpdata auth.user users.profile cfc_app.criteria \
     cfc_app.impact cfc_app.location --output sources/cfc-seed.json
-```
+-->
 
 Lastly, if you added or removed users, impacts, or locations, and need
 to reset it back to this intial state, you can run this command:
 
 ```console
-$ ./cron1 syncdata cfc-seed.json
+[ Legit-Info] $ ./cron1 syncdata sources/cfc-seed.json
+**Using SQLite3**
+Installing json fixture 'sources/cfc-seed' from absolute path.
+Deleted 1 user
+Deleted 2 criteria
+Installed 46 objects from 1 fixture
+
 ```
 
 ### Subsection 1.2 Set password for Superuser "cfcadmin"
@@ -183,13 +195,13 @@ to reset the password.  Please note that generate_password has an
 underscore character(_) and the changepassword does not.
 
 ```console
-$ cd legit-info
+$ cd Legit-Info
 $ pipenv shell
 (cfc) $ ./stage1 generate_password cfcadmin
 **Using SQLite3**
 Lv5EN5HvRU
 
-(cfc) [legit-info]$ ./stage1 changepassword cfcadmin
+(cfc) [Legit-Info]$ ./stage1 changepassword cfcadmin
 **Using SQLite3**
 Changing password for user 'cfcadmin'
 Password:                  <-- enter the random password, or choose your own!
@@ -206,7 +218,7 @@ If you need additional "superuser" accounts, each with their own profile,
 you can use the Django `createsuperuser` to create others:
 
 ```console
-$ cd legit-info
+$ cd Legit-Info
 $ pipenv shell
 (fix) $ ./stage1 createsuperuser
 ```
@@ -458,7 +470,7 @@ export EMAIL_PORT='2525'
 4. Test that this is working correctly using this command:
 
 ```
-(cfc) [legit-info]$ ./stage1 sendtestemail cfcadmin@us.ibm.com
+(cfc) [Legit-Info]$ ./stage1 sendtestemail cfcadmin@us.ibm.com
 **Using SQLite3**
 ```
 
