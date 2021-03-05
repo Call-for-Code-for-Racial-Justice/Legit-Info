@@ -1,13 +1,15 @@
 applications:
 - name: legit_info
   buildpacks:
-  - python_buildpack
+# - https://github.com/tonypearson/null-buildpack.git
+  - https://github.com/cloudfoundry/python-buildpack.git
   - https://github.com/ELD/rust-buildpack.git
   disk_quota: 1G
   stack: cflinuxfs3
+  routes:
+  - route: legitinfo-friendly-jackal-sg.us-east.mybluemix.net
 processes:
 - type: worker
-  command: /home/vcap/app/start-worker.sh
   no-route: true
   disk_quota: 1G
   health-check-type: process
@@ -15,9 +17,6 @@ processes:
   memory: 256M
   timeout: 180
 - type: web
-  command: /home/vcap/app/start-web.sh
-  routes:
-  - route: legitinfo-friendly-jackal-sg.us-east.mybluemix.net
   disk_quota: 512M
   health-check-http-endpoint: /health
   health-check-type: http
