@@ -169,6 +169,7 @@ INSTALLED_APPS = [
     # Third party apps.
     'bootstrap4',
     'django_extensions',
+    'django_q',
 
     # Other django apps
     'django.contrib.contenttypes',
@@ -309,4 +310,14 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # My settings
 LOGIN_URL = 'users:login'
 LONG_AGO = DT.date(1911, 6, 16)  # Long ago in history
+
+# Configure your Q cluster
+# More details https://django-q.readthedocs.io/en/latest/configure.html
+Q_CLUSTER = {
+    "name": "cfc_app",
+    "timeout": 3600,   # Allow up to 1 hour per task
+    "max_attempts": 3, # Try up to 3 times
+    "retry": 21600,    # Retry every six hours
+    "orm": "default",  # Use Django's ORM + database for broker
+}
 # End of module

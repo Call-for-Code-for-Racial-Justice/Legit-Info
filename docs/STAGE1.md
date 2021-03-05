@@ -95,6 +95,10 @@ virtualenv for your projects, as well as adds/removes packages from your
 Pipfile as you install/uninstall packages. It also generates the ever-important
 Pipfile.lock, which is used to produce deterministic builds.
 
+To learn more about pipenv, see 
+[Manage Python Packages and Virtual Environments with 
+Pipenv](https://www.linode.com/docs/guides/manage-python-environments-pipenv/)
+
 Deterministic builds eliminates that possibility of package dependency 
 issues when switching from development to production systems.
 

@@ -1,80 +1,87 @@
 -i https://pypi.org/simple
 alabaster==0.7.12
+arrow==1.0.2; python_version >= '3.6'
 asgiref==3.3.1
-astroid==2.4.2; python_version >= '3.5'
-babel==2.9.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
+astroid==2.4.2
+babel==2.9.0
 beautifulsoup4==4.9.1
+blessed==1.18.0
 bootstrap4==0.1.0
 certifi==2020.12.5
 cffi==1.14.5
-chardet==4.0.0; python_version >= '3.1'
-click==7.1.2; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'
-cryptography==3.4.6; python_version >= '3.6'
+chardet==4.0.0
+click==7.1.2
+cryptography==3.4.6
 decorator==4.4.2
 django-bootstrap4==2.2.0
 django-extensions==3.1.1
 django-pdb==0.6.2
+django-picklefield==3.0.1; python_version >= '3'
+django-q==1.3.5
 django==3.0.8
 docutils==0.16
 gitchangelog==3.0.4
 gunicorn==20.0.4
 html5lib==1.1
 ibm-cloud-sdk-core==3.5.2
-ibm-cos-sdk-core==2.9.0; python_version ~= '3.5'
-ibm-cos-sdk-s3transfer==2.9.0; python_version ~= '3.5'
+ibm-cos-sdk-core==2.9.0
+ibm-cos-sdk-s3transfer==2.9.0
 ibm-cos-sdk==2.9.0
 ibm-watson==5.1.0
 ibmcloudenv==0.2.1
-idna==2.10; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
-imagesize==1.2.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
-importlib-metadata==1.7.0; python_version < '3.8'
+idna==2.10
+imagesize==1.2.0
+importlib-metadata==1.7.0
 isort==5.7.0
 jinja2==2.11.3
-jmespath==0.10.0; python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'
-joblib==1.0.1; python_version >= '3.6'
+jmespath==0.10.0
+joblib==1.0.1
 jsonpath-rw==1.4.0
-lazy-object-proxy==1.4.3; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
+lazy-object-proxy==1.4.3
 livereload==2.6.2
 lxml==4.6.2
-markupsafe==1.1.1; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
+markupsafe==1.1.1
 mccabe==0.6.1
 nltk==3.5
 packaging==20.9; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
 pdfminer.six==20201018
 ply==3.11
 psycopg2-binary==2.8.6
-pycparser==2.20; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
-pygments==2.8.0; python_version >= '3.5'
+pycparser==2.20
+pygments==2.8.0
 pyjwt==2.0.1
 pylint-django==2.4.2
 pylint-plugin-utils==0.6
 pylint==2.6.2
-pyparsing==2.4.7; python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'
+pyparsing==2.4.7
 pystache==0.5.4
-python-dateutil==2.8.1; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
+python-dateutil==2.8.1
 pytz==2020.1
 regex==2020.11.13
 requests==2.25.1
-six==1.15.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
+six==1.15.0
 snowballstemmer==2.1.0
 sortedcontainers==2.3.0
 soupsieve==2.0.1
 sphinx==3.5.1
-sphinxcontrib-applehelp==1.0.2; python_version >= '3.5'
-sphinxcontrib-devhelp==1.0.2; python_version >= '3.5'
-sphinxcontrib-htmlhelp==1.0.3; python_version >= '3.5'
-sphinxcontrib-jsmath==1.0.1; python_version >= '3.5'
-sphinxcontrib-qthelp==1.0.3; python_version >= '3.5'
-sphinxcontrib-serializinghtml==1.1.4; python_version >= '3.5'
+sphinxcontrib-applehelp==1.0.2
+sphinxcontrib-devhelp==1.0.2
+sphinxcontrib-htmlhelp==1.0.3
+sphinxcontrib-jsmath==1.0.1
+sphinxcontrib-qthelp==1.0.3
+sphinxcontrib-serializinghtml==1.1.4
 sqlparse==0.3.1
 titlecase==2.0.0
-toml==0.10.2; python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'
-tornado==6.1; python_version >= '3.5'
-tqdm==4.57.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
-typed-ast==1.4.2; python_version < '3.8' and implementation_name == 'cpython'
-urllib3==1.26.3; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_version < '4'
+toml==0.10.2
+tornado==6.1
+tqdm==4.57.0
+typed-ast==1.4.2
+typing-extensions==3.7.4.3; python_version < '3.8'
+urllib3==1.26.3
+wcwidth==0.2.5
 webencodings==0.5.1
 websocket-client==0.48.0
+wheel==0.36.2
 whitenoise==5.2.0
 wrapt==1.12.1
 zipp==3.1.0

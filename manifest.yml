@@ -3,12 +3,26 @@ applications:
   buildpacks:
   - python_buildpack
   - https://github.com/ELD/rust-buildpack.git
-  command: USE_SQLITE3='False' gunicorn -b 0.0.0.0:$PORT --env DJANGO_SETTINGS_MODULE=cfc_project.settings
-    cfc_project.wsgi
   disk_quota: 1G
+  stack: cflinuxfs3
+processes:
+- type: worker
+  command: /home/vcap/app/start-worker.sh
+  no-route: true
+  disk_quota: 1G
+  health-check-type: process
   instances: 1
   memory: 256M
+  timeout: 180
+- type: web
+  command: /home/vcap/app/start-web.sh
   routes:
   - route: legitinfo-friendly-jackal-sg.us-east.mybluemix.net
-  stack: cflinuxfs3
+  disk_quota: 512M
+  health-check-http-endpoint: /health
+  health-check-type: http
+  health-check-invocation-timeout: 10
+  instances: 1
+  memory: 256M
   timeout: 180
+

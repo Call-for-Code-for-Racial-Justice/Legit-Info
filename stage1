@@ -7,6 +7,7 @@
 # ./stage1 makemigrations
 # ./stage1 migrate
 # ./stage1 dbshell
+# ./stage1 qcluster
 parms="$@"
 if [ "$#" -eq 0 ]; 
     then parms="runserver localhost:3000"
