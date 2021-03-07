@@ -16,6 +16,7 @@ if __name__ == '__main__':
     os.environ.setdefault('LD_LIBRARY_PATH', '/usr/local/lib')
 
     if not is_venv():
+        print(sys.executable, sys.base_prefix, sys.prefix)
         print('Virtual Environment: ERROR **NOT FOUND**')
         print('Did you forget to activate your virtual environment?')
         print('To enter virtual environment:   pipenv shell')

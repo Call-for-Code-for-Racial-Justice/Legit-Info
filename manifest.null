@@ -1,0 +1,9 @@
+version: 1
+applications:
+- name: legit_info
+  buildpacks:
+  - https://github.com/tonypearson/null-buildpack.git
+  stack: cflinuxfs3
+  no-route: true
+  memory: 256M
+  command: null.sh

@@ -1,0 +1,393 @@
+Invoking 'cf logs legit_info --recent'...
+
+Retrieving logs for app [36;1mlegit_info[0m in org [36;1mcfc-team-external-apps[0m / space [36;1mcfc-legit-info-space[0m as [36;1mtpearson@us.ibm.com[0m...
+
+   2021-03-05T13:14:24.08-0700 [API/3] OUT Updated app with guid 507b7075-927e-48b6-a0a3-9d769d1091ba ({})
+   2021-03-05T13:14:39.03-0700 [API/3] OUT Uploading app package for app with guid 507b7075-927e-48b6-a0a3-9d769d1091ba
+   2021-03-05T13:14:48.78-0700 [API/2] OUT Stopping app with guid 507b7075-927e-48b6-a0a3-9d769d1091ba
+   2021-03-05T13:14:49.95-0700 [API/11] OUT Creating build for app with guid 507b7075-927e-48b6-a0a3-9d769d1091ba
+   2021-03-05T13:14:51.44-0700 [STG/0] OUT Downloading r_buildpack...
+   2021-03-05T13:14:51.44-0700 [STG/0] OUT Downloading php_buildpack...
+   2021-03-05T13:14:51.44-0700 [STG/0] OUT Downloading staticfile_buildpack...
+   2021-03-05T13:14:51.44-0700 [STG/0] OUT Downloading binary_buildpack...
+   2021-03-05T13:14:51.44-0700 [STG/0] OUT Downloading dotnet_core_buildpack...
+   2021-03-05T13:14:51.48-0700 [STG/0] OUT Downloaded php_buildpack
+   2021-03-05T13:14:51.48-0700 [STG/0] OUT Downloading swift_buildpack_v2_0_18-20190303-1915...
+   2021-03-05T13:14:51.48-0700 [STG/0] OUT Downloaded staticfile_buildpack
+   2021-03-05T13:14:51.48-0700 [STG/0] OUT Downloading swift_buildpack_v2_0_20-20190401-2122...
+   2021-03-05T13:14:51.48-0700 [STG/0] OUT Downloaded binary_buildpack
+   2021-03-05T13:14:51.48-0700 [STG/0] OUT Downloading swift_buildpack_cflinuxfs3_v2_1_0-20190404-1206...
+   2021-03-05T13:14:51.51-0700 [STG/0] OUT Downloaded r_buildpack
+   2021-03-05T13:14:51.51-0700 [STG/0] OUT Downloading nginx_buildpack...
+   2021-03-05T13:14:51.52-0700 [STG/0] OUT Downloaded dotnet_core_buildpack
+   2021-03-05T13:14:51.52-0700 [STG/0] OUT Downloading java_buildpack...
+   2021-03-05T13:14:51.52-0700 [STG/0] OUT Downloaded swift_buildpack_cflinuxfs3_v2_1_0-20190404-1206
+   2021-03-05T13:14:51.52-0700 [STG/0] OUT Downloading ruby_buildpack...
+   2021-03-05T13:14:51.52-0700 [STG/0] OUT Downloaded swift_buildpack_v2_0_18-20190303-1915
+   2021-03-05T13:14:51.52-0700 [STG/0] OUT Downloading nodejs_buildpack...
+   2021-03-05T13:14:51.52-0700 [STG/0] OUT Downloaded swift_buildpack_v2_0_20-20190401-2122
+   2021-03-05T13:14:51.52-0700 [STG/0] OUT Downloading go_buildpack...
+   2021-03-05T13:14:51.55-0700 [STG/0] OUT Downloaded nginx_buildpack
+   2021-03-05T13:14:51.55-0700 [STG/0] OUT Downloading python_buildpack...
+   2021-03-05T13:14:51.56-0700 [STG/0] OUT Downloaded ruby_buildpack
+   2021-03-05T13:14:51.56-0700 [STG/0] OUT Downloading dotnet-core_v2_8-20200908-1929...
+   2021-03-05T13:14:51.56-0700 [STG/0] OUT Downloaded go_buildpack
+   2021-03-05T13:14:51.56-0700 [STG/0] OUT Downloading sdk-for-nodejs_v4_4-20200828-1028...
+   2021-03-05T13:14:51.59-0700 [STG/0] OUT Downloaded java_buildpack
+   2021-03-05T13:14:51.59-0700 [STG/0] OUT Downloading sdk-for-nodejs_v4_5-20201130-1530...
+   2021-03-05T13:14:51.59-0700 [STG/0] OUT Downloaded python_buildpack
+   2021-03-05T13:14:51.59-0700 [STG/0] OUT Downloading liberty-for-java_v3_53-20210114-1605...
+   2021-03-05T13:14:51.59-0700 [STG/0] OUT Downloaded dotnet-core_v2_8-20200908-1929
+   2021-03-05T13:14:51.59-0700 [STG/0] OUT Downloading dotnet-core_v2_9-20201207-2154...
+   2021-03-05T13:14:51.59-0700 [STG/0] OUT Downloaded nodejs_buildpack
+   2021-03-05T13:14:51.59-0700 [STG/0] OUT Downloading liberty-for-java_v3_54-20210211-1310...
+   2021-03-05T13:14:51.60-0700 [STG/0] OUT Downloaded sdk-for-nodejs_v4_4-20200828-1028
+   2021-03-05T13:14:51.60-0700 [STG/0] OUT Downloading sdk-for-nodejs...
+   2021-03-05T13:14:51.63-0700 [STG/0] OUT Downloaded sdk-for-nodejs_v4_5-20201130-1530
+   2021-03-05T13:14:51.63-0700 [STG/0] OUT Downloaded dotnet-core_v2_9-20201207-2154
+   2021-03-05T13:14:51.63-0700 [STG/0] OUT Downloading liberty-for-java...
+   2021-03-05T13:14:51.63-0700 [STG/0] OUT Downloaded liberty-for-java_v3_54-20210211-1310
+   2021-03-05T13:14:51.63-0700 [STG/0] OUT Downloading dotnet-core...
+   2021-03-05T13:14:51.64-0700 [STG/0] OUT Downloaded sdk-for-nodejs
+   2021-03-05T13:14:51.64-0700 [STG/0] OUT Downloading swift_buildpack...
+   2021-03-05T13:14:51.64-0700 [STG/0] OUT Downloading xpages_buildpack...
+   2021-03-05T13:14:51.67-0700 [STG/0] OUT Downloaded liberty-for-java_v3_53-20210114-1605
+   2021-03-05T13:14:51.67-0700 [STG/0] OUT Downloaded liberty-for-java
+   2021-03-05T13:14:51.68-0700 [STG/0] OUT Downloaded swift_buildpack
+   2021-03-05T13:14:51.68-0700 [STG/0] OUT Downloaded xpages_buildpack
+   2021-03-05T13:14:51.70-0700 [STG/0] OUT Downloaded dotnet-core
+   2021-03-05T13:14:51.70-0700 [STG/0] OUT Cell 50b54b7e-2ec9-4490-b10f-021141267697 creating container for instance 6c583590-c34a-4875-bafc-c5eae99ad3c5
+   2021-03-05T13:14:53.30-0700 [STG/0] OUT Cell 50b54b7e-2ec9-4490-b10f-021141267697 successfully created container for instance 6c583590-c34a-4875-bafc-c5eae99ad3c5
+   2021-03-05T13:14:53.48-0700 [STG/0] OUT Downloading app package...
+   2021-03-05T13:14:53.48-0700 [STG/0] OUT Downloading build artifacts cache...
+   2021-03-05T13:14:56.07-0700 [STG/0] OUT Downloaded app package (25.9M)
+   2021-03-05T13:14:58.20-0700 [STG/0] OUT Downloaded build artifacts cache (98.8M)
+   2021-03-05T13:15:02.46-0700 [STG/0] OUT -----> Python Buildpack version 1.7.29
+   2021-03-05T13:15:02.46-0700 [STG/0] OUT -----> Supplying Python
+   2021-03-05T13:15:02.46-0700 [STG/0] OUT -----> Installing python 3.7.9
+   2021-03-05T13:15:02.46-0700 [STG/0] OUT        Copy [/tmp/cache/final/dependencies/7e18ae2fe9c38a663209cbfacc71a9f310eef56ff9664234918c76e157098592/python_3.7.9_linux_x64_cflinuxfs3_14a1d89c.tgz]
+   2021-03-05T13:15:08.32-0700 [STG/0] OUT -----> Installing pip-pop 0.1.5
+   2021-03-05T13:15:08.32-0700 [STG/0] OUT        Copy [/tmp/cache/final/dependencies/9cceaa4f7bf62ebaebcac7637039c718827190df8d438d6847fa00fc8841628d/pip-pop-0.1.5-b32efe86.tar.gz]
+   2021-03-05T13:15:13.79-0700 [STG/0] OUT        Generating 'requirements.txt' from Pipfile.lock
+   2021-03-05T13:15:16.17-0700 [STG/0] OUT -----> Noticed dependency requiring libffi. Bootstrapping libffi.
+   2021-03-05T13:15:16.17-0700 [STG/0] OUT -----> Installing libffi 3.2.1
+   2021-03-05T13:15:16.17-0700 [STG/0] OUT        Copy [/tmp/cache/final/dependencies/f27129fba55c9320d85f368e55d79dc1f851c079b8dacfd70c085cfc71615e82/libffi-3.2.1-linux-x64-5f5bf32c.tgz]
+   2021-03-05T13:15:16.19-0700 [STG/0] OUT -----> Running Pip Install
+   2021-03-05T13:15:18.62-0700 [STG/0] OUT        Collecting joblib==1.0.1
+   2021-03-05T13:15:18.62-0700 [STG/0] OUT          Using cached joblib-1.0.1-py3-none-any.whl (303 kB)
+   2021-03-05T13:15:20.21-0700 [STG/0] OUT        Collecting lxml==4.6.2
+   2021-03-05T13:15:20.27-0700 [STG/0] OUT          Using cached lxml-4.6.2-cp37-cp37m-manylinux1_x86_64.whl (5.5 MB)
+   2021-03-05T13:15:21.12-0700 [STG/0] OUT        Collecting pyparsing==2.4.7
+   2021-03-05T13:15:21.12-0700 [STG/0] OUT          Using cached pyparsing-2.4.7-py2.py3-none-any.whl (67 kB)
+   2021-03-05T13:15:21.42-0700 [STG/0] OUT        Collecting sphinx==3.5.1
+   2021-03-05T13:15:21.44-0700 [STG/0] OUT          Using cached Sphinx-3.5.1-py3-none-any.whl (2.8 MB)
+   2021-03-05T13:15:22.10-0700 [STG/0] OUT        Collecting sphinxcontrib-applehelp==1.0.2
+   2021-03-05T13:15:22.10-0700 [STG/0] OUT          Using cached sphinxcontrib_applehelp-1.0.2-py2.py3-none-any.whl (121 kB)
+   2021-03-05T13:15:22.24-0700 [STG/0] OUT        Collecting wcwidth==0.2.5
+   2021-03-05T13:15:22.25-0700 [STG/0] OUT          Using cached wcwidth-0.2.5-py2.py3-none-any.whl (30 kB)
+   2021-03-05T13:15:22.46-0700 [STG/0] OUT        Collecting tqdm==4.57.0
+   2021-03-05T13:15:22.47-0700 [STG/0] OUT          Using cached tqdm-4.57.0-py2.py3-none-any.whl (72 kB)
+   2021-03-05T13:15:22.59-0700 [STG/0] OUT        Collecting asgiref==3.3.1
+   2021-03-05T13:15:22.60-0700 [STG/0] OUT          Using cached asgiref-3.3.1-py3-none-any.whl (19 kB)
+   2021-03-05T13:15:22.69-0700 [STG/0] OUT        Collecting certifi==2020.12.5
+   2021-03-05T13:15:22.71-0700 [STG/0] OUT          Using cached certifi-2020.12.5-py2.py3-none-any.whl (147 kB)
+   2021-03-05T13:15:23.81-0700 [STG/0] OUT        Collecting cryptography==3.4.6
+   2021-03-05T13:15:23.89-0700 [STG/0] OUT          Using cached cryptography-3.4.6-cp36-abi3-manylinux2014_x86_64.whl (3.2 MB)
+   2021-03-05T13:15:24.27-0700 [STG/0] OUT        Collecting django-pdb==0.6.2
+   2021-03-05T13:15:24.28-0700 [STG/0] OUT          Using cached django-pdb-0.6.2.tar.gz (8.3 kB)
+   2021-03-05T13:15:24.79-0700 [STG/0] OUT        Collecting ibm-cos-sdk-core==2.9.0
+   2021-03-05T13:15:24.82-0700 [STG/0] OUT          Using cached ibm-cos-sdk-core-2.9.0.tar.gz (823 kB)
+   2021-03-05T13:15:25.66-0700 [STG/0] OUT        Collecting ibmcloudenv==0.2.1
+   2021-03-05T13:15:25.67-0700 [STG/0] OUT          Using cached ibmcloudenv-0.2.1-py2.py3-none-any.whl (4.9 kB)
+   2021-03-05T13:15:25.77-0700 [STG/0] OUT        Collecting packaging==20.9
+   2021-03-05T13:15:25.78-0700 [STG/0] OUT          Using cached packaging-20.9-py2.py3-none-any.whl (40 kB)
+   2021-03-05T13:15:25.87-0700 [STG/0] OUT        Collecting sortedcontainers==2.3.0
+   2021-03-05T13:15:25.88-0700 [STG/0] OUT          Using cached sortedcontainers-2.3.0-py2.py3-none-any.whl (29 kB)
+   2021-03-05T13:15:25.95-0700 [STG/0] OUT        Collecting sqlparse==0.3.1
+   2021-03-05T13:15:25.96-0700 [STG/0] OUT          Using cached sqlparse-0.3.1-py2.py3-none-any.whl (40 kB)
+   2021-03-05T13:15:26.05-0700 [STG/0] OUT        Collecting arrow==1.0.2
+   2021-03-05T13:15:26.06-0700 [STG/0] OUT          Using cached arrow-1.0.2-py3-none-any.whl (54 kB)
+   2021-03-05T13:15:26.20-0700 [STG/0] OUT        Collecting astroid==2.4.2
+   2021-03-05T13:15:26.21-0700 [STG/0] OUT          Using cached astroid-2.4.2-py3-none-any.whl (213 kB)
+   2021-03-05T13:15:26.32-0700 [STG/0] OUT        Collecting pystache==0.5.4
+   2021-03-05T13:15:26.32-0700 [STG/0] OUT          Using cached pystache-0.5.4.tar.gz (75 kB)
+   2021-03-05T13:15:26.84-0700 [STG/0] OUT        Collecting bootstrap4==0.1.0
+   2021-03-05T13:15:26.85-0700 [STG/0] OUT          Using cached bootstrap4-0.1.0.tar.gz (588 kB)
+   2021-03-05T13:15:27.45-0700 [STG/0] OUT        Collecting django-q==1.3.5
+   2021-03-05T13:15:27.46-0700 [STG/0] OUT          Using cached django_q-1.3.5-py3-none-any.whl (73 kB)
+   2021-03-05T13:15:27.56-0700 [STG/0] OUT        Collecting ibm-cloud-sdk-core==3.5.2
+   2021-03-05T13:15:27.57-0700 [STG/0] OUT          Using cached ibm-cloud-sdk-core-3.5.2.tar.gz (35 kB)
+   2021-03-05T13:15:28.16-0700 [STG/0] OUT        Collecting ibm-watson==5.1.0
+   2021-03-05T13:15:28.18-0700 [STG/0] OUT          Using cached ibm-watson-5.1.0.tar.gz (382 kB)
+   2021-03-05T13:15:29.04-0700 [STG/0] OUT        Collecting lazy-object-proxy==1.4.3
+   2021-03-05T13:15:29.06-0700 [STG/0] OUT          Using cached lazy_object_proxy-1.4.3-cp37-cp37m-manylinux1_x86_64.whl (56 kB)
+   2021-03-05T13:15:29.36-0700 [STG/0] OUT        Collecting pytz==2020.1
+   2021-03-05T13:15:29.37-0700 [STG/0] OUT          Using cached pytz-2020.1-py2.py3-none-any.whl (510 kB)
+   2021-03-05T13:15:29.76-0700 [STG/0] OUT        Collecting ibm-cos-sdk==2.9.0
+   2021-03-05T13:15:29.76-0700 [STG/0] OUT          Using cached ibm-cos-sdk-2.9.0.tar.gz (51 kB)
+   2021-03-05T13:15:30.48-0700 [STG/0] OUT        Collecting python-dateutil==2.8.1
+   2021-03-05T13:15:30.49-0700 [STG/0] OUT          Using cached python_dateutil-2.8.1-py2.py3-none-any.whl (227 kB)
+   2021-03-05T13:15:30.55-0700 [STG/0] OUT        Collecting sphinxcontrib-qthelp==1.0.3
+   2021-03-05T13:15:30.56-0700 [STG/0] OUT          Using cached sphinxcontrib_qthelp-1.0.3-py2.py3-none-any.whl (90 kB)
+   2021-03-05T13:15:30.84-0700 [STG/0] OUT        Collecting typed-ast==1.4.2
+   2021-03-05T13:15:30.86-0700 [STG/0] OUT          Using cached typed_ast-1.4.2-cp37-cp37m-manylinux1_x86_64.whl (743 kB)
+   2021-03-05T13:15:30.96-0700 [STG/0] OUT        Collecting babel==2.9.0
+   2021-03-05T13:15:31.02-0700 [STG/0] OUT          Using cached Babel-2.9.0-py2.py3-none-any.whl (8.8 MB)
+   2021-03-05T13:15:32.29-0700 [STG/0] OUT        Collecting django==3.0.8
+   2021-03-05T13:15:32.33-0700 [STG/0] OUT          Using cached Django-3.0.8-py3-none-any.whl (7.5 MB)
+   2021-03-05T13:15:34.70-0700 [STG/0] OUT        Collecting docutils==0.16
+   2021-03-05T13:15:34.80-0700 [STG/0] OUT          Using cached docutils-0.16-py2.py3-none-any.whl (548 kB)
+   2021-03-05T13:15:34.96-0700 [STG/0] OUT        Collecting pylint-plugin-utils==0.6
+   2021-03-05T13:15:34.96-0700 [STG/0] OUT          Using cached pylint_plugin_utils-0.6-py3-none-any.whl (10 kB)
+   2021-03-05T13:15:35.05-0700 [STG/0] OUT        Collecting websocket-client==0.48.0
+   2021-03-05T13:15:35.05-0700 [STG/0] OUT          Using cached websocket_client-0.48.0-py2.py3-none-any.whl (198 kB)
+   2021-03-05T13:15:35.20-0700 [STG/0] OUT        Collecting wheel==0.36.2
+   2021-03-05T13:15:35.20-0700 [STG/0] OUT          Using cached wheel-0.36.2-py2.py3-none-any.whl (35 kB)
+   2021-03-05T13:15:35.32-0700 [STG/0] OUT        Collecting alabaster==0.7.12
+   2021-03-05T13:15:35.32-0700 [STG/0] OUT          Using cached alabaster-0.7.12-py2.py3-none-any.whl (14 kB)
+   2021-03-05T13:15:35.36-0700 [STG/0] OUT        Collecting chardet==4.0.0
+   2021-03-05T13:15:35.37-0700 [STG/0] OUT          Using cached chardet-4.0.0-py2.py3-none-any.whl (178 kB)
+   2021-03-05T13:15:35.44-0700 [STG/0] OUT        Collecting html5lib==1.1
+   2021-03-05T13:15:35.44-0700 [STG/0] OUT          Using cached html5lib-1.1-py2.py3-none-any.whl (112 kB)
+   2021-03-05T13:15:35.52-0700 [STG/0] OUT        Collecting ply==3.11
+   2021-03-05T13:15:35.52-0700 [STG/0] OUT          Using cached ply-3.11-py2.py3-none-any.whl (49 kB)
+   2021-03-05T13:15:35.58-0700 [STG/0] OUT        Collecting blessed==1.18.0
+   2021-03-05T13:15:35.59-0700 [STG/0] OUT          Using cached blessed-1.18.0-py2.py3-none-any.whl (81 kB)
+   2021-03-05T13:15:35.66-0700 [STG/0] OUT        Collecting ibm-cos-sdk-s3transfer==2.9.0
+   2021-03-05T13:15:35.67-0700 [STG/0] OUT          Using cached ibm-cos-sdk-s3transfer-2.9.0.tar.gz (133 kB)
+   2021-03-05T13:15:36.37-0700 [STG/0] OUT        Collecting psycopg2-binary==2.8.6
+   2021-03-05T13:15:36.39-0700 [STG/0] OUT          Using cached psycopg2_binary-2.8.6-cp37-cp37m-manylinux1_x86_64.whl (3.0 MB)
+   2021-03-05T13:15:36.66-0700 [STG/0] OUT        Collecting pylint==2.6.2
+   2021-03-05T13:15:36.66-0700 [STG/0] OUT          Using cached pylint-2.6.2-py3-none-any.whl (325 kB)
+   2021-03-05T13:15:36.76-0700 [STG/0] OUT        Collecting sphinxcontrib-htmlhelp==1.0.3
+   2021-03-05T13:15:36.76-0700 [STG/0] OUT          Using cached sphinxcontrib_htmlhelp-1.0.3-py2.py3-none-any.whl (96 kB)
+   2021-03-05T13:15:36.93-0700 [STG/0] OUT        Collecting pygments==2.8.0
+   2021-03-05T13:15:36.94-0700 [STG/0] OUT          Using cached Pygments-2.8.0-py3-none-any.whl (983 kB)
+   2021-03-05T13:15:37.14-0700 [STG/0] OUT        Collecting idna==2.10
+   2021-03-05T13:15:37.14-0700 [STG/0] OUT          Using cached idna-2.10-py2.py3-none-any.whl (58 kB)
+   2021-03-05T13:15:37.20-0700 [STG/0] OUT        Collecting imagesize==1.2.0
+   2021-03-05T13:15:37.20-0700 [STG/0] OUT          Using cached imagesize-1.2.0-py2.py3-none-any.whl (4.8 kB)
+   2021-03-05T13:15:37.33-0700 [STG/0] OUT        Collecting importlib-metadata==1.7.0
+   2021-03-05T13:15:37.33-0700 [STG/0] OUT          Using cached importlib_metadata-1.7.0-py2.py3-none-any.whl (31 kB)
+   2021-03-05T13:15:37.40-0700 [STG/0] OUT        Collecting jsonpath-rw==1.4.0
+   2021-03-05T13:15:37.40-0700 [STG/0] OUT          Using cached jsonpath-rw-1.4.0.tar.gz (13 kB)
+   2021-03-05T13:15:37.89-0700 [STG/0] OUT        Collecting mccabe==0.6.1
+   2021-03-05T13:15:37.89-0700 [STG/0] OUT          Using cached mccabe-0.6.1-py2.py3-none-any.whl (8.6 kB)
+   2021-03-05T13:15:37.95-0700 [STG/0] OUT        Collecting pdfminer.six==20201018
+   2021-03-05T13:15:37.98-0700 [STG/0] OUT          Using cached pdfminer.six-20201018-py3-none-any.whl (5.6 MB)
+   2021-03-05T13:15:38.26-0700 [STG/0] OUT        Collecting pycparser==2.20
+   2021-03-05T13:15:38.28-0700 [STG/0] OUT          Using cached pycparser-2.20-py2.py3-none-any.whl (112 kB)
+   2021-03-05T13:15:38.33-0700 [STG/0] OUT        Collecting snowballstemmer==2.1.0
+   2021-03-05T13:15:38.35-0700 [STG/0] OUT          Using cached snowballstemmer-2.1.0-py2.py3-none-any.whl (93 kB)
+   2021-03-05T13:15:38.43-0700 [STG/0] OUT        Collecting click==7.1.2
+   2021-03-05T13:15:38.44-0700 [STG/0] OUT          Using cached click-7.1.2-py2.py3-none-any.whl (82 kB)
+   2021-03-05T13:15:38.50-0700 [STG/0] OUT        Collecting django-picklefield==3.0.1
+   2021-03-05T13:15:38.51-0700 [STG/0] OUT          Using cached django_picklefield-3.0.1-py3-none-any.whl (9.4 kB)
+   2021-03-05T13:15:38.69-0700 [STG/0] OUT        Collecting isort==5.7.0
+   2021-03-05T13:15:38.70-0700 [STG/0] OUT          Using cached isort-5.7.0-py3-none-any.whl (104 kB)
+   2021-03-05T13:15:38.79-0700 [STG/0] OUT        Collecting livereload==2.6.2
+   2021-03-05T13:15:38.80-0700 [STG/0] OUT          Using cached livereload-2.6.2.tar.gz (25 kB)
+   2021-03-05T13:15:39.43-0700 [STG/0] OUT        Collecting markupsafe==1.1.1
+   2021-03-05T13:15:39.45-0700 [STG/0] OUT          Using cached MarkupSafe-1.1.1-cp37-cp37m-manylinux2010_x86_64.whl (33 kB)
+   2021-03-05T13:15:39.49-0700 [STG/0] OUT        Collecting titlecase==2.0.0
+   2021-03-05T13:15:39.50-0700 [STG/0] OUT          Using cached titlecase-2.0.0.tar.gz (12 kB)
+   2021-03-05T13:15:40.07-0700 [STG/0] OUT        Collecting typing-extensions==3.7.4.3
+   2021-03-05T13:15:40.08-0700 [STG/0] OUT          Using cached typing_extensions-3.7.4.3-py3-none-any.whl (22 kB)
+   2021-03-05T13:15:40.16-0700 [STG/0] OUT        Collecting beautifulsoup4==4.9.1
+   2021-03-05T13:15:40.17-0700 [STG/0] OUT          Using cached beautifulsoup4-4.9.1-py3-none-any.whl (115 kB)
+   2021-03-05T13:15:40.35-0700 [STG/0] OUT        Collecting urllib3==1.26.3
+   2021-03-05T13:15:40.36-0700 [STG/0] OUT          Using cached urllib3-1.26.3-py2.py3-none-any.whl (137 kB)
+   2021-03-05T13:15:40.52-0700 [STG/0] OUT        Collecting whitenoise==5.2.0
+   2021-03-05T13:15:40.52-0700 [STG/0] OUT          Using cached whitenoise-5.2.0-py2.py3-none-any.whl (19 kB)
+   2021-03-05T13:15:40.70-0700 [STG/0] OUT        Collecting tornado==6.1
+   2021-03-05T13:15:40.71-0700 [STG/0] OUT          Using cached tornado-6.1-cp37-cp37m-manylinux2010_x86_64.whl (428 kB)
+   2021-03-05T13:15:40.84-0700 [STG/0] OUT        Collecting django-bootstrap4==2.2.0
+   2021-03-05T13:15:40.85-0700 [STG/0] OUT          Using cached django_bootstrap4-2.2.0-py3-none-any.whl (24 kB)
+   2021-03-05T13:15:41.00-0700 [STG/0] OUT        Collecting gunicorn==20.0.4
+   2021-03-05T13:15:41.01-0700 [STG/0] OUT          Using cached gunicorn-20.0.4-py2.py3-none-any.whl (77 kB)
+   2021-03-05T13:15:41.11-0700 [STG/0] OUT        Collecting jinja2==2.11.3
+   2021-03-05T13:15:41.12-0700 [STG/0] OUT          Using cached Jinja2-2.11.3-py2.py3-none-any.whl (125 kB)
+   2021-03-05T13:15:41.24-0700 [STG/0] OUT        Collecting pyjwt==2.0.1
+   2021-03-05T13:15:41.25-0700 [STG/0] OUT          Using cached PyJWT-2.0.1-py3-none-any.whl (15 kB)
+   2021-03-05T13:15:42.44-0700 [STG/0] OUT        Collecting regex==2020.11.13
+   2021-03-05T13:15:42.45-0700 [STG/0] OUT          Using cached regex-2020.11.13-cp37-cp37m-manylinux2014_x86_64.whl (719 kB)
+   2021-03-05T13:15:42.55-0700 [STG/0] OUT        Collecting sphinxcontrib-serializinghtml==1.1.4
+   2021-03-05T13:15:42.56-0700 [STG/0] OUT          Using cached sphinxcontrib_serializinghtml-1.1.4-py2.py3-none-any.whl (89 kB)
+   2021-03-05T13:15:42.68-0700 [STG/0] OUT        Collecting toml==0.10.2
+   2021-03-05T13:15:42.68-0700 [STG/0] OUT          Using cached toml-0.10.2-py2.py3-none-any.whl (16 kB)
+   2021-03-05T13:15:42.74-0700 [STG/0] OUT        Collecting decorator==4.4.2
+   2021-03-05T13:15:42.75-0700 [STG/0] OUT          Using cached decorator-4.4.2-py2.py3-none-any.whl (9.2 kB)
+   2021-03-05T13:15:42.81-0700 [STG/0] OUT        Collecting jmespath==0.10.0
+   2021-03-05T13:15:42.81-0700 [STG/0] OUT          Using cached jmespath-0.10.0-py2.py3-none-any.whl (24 kB)
+   2021-03-05T13:15:42.97-0700 [STG/0] OUT        Collecting requests==2.25.1
+   2021-03-05T13:15:42.98-0700 [STG/0] OUT          Using cached requests-2.25.1-py2.py3-none-any.whl (61 kB)
+   2021-03-05T13:15:43.06-0700 [STG/0] OUT        Collecting wrapt==1.12.1
+   2021-03-05T13:15:43.06-0700 [STG/0] OUT          Using cached wrapt-1.12.1.tar.gz (27 kB)
+   2021-03-05T13:15:44.18-0700 [STG/0] OUT        Collecting cffi==1.14.5
+   2021-03-05T13:15:44.20-0700 [STG/0] OUT          Using cached cffi-1.14.5-cp37-cp37m-manylinux1_x86_64.whl (402 kB)
+   2021-03-05T13:15:44.48-0700 [STG/0] OUT        Collecting django-extensions==3.1.1
+   2021-03-05T13:15:44.50-0700 [STG/0] OUT          Using cached django_extensions-3.1.1-py3-none-any.whl (222 kB)
+   2021-03-05T13:15:44.66-0700 [STG/0] OUT        Collecting pylint-django==2.4.2
+   2021-03-05T13:15:44.67-0700 [STG/0] OUT          Using cached pylint_django-2.4.2-py3-none-any.whl (80 kB)
+   2021-03-05T13:15:44.90-0700 [STG/0] OUT        Collecting six==1.15.0
+   2021-03-05T13:15:44.91-0700 [STG/0] OUT          Using cached six-1.15.0-py2.py3-none-any.whl (10 kB)
+   2021-03-05T13:15:45.01-0700 [STG/0] OUT        Collecting soupsieve==2.0.1
+   2021-03-05T13:15:45.02-0700 [STG/0] OUT          Using cached soupsieve-2.0.1-py3-none-any.whl (32 kB)
+   2021-03-05T13:15:45.07-0700 [STG/0] OUT        Collecting sphinxcontrib-jsmath==1.0.1
+   2021-03-05T13:15:45.08-0700 [STG/0] OUT          Using cached sphinxcontrib_jsmath-1.0.1-py2.py3-none-any.whl (5.1 kB)
+   2021-03-05T13:15:45.13-0700 [STG/0] OUT        Collecting webencodings==0.5.1
+   2021-03-05T13:15:45.14-0700 [STG/0] OUT          Using cached webencodings-0.5.1-py2.py3-none-any.whl (11 kB)
+   2021-03-05T13:15:45.21-0700 [STG/0] OUT        Collecting gitchangelog==3.0.4
+   2021-03-05T13:15:45.22-0700 [STG/0] OUT          Using cached gitchangelog-3.0.4-py2.py3-none-any.whl (54 kB)
+   2021-03-05T13:15:45.32-0700 [STG/0] OUT        Collecting nltk==3.5
+   2021-03-05T13:15:45.33-0700 [STG/0] OUT          Using cached nltk-3.5.zip (1.4 MB)
+   2021-03-05T13:15:46.37-0700 [STG/0] OUT        Collecting sphinxcontrib-devhelp==1.0.2
+   2021-03-05T13:15:46.37-0700 [STG/0] OUT          Using cached sphinxcontrib_devhelp-1.0.2-py2.py3-none-any.whl (84 kB)
+   2021-03-05T13:15:46.56-0700 [STG/0] OUT        Collecting zipp==3.1.0
+   2021-03-05T13:15:46.56-0700 [STG/0] OUT          Using cached zipp-3.1.0-py3-none-any.whl (4.9 kB)
+   2021-03-05T13:15:47.75-0700 [STG/0] OUT        Collecting setuptools
+   2021-03-05T13:15:47.76-0700 [STG/0] OUT          Using cached setuptools-54.1.0-py3-none-any.whl (784 kB)
+   2021-03-05T13:15:48.01-0700 [STG/0] OUT        Using legacy setup.py install for django-pdb, since package 'wheel' is not installed.
+   2021-03-05T13:15:48.03-0700 [STG/0] OUT        Using legacy setup.py install for ibm-cos-sdk-core, since package 'wheel' is not installed.
+   2021-03-05T13:15:48.04-0700 [STG/0] OUT        Using legacy setup.py install for pystache, since package 'wheel' is not installed.
+   2021-03-05T13:15:48.05-0700 [STG/0] OUT        Using legacy setup.py install for bootstrap4, since package 'wheel' is not installed.
+   2021-03-05T13:15:48.07-0700 [STG/0] OUT        Using legacy setup.py install for ibm-cloud-sdk-core, since package 'wheel' is not installed.
+   2021-03-05T13:15:48.08-0700 [STG/0] OUT        Using legacy setup.py install for ibm-watson, since package 'wheel' is not installed.
+   2021-03-05T13:15:48.10-0700 [STG/0] OUT        Using legacy setup.py install for ibm-cos-sdk, since package 'wheel' is not installed.
+   2021-03-05T13:15:48.11-0700 [STG/0] OUT        Using legacy setup.py install for ibm-cos-sdk-s3transfer, since package 'wheel' is not installed.
+   2021-03-05T13:15:48.12-0700 [STG/0] OUT        Using legacy setup.py install for jsonpath-rw, since package 'wheel' is not installed.
+   2021-03-05T13:15:48.13-0700 [STG/0] OUT        Using legacy setup.py install for livereload, since package 'wheel' is not installed.
+   2021-03-05T13:15:48.13-0700 [STG/0] OUT        Using legacy setup.py install for titlecase, since package 'wheel' is not installed.
+   2021-03-05T13:15:48.13-0700 [STG/0] OUT        Using legacy setup.py install for wrapt, since package 'wheel' is not installed.
+   2021-03-05T13:15:48.13-0700 [STG/0] OUT        Using legacy setup.py install for nltk, since package 'wheel' is not installed.
+   2021-03-05T13:15:49.44-0700 [STG/0] OUT        Installing collected packages: joblib, lxml, pyparsing, docutils, pytz, babel, imagesize, sphinxcontrib-qthelp, certifi, idna, chardet, urllib3, requests, alabaster, sphinxcontrib-htmlhelp, pygments, sphinxcontrib-devhelp, markupsafe, jinja2, snowballstemmer, setuptools, sphinxcontrib-jsmath, sphinxcontrib-applehelp, sphinxcontrib-serializinghtml, packaging, sphinx, wcwidth, tqdm, asgiref, pycparser, cffi, cryptography, django-pdb, jmespath, six, python-dateutil, ibm-cos-sdk-core, ply, decorator, jsonpath-rw, ibmcloudenv, sortedcontainers, sqlparse, typing-extensions, arrow, typed-ast, lazy-object-proxy, wrapt, astroid, pystache, bootstrap4, django, django-picklefield, blessed, django-q, pyjwt, ibm-cloud-sdk-core, websocket-client, ibm-watson, ibm-cos-sdk-s3transfer, ibm-cos-sdk, mccabe, toml, isort, pylint, pylint-plugin-utils, wheel, webencodings, html5lib, psycopg2-binary, zipp, importlib-metadata, pdfminer.six, click, tornado, livereload, regex, titlecase, soupsieve, beautifulsoup4, whitenoise, django-bootstrap4, gunicorn, django-extensions, pylint-django, gitchangelog, nltk
+   [31m2021-03-05T13:15:53.49-0700 [STG/0] ERR          WARNING: The script pybabel is installed in '/tmp/contents551765503/deps/0/python/bin' which is not on PATH.[0m
+   [31m2021-03-05T13:15:53.49-0700 [STG/0] ERR          Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.[0m
+   [31m2021-03-05T13:15:54.48-0700 [STG/0] ERR          WARNING: The script chardetect is installed in '/tmp/contents551765503/deps/0/python/bin' which is not on PATH.[0m
+   [31m2021-03-05T13:15:54.49-0700 [STG/0] ERR          Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.[0m
+   [31m2021-03-05T13:15:56.83-0700 [STG/0] ERR          WARNING: The script pygmentize is installed in '/tmp/contents551765503/deps/0/python/bin' which is not on PATH.[0m
+   [31m2021-03-05T13:15:56.83-0700 [STG/0] ERR          Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.[0m
+   [31m2021-03-05T13:16:02.72-0700 [STG/0] ERR          WARNING: The scripts sphinx-apidoc, sphinx-autogen, sphinx-build and sphinx-quickstart are installed in '/tmp/contents551765503/deps/0/python/bin' which is not on PATH.[0m
+   [31m2021-03-05T13:16:02.72-0700 [STG/0] ERR          Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.[0m
+   [31m2021-03-05T13:16:03.10-0700 [STG/0] ERR          WARNING: The script tqdm is installed in '/tmp/contents551765503/deps/0/python/bin' which is not on PATH.[0m
+   [31m2021-03-05T13:16:03.11-0700 [STG/0] ERR          Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.[0m
+   2021-03-05T13:16:04.43-0700 [STG/0] OUT            Running setup.py install for django-pdb: started
+   2021-03-05T13:16:05.20-0700 [STG/0] OUT            Running setup.py install for django-pdb: finished with status 'done'
+   2021-03-05T13:16:05.73-0700 [STG/0] OUT            Running setup.py install for ibm-cos-sdk-core: started
+   2021-03-05T13:16:06.73-0700 [STG/0] OUT            Running setup.py install for ibm-cos-sdk-core: finished with status 'done'
+   2021-03-05T13:16:06.86-0700 [STG/0] OUT            Running setup.py install for jsonpath-rw: started
+   2021-03-05T13:16:07.41-0700 [STG/0] OUT            Running setup.py install for jsonpath-rw: finished with status 'done'
+   [31m2021-03-05T13:16:07.62-0700 [STG/0] ERR          WARNING: The script sqlformat is installed in '/tmp/contents551765503/deps/0/python/bin' which is not on PATH.[0m
+   [31m2021-03-05T13:16:07.62-0700 [STG/0] ERR          Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.[0m
+   2021-03-05T13:16:07.90-0700 [STG/0] OUT            Running setup.py install for wrapt: started
+   2021-03-05T13:16:09.76-0700 [STG/0] OUT            Running setup.py install for wrapt: finished with status 'done'
+   2021-03-05T13:16:10.22-0700 [STG/0] OUT            Running setup.py install for pystache: started
+   2021-03-05T13:16:15.66-0700 [STG/0] OUT            Running setup.py install for pystache: finished with status 'done'
+   2021-03-05T13:16:15.67-0700 [STG/0] OUT            Running setup.py install for bootstrap4: started
+   2021-03-05T13:16:16.39-0700 [STG/0] OUT            Running setup.py install for bootstrap4: finished with status 'done'
+   [31m2021-03-05T13:16:24.30-0700 [STG/0] ERR          WARNING: The script django-admin is installed in '/tmp/contents551765503/deps/0/python/bin' which is not on PATH.[0m
+   [31m2021-03-05T13:16:24.30-0700 [STG/0] ERR          Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.[0m
+   2021-03-05T13:16:26.03-0700 [STG/0] OUT            Running setup.py install for ibm-cloud-sdk-core: started
+   2021-03-05T13:16:26.75-0700 [STG/0] OUT            Running setup.py install for ibm-cloud-sdk-core: finished with status 'done'
+   2021-03-05T13:16:26.85-0700 [STG/0] OUT            Running setup.py install for ibm-watson: started
+   2021-03-05T13:16:28.10-0700 [STG/0] OUT            Running setup.py install for ibm-watson: finished with status 'done'
+   2021-03-05T13:16:28.11-0700 [STG/0] OUT            Running setup.py install for ibm-cos-sdk-s3transfer: started
+   2021-03-05T13:16:28.85-0700 [STG/0] OUT            Running setup.py install for ibm-cos-sdk-s3transfer: finished with status 'done'
+   2021-03-05T13:16:28.86-0700 [STG/0] OUT            Running setup.py install for ibm-cos-sdk: started
+   2021-03-05T13:16:29.72-0700 [STG/0] OUT            Running setup.py install for ibm-cos-sdk: finished with status 'done'
+   [31m2021-03-05T13:16:30.12-0700 [STG/0] ERR          WARNING: The scripts isort and isort-identify-imports are installed in '/tmp/contents551765503/deps/0/python/bin' which is not on PATH.[0m
+   [31m2021-03-05T13:16:30.12-0700 [STG/0] ERR          Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.[0m
+   [31m2021-03-05T13:16:30.72-0700 [STG/0] ERR          WARNING: The scripts epylint, pylint, pyreverse and symilar are installed in '/tmp/contents551765503/deps/0/python/bin' which is not on PATH.[0m
+   [31m2021-03-05T13:16:30.73-0700 [STG/0] ERR          Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.[0m
+   [31m2021-03-05T13:16:30.89-0700 [STG/0] ERR          WARNING: The script wheel is installed in '/tmp/contents551765503/deps/0/python/bin' which is not on PATH.[0m
+   [31m2021-03-05T13:16:30.89-0700 [STG/0] ERR          Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.[0m
+   2021-03-05T13:16:32.98-0700 [STG/0] OUT            Running setup.py install for livereload: started
+   2021-03-05T13:16:33.80-0700 [STG/0] OUT            Running setup.py install for livereload: finished with status 'done'
+   2021-03-05T13:16:34.07-0700 [STG/0] OUT            Running setup.py install for titlecase: started
+   2021-03-05T13:16:35.35-0700 [STG/0] OUT            Running setup.py install for titlecase: finished with status 'done'
+   [31m2021-03-05T13:16:36.26-0700 [STG/0] ERR          WARNING: The script gunicorn is installed in '/tmp/contents551765503/deps/0/python/bin' which is not on PATH.[0m
+   [31m2021-03-05T13:16:36.27-0700 [STG/0] ERR          Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.[0m
+   [31m2021-03-05T13:16:37.44-0700 [STG/0] ERR          WARNING: The script gitchangelog is installed in '/tmp/contents551765503/deps/0/python/bin' which is not on PATH.[0m
+   [31m2021-03-05T13:16:37.44-0700 [STG/0] ERR          Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.[0m
+   2021-03-05T13:16:37.46-0700 [STG/0] OUT            Running setup.py install for nltk: started
+   2021-03-05T13:16:40.45-0700 [STG/0] OUT            Running setup.py install for nltk: finished with status 'done'
+   2021-03-05T13:16:40.66-0700 [STG/0] OUT        Successfully installed alabaster-0.7.12 arrow-1.0.2 asgiref-3.3.1 astroid-2.4.2 babel-2.9.0 beautifulsoup4-4.9.1 blessed-1.18.0 bootstrap4-0.1.0 certifi-2020.12.5 cffi-1.14.5 chardet-4.0.0 click-7.1.2 cryptography-3.4.6 decorator-4.4.2 django-3.0.8 django-bootstrap4-2.2.0 django-extensions-3.1.1 django-pdb-0.6.2 django-picklefield-3.0.1 django-q-1.3.5 docutils-0.16 gitchangelog-3.0.4 gunicorn-20.0.4 html5lib-1.1 ibm-cloud-sdk-core-3.5.2 ibm-cos-sdk-2.9.0 ibm-cos-sdk-core-2.9.0 ibm-cos-sdk-s3transfer-2.9.0 ibm-watson-5.1.0 ibmcloudenv-0.2.1 idna-2.10 imagesize-1.2.0 importlib-metadata-1.7.0 isort-5.7.0 jinja2-2.11.3 jmespath-0.10.0 joblib-1.0.1 jsonpath-rw-1.4.0 lazy-object-proxy-1.4.3 livereload-2.6.2 lxml-4.6.2 markupsafe-1.1.1 mccabe-0.6.1 nltk-3.5 packaging-20.9 pdfminer.six-20201018 ply-3.11 psycopg2-binary-2.8.6 pycparser-2.20 pygments-2.8.0 pyjwt-2.0.1 pylint-2.6.2 pylint-django-2.4.2 pylint-plugin-utils-0.6 pyparsing-2.4.7 pystache-0.5.4 python-dateutil-2.8.1 pytz-2020.1 regex-2020.11.13 requests-2.25.1 setuptools-54.1.0 six-1.15.0 snowballstemmer-2.1.0 sortedcontainers-2.3.0 soupsieve-2.0.1 sphinx-3.5.1 sphinxcontrib-applehelp-1.0.2 sphinxcontrib-devhelp-1.0.2 sphinxcontrib-htmlhelp-1.0.3 sphinxcontrib-jsmath-1.0.1 sphinxcontrib-qthelp-1.0.3 sphinxcontrib-serializinghtml-1.1.4 sqlparse-0.3.1 titlecase-2.0.0 toml-0.10.2 tornado-6.1 tqdm-4.57.0 typed-ast-1.4.2 typing-extensions-3.7.4.3 urllib3-1.26.3 wcwidth-0.2.5 webencodings-0.5.1 websocket-client-0.48.0 wheel-0.36.2 whitenoise-5.2.0 wrapt-1.12.1 zipp-3.1.0
+   [31m2021-03-05T13:16:40.95-0700 [STG/0] ERR        WARNING: You are using pip version 20.1.1; however, version 21.0.1 is available.[0m
+   [31m2021-03-05T13:16:40.95-0700 [STG/0] ERR        You should consider upgrading via the '/tmp/contents551765503/deps/0/bin/python -m pip install --upgrade pip' command.[0m
+   2021-03-05T13:16:44.59-0700 [STG/0] OUT -----> Downloading NLTK corpora...
+   2021-03-05T13:16:44.59-0700 [STG/0] OUT -----> Downloading NLTK packages: punkt
+   [31m2021-03-05T13:16:46.10-0700 [STG/0] ERR        /tmp/contents551765503/deps/0/python/lib/python3.7/runpy.py:125: RuntimeWarning: 'nltk.downloader' found in sys.modules after import of package 'nltk', but prior to execution of 'nltk.downloader'; this may result in unpredictable behaviour[0m
+   [31m2021-03-05T13:16:46.10-0700 [STG/0] ERR          warn(RuntimeWarning(msg))[0m
+   [31m2021-03-05T13:16:46.10-0700 [STG/0] ERR        [nltk_data] Downloading package punkt to[0m
+   [31m2021-03-05T13:16:46.10-0700 [STG/0] ERR        [nltk_data]     /tmp/contents551765503/deps/0/python/nltk_data...[0m
+   [31m2021-03-05T13:16:46.10-0700 [STG/0] ERR        [nltk_data]   Unzipping tokenizers/punkt.zip.[0m
+   2021-03-05T13:17:38.88-0700 [STG/0] OUT Exit status 0
+   2021-03-05T13:17:38.88-0700 [STG/0] OUT Uploading droplet, build artifacts cache...
+   2021-03-05T13:17:38.88-0700 [STG/0] OUT Uploading droplet...
+   2021-03-05T13:17:38.88-0700 [STG/0] OUT Uploading build artifacts cache...
+   2021-03-05T13:17:41.24-0700 [STG/0] OUT Uploaded build artifacts cache (98.8M)
+   2021-03-05T13:17:41.86-0700 [API/3] OUT Creating droplet for app with guid 507b7075-927e-48b6-a0a3-9d769d1091ba
+   2021-03-05T13:17:48.24-0700 [STG/0] OUT Uploaded droplet (155.4M)
+   2021-03-05T13:17:48.28-0700 [STG/0] OUT Uploading complete
+   2021-03-05T13:17:48.53-0700 [STG/0] OUT Cell 50b54b7e-2ec9-4490-b10f-021141267697 stopping instance 6c583590-c34a-4875-bafc-c5eae99ad3c5
+   2021-03-05T13:17:48.53-0700 [STG/0] OUT Cell 50b54b7e-2ec9-4490-b10f-021141267697 destroying container for instance 6c583590-c34a-4875-bafc-c5eae99ad3c5
+   2021-03-05T13:17:49.29-0700 [API/11] OUT Updated app with guid 507b7075-927e-48b6-a0a3-9d769d1091ba ({:droplet_guid=>"16e4c751-a1c3-4f6a-ae17-f52d7d8eaa51"})
+   2021-03-05T13:17:50.15-0700 [STG/0] OUT Cell 50b54b7e-2ec9-4490-b10f-021141267697 successfully destroyed container for instance 6c583590-c34a-4875-bafc-c5eae99ad3c5
+   2021-03-05T13:17:50.87-0700 [API/3] OUT Creating revision for app with guid 507b7075-927e-48b6-a0a3-9d769d1091ba
+   2021-03-05T13:17:51.05-0700 [API/3] OUT Starting app with guid 507b7075-927e-48b6-a0a3-9d769d1091ba
+   2021-03-05T13:17:51.27-0700 [CELL/0] OUT Cell df8f9e2c-983c-4b60-8ed3-6fc70ca5f7c1 creating container for instance 328df1ed-26db-4faf-7437-3714
+   2021-03-05T13:17:52.09-0700 [CELL/0] OUT Cell df8f9e2c-983c-4b60-8ed3-6fc70ca5f7c1 successfully created container for instance 328df1ed-26db-4faf-7437-3714
+   2021-03-05T13:17:52.51-0700 [CELL/0] OUT Downloading droplet...
+   2021-03-05T13:18:03.79-0700 [CELL/0] OUT Downloaded droplet (155.4M)
+   2021-03-05T13:18:03.80-0700 [CELL/0] OUT Starting health monitoring of container
+   [31m2021-03-05T13:18:05.36-0700 [APP/PROC/WEB/0] ERR /home/vcap/app/start-web.sh: line 4: pipenv: command not found[0m
+   2021-03-05T13:18:05.37-0700 [APP/PROC/WEB/0] OUT Exit status 127
+   2021-03-05T13:18:05.37-0700 [CELL/SSHD/0] OUT Exit status 0
+   2021-03-05T13:18:14.29-0700 [API/9] OUT Process has crashed with type: "web"
+   2021-03-05T13:18:14.29-0700 [CELL/0] OUT Cell df8f9e2c-983c-4b60-8ed3-6fc70ca5f7c1 stopping instance 328df1ed-26db-4faf-7437-3714
+   2021-03-05T13:18:14.29-0700 [CELL/0] OUT Cell df8f9e2c-983c-4b60-8ed3-6fc70ca5f7c1 destroying container for instance 328df1ed-26db-4faf-7437-3714
+   2021-03-05T13:18:14.33-0700 [API/9] OUT App instance exited with guid 507b7075-927e-48b6-a0a3-9d769d1091ba payload: {"instance"=>"328df1ed-26db-4faf-7437-3714", "index"=>0, "cell_id"=>"df8f9e2c-983c-4b60-8ed3-6fc70ca5f7c1", "reason"=>"CRASHED", "exit_description"=>"APP/PROC/WEB: Exited with status 127", "crash_count"=>1, "crash_timestamp"=>1614975494264646265, "version"=>"0527d3c9-d6ae-49d7-81d4-97f17e1ec67f"}
+   2021-03-05T13:18:14.35-0700 [CELL/0] OUT Cell 1787ea8f-58b6-4387-a38b-d40f7dd9e52d creating container for instance f0c69b52-0c1a-4c92-56ea-b652
+   2021-03-05T13:18:14.68-0700 [PROXY/0] OUT Exit status 137
+   2021-03-05T13:18:15.47-0700 [CELL/0] OUT Cell 1787ea8f-58b6-4387-a38b-d40f7dd9e52d successfully created container for instance f0c69b52-0c1a-4c92-56ea-b652
+   2021-03-05T13:18:15.72-0700 [CELL/0] OUT Downloading droplet...
+   2021-03-05T13:18:16.81-0700 [CELL/0] OUT Cell df8f9e2c-983c-4b60-8ed3-6fc70ca5f7c1 successfully destroyed container for instance 328df1ed-26db-4faf-7437-3714
+   2021-03-05T13:18:32.06-0700 [CELL/0] OUT Downloaded droplet (155.4M)
+   2021-03-05T13:18:32.06-0700 [CELL/0] OUT Starting health monitoring of container
+   [31m2021-03-05T13:18:34.34-0700 [APP/PROC/WEB/0] ERR /home/vcap/app/start-web.sh: line 4: pipenv: command not found[0m
+   2021-03-05T13:18:34.36-0700 [APP/PROC/WEB/0] OUT Exit status 127
+   2021-03-05T13:18:34.38-0700 [CELL/SSHD/0] OUT Exit status 0
+   2021-03-05T13:18:41.82-0700 [CELL/0] OUT Cell 1787ea8f-58b6-4387-a38b-d40f7dd9e52d stopping instance f0c69b52-0c1a-4c92-56ea-b652
+   2021-03-05T13:18:41.82-0700 [CELL/0] OUT Cell 1787ea8f-58b6-4387-a38b-d40f7dd9e52d destroying container for instance f0c69b52-0c1a-4c92-56ea-b652
+   2021-03-05T13:18:41.92-0700 [CELL/0] OUT Cell e063fec3-05f4-45f1-ae74-8f5bb3c087f5 creating container for instance 5ad54349-35e0-4a03-569c-a4eb
+   2021-03-05T13:18:41.96-0700 [API/4] OUT Process has crashed with type: "web"
+   2021-03-05T13:18:42.01-0700 [API/4] OUT App instance exited with guid 507b7075-927e-48b6-a0a3-9d769d1091ba payload: {"instance"=>"f0c69b52-0c1a-4c92-56ea-b652", "index"=>0, "cell_id"=>"1787ea8f-58b6-4387-a38b-d40f7dd9e52d", "reason"=>"CRASHED", "exit_description"=>"APP/PROC/WEB: Exited with status 127", "crash_count"=>2, "crash_timestamp"=>1614975521804376262, "version"=>"0527d3c9-d6ae-49d7-81d4-97f17e1ec67f"}
+   2021-03-05T13:18:42.13-0700 [PROXY/0] OUT Exit status 137
+   2021-03-05T13:18:42.73-0700 [CELL/0] OUT Cell e063fec3-05f4-45f1-ae74-8f5bb3c087f5 successfully created container for instance 5ad54349-35e0-4a03-569c-a4eb
+   2021-03-05T13:18:42.91-0700 [CELL/0] OUT Downloading droplet...
+   2021-03-05T13:18:44.98-0700 [CELL/0] OUT Cell 1787ea8f-58b6-4387-a38b-d40f7dd9e52d successfully destroyed container for instance f0c69b52-0c1a-4c92-56ea-b652
+   2021-03-05T13:18:52.55-0700 [CELL/0] OUT Downloaded droplet (155.4M)
+   2021-03-05T13:18:52.55-0700 [CELL/0] OUT Starting health monitoring of container
+   [31m2021-03-05T13:18:53.49-0700 [APP/PROC/WEB/0] ERR /home/vcap/app/start-web.sh: line 4: pipenv: command not found[0m
+   2021-03-05T13:18:53.50-0700 [APP/PROC/WEB/0] OUT Exit status 127
+   2021-03-05T13:18:53.50-0700 [CELL/SSHD/0] OUT Exit status 0
+   2021-03-05T13:19:00.83-0700 [CELL/0] OUT Cell e063fec3-05f4-45f1-ae74-8f5bb3c087f5 stopping instance 5ad54349-35e0-4a03-569c-a4eb
+   2021-03-05T13:19:00.83-0700 [CELL/0] OUT Cell e063fec3-05f4-45f1-ae74-8f5bb3c087f5 destroying container for instance 5ad54349-35e0-4a03-569c-a4eb
+   2021-03-05T13:19:00.89-0700 [API/9] OUT Process has crashed with type: "web"
+   2021-03-05T13:19:00.91-0700 [API/9] OUT App instance exited with guid 507b7075-927e-48b6-a0a3-9d769d1091ba payload: {"instance"=>"5ad54349-35e0-4a03-569c-a4eb", "index"=>0, "cell_id"=>"e063fec3-05f4-45f1-ae74-8f5bb3c087f5", "reason"=>"CRASHED", "exit_description"=>"APP/PROC/WEB: Exited with status 127", "crash_count"=>3, "crash_timestamp"=>1614975540830789770, "version"=>"0527d3c9-d6ae-49d7-81d4-97f17e1ec67f"}
+   2021-03-05T13:19:01.11-0700 [PROXY/0] OUT Exit status 137
+   2021-03-05T13:19:02.55-0700 [CELL/0] OUT Cell e063fec3-05f4-45f1-ae74-8f5bb3c087f5 successfully destroyed container for instance 5ad54349-35e0-4a03-569c-a4eb
+   2021-03-05T13:19:32.93-0700 [CELL/0] OUT Cell df8f9e2c-983c-4b60-8ed3-6fc70ca5f7c1 creating container for instance f327098e-cce4-488e-61df-9577
+   2021-03-05T13:19:33.87-0700 [CELL/0] OUT Cell df8f9e2c-983c-4b60-8ed3-6fc70ca5f7c1 successfully created container for instance f327098e-cce4-488e-61df-9577
+   2021-03-05T13:19:34.15-0700 [CELL/0] OUT Downloading droplet...
+   2021-03-05T13:19:37.20-0700 [CELL/0] OUT Downloaded droplet
+   2021-03-05T13:19:37.20-0700 [CELL/0] OUT Starting health monitoring of container
+   [31m2021-03-05T13:19:39.65-0700 [APP/PROC/WEB/0] ERR /home/vcap/app/start-web.sh: line 4: pipenv: command not found[0m
+   2021-03-05T13:19:39.66-0700 [APP/PROC/WEB/0] OUT Exit status 127
+   2021-03-05T13:19:39.67-0700 [CELL/SSHD/0] OUT Exit status 0
+   2021-03-05T13:19:46.99-0700 [CELL/0] OUT Cell df8f9e2c-983c-4b60-8ed3-6fc70ca5f7c1 stopping instance f327098e-cce4-488e-61df-9577
+   2021-03-05T13:19:46.99-0700 [CELL/0] OUT Cell df8f9e2c-983c-4b60-8ed3-6fc70ca5f7c1 destroying container for instance f327098e-cce4-488e-61df-9577
+   2021-03-05T13:19:47.02-0700 [API/3] OUT Process has crashed with type: "web"
+   2021-03-05T13:19:47.04-0700 [API/3] OUT App instance exited with guid 507b7075-927e-48b6-a0a3-9d769d1091ba payload: {"instance"=>"f327098e-cce4-488e-61df-9577", "index"=>0, "cell_id"=>"df8f9e2c-983c-4b60-8ed3-6fc70ca5f7c1", "reason"=>"CRASHED", "exit_description"=>"APP/PROC/WEB: Exited with status 127", "crash_count"=>4, "crash_timestamp"=>1614975586995493206, "version"=>"0527d3c9-d6ae-49d7-81d4-97f17e1ec67f"}
+   2021-03-05T13:19:47.26-0700 [PROXY/0] OUT Exit status 137
+   2021-03-05T13:19:49.07-0700 [CELL/0] OUT Cell df8f9e2c-983c-4b60-8ed3-6fc70ca5f7c1 successfully destroyed container for instance f327098e-cce4-488e-61df-9577

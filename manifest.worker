@@ -1,0 +1,18 @@
+version: 1
+applications:
+- name: legit_info
+  buildpacks:
+  - python-buildpack
+  - https://github.com/ELD/rust-buildpack.git
+  stack: cflinuxfs3
+  no-route: true
+  command: /home/vcap/app/start-worker.sh
+  memory: 256M
+  processes:
+  - type: worker
+    command: /home/vcap/app/start-worker.sh
+    disk_quota: 1G
+    health-check-type: process
+    instances: 1
+    timeout: 15
+

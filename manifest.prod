@@ -5,9 +5,10 @@ applications:
   - python-buildpack
   - https://github.com/ELD/rust-buildpack.git
   stack: cflinuxfs3
-  routes:
-  - route: legitinfo-friendly-jackal-sg.us-east.mybluemix.net
+  random-route: true
   memory: 256M
+#  routes:
+#  - route: legitinfo-friendly-jackal-sg.us-east.mybluemix.net
   processes:
   - type: web
     disk_quota: 1G
@@ -16,3 +17,9 @@ applications:
     health-check-invocation-timeout: 10
     instances: 1
     timeout: 10
+  - type: worker
+    disk_quota: 1G
+    health-check-type: process
+    instances: 1
+    timeout: 15
+
