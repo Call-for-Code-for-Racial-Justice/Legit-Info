@@ -1,5 +1,13 @@
 # Stage 3
 
+![Deployment Stages](Deployment_Stages.png)
+
+Stage 3 is intended to be production deployment.
+
+* The file object storage (FOB) and Database are the same as Stage 2.
+
+* The web server and scheduler move to the cloud, providing public access.
+
 ## Stage 3: Production
 
 1. Run Docker locally

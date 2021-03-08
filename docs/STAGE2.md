@@ -1,5 +1,26 @@
 # Stage 2
 
+![Deployment Stages](Deployment_Stages.png)
+
+Stage 2 is intended to help transition to production deployment.
+
+* The file object storage (FOB) that contains the PDF, HTML, JSON and TXT files
+of downloaded-legislation will now be in the Cloud, either on Networked
+Addressable Storage (NAS) file service, or IBM Cloud Object Storage.
+
+* The database changes from single-user SQLite3 to multiuser PostgreSQL in 
+the CLoud.
+
+* The web server remains on the local workstation, but changes from 
+single-user "Django runserver" to multiuser "Gunicorn", allowing the tester 
+to use multiple "clients" to the single server.
+
+* Clients must be on the same network sub-net.  For example, on a home
+network with 192.168.1.1 gateway, any system with 192.168.1.x should work.
+For example, you can have a browser (192.168.1.2) and a mobile phone 
+(192.168.1.3) accessing the application at the same time.
+
+
 ## Stage 2: Pre-Production
 
 1. Download and install the following modules.

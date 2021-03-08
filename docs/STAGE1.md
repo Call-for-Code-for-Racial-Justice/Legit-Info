@@ -1,5 +1,11 @@
 # Stage 1
 
+![Deployment Stages](Deployment_Stages.png)
+
+Stage 1 is intended for developers and testers.  All of the code and data
+is local to the user's workstation.  A fair amount of development and testing
+can be done without accessing the Legiscan or IBM Watson NLU services.
+
 ## Stage 1: Development
 
 Follow these steps to start development and testing on your local machine.

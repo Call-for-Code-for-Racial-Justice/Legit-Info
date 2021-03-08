@@ -161,6 +161,8 @@ on how to deploy the project on a live system.
 
 ### States of Deployment
 
+![Deployment Stages](Deployment_Stages.png)
+
 This project is designed for three deployment stages.
 
 1. [Development](docs/STAGE1.md)
@@ -174,7 +176,7 @@ TEXT files, are stored on local file system and analyzed.  The resulting
 title, summary, location and impact are stored in the database.  This
 allows staff to review the AI/NLP-based classifications and make adjustments.
 
-2. [Pre-Production](docs/STAGE2.md)
+2. [Transition](docs/STAGE2.md)
 
 In stage 2, each developer has their own copy of application code, but
 a shared database, using Postgresql running in the IBM Cloud.  The
