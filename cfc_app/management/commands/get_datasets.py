@@ -174,7 +174,7 @@ class Command(BaseCommand):
             self.list_data = self.fob.download_text(self.list_name)
 
         if self.list_data:
-            logger.debug(f"210:Verifying JSON contents of: {self.list_name}")
+            logger.debug(f"177:Verifying JSON contents of: {self.list_name}")
             self.list_pkg = json.loads(self.list_data)
 
             # Validate this is a Legiscan DatasetList file
@@ -188,7 +188,7 @@ class Command(BaseCommand):
         if not self.list_data:
             logger.error('180:DatasetList-YYYY-MM-DD.json not found')
             if not self.use_api:
-                print('Did you forget the --api parameter?')
+                self.stdout.write(self.style.WARNING('Did you forget the --api parameter?'))
             raise CommandError('API failure, or DatasetList not Found')
 
         # Let's keep only five versions of DatasetList, older ones
@@ -295,10 +295,10 @@ class Command(BaseCommand):
                     session_name = self.fobhelp.dataset_name(state, session_id)
                     if session_name in found_list:
                         show_results(entry)
-                        print('Found session dataset: '+session_name)
+                        self.stdout.write(self.style.SUCCESS('Found session dataset: '+session_name))
                         save_entry_to_hash(session_name, entry)
                     else:
-                        print('Item not found: '+session_name)
+                        self.stdout.write(self.style.WARNING('Item not found: '+session_name))
 
         return None
 

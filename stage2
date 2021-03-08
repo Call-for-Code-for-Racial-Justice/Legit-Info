@@ -12,4 +12,4 @@ parms="$@"
 if [ "$#" -eq 0 ]; 
     then parms="runserver localhost:3000"
 fi
-USE_SQLITE3='False' python manage.py $parms
+USE_SQLITE3='False' python3 manage.py $parms

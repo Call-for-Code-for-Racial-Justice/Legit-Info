@@ -1,6 +1,7 @@
 .pyc
 .egg-info
 results/*.csv
+results/*.msg
 sources/*.html
 sources/*.pdf
 sources/*.txt
