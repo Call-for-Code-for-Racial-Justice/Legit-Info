@@ -161,7 +161,7 @@ on how to deploy the project on a live system.
 
 ### States of Deployment
 
-![Deployment Stages](Deployment_Stages.png)
+![Deployment Stages](docs/Deployment_Stages.png)
 
 This project is designed for three deployment stages.
 

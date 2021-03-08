@@ -228,7 +228,8 @@ def locations(request):
     if len(locations) == 0:
         Location.load_defaults()
 
-    locations = Location.objects.order_by('hierarchy').exclude(longname='world')
+    locations = Location.objects.order_by(
+        'hierarchy').exclude(longname='world')
     context = {'locations': locations}
     return render(request, 'locations.html', context)
 

@@ -13,7 +13,6 @@ import os
 import logging
 from datetime import datetime
 from contextlib import redirect_stdout
-import sys
 
 # Django and other third-party imports
 from django.core.management import call_command
@@ -21,8 +20,6 @@ from django.conf import settings
 
 
 # Application imports
-from .management.commands import get_datasets
-
 
 
 # Debugging options
@@ -36,6 +33,7 @@ logger = logging.getLogger(__name__)
 # Support functions here
 #########################
 
+
 def gen_output_name(cmd):
     today = datetime.now()
     gen_date = today.strftime("%Y-%m-%d")
@@ -47,49 +45,67 @@ def gen_output_name(cmd):
 # Create your views here.
 #########################
 
-def cron_step1_get_datasets(*args, **kwargs):
-    logger.info(f"51:task started: cron_step1_get_datasets")
 
-    outfile = gen_output_name('get_datasets')
+def cron_step1_get_datasets(*args, **kwargs):
+    logger.info("51:task started: cron_step1_get_datasets")
+
+    cmd = 'get_datasets'
+    logpath = gen_output_name(cmd)
     with open(logpath, 'a+') as outfile:
         with redirect_stdout(outfile):
-            call_command('get_datasets', '--api')
+            call_command(cmd, '--api')
 
-    logger.info(f"52:task ended: cron_step1_get_datasets")
+    logger.info("58:task ended: cron_step1_get_datasets")
     return
+
 
 def cron_step2_extract_files(*args, **kwargs):
-    logger.info(f"57:task started: cron_step2_extract_files")
+    logger.info("63:task started: cron_step2_extract_files")
 
-    outfile = gen_output_name('extract_files')
+    cmd = 'extract_files'
+    logpath = gen_output_name(cmd)
     with open(logpath, 'a+') as outfile:
         with redirect_stdout(outfile):
-            call_command('extract_files', '--api', '--skip', '--limit 10')
+            call_command(cmd, '--api', '--skip', '--limit 10')
 
-    logger.info(f"58:task ended: cron_step2_extract_files")
+    logger.info("71:task ended: cron_step2_extract_files")
     return
+
 
 def cron_step3_analyze_text():
-    logger.info(f"62:task started: cron_step3_analyze_text")
+    logger.info("76:task started: cron_step3_analyze_text")
 
-    outfile = gen_output_name('analyze_text')
+    cmd = 'analyze_text'
+    logpath = gen_output_name(cmd)
     with open(logpath, 'a+') as outfile:
         with redirect_stdout(outfile):
-            call_command('analyze_text', '--api', '--skip', '--compare',
-                         '--limit 10')
+            call_command(cmd, '--api', '--skip', '--compare', '--limit 10')
 
-    logger.info(f"63:task ended: cron_step3_analyze_text")
+    logger.info("84:task ended: cron_step3_analyze_text")
     return
+
 
 def fob_stats():
-    logger.info(f"66:task started: fob_stats")
-    logger.info(f"67:task ended: fob_stats")
+    logger.info("89:task started: fob_stats")
+
+    cmd = 'fob_stats'
+    logpath = gen_output_name(cmd)
+    with open(logpath, 'a+') as outfile:
+        with redirect_stdout(outfile):
+            call_command(cmd, '--mode OBJECT')
+
+    logger.info("97:task ended: fob_stats")
     return
+
 
 def fob_sync():
-    logger.info(f"71:task started: fob_sync")
-    logger.info(f"72:task ended: fob_sync")
+    logger.info("102:task started: fob_sync")
+
+    cmd = 'fob_sync'
+    logpath = gen_output_name(cmd)
+    with open(logpath, 'a+') as outfile:
+        with redirect_stdout(outfile):
+            call_command(cmd, '--maxget 10')
+
+    logger.info("110:task ended: fob_sync")
     return
-
-
-
