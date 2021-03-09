@@ -2,15 +2,18 @@
 # This script runs the application with Postgresql (see STAGE2.md for details)
 #
 # Examples:
-# ./stage2 runserver localhost:3000   <-- default if nothing specified
+# ./stage2 <-- default if nothing specified runs "gunicorn"
+# ./stage2 runserver localhost:3000   
 # ./stage2 shell
 # ./stage2 makemigrations
 # ./stage2 migrate
 # ./stage2 dbshell
 # ./stage1 qcluster
 parms="$@"
-if [ "$#" -eq 0 ]; 
-    then cmd="gunicorn -b 0.0.0.0:3000 --env DJANGO_SETTINGS_MODULE=cfc_project.settings cfc_project.wsgi"
+if [ "$#" -eq 0 ]; then
+    myhost='0.0.0.0:3000'
+    myenv='--env DJANGO_SETTINGS_MODULE=cfc_project.settings'
+    cmd="gunicorn -b $myhost $myenv cfc_project.wsgi"
 else
     cmd="python3 manage.py $parms"
 fi
