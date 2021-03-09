@@ -10,6 +10,9 @@
 # ./stage1 qcluster
 parms="$@"
 if [ "$#" -eq 0 ]; 
-    then parms="runserver localhost:3000"
+    then cmd="gunicorn -b 0.0.0.0:3000 --env DJANGO_SETTINGS_MODULE=cfc_project.settings cfc_project.wsgi"
+else
+    cmd="python3 manage.py $parms"
 fi
-USE_SQLITE3='False' python3 manage.py $parms
+echo $cmd
+USE_SQLITE3='False' $cmd

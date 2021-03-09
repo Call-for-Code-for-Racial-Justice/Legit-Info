@@ -8,11 +8,4 @@ applications:
   routes:
   - route: legitinfo-friendly-jackal-sg.us-east.mybluemix.net
   memory: 256M
-  processes:
-  - type: web
-    disk_quota: 1G
-    health-check-http-endpoint: /health
-    health-check-type: http
-    health-check-invocation-timeout: 10
-    instances: 1
-    timeout: 10
+  command: gunicorn -b 0.0.0.0:3000 --env DJANGO_SETTINGS_MODULE=cfc_project.settings cfc_project.wsgi --timeout 120

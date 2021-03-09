@@ -1,0 +1,75 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+};
+
+/* TODO ensure this all works fine across browsers and with/without zooming! */
+
+#new-container {
+    margin: 0 auto;
+    width: 70%;
+}
+
+.link-section {
+    margin: auto;
+    padding: 1em;
+    width: 80%;
+}
+
+.ibm-cloud {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+.ibm-cloud img {
+    display:block;
+    margin:auto;
+}
+
+.link-item a {
+    color: #6e98df;
+    text-decoration: underline;
+    font-size: 1em;
+}
+
+.left-link-items {
+    float: left;
+    padding: 1em;
+    margin-left: 20%;
+}
+
+.right-link-items {
+    float: right;
+    padding: 1em;
+    margin-right: 20%;
+}
+
+.right-arrow{
+    padding-right: 0.5em;
+}
+.title {
+    color: black;
+    text-align: center;
+}
+
+.title-404 {
+    color: black;
+    text-align: center;
+    font-size: 4em;
+}
+
+.subtitle {
+    color: black;
+    text-align: center;
+}
+
+.ibm-404 {
+    margin: auto;
+    width: 35%;
+}
+
+.ibm-404 a {
+    color: #6e98df;
+    text-decoration: underline;
+}

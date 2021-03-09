@@ -1,8 +1,8 @@
 """Defines URL patterns for this application"""
 
 from django.urls import path
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from . import views
-
 
 app_name = 'cfc_app'
 
@@ -42,3 +42,5 @@ urlpatterns = [
     # health endpoint
     path('health/', views.health, name='health'),
 ]
+
+urlpatterns += staticfiles_urlpatterns()
