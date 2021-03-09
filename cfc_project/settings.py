@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 import datetime as DT
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -152,12 +153,13 @@ LOGGING = {
 }
 
 
-ALLOWED_HOSTS = ['*', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['*', '0.0.0.0', '127.0.0.1', 'localhost']
 
 # Application definition
 
 INSTALLED_APPS = [
     # Default django apps
+    'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
 
@@ -175,7 +177,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'whitenoise.runserver_nostatic',
+    
     'django.contrib.staticfiles',
     'django.contrib.admindocs',
 
@@ -183,8 +185,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -298,13 +300,15 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'staticfiles'), ]
+STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'static'), ]
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 #STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 # My settings

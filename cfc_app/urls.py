@@ -42,5 +42,3 @@ urlpatterns = [
     # health endpoint
     path('health/', views.health, name='health'),
 ]
-
-urlpatterns += staticfiles_urlpatterns()
