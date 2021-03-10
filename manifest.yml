@@ -1,11 +1,17 @@
-version: 1
 applications:
 - name: legit_info
   buildpacks:
-  - python-buildpack
+#  - https://github.com/particle-iot/buildpack-gcc.git
+#  - https://github.com/emk/heroku-buildpack-rust.git
+#  - https://github.com/heroku/heroku-buildpack-python.git
   - https://github.com/ELD/rust-buildpack.git
+  - python_buildpack
   stack: cflinuxfs3
   routes:
-  - route: legitinfo-friendly-jackal-sg.us-east.mybluemix.net
-  memory: 256M
-  command: gunicorn -b 0.0.0.0:3000 --env DJANGO_SETTINGS_MODULE=cfc_project.settings cfc_project.wsgi --timeout 120
+  - route: legitinfo-friendly-jackal-v2.us-east.mybluemix.net
+  memory: 512M
+  command: gunicorn -b 0.0.0.0:$PORT --env DJANGO_SETTINGS_MODULE=cfc_project.settings cfc_project.wsgi --timeout 120
+  health-check-type: http
+  health-check-http-endpoint: /health
+  env:
+    CRYPTOGRAPHY_DONT_BUILD_RUST: 1

@@ -14,6 +14,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import datetime as DT
 import os
 import sys
+from socket import gethostname, gethostbyname 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -155,8 +156,10 @@ LOGGING = {
 
 }
 
+ALLOWED_CIDR_NETS = ['10.0.0.0/8']
 
-ALLOWED_HOSTS = ['.mybluemix.net', '0.0.0.0', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = [ gethostname(), gethostbyname(gethostname()), 
+                '.mybluemix.net', '0.0.0.0', '127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -189,6 +192,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'allow_cidr.middleware.AllowCIDRMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
