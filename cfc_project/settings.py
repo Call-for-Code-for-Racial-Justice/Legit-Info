@@ -322,6 +322,8 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 LOGIN_URL = 'users:login'
 LONG_AGO = DT.date(1911, 6, 16)  # Long ago in history
 
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/' # new
 
 # Configure your Q cluster
 # More details https://django-q.readthedocs.io/en/latest/configure.html

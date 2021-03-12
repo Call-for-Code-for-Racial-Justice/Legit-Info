@@ -1,1 +1,303 @@
-[{"model": "auth.user", "pk": 1, "fields": {"password": "pbkdf2_sha256$180000$NgxaHCSGByQU$Yvtyd31uHdswuhlaxsPPrwiAWA+mu1//BzBCYu8LAAE=", "last_login": "2021-03-02T17:18:39.521Z", "is_superuser": true, "username": "cfcadmin", "first_name": "CFC", "last_name": "Administrator", "email": "cfcadmin@us.ibm.com", "is_staff": true, "is_active": true, "date_joined": "2020-10-20T16:40:02.177Z", "groups": [], "user_permissions": []}}, {"model": "users.profile", "pk": 1, "fields": {"user": 1, "location": 6, "criteria": 1, "impacts": [2, 3, 4]}}, {"model": "cfc_app.criteria", "pk": 1, "fields": {"crtext": "world.usa.arizona.pima.tucson-Healthcare-Safety-Environment", "location": 6, "impacts": [2, 3, 4]}}, {"model": "cfc_app.impact", "pk": 1, "fields": {"iname": "None", "date_added": "2020-10-20T16:48:02.661Z"}}, {"model": "cfc_app.impact", "pk": 2, "fields": {"iname": "Healthcare", "date_added": "2020-10-20T16:48:02.676Z"}}, {"model": "cfc_app.impact", "pk": 3, "fields": {"iname": "Safety", "date_added": "2020-10-20T16:48:02.681Z"}}, {"model": "cfc_app.impact", "pk": 4, "fields": {"iname": "Environment", "date_added": "2020-10-20T16:48:02.686Z"}}, {"model": "cfc_app.impact", "pk": 5, "fields": {"iname": "Transportation", "date_added": "2020-10-20T16:48:02.692Z"}}, {"model": "cfc_app.impact", "pk": 6, "fields": {"iname": "Jobs", "date_added": "2020-10-20T16:48:02.696Z"}}, {"model": "cfc_app.location", "pk": 1, "fields": {"longname": "world", "shortname": "world", "legiscan_id": 0, "hierarchy": "world", "govlevel": "world", "parent": 1, "date_added": "2020-10-20T16:47:58.327Z"}}, {"model": "cfc_app.location", "pk": 2, "fields": {"longname": "United States", "shortname": "usa", "legiscan_id": 52, "hierarchy": "world.usa", "govlevel": "country", "parent": 1, "date_added": "2020-10-20T16:47:58.334Z"}}, {"model": "cfc_app.location", "pk": 3, "fields": {"longname": "Arizona", "shortname": "arizona", "legiscan_id": 3, "hierarchy": "world.usa.arizona", "govlevel": "state", "parent": 2, "date_added": "2020-10-20T16:47:58.337Z"}}, {"model": "cfc_app.location", "pk": 4, "fields": {"longname": "Ohio", "shortname": "ohio", "legiscan_id": 35, "hierarchy": "world.usa.ohio", "govlevel": "state", "parent": 2, "date_added": "2020-10-20T16:47:58.346Z"}}, {"model": "cfc_app.location", "pk": 5, "fields": {"longname": "Pima County", "shortname": "pima", "legiscan_id": 0, "hierarchy": "world.usa.arizona.pima", "govlevel": "county", "parent": 3, "date_added": "2020-10-20T16:53:39.080Z"}}, {"model": "cfc_app.location", "pk": 6, "fields": {"longname": "Tucson, Arizona", "shortname": "tucson", "legiscan_id": 0, "hierarchy": "world.usa.arizona.pima.tucson", "govlevel": "city", "parent": 5, "date_added": "2020-10-20T16:54:16.785Z"}}, {"model": "cfc_app.location", "pk": 7, "fields": {"longname": "Franklin County", "shortname": "franklin", "legiscan_id": 0, "hierarchy": "world.usa.ohio.franklin", "govlevel": "county", "parent": 4, "date_added": "2020-10-20T16:56:49.243Z"}}, {"model": "cfc_app.location", "pk": 8, "fields": {"longname": "Columbus, Ohio", "shortname": "columbus", "legiscan_id": 0, "hierarchy": "world.usa.ohio.franklin.columbus", "govlevel": "city", "parent": 7, "date_added": "2020-10-20T16:57:22.254Z"}}, {"model": "cfc_app.location", "pk": 10, "fields": {"longname": "Maricopa County", "shortname": "maricopa", "legiscan_id": 0, "hierarchy": "world.usa.arizona.maricopa", "govlevel": "county", "parent": 3, "date_added": "2020-10-30T22:18:05.601Z"}}, {"model": "cfc_app.location", "pk": 11, "fields": {"longname": "Phoenix, Arizona", "shortname": "phoenix", "legiscan_id": 0, "hierarchy": "world.usa.arizona.maricopa.phoenix", "govlevel": "city", "parent": 10, "date_added": "2020-10-30T22:19:14.405Z"}}, {"model": "cfc_app.location", "pk": 14, "fields": {"longname": "Scottsdale, Arizona", "shortname": "scottsdale", "legiscan_id": 0, "hierarchy": "world.usa.arizona.maricopa.scottsdale", "govlevel": "city", "parent": 10, "date_added": "2020-10-30T22:21:51.267Z"}}, {"model": "cfc_app.location", "pk": 16, "fields": {"longname": "Glendale, Arizona", "shortname": "glendale", "legiscan_id": 0, "hierarchy": "world.usa.arizona.maricopa.glendale", "govlevel": "city", "parent": 10, "date_added": "2020-10-30T22:25:05.405Z"}}, {"model": "cfc_app.location", "pk": 20, "fields": {"longname": "Cuyahoga County", "shortname": "cuyahoga", "legiscan_id": 0, "hierarchy": "world.usa.ohio.cuyahoga", "govlevel": "county", "parent": 4, "date_added": "2020-10-30T22:30:09.448Z"}}, {"model": "cfc_app.location", "pk": 21, "fields": {"longname": "Hamilton County", "shortname": "hamilton", "legiscan_id": 0, "hierarchy": "world.usa.ohio.hamilton", "govlevel": "county", "parent": 4, "date_added": "2020-10-30T22:30:36.356Z"}}, {"model": "cfc_app.location", "pk": 29, "fields": {"longname": "Cleveland, Ohio", "shortname": "cleveland", "legiscan_id": 0, "hierarchy": "world.usa.ohio.cuyahoga.cleveland", "govlevel": "city", "parent": 20, "date_added": "2020-10-30T22:38:26.269Z"}}, {"model": "cfc_app.location", "pk": 30, "fields": {"longname": "Cincinnati, Ohio", "shortname": "cincinnati", "legiscan_id": 0, "hierarchy": "world.usa.ohio.hamilton.cincinnati", "govlevel": "city", "parent": 21, "date_added": "2020-10-30T22:39:26.062Z"}}]
+﻿[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$180000$NgxaHCSGByQU$Yvtyd31uHdswuhlaxsPPrwiAWA+mu1//BzBCYu8LAAE=",
+      "last_login": "2021-03-02T17:18:39.521Z",
+      "is_superuser": true,
+      "username": "cfcadmin",
+      "first_name": "CFC",
+      "last_name": "Administrator",
+      "email": "cfcadmin@us.ibm.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2020-10-20T16:40:02.177Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.profile",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "location": 6,
+      "criteria": 1,
+      "impacts": [
+        2,
+        3,
+        4
+      ]
+    }
+  },
+  {
+    "model": "cfc_app.criteria",
+    "pk": 1,
+    "fields": {
+      "crtext": "world.usa.arizona.pima.tucson-Healthcare-Safety-Environment",
+      "location": 6,
+      "impacts": [
+        2,
+        3,
+        4
+      ]
+    }
+  },
+  {
+    "model": "cfc_app.impact",
+    "pk": 1,
+    "fields": {
+      "iname": "None",
+      "date_added": "2020-10-20T16:48:02.661Z"
+    }
+  },
+  {
+    "model": "cfc_app.impact",
+    "pk": 2,
+    "fields": {
+      "iname": "Healthcare",
+      "date_added": "2020-10-20T16:48:02.676Z"
+    }
+  },
+  {
+    "model": "cfc_app.impact",
+    "pk": 3,
+    "fields": {
+      "iname": "Safety",
+      "date_added": "2020-10-20T16:48:02.681Z"
+    }
+  },
+  {
+    "model": "cfc_app.impact",
+    "pk": 4,
+    "fields": {
+      "iname": "Environment",
+      "date_added": "2020-10-20T16:48:02.686Z"
+    }
+  },
+  {
+    "model": "cfc_app.impact",
+    "pk": 5,
+    "fields": {
+      "iname": "Transportation",
+      "date_added": "2020-10-20T16:48:02.692Z"
+    }
+  },
+  {
+    "model": "cfc_app.impact",
+    "pk": 6,
+    "fields": {
+      "iname": "Jobs",
+      "date_added": "2020-10-20T16:48:02.696Z"
+    }
+  },
+  {
+    "model": "cfc_app.location",
+    "pk": 1,
+    "fields": {
+      "longname": "world",
+      "shortname": "world",
+      "legiscan_id": 0,
+      "hierarchy": "world",
+      "govlevel": "world",
+      "parent": 1,
+      "date_added": "2020-10-20T16:47:58.327Z"
+    }
+  },
+  {
+    "model": "cfc_app.location",
+    "pk": 2,
+    "fields": {
+      "longname": "United States",
+      "shortname": "usa",
+      "legiscan_id": 52,
+      "hierarchy": "world.usa",
+      "govlevel": "country",
+      "parent": 1,
+      "date_added": "2020-10-20T16:47:58.334Z"
+    }
+  },
+  {
+    "model": "cfc_app.location",
+    "pk": 3,
+    "fields": {
+      "longname": "Arizona",
+      "shortname": "arizona",
+      "legiscan_id": 3,
+      "hierarchy": "world.usa.arizona",
+      "govlevel": "state",
+      "parent": 2,
+      "date_added": "2020-10-20T16:47:58.337Z"
+    }
+  },
+  {
+    "model": "cfc_app.location",
+    "pk": 4,
+    "fields": {
+      "longname": "Ohio",
+      "shortname": "ohio",
+      "legiscan_id": 35,
+      "hierarchy": "world.usa.ohio",
+      "govlevel": "state",
+      "parent": 2,
+      "date_added": "2020-10-20T16:47:58.346Z"
+    }
+  },
+  {
+    "model": "cfc_app.location",
+    "pk": 5,
+    "fields": {
+      "longname": "Pima County",
+      "shortname": "pima",
+      "legiscan_id": 0,
+      "hierarchy": "world.usa.arizona.pima",
+      "govlevel": "county",
+      "parent": 3,
+      "date_added": "2020-10-20T16:53:39.080Z"
+    }
+  },
+  {
+    "model": "cfc_app.location",
+    "pk": 6,
+    "fields": {
+      "longname": "Tucson, Arizona",
+      "shortname": "tucson",
+      "legiscan_id": 0,
+      "hierarchy": "world.usa.arizona.pima.tucson",
+      "govlevel": "city",
+      "parent": 5,
+      "date_added": "2020-10-20T16:54:16.785Z"
+    }
+  },
+  {
+    "model": "cfc_app.location",
+    "pk": 7,
+    "fields": {
+      "longname": "Franklin County",
+      "shortname": "franklin",
+      "legiscan_id": 0,
+      "hierarchy": "world.usa.ohio.franklin",
+      "govlevel": "county",
+      "parent": 4,
+      "date_added": "2020-10-20T16:56:49.243Z"
+    }
+  },
+  {
+    "model": "cfc_app.location",
+    "pk": 8,
+    "fields": {
+      "longname": "Columbus, Ohio",
+      "shortname": "columbus",
+      "legiscan_id": 0,
+      "hierarchy": "world.usa.ohio.franklin.columbus",
+      "govlevel": "city",
+      "parent": 7,
+      "date_added": "2020-10-20T16:57:22.254Z"
+    }
+  },
+  {
+    "model": "cfc_app.location",
+    "pk": 10,
+    "fields": {
+      "longname": "Maricopa County",
+      "shortname": "maricopa",
+      "legiscan_id": 0,
+      "hierarchy": "world.usa.arizona.maricopa",
+      "govlevel": "county",
+      "parent": 3,
+      "date_added": "2020-10-30T22:18:05.601Z"
+    }
+  },
+  {
+    "model": "cfc_app.location",
+    "pk": 11,
+    "fields": {
+      "longname": "Phoenix, Arizona",
+      "shortname": "phoenix",
+      "legiscan_id": 0,
+      "hierarchy": "world.usa.arizona.maricopa.phoenix",
+      "govlevel": "city",
+      "parent": 10,
+      "date_added": "2020-10-30T22:19:14.405Z"
+    }
+  },
+  {
+    "model": "cfc_app.location",
+    "pk": 14,
+    "fields": {
+      "longname": "Scottsdale, Arizona",
+      "shortname": "scottsdale",
+      "legiscan_id": 0,
+      "hierarchy": "world.usa.arizona.maricopa.scottsdale",
+      "govlevel": "city",
+      "parent": 10,
+      "date_added": "2020-10-30T22:21:51.267Z"
+    }
+  },
+  {
+    "model": "cfc_app.location",
+    "pk": 16,
+    "fields": {
+      "longname": "Glendale, Arizona",
+      "shortname": "glendale",
+      "legiscan_id": 0,
+      "hierarchy": "world.usa.arizona.maricopa.glendale",
+      "govlevel": "city",
+      "parent": 10,
+      "date_added": "2020-10-30T22:25:05.405Z"
+    }
+  },
+  {
+    "model": "cfc_app.location",
+    "pk": 20,
+    "fields": {
+      "longname": "Cuyahoga County",
+      "shortname": "cuyahoga",
+      "legiscan_id": 0,
+      "hierarchy": "world.usa.ohio.cuyahoga",
+      "govlevel": "county",
+      "parent": 4,
+      "date_added": "2020-10-30T22:30:09.448Z"
+    }
+  },
+  {
+    "model": "cfc_app.location",
+    "pk": 21,
+    "fields": {
+      "longname": "Hamilton County",
+      "shortname": "hamilton",
+      "legiscan_id": 0,
+      "hierarchy": "world.usa.ohio.hamilton",
+      "govlevel": "county",
+      "parent": 4,
+      "date_added": "2020-10-30T22:30:36.356Z"
+    }
+  },
+  {
+    "model": "cfc_app.location",
+    "pk": 29,
+    "fields": {
+      "longname": "Cleveland, Ohio",
+      "shortname": "cleveland",
+      "legiscan_id": 0,
+      "hierarchy": "world.usa.ohio.cuyahoga.cleveland",
+      "govlevel": "city",
+      "parent": 20,
+      "date_added": "2020-10-30T22:38:26.269Z"
+    }
+  },
+  {
+    "model": "cfc_app.location",
+    "pk": 30,
+    "fields": {
+      "longname": "Cincinnati, Ohio",
+      "shortname": "cincinnati",
+      "legiscan_id": 0,
+      "hierarchy": "world.usa.ohio.hamilton.cincinnati",
+      "govlevel": "city",
+      "parent": 21,
+      "date_added": "2020-10-30T22:39:26.062Z"
+    }
+  }
+]
