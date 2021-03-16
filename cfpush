@@ -30,7 +30,7 @@ elif [[ "$mode" != "yml" ]]; then
     echo -e "Copying Procfile.$mode to Procfile" | tee $outfile
     cp "Procfile.$mode" Procfile
     echo -e "Using Python level:\t" `cat runtime.txt` | tee -a $outfile
-    ibmcloud cf v3-push legit_info 2>&1 | tee -a $outfile
-    ibmcloud cf logs legit_info --recent 2>&1 | tee -a $outfile
+    ibmcloud cf v3-push "legit_info_$mode" 2>&1 | tee -a $outfile
+    ibmcloud cf logs "legit_info_$mode" --recent 2>&1 | tee -a $outfile
     echo "All messages written to: " $outfile
 fi

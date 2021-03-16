@@ -6,6 +6,6 @@ applications:
   - https://github.com/ELD/rust-buildpack.git
   stack: cflinuxfs3
   routes:
-  - route: legitinfo-friendly-jackal-sg.us-east.mybluemix.net
+  - route: legitinfo-friendly-jackal-v2.us-east.mybluemix.net
   memory: 256M
   command: gunicorn -b 0.0.0.0:3000 --env DJANGO_SETTINGS_MODULE=cfc_project.settings cfc_project.wsgi --timeout 120

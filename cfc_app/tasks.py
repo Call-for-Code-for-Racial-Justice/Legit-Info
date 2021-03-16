@@ -46,7 +46,7 @@ def gen_output_name(cmd):
 #########################
 
 
-def cron_step1_get_datasets(*args, **kwargs):
+def a_get_datasets(*args, **kwargs):
     logger.info("51:task started: cron_step1_get_datasets")
 
     cmd = 'get_datasets'
@@ -59,7 +59,7 @@ def cron_step1_get_datasets(*args, **kwargs):
     return
 
 
-def cron_step2_extract_files(*args, **kwargs):
+def b_extract_files(*args, **kwargs):
     logger.info("63:task started: cron_step2_extract_files")
 
     cmd = 'extract_files'
@@ -72,7 +72,7 @@ def cron_step2_extract_files(*args, **kwargs):
     return
 
 
-def cron_step3_analyze_text():
+def c_analyze_text():
     logger.info("76:task started: cron_step3_analyze_text")
 
     cmd = 'analyze_text'
