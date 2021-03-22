@@ -244,7 +244,7 @@ def results(request, search_id):
     impact_list = criteria.impacts.all()
 
     laws_list = Law.objects.filter(location__in=loc_list)
-    laws_list = laws.filter(impact__in=impact_list)
+    laws_list = laws_list.filter(impact__in=impact_list)
 
     # Pagination logic, to change the amount of laws per page modify NUM_LAWS_PER_PAGE
     NUM_LAWS_PER_PAGE = 10
