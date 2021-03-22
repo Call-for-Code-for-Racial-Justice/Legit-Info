@@ -23,6 +23,7 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Application imports
 from users.models import Profile
@@ -242,18 +243,30 @@ def results(request, search_id):
     loc_list = cte_query(loc)
     impact_list = criteria.impacts.all()
 
-    laws = Law.objects.filter(location__in=loc_list)
-    laws = laws.filter(impact__in=impact_list)
+    laws_list = Law.objects.filter(location__in=loc_list)
+    laws_list = laws.filter(impact__in=impact_list)
+
+    # Pagination logic, to change the amount of laws per page modify NUM_LAWS_PER_PAGE
+    NUM_LAWS_PER_PAGE = 10
+    page = request.GET.get('page')
+    paginator = Paginator(laws_list, NUM_LAWS_PER_PAGE)
+
+    try: 
+        laws = paginator.page(page)
+    except PageNotAnInteger:
+        laws = paginator.page(1)
+    except EmptyPage:
+        laws = paginator.page(paginator.num_pages)
 
     gen_date = datetime.now().strftime("%B %-d, %Y")
 
     context = {'heading': criteria.text,
                'laws': laws,
-               'numlaws': len(laws),
+               'numlaws': len(laws_list),
                'search_id': search_id,
                'gen_date': gen_date}
 
-    make_csv(search_id, laws)
+    make_csv(search_id, laws_list)
     return render(request, 'results.html', context)
 
 

@@ -15,8 +15,7 @@
 <p>Search Criteria: {{ heading|safe }}</p>
 -->
 
-<div class="results">
-  
+<div class="results">  
     <div class="page-content-standard">
         <dl>
         {% for law in laws %}
@@ -29,36 +28,72 @@
         </dl>
     </div>
 </div>
-
 <div class="btn-toolbar d-print-none">
-<div class="mx-auto">
-    <a class="btn btn-lg btn-warning m-3" 
-            href="{% url 'cfc_app:search' %}"
-            role="button"> &laquo; Search Again</a>
+    <div class="pagination float-left">        
+        <span class="step-links">
+            {% if laws.has_previous %}
+            <a class="btn btn-sm btn-success" 
+            href="?page=1"
+            role="button">
+            First
+            </a>         
+            <a class="btn btn-sm btn-success m-2" 
+                href="?page={{ laws.previous_page_number }}"
+                role="button">
+                &laquo; Previous
+            </a>
+            {% endif %}
 
-{% if numlaws > 0 %}
+            <span class="current" style="font-size:16px">
+                Page {{ laws.number }} of {{ laws.paginator.num_pages }}
+            </span>
 
-    <button class="btn btn-lg btn-success m-3" 
-    onclick="javascript:window.print()" role="button">
-    <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
-    Print
-    </button>
+            {% if laws.has_next %}
+            <a class="btn btn-sm btn-success m-2" 
+                href="?page={{ laws.next_page_number }}"
+                role="button">
+                Next &raquo;
+            </a>              
+            <a class="btn btn-sm btn-success" 
+            href="?page={{ laws.paginator.num_pages }}"
+            role="button">
+            Last
+            </a>  
+            {% endif %}        
+        </span>        
+    </div>
+</div>
+<div class="btn-toolbar d-print-none">
+    <div class="mx-auto">
+        <a class="btn btn-lg btn-warning m-3" 
+                href="{% url 'cfc_app:search' %}"
+                role="button"> &laquo; Search Again</a>
 
-    <a class="btn btn-lg btn-success float-right m-3" 
-            href="{% url 'cfc_app:download' search_id %}"
-            role="button">Download CSV &raquo;</a>
+        {% if numlaws > 0 %}
 
-{{ settings.EMAIL_HOST }}
+            <button class="btn btn-lg btn-success m-3" 
+                    onclick="javascript:window.print()" role="button">
+                <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
+                Print
+            </button>
 
-    {% if user.is_authenticated %}
-    <a class="btn btn-lg btn-primary float-right m-3" 
-            href="{% url 'cfc_app:sendmail' search_id %}"
-            role="button">Send Results &raquo;</a>
-    {% endif %}
+            <a class="btn btn-lg btn-success float-right m-3" 
+                    href="{% url 'cfc_app:download' search_id %}"
+                    role="button">
+                Download CSV &raquo;
+            </a>
 
-{% endif %}
-</div></div>
+            {{ settings.EMAIL_HOST }}
+
+            {% if user.is_authenticated %}
+                <a class="btn btn-lg btn-primary float-right m-3" 
+                        href="{% url 'cfc_app:sendmail' search_id %}"
+                        role="button"> 
+                        Send Results &raquo;
+                </a>
+            {% endif %}
+
+        {% endif %}
+    </div>
+</div>
 {% endblock content %}
-
-
-
