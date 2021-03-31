@@ -8,9 +8,11 @@ applications:
   routes:
   - route: legitinfo-friendly-green-v3.us-east.mybluemix.net
   memory: 512M
+  health-check-type: http
+  health-check-http-endpoint: /health
   sidecars:
   - name: legit_info_sidecar
     process_types: [ 'web' ]
-    command: bash /home/vcap/app/start-worker.sh
+    command: /home/vcap/app/start-worker.sh
     memory: 512MB
 
