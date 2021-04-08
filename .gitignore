@@ -10,6 +10,7 @@ server/localdev-config.json
 credentials.json
 localdev-config.json
 venv/
+.env
 secret-smtp-mailtrap.env
 results/*.csv
 results/*.msg

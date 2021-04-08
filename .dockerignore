@@ -12,6 +12,7 @@ build-docker
 DONOT_SAVE_git_secret.yaml
 TEMPLATE_GIT_SECRET.yaml
 secret
+.env
 
 # misc
 **/*DONOT_SAVE*.*
