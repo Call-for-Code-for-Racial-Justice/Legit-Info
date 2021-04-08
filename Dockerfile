@@ -21,5 +21,5 @@ RUN chmod -R 775 /app
 
 USER 1001
 
-EXPOSE 3000
-CMD ["gunicorn", "-b", "0.0.0.0:3000",  "--env", "DJANGO_SETTINGS_MODULE=cfc_project.settings", "cfc_project.wsgi", "--timeout 120"]
+EXPOSE 8080
+CMD ["gunicorn", "-b", "0.0.0.0:8080",  "--env", "DJANGO_SETTINGS_MODULE=cfc_project.settings", "cfc_project.wsgi", "--timeout 120"]
