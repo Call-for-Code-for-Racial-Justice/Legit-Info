@@ -22,4 +22,4 @@ RUN chmod -R 775 /app
 USER 1001
 
 EXPOSE 8080
-CMD ["bash weekly.sh"]
+CMD ["cd /app && pipenv run python3 manage.py qcluster"]
