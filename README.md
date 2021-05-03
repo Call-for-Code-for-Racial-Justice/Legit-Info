@@ -10,20 +10,15 @@ social followers.
 
 ## Contents
 
-1. [Short description](#short-description)
-1. [Demo video](#demo-video)
-1. [The architecture](#the-architecture)
-1. [Long description](#long-description)
-1. [Getting started](#getting-started)
-1. [Running the tests](#running-the-tests)
-1. [Built with](#built-with)
+1. [Short Description](#short-description)
+1. [Demo Video](#demo-video)
+1. [The Architecture](#the-architecture)
+1. [Getting Started](#getting-started)
 1. [Contributing](#contributing)
-1. [Versioning](#versioning)
-1. [Authors](#authors)
+1. [Suggestions](#suggestions)
 1. [License](#license)
-1. [Acknowledgments](#acknowledgments)
 
-## Short description
+## Short Description
 
 ### Policy and Legislation Reform
 
@@ -47,7 +42,7 @@ Code for Racial Justice led by contributors from IBM and Red Hat.
 Concerned citizens and impacted residents don't have a straightforward way of 
 knowing what or how policies and regulations impact them or what they can do 
 in response.  A community leader could use this tool to help motivate their
-social followers.  Our target user will be referred to as "advocate".
+social followers. Our target user will be referred to as "advocate".
 
 #### Hills (who, what, and wow)
 
@@ -67,7 +62,6 @@ they are.
 5. Policy makers have visibility into how diverse citizenry will be impacted
 by multiple variations of a proposed policy.
 
-
 ### How can technology help?
 
 Searching for legislation can be complicated by the fact that each government
@@ -75,7 +69,6 @@ level has their own repository, their own numbering convention, and different
 formats.  Technology can assist by allowing content to be centralized
 into a single database, in a consistent format,  readily accessible to 
 advocates that need simple-to-read information.
-
 
 ### The idea  - Legit-Info App
 
@@ -97,18 +90,92 @@ By classifying legislation by impact and location, we hope to increase
 awareness of current and pending legislation and their ability to affect change 
 through voting or other activism.
 
-
-## The architecture / information flow
-
-![architecture](docs/legit-info-flow.png)
-
-
-## Long description
-
 [More detail is available here](DESCRIPTION.md)
 
+## Demo Video
+[![Legit Info](https://img.youtube.com/vi/eEvtKRpieHg/0.jpg)](http://www.youtube.com/watch?v=eEvtKRpieHg)
 
-## Suggestions on how to take this idea in other directions
+## The Architecture
+![architecture](docs/legit-info-flow.png)
+
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your 
+local machine for development and testing purposes. See deployment for notes 
+on how to deploy the project on a live system.
+
+### Deploying the Solution Locally
+**_Prerequisites: Python, pip, pipenv_**
+
+1. Clone the Legit-Info Git repository 
+
+`git clone https://github.com/Call-for-Code-for-Racial-Justice/Legit-Info.git`
+
+2. Navigate to the Legit-Info directory
+
+`cd Legit-Info`
+
+3. Install the dependencies using `pipenv`.
+
+`pipenv install`
+
+4. Use the following command if you already have installed the dependencies and want to activate the virtual environment only.
+
+`pipenv shell`
+
+5. Run the following command to generate a default user with some pre-existing impacts and locations. This creates an admin user `cfcadmin` with the password `Call4Code`.
+
+`./stage1 loaddata sources/cfc-seed.json`
+
+6. Run the application with the following command.
+
+`./stage1 runserver localhost:3000`
+
+### States of Deployment
+
+![Deployment Stages](docs/Deployment_Stages.png)
+
+This project is designed for three deployment stages.
+
+1. [Development](docs/STAGE1.md)
+
+In stage 1, each developer has their own copy of application code and
+data, using SQLite3 that stores the entire database in a single file.
+Django provides a development webserver to allow local testing.
+
+The original PDF or HTML version of the legislation, along with the extracted
+TEXT files, are stored on local file system and analyzed.  The resulting
+title, summary, location and impact are stored in the database.  This
+allows staff to review the AI/NLP-based classifications and make adjustments.
+
+2. [Transition](docs/STAGE2.md)
+
+In stage 2, each developer has their own copy of application code, but
+a shared database, using Postgresql running in the IBM Cloud.  The
+developer can choose to use the Django development webserver, or try out
+the production server called Gunicorn.  The difference is that Django
+is designed for single-user, and Gunicorn for concurrent multiple users.
+
+Optionally, the PDF, HTML and TEXT files of the legislation can be stored
+on a network file system or IBM Cloud Object Storage for shared access.
+
+3. [Production](docs/STAGE3.md)
+
+In stage 3, the application is running in the IBM Cloud in one pod, using the
+Postgresql running in the IBM Cloud from pre-production.  Updates to the
+code are deployed using a Tekton pipeline.
+
+The PDF, HTML and TEXT files of the legislation can be stored on the same
+web application container, a network file system, or IBM Cloud Object Storage.
+
+## Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on the code of 
+conduct, and the process for submitting pull requests to the project.  This
+project adheres to the PEP 8 Python Coding Style Guidelines, Django naming
+conventions, and other standards. See [STYLE.md](docs/STYLE.md) for details.
+
+## Suggestions
 
 This starter kit can be taken in a variety of directions.
 
@@ -151,57 +218,12 @@ characters.  This solution could be modified to handle other locations,
 evaluating alternatives to Legiscan.com, and finding other public sources of 
 information for the particular country or language.
 
-
-
-## Getting started
-
-These instructions will get you a copy of the project up and running on your 
-local machine for development and testing purposes. See deployment for notes 
-on how to deploy the project on a live system.
-
-### States of Deployment
-
-![Deployment Stages](docs/Deployment_Stages.png)
-
-This project is designed for three deployment stages.
-
-1. [Development](docs/STAGE1.md)
-
-In stage 1, each developer has their own copy of application code and
-data, using SQLite3 that stores the entire database in a single file.
-Django provides a development webserver to allow local testing.
-
-The original PDF or HTML version of the legislation, along with the extracted
-TEXT files, are stored on local file system and analyzed.  The resulting
-title, summary, location and impact are stored in the database.  This
-allows staff to review the AI/NLP-based classifications and make adjustments.
-
-2. [Transition](docs/STAGE2.md)
-
-In stage 2, each developer has their own copy of application code, but
-a shared database, using Postgresql running in the IBM Cloud.  The
-developer can choose to use the Django development webserver, or try out
-the production server called Gunicorn.  The difference is that Django
-is designed for single-user, and Gunicorn for concurrent multiple users.
-
-Optionally, the PDF, HTML and TEXT files of the legislation can be stored
-on a network file system or IBM Cloud Object Storage for shared access.
-
-3. [Production](docs/STAGE3.md)
-
-In stage 3, the application is running in the IBM Cloud in one pod, using the
-Postgresql running in the IBM Cloud from pre-production.  Updates to the
-code are deployed using a Tekton pipeline.
-
-The PDF, HTML and TEXT files of the legislation can be stored on the same
-web application container, a network file system, or IBM Cloud Object Storage.
-
-
-## Built with IBM and Open Source technologies
+## Built with IBM and Open Source Technologies
 
 The web application and cron job use the following IBM and open source
 technologies.
 
+### Used Within Deployment Stage 1
 * [Python](https://www.python.org/) - The programming language, along with
 pip and pipenv supporting tools
 * [Django](https://www.djangoproject.com/) - A framework for web applications
@@ -211,20 +233,20 @@ providing "responsive UI" to handle different screen sizes across smartphones,
 tablets and desktops.
 * [PDFminer](https://pypi.org/project/pdfminer.six/) - Extracts text from PDF
 * [SQlite](https://www.sqlite.org/index.html) - A simple, local database
+
+### Additional Technologies for Deployment Stage 2 & 3
 * [Postgresql](https://www.postgresql.org/) - A robust, relational database
 * [Gunicorn](https://gunicorn.org/) - A WSGI HTTP webserver for Python
 * [NLTK](https://github.com/nltk/nltk) - Natural Language Toolkit
 * [Watson Studio Natural Language Understanding](https://www.ibm.com/watson/nlu)
 
-The following repositories are used to automate the collection of legislation:
+### The following repositories are used to automate the collection of legislation:
 
 * [Legiscan.com](https://legiscan.com/) -- API for all 50 USA states
 * [AZLeg.gov](https://www.azleg.gov/) -- Arizona State Legislature website
 * [Ohio.gov](https://ohio.gov/wps/portal/gov/site/home/) -- Ohio State website
 
-The following technologies were used to deploy and demonstrate the MVP.
-Certainly, they are optional, as the above application can run on a traditional 
-LAMP stack bare-metal server or virtual machine.
+### The following technologies were used to deploy and demonstrate the MVP. Certainly, they are optional, as the above application can run on a traditional LAMP stack bare-metal server or virtual machine.
 
 * [Red Hat UBI](https://catalog.redhat.com/software/containers/ubi8)  - Red Hat
   Universal Base Image, based on Red Hat Enterprise Linux (RHEL) 8.2
@@ -235,30 +257,7 @@ LAMP stack bare-metal server or virtual machine.
 * [Tekton](https://www.openshift.com/learn/topics/pipelines) - A Continuous 
   Integration (CI) pipeline
 
-
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on the code of 
-conduct, and the process for submitting pull requests to the project.  This
-project adheres to the PEP 8 Python Coding Style Guidelines, Django naming
-conventions, and other standards.  See [STYLE.md](docs/STYLE.md) for details.
-
-
-## Authors
-
-* **Tony Pearson** - *Lead Developer*
-* **Uchechukwu Uboh** - *Developer*
-* **Shilpi Bhattacharyya** - *Developer / Data Scientist*
-* **Tommy Adams** - *Tester*
-* **Beth Morgan** - *UI Designer*
-* **Nikhil Raja** - *Project Manager*
-* **Rita Tackett** - *Project Manager*
-* **Mao Vang Corne** - *Content Curator*
-
-
 ## License
 
-This project is licensed under the Apache 2 License - see the [LICENSE
-](LICENSE) file for details
-
+This project is licensed under the Apache 2 License - see the [LICENSE](LICENSE) file for details
 Please also read the [BSD Copyright Notice](BSD-NOTICE)
