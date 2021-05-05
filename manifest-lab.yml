@@ -1,0 +1,11 @@
+version: 1
+applications:
+- name: legit_info
+  buildpacks:
+  - python_buildpack
+  command: USE_SQLITE3='True' gunicorn --env DJANGO_SETTINGS_MODULE=cfc_project.settings cfc_project.wsgi -b 0.0.0.0:8080
+  stack: cflinuxfs3
+  memory: 256M
+  random-route: true
+  health-check-type: http
+  health-check-http-endpoint: /health
