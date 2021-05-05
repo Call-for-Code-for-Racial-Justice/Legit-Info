@@ -1,12 +1,11 @@
+[![License](https://img.shields.io/badge/License-Apache2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0) [![Community](https://img.shields.io/badge/Join-Community-blue.svg)](https://developer.ibm.com/callforcode/racial-justice/get-started/)
+
 # Legit-Info
 
 Concerned citizens and impacted residents don't have a straightforward way of 
 knowing what or how policies and regulations impact them or what they can do 
 in response.  A community leader could use this tool to help motivate their
 social followers.
-
-[![License](https://img.shields.io/badge/License-Apache2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0) 
-[![Slack](https://img.shields.io/badge/Join-Slack-blue)](https://callforcode.org/slack)
 
 ## Contents
 
