@@ -11,4 +11,3 @@ sources/drafts/
 sources/curated/
 sources/zipfiles/
 logs/*.log
-db.sqlite3
