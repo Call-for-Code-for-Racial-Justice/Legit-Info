@@ -66,7 +66,7 @@ def b_extract_files(*args, **kwargs):
     logpath = gen_output_name(cmd)
     with open(logpath, 'a+') as outfile:
         with redirect_stdout(outfile):
-            call_command(cmd, '--api', '--skip', '--limit 10')
+            call_command(cmd, '--api', '--skip')
 
     logger.info("71:task ended: cron_step2_extract_files")
     return
@@ -79,7 +79,7 @@ def c_analyze_text():
     logpath = gen_output_name(cmd)
     with open(logpath, 'a+') as outfile:
         with redirect_stdout(outfile):
-            call_command(cmd, '--api', '--skip', '--compare', '--limit 10')
+            call_command(cmd, '--api', '--skip', '--compare')
 
     logger.info("84:task ended: cron_step3_analyze_text")
     return
