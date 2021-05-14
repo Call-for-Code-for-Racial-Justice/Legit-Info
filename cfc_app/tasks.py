@@ -47,7 +47,7 @@ def gen_output_name(cmd):
 
 
 def a_get_datasets(*args, **kwargs):
-    logger.info("51:task started: cron_step1_get_datasets")
+    logger.info(f"51:task started: cron_step1_get_datasets")
 
     cmd = 'get_datasets'
     logpath = gen_output_name(cmd)
@@ -55,12 +55,12 @@ def a_get_datasets(*args, **kwargs):
         with redirect_stdout(outfile):
             call_command(cmd, '--api')
 
-    logger.info("58:task ended: cron_step1_get_datasets")
+    logger.info(f"58:task ended: cron_step1_get_datasets")
     return
 
 
 def b_extract_files(*args, **kwargs):
-    logger.info("63:task started: cron_step2_extract_files")
+    logger.info(f"63:task started: cron_step2_extract_files")
 
     cmd = 'extract_files'
     logpath = gen_output_name(cmd)
@@ -68,12 +68,12 @@ def b_extract_files(*args, **kwargs):
         with redirect_stdout(outfile):
             call_command(cmd, '--api', '--skip')
 
-    logger.info("71:task ended: cron_step2_extract_files")
+    logger.info(f"71:task ended: cron_step2_extract_files")
     return
 
 
 def c_analyze_text():
-    logger.info("76:task started: cron_step3_analyze_text")
+    logger.info(f"76:task started: cron_step3_analyze_text")
 
     cmd = 'analyze_text'
     logpath = gen_output_name(cmd)
@@ -81,12 +81,12 @@ def c_analyze_text():
         with redirect_stdout(outfile):
             call_command(cmd, '--api', '--skip', '--compare')
 
-    logger.info("84:task ended: cron_step3_analyze_text")
+    logger.info(f"84:task ended: cron_step3_analyze_text")
     return
 
 
 def fob_stats():
-    logger.info("89:task started: fob_stats")
+    logger.info(f"89:task started: fob_stats")
 
     cmd = 'fob_stats'
     logpath = gen_output_name(cmd)
@@ -94,12 +94,12 @@ def fob_stats():
         with redirect_stdout(outfile):
             call_command(cmd, '--mode OBJECT')
 
-    logger.info("97:task ended: fob_stats")
+    logger.info(f"97:task ended: fob_stats")
     return
 
 
 def fob_sync():
-    logger.info("102:task started: fob_sync")
+    logger.info(f"102:task started: fob_sync")
 
     cmd = 'fob_sync'
     logpath = gen_output_name(cmd)
@@ -107,5 +107,5 @@ def fob_sync():
         with redirect_stdout(outfile):
             call_command(cmd, '--maxget 10')
 
-    logger.info("110:task ended: fob_sync")
+    logger.info(f"110:task ended: fob_sync")
     return
