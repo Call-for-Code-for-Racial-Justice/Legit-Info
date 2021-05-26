@@ -61,6 +61,7 @@ if os.getenv('CFC_DEBUG', 'True') == 'True':
     DEBUG = True
     LOGLEVEL = os.getenv('CFC_LOGLEVEL_DEV', 'DEBUG')
 
+LOGHANDLE = ['console', 'log_file']                      # Issue 71
 LOGGING = {
     'version': 1,
     # Version of logging
@@ -137,17 +138,17 @@ LOGGING = {
             'handlers': ['console', 'log_file'],
         },
         'cfc_app': {
-            'handlers': ['log_file'],
+            'handlers': LOGHANDLE,                            # Issue 71
             'level': LOGLEVEL,
             'propagate': False,
         },
         'cfc_app.management.commands': {
             'level': 'DEBUG',
-            'handlers': ['log_file'],
+            'handlers': LOGHANDLE,                            # Issue 71
             'propagate': False,
         },
         'users': {
-            'handlers': ['log_file'],
+            'handlers': LOGHANDLE,                            # Issue 71
             'level': LOGLEVEL,
             'propagate': False,
         },
