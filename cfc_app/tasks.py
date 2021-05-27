@@ -47,7 +47,7 @@ def gen_output_name(cmd):
 
 
 def a_get_datasets(*args, **kwargs):
-    logger.info(f"51:task started: cron_step1_get_datasets")
+    logger.info(f"51:task started: a_get_datasets")
 
     cmd = 'get_datasets'
     logpath = gen_output_name(cmd)
@@ -55,12 +55,12 @@ def a_get_datasets(*args, **kwargs):
         with redirect_stdout(outfile):
             call_command(cmd, '--api')
 
-    logger.info(f"58:task ended: cron_step1_get_datasets")
+    logger.info(f"58:task ended: a_get_datasets")
     return
 
 
 def b_extract_files(*args, **kwargs):
-    logger.info(f"63:task started: cron_step2_extract_files")
+    logger.info(f"63:task started: b_extract_files")
 
     cmd = 'extract_files'
     logpath = gen_output_name(cmd)
@@ -68,12 +68,12 @@ def b_extract_files(*args, **kwargs):
         with redirect_stdout(outfile):
             call_command(cmd, '--api', '--skip')
 
-    logger.info(f"71:task ended: cron_step2_extract_files")
+    logger.info(f"71:task ended: b_extract_files")
     return
 
 
 def c_analyze_text():
-    logger.info(f"76:task started: cron_step3_analyze_text")
+    logger.info(f"76:task started: c_analyze_text")
 
     cmd = 'analyze_text'
     logpath = gen_output_name(cmd)
@@ -81,7 +81,7 @@ def c_analyze_text():
         with redirect_stdout(outfile):
             call_command(cmd, '--api', '--skip', '--compare')
 
-    logger.info(f"84:task ended: cron_step3_analyze_text")
+    logger.info(f"84:task ended: c_analyze_text")
     return
 
 

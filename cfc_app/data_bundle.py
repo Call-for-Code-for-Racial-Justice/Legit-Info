@@ -9,8 +9,10 @@ Licensed under Apache 2.0, see LICENSE for details
 """
 
 # System imports
+import certifi
 import logging
 import sys
+import urllib3
 
 # Django and other third-party imports
 import requests
@@ -60,7 +62,13 @@ class DataBundle():
         """ Make API request and capture the response """
 
         logger.debug(f"Make request {self.name}")
-        response = requests.get(url, params)
+        # Issue 72 add ca_cert verification, bypass for Ohio
+        ca_cert = certifi.where()
+        if 'state.oh.us' in url:
+            ca_cert = False
+            urllib3.disable_warnings()
+        # import pdb; pdb.set_trace()
+        response = requests.get(url, params, verify=ca_cert) 
         return response
 
     def load_response(self, response):
@@ -93,7 +101,15 @@ if __name__ == "__main__":
 
     bundle = DataBundle('ibm.com')
     params = {}
-    response = bundle.make_request('http://www.ibm.com', params)
+    response = bundle.make_request('https://www.ibm.com', params)
+    print('RESPONSE: ', response)
+    result = bundle.load_response(response)
+    print('RESULT:', result)
+    print('BUNDLE:', bundle)
+
+    bundle = DataBundle('state.oh.us')
+    params = {'format': 'pdf'}
+    response = bundle.make_request('https://search-prod.lis.state.oh.us/solarapi/v1/general_assembly_134/bills/hb13/IN/00', params)
     print('RESPONSE: ', response)
     result = bundle.load_response(response)
     print('RESULT:', result)
