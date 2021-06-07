@@ -196,7 +196,7 @@ class LegiscanAPI:
                 result = None
 
             if result:
-                self.check_result(bundle)
+                self.check_result(bundle, params)
 
         else:
             bundle.status_code = 405
@@ -209,7 +209,7 @@ class LegiscanAPI:
         output_string = json.dumps(LEGISCAN_ID, indent=2)
         return output_string
 
-    def check_result(self, bundle):
+    def check_result(self, bundle, params):
         """ check result matches expectations """
 
         if bundle.extension == 'json':

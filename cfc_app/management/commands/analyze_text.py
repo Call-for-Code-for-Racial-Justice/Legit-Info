@@ -135,7 +135,7 @@ class Command(BaseCommand):
         self.verbosity = options['verbosity']
         logger.debug(f"134:Options {options}")
 
-        impacts = Impact.objects.all().exclude(text='None')
+        impacts = Impact.objects.all().exclude(iname='None')
         impact_list = []
         for imp in impacts:
             impact_list.append(imp.iname)
@@ -340,7 +340,8 @@ class Command(BaseCommand):
         doc_date = header['DOCDATE']
         # import pdb; pdb.set_trace()
         if Law.objects.filter(key=key).exists():
-            law = Law.objects.get(key=key)
+            logger.debug(f'343:"Key={key}"')
+            law = Law.objects.get(key=key).first()
             result = 'Updated'
         # otherwise, this is a new record.
         else:
