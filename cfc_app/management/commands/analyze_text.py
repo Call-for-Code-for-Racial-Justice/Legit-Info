@@ -352,7 +352,7 @@ class Command(BaseCommand):
         law.bill_id = header['BILLID']
         law.doc_date = doc_date
         law.title = header['TITLE']
-        law.summary = header['SUMMARY']
+        law.summary = header['SUMMARY'][:999]
 
         state = key[:2]
         if state in self.id_table:
