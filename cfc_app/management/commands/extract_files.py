@@ -339,7 +339,7 @@ class Command(BaseCommand):
 
         detail.title = titlecase(detail.title)
 
-        law_record = Law.objects.filter(key=detail.key).first()
+        law_record = Law.objects.filter(key=detail.key)
         if law_record is None:
             logger.debug(f"366:Creating LAW record: {detail.key}")
             law_record = Law(key=detail.key, title=detail.title,
