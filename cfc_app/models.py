@@ -112,6 +112,10 @@ class Location(models.Model):
         return None
 
 
+    @staticmethod
+    def load_upkar():
+        return None
+
 class Impact(models.Model):
     """A location helps filter which legislation to look at."""
 

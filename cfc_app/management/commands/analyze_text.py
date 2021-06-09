@@ -209,7 +209,11 @@ class Command(BaseCommand):
         impact_nlu, impact_map = "", ""
         rel_nlu, rel_map = "", ""
         if self.skip or self.compare:
-            law = Law.objects.filter(key=key).first()
+            logger.debug(f"212:Reading {key}")
+            law = None
+            laws = Law.objects.filter(key=key)
+            if laws is not None and len(laws)>0:
+                law = laws[0]
             if (law is not None
                     and (law.impact is not None)
                     and law.relevance is not None):
@@ -341,7 +345,7 @@ class Command(BaseCommand):
         # import pdb; pdb.set_trace()
         if Law.objects.filter(key=key).exists():
             logger.debug(f'343:"Key={key}"')
-            law = Law.objects.get(key=key).first()
+            law = Law.objects.get(key=key)
             result = 'Updated'
         # otherwise, this is a new record.
         else:
@@ -351,7 +355,9 @@ class Command(BaseCommand):
 
         law.bill_id = header['BILLID']
         law.doc_date = doc_date
-        law.title = header['TITLE']
+        if len(header['TITLE'])>200 or len(header['SUMMARY'])>1000:
+            logger.debug(f'358:"Too Long: {header}"')
+        law.title = header['TITLE'][:199]
         law.summary = header['SUMMARY'][:999]
 
         state = key[:2]
