@@ -411,6 +411,7 @@ class Command(BaseCommand):
             source_file = "{} ({})".format(detail.bill_name,
                                            settings.FOB_METHOD)
         else:
+            logger.debug(f"414:Fetch from state: {detail.bill_name}")
             bindata = self.fetch_state_link(detail)
 
         # For HTML, convert to text.  Othewise leave binary for PDF.
