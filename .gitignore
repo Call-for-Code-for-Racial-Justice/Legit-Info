@@ -35,3 +35,4 @@ backups/
 **/Thumbs.db
 cron/*.json
 .vscode
+.idea
