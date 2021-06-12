@@ -1,25 +1,23 @@
-FROM registry.access.redhat.com/ubi8
+FROM registry.access.redhat.com/ubi8/python-38
 
-WORKDIR /app
+WORKDIR /opt/app-root/src
 
-COPY Pipfile* /app/
-
-## NOTE - rhel enforces user container permissions stronger ##
-USER root
-RUN yum -y install python3
-RUN yum -y install python3-pip wget
-
-RUN python3 -m pip install --user --upgrade pip
-RUN python3 -m pip install --upgrade pipenv
-RUN pipenv install --system --deploy
-
-COPY . /app
-
-RUN pwd
-RUN chown -R 1001 /app
-RUN chmod -R 775 /app
+COPY --chown=1001:0 . .
+RUN chmod -R g=u .
 
 USER 1001
 
+ENV LC_ALL=C.UTF-8 \
+    LANG=C.UTF-8 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONFAULTHANDLER=1
+
+# see issue https://github.com/pypa/pipenv/issues/4220 for pipenv version
+RUN pip install --upgrade pip && \
+    pip install pipenv==2018.11.26 && \
+    pipenv install --system --dev
+
 EXPOSE 8080
+
+ENTRYPOINT ["sh", "entrypoint.sh"]
 CMD ["gunicorn", "-b", "0.0.0.0:8080",  "--env", "DJANGO_SETTINGS_MODULE=cfc_project.settings", "cfc_project.wsgi", "--timeout 120"]
