@@ -119,8 +119,8 @@ class Command(BaseCommand):
             self.parse_options(options)
         except Exception as exc:
             err_msg = f"116: Parse Error input options: {exc}"
-            logger.error(err_msg, exc_info=True)
-            raise ExtractTextError from exc
+            logger.debug(err_msg, exc_info=True)
+            # raise ExtractTextError from exc
 
         # Use the Django "Location" database to get list of locations
         # listed with valid (non-zero) Legiscan_id.  For example,
@@ -186,8 +186,8 @@ class Command(BaseCommand):
                 self.process_json(json_name)
             except Exception as exc:
                 err_msg = f"238: Process Error. {exc}"
-                logger.error(err_msg, exc_info=True)
-                raise ExtractTextError(err_msg) from exc
+                logger.debug(err_msg, exc_info=True)
+                # raise ExtractTextError(err_msg) from exc
 
         return None
 
@@ -428,7 +428,11 @@ class Command(BaseCommand):
             save_source_hash(bill_hash, detail)
             self.dot.show()
         else:
-            logger.error(f"435:Failure processing source: {source_file}")
+            # should this be an error? for detail.bill_name = 'AZ-HB2001-1717-Y2019.html', the file
+            # is not present in COS. The bindata is 0 bytes and so it is not processed.
+            # This error causes the job to fail on Code Engine.
+            logger.debug(f"431:Could not process source: {source_file}")
+            # logger.debug(f"435:Failure processing source: {source_file}")
         return processed
 
     def fetch_state_link(self, detail):
@@ -446,7 +450,7 @@ class Command(BaseCommand):
             bindata = bill_bundle.content
             if ((detail.extension == "pdf")
                     and (bindata[:4] != b'%PDF')):
-                logger.error(f"392:Invalid PDF format found: "
+                logger.debug(f"392:Invalid PDF format found: "
                              f"{detail.bill_name}")
                 bindata = None
 
@@ -533,9 +537,9 @@ class Command(BaseCommand):
             except Exception as exc:
                 self.leg.api_ok = False
                 ftext = 'Unable to fetch bill'
-                logger.error(f"{ftext}: key={key} DocID={doc_id} Msg:{exc}",
+                logger.debug(f"{ftext}: key={key} DocID={doc_id} Msg:{exc}",
                              exc_info=True)
-                raise LegiscanError(ftext) from exc
+                # raise LegiscanError(ftext) from exc
 
         if response:
             mime_type = response['mime_type']

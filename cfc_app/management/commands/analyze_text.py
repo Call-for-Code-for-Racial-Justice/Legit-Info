@@ -163,7 +163,7 @@ class Command(BaseCommand):
             except Exception as exc:
                 err_msg = f"151:Process State Error: {exc}"
                 logger.error(err_msg, exc_info=True)
-                raise AnalyzeTextError(err_msg) from exc
+                # raise AnalyzeTextError(err_msg) from exc
 
         timing.end_time(options['verbosity'])
         return None
