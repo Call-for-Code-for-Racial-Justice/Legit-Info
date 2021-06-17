@@ -15,6 +15,7 @@ import logging
 # Django and other third-party imports
 from django.db import models
 from django.conf import settings
+from django.db.models.base import ObjectDoesNotExist
 
 LEFT_CORNER = u"\u2514\u2500\u2002"
 LEFT_PAD = u"\u2002\u2002\u2002\u2002"
@@ -285,8 +286,11 @@ class Hash(models.Model):
     def find_item_name(name, mode=settings.FOB_METHOD):
         """ get item if exists, None if not """
 
-        record = Hash.objects.get(item_name=name,
+        try:
+            record = Hash.objects.get(item_name=name,
                                      fob_method=mode)
+        except ObjectDoesNotExist:
+            record = None
         return record
 
 
