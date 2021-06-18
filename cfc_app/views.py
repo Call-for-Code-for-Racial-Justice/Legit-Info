@@ -267,7 +267,7 @@ def results(request, search_id):
                'search_id': search_id,
                'gen_date': gen_date}
 
-    make_csv(search_id, laws_list)
+    # make_csv(search_id, laws_list)
     return render(request, 'results.html', context)
 
 
