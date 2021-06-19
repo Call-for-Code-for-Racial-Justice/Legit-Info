@@ -64,7 +64,7 @@ class DataBundle():
         logger.debug(f"Make request {self.name}")
         # Issue 72 add ca_cert verification, bypass for Ohio
         ca_cert = certifi.where()
-        if 'state.oh.us' in url:
+        if 'state.oh.us' in url or 'mn.gov' in url:
             ca_cert = False
             urllib3.disable_warnings()
         # import pdb; pdb.set_trace()
