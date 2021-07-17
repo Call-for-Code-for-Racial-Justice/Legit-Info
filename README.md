@@ -122,11 +122,16 @@ on how to deploy the project on a live system.
 
 `pipenv shell`
 
-5. Run the following command to generate a default user with some pre-existing impacts and locations. This creates an admin user `cfcadmin` with the password `Call4Code`.
+5. Use the following commands to migrate SQLite to the environment
+ 
+`./stage1 makemigrations`
+`./stage1 migrate`
+
+6. Run the following command to generate a default user with some pre-existing impacts and locations. This creates an admin user `cfcadmin` with the password `Call4Code`.
 
 `./stage1 loaddata sources/cfc-seed.json`
 
-6. Run the application with the following command.
+7. Run the application with the following command.
 
 `./stage1 runserver localhost:3000`
 
