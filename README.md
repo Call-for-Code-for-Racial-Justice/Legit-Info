@@ -122,10 +122,9 @@ on how to deploy the project on a live system.
 
 `pipenv shell`
 
-5. Use the following commands to migrate SQLite to the environment
+5. Use the following commands to migrate the models (Location, Criteria, Impact, etc) to the database schema.
  
-`./stage1 makemigrations`
-`./stage1 migrate`
+`./stage1 makemigrations` and `./stage1 migrate`
 
 6. Run the following command to generate a default user with some pre-existing impacts and locations. This creates an admin user `cfcadmin` with the password `Call4Code`.
 
