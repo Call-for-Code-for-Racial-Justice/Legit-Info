@@ -12,14 +12,12 @@ Licensed under Apache 2.0, see LICENSE for details
 # Django and other third-party imports
 from django import forms
 from cfc_app.models import Location, Impact
-
 # Application imports
 from .models import Criteria
 
 
 class SearchForm(forms.ModelForm):
     """ Input form to search legislation """
-
     class Meta:
         """ set model criteria """
         model = Criteria
@@ -44,5 +42,6 @@ class SearchForm(forms.ModelForm):
             'required': 'A location must be selected'}
         self.fields['impacts'].error_messages = {
             'required': 'Select one or more impact areas'}
+
 
 # end of module
