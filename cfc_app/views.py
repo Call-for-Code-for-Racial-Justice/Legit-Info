@@ -281,7 +281,7 @@ def search(request):
             form = SearchForm()             # blank search form
         else:
             crit = request.user.profile.criteria
-            form = SearchForm(instance=crit)  # pre-filled with profile
+            form = SearchForm(instance=crit, )  # pre-filled with profile
 
     else:
         # POST data submitted; process data.
