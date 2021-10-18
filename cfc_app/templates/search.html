@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+{% load bootstrap4 %}
 {% block page_header %}
 Search legislation
 {% endblock page_header %}
@@ -9,31 +10,78 @@ Search legislation
     ul {
         list-style-type: none;
     }
-    .errorlist
-        {
-            padding: 1rem 0;
-            color: red;
-            font: bold;
-            text-align: center;
-            background-color: #FFF3CD;
-        }
-        .error select {
-    border: 2px red solid;
+    .form-hidden{
+        display: none;
     }
+
+    .invalid-feedback{
+        display: block;
+        margin: 1rem 0;
+        padding: 1rem 0;
+        color:#ff7f7f;
+        text-align: center;
+        font-size: 20px;
+        background-color: #FFF3CD;
+        /* background-color: #DE9CAD; */
+    }
+    .form-control.is-valid,
+    .form-control.is-invalid
+    {
+        background-image: none;
+
+    }
+
+    .hidden{
+        display: none;
+    }
+
+    
 </style>
 <div class="signin-register-search">
     <p>Select your location and the impacts are you are concerned about:</p>
-    <form action="{% url 'cfc_app:search' %}" method='post'>
+    <form action="{% url 'cfc_app:search' %}" method='post' class="form" novalidate>
         {% csrf_token %}
-        {{ form.as_p }}
-
+        <!-- {{ form.as_p }} -->
+        {% bootstrap_form form %}
     <div class="row mx-auto">
       <button id="submit" name="submit" class="btn btn-lg btn-success mx-auto"
           value="1">Search Legislation</button>
     </div>
     </form>
 </div>
+<script>
 
+document.addEventListener("DOMContentLoaded", ()=>{  
+    location_input = document.querySelector("#id_location");
+    form_check = document.querySelector('#id_impacts');
+    impact_input = Array.from(document.querySelectorAll(".form-check input[name='impacts']"));
+    location_input.addEventListener("click", e =>{
+        if (e.target.value === ''){
+            location_input.classList.add('is-invalid');
+
+        }
+        else{
+            location_input.classList.remove('is-invalid');
+            location_input.classList.add('is-valid');
+            try{
+            location_input.nextElementSibling.classList.add('hidden')
+        }catch{}
+        }
+        
+    });
+    impact_input.forEach((impact) => {
+        impact.addEventListener('click', (e)=>{
+            if (e.target.checked == true){
+                try{
+                    form_check.nextElementSibling.classList.add('hidden')
+                 }catch{}
+            }
+
+        })
+    });
+})
+
+</script>
 {% endblock content %}
 
 

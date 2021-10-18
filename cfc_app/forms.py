@@ -38,6 +38,7 @@ class SearchForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         # if you want to do just one
+        # print(dir(self.fields['location']))
         self.fields['location'].error_messages = {
             'required': 'A location must be selected'}
         self.fields['impacts'].error_messages = {
