@@ -19,7 +19,7 @@ Sign in
 
     
 
-    <form method="post" action="{% url 'users:login' %}" class="form">
+    <form method="post" action="{% url 'users:login' %}" class="form" novalidate>
     {% csrf_token %}
     {% bootstrap_form form %}
     {% buttons %}

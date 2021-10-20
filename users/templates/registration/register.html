@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+{% load bootstrap4 %}
 
 {% block page_header %}
 <h4>Register</h4>
@@ -8,9 +9,9 @@
 
 {% block content %}
 <div class="signin-register-search">
-  <form method="post" action="{% url 'users:register' %}">
+  <form method="post" action="{% url 'users:register' %}" novalidate>
     {% csrf_token %}
-    {{ form.as_p }}
+    {% bootstrap_form form %}    
 
 <div class="row"
   <div class="btn-group mx-auto" role="button">
@@ -23,10 +24,8 @@
           value="1">Register &raquo;</button>
   </div>
 </div>
-
     <input type="hidden" name="next" value="{% url 'cfc_app:index' %}" />
   </form>
 
 </div>
-
 {% endblock content %}
