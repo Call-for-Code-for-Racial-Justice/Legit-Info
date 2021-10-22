@@ -15,9 +15,10 @@ ul {
 }
 </style>
 
-    <form action="{% url 'cfc_app:search' %}" method='post'>
+    <form action="{% url 'cfc_app:search' %}" method='post' novalidate>
         {% csrf_token %}
-        {{ form.as_p }}
+        {% bootstrap_form form %}
+        {% bootstrap_form_errors form %}
     <div class="row mx-auto">
       <button id="submit" name="submit" class="btn btn-lg btn-success mx-auto"
           value="1">Search Legislation</button>
