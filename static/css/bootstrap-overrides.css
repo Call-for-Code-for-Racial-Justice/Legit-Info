@@ -26,7 +26,10 @@
     background-color: #128091;
     border-color: #128091;
 }
-
+.btn-info:not(:disabled):hover, .btn-info:not(:disabled):focus {
+    background-color: #0F6875;
+    border-color: #0F6875;
+}
 .invalid-feedback {
     color: #9C1C26;
 }
