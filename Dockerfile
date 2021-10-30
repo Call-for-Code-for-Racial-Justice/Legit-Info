@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/python-38
+FROM registry.access.redhat.com/ubi8/python-38:1-71.1634036286
 
 WORKDIR /opt/app-root/src
 
@@ -13,8 +13,8 @@ ENV LC_ALL=C.UTF-8 \
     PYTHONFAULTHANDLER=1
 
 # see issue https://github.com/pypa/pipenv/issues/4220 for pipenv version
-RUN pip install --upgrade pip && \
-    pip install pipenv==2018.11.26 && \
+RUN pip install --no-cache-dir --upgrade pip==21.3.1 && \
+    pip install --no-cache-dir pipenv==2018.11.26 && \
     pipenv install --system --dev
 
 EXPOSE 8080
