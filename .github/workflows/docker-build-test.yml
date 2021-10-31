@@ -21,7 +21,7 @@ jobs:
       - name: Docker Test
         run: |
           docker run --rm --name legitinfo-test -d legitinfo
-          sleep 5
+          sleep 10
           STATUS_CODE=$(docker exec legitinfo-test curl -s -o /dev/null -w "%{http_code}" localhost:8080/health/)
           docker stop legitinfo-test
           echo $STATUS_CODE | grep -q 200
