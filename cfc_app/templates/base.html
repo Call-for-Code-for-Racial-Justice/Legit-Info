@@ -14,7 +14,9 @@
 
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
+{% load static %}
 
+<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-overrides.css' %}"/>
 <style>
 .bg-company-red {
     background-color: #6F2F2C !important;
