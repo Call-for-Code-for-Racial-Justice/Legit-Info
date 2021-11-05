@@ -1,0 +1,27 @@
+name: "Test Docker build"
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Docker Lint
+        run: docker run --rm -i hadolint/hadolint < Dockerfile
+      - name: Docker Build
+        run: docker build -t legitinfo .
+
+      - name: Docker Test
+        run: |
+          docker run --rm --name legitinfo-test -d legitinfo
+          sleep 10
+          STATUS_CODE=$(docker exec legitinfo-test curl -s -o /dev/null -w "%{http_code}" localhost:8080/health/)
+          docker stop legitinfo-test
+          echo $STATUS_CODE | grep -q 200
