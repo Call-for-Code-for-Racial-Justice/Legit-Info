@@ -1,0 +1,38 @@
+.navbar-dark .navbar-nav .nav-link {
+    color: white;
+}
+.navbar-dark .navbar-nav .nav-link:focus, 
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: white; 
+    outline: 2px solid white;
+}
+.btn-primary {
+    background-color: #0063CC;
+    border-color: #0063CC;
+}
+.btn-primary:not(:disabled):hover, .btn-primary:not(:disabled):focus {
+    background-color: #004FA3;
+    border-color: #004FA3;
+}
+.btn-success {
+    background-color: #208337;
+    border-color: #208337;
+}
+.btn-success:not(:disabled):hover, .btn-success:not(:disabled):focus {
+    background-color: #186329;
+    border-color: #186329;
+}
+.btn-info {
+    background-color: #128091;
+    border-color: #128091;
+}
+.btn-info:not(:disabled):hover, .btn-info:not(:disabled):focus {
+    background-color: #0F6875;
+    border-color: #0F6875;
+}
+.invalid-feedback {
+    color: #9C1C26;
+}
+.form-control.is-invalid, .was-validated .form-control:invalid {
+    border-color: #9C1C26;
+}
