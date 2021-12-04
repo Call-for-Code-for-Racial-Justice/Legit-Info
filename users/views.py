@@ -13,6 +13,8 @@ import logging
 
 # Django and other third-party imports
 from django.shortcuts import render, redirect
+from django import forms  
+from django.contrib.auth.models import User  
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
@@ -24,6 +26,19 @@ from .forms import UserForm, ProfileForm
 # import pdb; pdb.set_trace()
 logger = logging.getLogger(__name__)
 
+class RegisterUserForm(UserCreationForm):
+  username = forms.CharField(required=True, max_length=30) 
+  
+  class Meta:
+    model = User
+    fields = ['username', 'password1', 'password2']
+
+  def __init__(self, *args, **kwargs):
+        super(RegisterUserForm, self).__init__(*args, **kwargs)
+        self.fields['username'].error_messages = {'required': 'Username field is required'}
+        self.fields['password1'].error_messages = {'required': 'Password field is required'}
+        self.fields['password2'].error_messages = {'required': 'Password confirmation field is required.'}
+
 
 def register(request):
     """Register a new user."""
@@ -31,10 +46,10 @@ def register(request):
     logger.info(f"Line31: {request.method}, {request.user.username}")
     if request.method != 'POST':
         # Display blank registration form.
-        form = UserCreationForm()
+        form = RegisterUserForm()
     else:
         # Process completed form.
-        form = UserCreationForm(data=request.POST)
+        form = RegisterUserForm(data=request.POST)
 
         if form.is_valid():
             new_user = form.save()
