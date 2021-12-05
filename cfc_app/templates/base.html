@@ -14,7 +14,6 @@
 
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
-{% load static %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-overrides.css' %}"/>
 <style>
@@ -22,6 +21,19 @@
     background-color: #6F2F2C !important;
     color: #ffffff;
     }
+.skip-link {
+    position: absolute;
+    transform: translateY(-160%);
+    transition: transform 0.2s ease-in-out;
+    color: white; 
+}
+.skip-link:focus {
+    padding: 0.8rem .5rem;
+    transform: translateY(0%);
+    left: 30%;
+    outline: 2px solid white;
+}
+
 </style>
 
 </head>
@@ -29,7 +41,7 @@
 <body>
 
 <nav class="navbar navbar-expand-md navbar-dark bg-company-red mb-5 border">
-
+<a href="#main-content" class="skip-link">Skip to main</a>
 <a class="navbar-brand" href="{% url 'cfc_app:index' %}">
            {% app_name request %}
 </a>
@@ -83,7 +95,7 @@
 </div>
 </nav>
 
-<main role="main" class="container">
+<main role="main" class="container" id="main-content">
 
 <div class="m-0 mb-4 pl-5 pr-5 pt-2 pb-2 text-center bg-company-red">
        {% block page_header %}{% endblock page_header %}
