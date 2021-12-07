@@ -2,6 +2,7 @@
 
 * **Tony Pearson** - *Lead Developer*
 * **Uchechukwu Uboh** - *Developer*
+* **Upkar Lidder** - *Developer*
 * **Shilpi Bhattacharyya** - *Developer / Data Scientist*
 * **Tommy Adams** - *Tester*
 * **Beth Morgan** - *UI Designer*
