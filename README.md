@@ -118,6 +118,16 @@ on how to deploy the project on a live system.
 
 `pipenv install`
 
+---
+
+**Note:** An error might appear in the installation of `pystache==0.5.4` (because `pystache` uses `2to3` for installation, which is not supported in `setuptools>58`).
+
+To fix this, run `pipenv run pip install setuptools==57.5.0`.
+
+Then run `pipenv install` again. The intallation of the packages should now complete without errors.
+
+---
+
 4. Use the following command if you already have installed the dependencies and want to activate the virtual environment only.
 
 `pipenv shell`
