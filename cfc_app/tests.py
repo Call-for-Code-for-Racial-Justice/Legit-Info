@@ -30,10 +30,16 @@ class HealthEndpointTests(SimpleTestCase):
     def test_health_status_is_up(self):
         """ Test that health status is returned with RC=200 """
 
-        response = self.client.get('/health')
+        response = self.client.get('/health/')
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '{"status": "UP"}')
 
+    def test_health_status_redirects(self):
+        """ Test that '/health' is redirected to '/health/' and returned with RC=301 """
+
+        response = self.client.get('/health')
+        self.assertEqual(response.status_code, 301)
+        self.assertEqual(response.url, '/health/')
 
 class AddStatesCustomCommandTests(TestCase):
     @classmethod
