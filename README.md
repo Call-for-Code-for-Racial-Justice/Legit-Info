@@ -122,13 +122,40 @@ on how to deploy the project on a live system.
 
 `pipenv shell`
 
-5. Run the following command to generate a default user with some pre-existing impacts and locations. This creates an admin user `cfcadmin` with the password `Call4Code`.
+5. Run the following commands to set up the local database (If you are using Windows there are variations for the next 3 steps)
+
+`python3 manage.py makemigrations` 
+
+
+`python3 manage.py migrate`
+
+
+Windows users
+
+`python manage.py makemigrations` 
+
+
+`python manage.py migrate`
+
+
+6. Run the following command to generate a default user with some pre-existing impacts and locations. This creates an admin user `cfcadmin` with the password `Call4Code`.
 
 `./stage1 loaddata sources/cfc-seed.json`
 
-6. Run the application with the following command.
+
+Windows Users
+
+`python manage.py loaddata sources/cfc-seed.json`
+
+7. Run the application with the following command.
 
 `./stage1 runserver localhost:3000`
+
+
+Windows Users 
+
+`python manage.py loaddata sources/cfc-seed.json`
+
 
 ### States of Deployment
 
