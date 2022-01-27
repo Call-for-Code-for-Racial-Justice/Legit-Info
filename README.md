@@ -124,9 +124,9 @@ on how to deploy the project on a live system.
  
 5. Use the following commands to create your local database. (If you are using Windows, there will be command variations for the next 3 steps)
 
-`python3 manage.py makemigrations` 
+`./stage1 makemigrations` 
 
-`python3 manage.py migrate`
+`./stage1 migrate`
 
 Windows
 
