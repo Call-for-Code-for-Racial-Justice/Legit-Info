@@ -121,14 +121,34 @@ on how to deploy the project on a live system.
 4. Use the following command if you already have installed the dependencies and want to activate the virtual environment only.
 
 `pipenv shell`
+ 
+5. Use the following commands to create your local database. (If you are using Windows, there will be command variations for the next 3 steps)
 
-5. Run the following command to generate a default user with some pre-existing impacts and locations. This creates an admin user `cfcadmin` with the password `Call4Code`.
+`./stage1 makemigrations` 
+
+`./stage1 migrate`
+
+Windows
+
+`python manage.py makemigrations` 
+
+`python manage.py migrate`
+
+6. Run the following command to generate a default user with some pre-existing impacts and locations. This creates an admin user `cfcadmin` with the password `Call4Code`.
 
 `./stage1 loaddata sources/cfc-seed.json`
 
-6. Run the application with the following command.
+Windows
+
+`python manage.py loaddata sources/cfc-seed.json`
+
+7. Run the application with the following command.
 
 `./stage1 runserver localhost:3000`
+
+Windows
+
+`python manage.py runserver localhost:3000`
 
 ### States of Deployment
 
