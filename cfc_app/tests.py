@@ -38,7 +38,7 @@ class HealthEndpointTests(SimpleTestCase):
         """ Test that '/health' is redirected to '/health/' with RC=301 """
 
         response = self.client.get('/health')
-        self.assertRedirects(response, '/locations/', 301, 200)
+        self.assertRedirects(response, '/health/', 301, 200)
 
 class LocationsEndpointTests(TestCase):
     """ Locations Endpoint use to show all supported locations """
