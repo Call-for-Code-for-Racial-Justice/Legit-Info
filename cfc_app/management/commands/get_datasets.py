@@ -121,7 +121,7 @@ class Command(BaseCommand):
         try:
             Location.objects.get(shortname='usa')
         except Location.DoesNotExist:
-            Location.loads()
+            Location.load_defaults()
 
         locations = Location.objects.filter(legiscan_id__gt=0)
         if not locations:

@@ -111,11 +111,6 @@ class Location(models.Model):
         ohio.save()
         return None
 
-
-    @staticmethod
-    def load_upkar():
-        return None
-
 class Impact(models.Model):
     """A location helps filter which legislation to look at."""
 
