@@ -41,6 +41,32 @@ class HealthEndpointTests(SimpleTestCase):
         self.assertEqual(response.status_code, 301)
         self.assertEqual(response.url, '/health/')
 
+class ImpactsEndpointTests(TestCase):
+    """ Impacts Endpoint used to show the impact areas """
+
+    def test_locations_template(self):
+        """ Test that impacts uses 'impacts.html' template """
+
+        response = self.client.get('/impacts/')
+        self.assertTemplateUsed(response, 'impacts.html')
+
+    def test_locations_default_locations_loaded(self):
+        """ Test that default impact areas are loaded """
+
+        response = self.client.get('/impacts/')
+        self.assertNotContains(response, 'None')
+        self.assertContains(response, 'Healthcare')
+        self.assertContains(response, 'Safety')
+        self.assertContains(response, 'Environment')
+        self.assertContains(response, 'Transportation')
+        self.assertContains(response, 'Jobs')
+
+    def test_locations_redirects(self):
+        """ Test that '/impacts' is redirected to '/impacts/' with RC=301 """
+
+        response = self.client.get('/impacts')
+        self.assertRedirects(response, '/impacts/', 301, 200)
+
 class AddStatesCustomCommandTests(TestCase):
     @classmethod
     def setUpTestData(cls):
