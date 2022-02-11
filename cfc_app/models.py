@@ -280,8 +280,8 @@ class Hash(models.Model):
     def find_item_name(name, mode=settings.FOB_METHOD):
         """ get item if exists, None if not """
 
-        record = Hash.objects.get(item_name=name,
-                                     fob_method=mode)
+        record = Hash.objects.filter(item_name=name,
+                                     fob_method=mode).first()
         return record
 
 
