@@ -83,7 +83,7 @@ class GetDatasetsCustomCommandtests(TestCase):
     def fetch_dsl_api_with_new_data_returned(self):
         return
 
-#fetch_dataset
+# fetch_dataset
     def fetch_dataset_with_no_entries(self):
         return
 
@@ -94,6 +94,77 @@ class GetDatasetsCustomCommandtests(TestCase):
         return
 
     def fetch_dataset_with_entry_for_this_state_with_entries_from_this_year(self):
+        return
+
+# fetch_from_api
+    def fetch_from_api_with_existing_session_with_existing_hash_code_when_not_using_api_with_bad_api(self):
+        return
+
+    def fetch_from_api_with_existing_session_without_existing_hash_code_when_not_using_api_with_bad_api(self):
+        return
+
+    def fetch_from_api_with_existing_session_with_existing_hash_code_when_using_api_with_bad_api(self):
+        return
+
+    def fetch_from_api_with_existing_session_without_existing_hash_code_when_using_api_with_bad_api(self):
+        return
+
+    def fetch_from_api_with_existing_session_with_existing_hash_code_when_not_using_api_without_session_data(self):
+        return
+
+    def fetch_from_api_with_existing_session_without_existing_hash_code_when_not_using_api_without_session_data(self):
+        return
+
+    def fetch_from_api_with_existing_session_with_existing_hash_code_when_using_api_without_session_data(self):
+        return
+
+    def fetch_from_api_with_existing_session_without_existing_hash_code_when_using_api_without_session_data(self):
+        return
+
+    def fetch_from_api_with_existing_session_with_existing_hash_code_when_not_using_api_with_error(self):
+        return
+
+    def fetch_from_api_with_existing_session_without_existing_hash_code_when_not_using_api_with_error(self):
+        return
+
+    def fetch_from_api_with_existing_session_with_existing_hash_code_when_using_api_with_error(self):
+        return
+
+    def fetch_from_api_with_existing_session_without_existing_hash_code_when_using_api_with_error(self):
+        return
+
+    def fetch_from_api_with_existing_session_with_existing_hash_code_when_not_using_api(self):
+        return
+
+    def fetch_from_api_with_existing_session_without_existing_hash_code_when_not_using_api(self):
+        return
+
+    def fetch_from_api_with_existing_session_with_existing_hash_code_when_using_api(self):
+        return
+
+    def fetch_from_api_with_existing_session_without_existing_hash_code_when_using_api(self):
+        return
+
+# datasets_found
+    def datasets_found_with_no_states(self):
+        return
+
+    def datasets_found_with_states_without_matching_state_id(self):
+        return
+
+    def datasets_found_with_states_without_matching_year_end(self):
+        return
+
+    def datasets_found_with_states_with_equal_year_end(self):
+        return
+
+    def datasets_found_with_states_with_newer_year_end_in_entry(self):
+        return
+
+    def datasets_found_with_unmatched_session_name(self):
+        return
+
+    def datasets_found_with_matched_session_name(self):
         return
 # Identify what test cases we want
 # Potentially download the file once, and then use that as a base to test against if you had an account
