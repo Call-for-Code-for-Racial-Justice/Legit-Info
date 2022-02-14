@@ -49,15 +49,6 @@ class LocationsEndpointTests(TestCase):
         response = self.client.get('/locations/')
         self.assertTemplateUsed(response, 'locations.html')
 
-    def test_locations_default_locations_loaded(self):
-        """ Test that default locations are loaded"""
-
-        response = self.client.get('/locations/')
-        self.assertNotContains(response, 'world')
-        self.assertContains(response, 'United States')
-        self.assertContains(response, 'Arizona')
-        self.assertContains(response, 'Ohio')
-
     def test_locations_redirects(self):
         """ Test that '/locations' is redirected to '/locations/' with RC=301 """
 
