@@ -50,17 +50,6 @@ class ImpactsEndpointTests(TestCase):
         response = self.client.get('/impacts/')
         self.assertTemplateUsed(response, 'impacts.html')
 
-    def test_locations_default_locations_loaded(self):
-        """ Test that default impact areas are loaded """
-
-        response = self.client.get('/impacts/')
-        self.assertNotContains(response, 'None')
-        self.assertContains(response, 'Healthcare')
-        self.assertContains(response, 'Safety')
-        self.assertContains(response, 'Environment')
-        self.assertContains(response, 'Transportation')
-        self.assertContains(response, 'Jobs')
-
     def test_locations_redirects(self):
         """ Test that '/impacts' is redirected to '/impacts/' with RC=301 """
 
