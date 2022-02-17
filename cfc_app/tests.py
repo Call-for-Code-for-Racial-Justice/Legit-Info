@@ -15,9 +15,6 @@ from django.test import Client
 from django.core.management import call_command
 from django.test import TestCase
 from io import StringIO
-
-from django.urls import reverse
-
 from cfc_app.models import Location
 from cfc_app.models import Impact
 from django.core.management.base import CommandError
