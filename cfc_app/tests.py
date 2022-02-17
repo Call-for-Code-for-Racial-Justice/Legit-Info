@@ -15,7 +15,11 @@ from django.test import Client
 from django.core.management import call_command
 from django.test import TestCase
 from io import StringIO
+
+from django.urls import reverse
+
 from cfc_app.models import Location
+from cfc_app.models import Impact
 from django.core.management.base import CommandError
 from argparse import ArgumentError
 
@@ -40,6 +44,42 @@ class HealthEndpointTests(SimpleTestCase):
         response = self.client.get('/health')
         self.assertEqual(response.status_code, 301)
         self.assertEqual(response.url, '/health/')
+
+class SearchEndpointTests(TestCase):
+    """ Search Endpoint used to search for results """
+
+    def test_get_search_template(self):
+        """ Test that search uses 'search.html' template """
+
+        response = self.client.get('/search/')
+        self.assertTemplateUsed(response, 'search.html')
+
+    def test_get_search_template_redirects(self):
+        """ Test that '/search' is redirected to '/search/' with RC=301 """
+
+        response = self.client.get('/search')
+        self.assertRedirects(response, '/search/', 301, 200)
+
+    def test_post_search_missing_required_data_has_form_error(self):
+        """ Test that '/search' requires a location and at-least one impacts to be selected """
+
+        response = self.client.post('/search/', {})
+        self.assertFormError(response, 'form', 'location', 'A location must be selected')
+        self.assertFormError(response, 'form', 'impacts', 'Select one or more impact areas')
+
+    def test_post_search_with_required_data_redirect_to_results(self):
+        """ Test that '/search/' given valid location and impacts redirects to '/results' view """
+
+        Location.load_defaults()
+        Impact.load_defaults()
+
+        data = {
+            'location': ['2'],
+            'impacts': ['2', '3', '4', '5', '6'],
+        }
+
+        response = self.client.post('/search/', data)
+        self.assertRedirects(response, '/results/1/', 302, 200)
 
 class AddStatesCustomCommandTests(TestCase):
     @classmethod
