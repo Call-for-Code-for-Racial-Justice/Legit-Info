@@ -36,11 +36,25 @@ class HealthEndpointTests(SimpleTestCase):
         self.assertContains(response, '{"status": "UP"}')
 
     def test_health_status_redirects(self):
-        """ Test that '/health' is redirected to '/health/' and returned with RC=301 """
+        """ Test that '/health' is redirected to '/health/' with RC=301 """
 
         response = self.client.get('/health')
-        self.assertEqual(response.status_code, 301)
-        self.assertEqual(response.url, '/health/')
+        self.assertRedirects(response, '/health/', 301, 200)
+
+class LocationsEndpointTests(TestCase):
+    """ Locations Endpoint use to show all supported locations """
+
+    def test_locations_template(self):
+        """ Test that locations uses 'locations.html' template """
+
+        response = self.client.get('/locations/')
+        self.assertTemplateUsed(response, 'locations.html')
+
+    def test_locations_redirects(self):
+        """ Test that '/locations' is redirected to '/locations/' with RC=301 """
+
+        response = self.client.get('/locations')
+        self.assertRedirects(response, '/locations/', 301, 200)
 
 
 class ImpactsEndpointTests(TestCase):
