@@ -42,6 +42,23 @@ class HealthEndpointTests(SimpleTestCase):
         self.assertEqual(response.status_code, 301)
         self.assertEqual(response.url, '/health/')
 
+
+class ImpactsEndpointTests(TestCase):
+    """ Impacts Endpoint used to show the impact areas """
+
+    def test_locations_template(self):
+        """ Test that impacts uses 'impacts.html' template """
+
+        response = self.client.get('/impacts/')
+        self.assertTemplateUsed(response, 'impacts.html')
+
+    def test_locations_redirects(self):
+        """ Test that '/impacts' is redirected to '/impacts/' with RC=301 """
+
+        response = self.client.get('/impacts')
+        self.assertRedirects(response, '/impacts/', 301, 200)
+
+        
 class SearchEndpointTests(TestCase):
     """ Search Endpoint used to search for results """
 
@@ -78,6 +95,7 @@ class SearchEndpointTests(TestCase):
         response = self.client.post('/search/', data)
         self.assertRedirects(response, '/results/1/', 302, 200)
 
+        
 class AddStatesCustomCommandTests(TestCase):
     @classmethod
     def setUpTestData(cls):
