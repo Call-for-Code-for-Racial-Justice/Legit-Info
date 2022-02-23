@@ -21,6 +21,8 @@ from django.conf import LazySettings
 from django.test import Client
 from django.test import TestCase
 
+import cfc_app
+from cfc_app import models
 from cfc_app.management.commands.get_datasets import Command
 # Application imports
 
@@ -33,11 +35,13 @@ class GetDatasetsCustomCommandTests(TestCase):
         os.environ['FOB_STORAGE'] = '/tmp/'
         cls.subject = Command()
 
+        when(cfc_app.management.commands.get_datasets).save_entry_to_hash(...).thenReturn()
         when(cls.subject.fob).upload_text(...).thenReturn()
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDown(cls):
         mockito.unstub(cls.subject)
+        mockito.unstub(cfc_app.management.commands.get_datasets)
 
     # def test_test_get_datasets(self, mock_get_datasetlist):
     #     out = StringIO()
@@ -228,25 +232,81 @@ class GetDatasetsCustomCommandTests(TestCase):
 
 # datasets_found
     def test_datasets_found_with_no_states(self):
-        return
+        self.subject.datasets_found([])
+        verify(cfc_app.management.commands.get_datasets, times=0).save_entry_to_hash(...)
 
     def test_datasets_found_with_states_without_matching_state_id(self):
-        return
+        when(self.subject.fobhelp).dataset_items('TestState').thenReturn('TestState-Dataset-1234.json')
+
+        entry = {'state_id': 'UnmatchedStateID',
+                 'session_id': 1234,
+                 'year_start': 2014,
+                 'year_end': 2015,
+                 'dataset_size': 0}
+        self.subject.fromyear = 2020
+        self.subject.datasetlist = [entry]
+        self.subject.datasets_found([['TestState', 'TestStateID']])
+        verify(cfc_app.management.commands.get_datasets, times=0).save_entry_to_hash(...)
 
     def test_datasets_found_with_states_without_matching_year_end(self):
-        return
+        when(self.subject.fobhelp).dataset_items('TestState').thenReturn('TestState-Dataset-1234.json')
+
+        entry = {'state_id': 'TestStateID',
+                 'session_id': 1234,
+                 'dataset_date': '2015-01-30',
+                 'year_start': 2014,
+                 'year_end': 2015,
+                 'dataset_size': 0}
+        self.subject.fromyear = 2020
+        self.subject.datasetlist = [entry]
+        self.subject.datasets_found([['TestState', 'TestStateID']])
+        verify(cfc_app.management.commands.get_datasets, times=0).save_entry_to_hash(...)
 
     def test_datasets_found_with_states_with_equal_year_end(self):
-        return
+        when(self.subject.fobhelp).dataset_items('TestState').thenReturn('TestState-Dataset-1234.json')
+
+        entry = {'state_id': 'TestStateID',
+                 'session_id': 1234,
+                 'dataset_date': '2015-01-30',
+                 'year_start': 2014,
+                 'year_end': 2015,
+                 'dataset_size': 0}
+        self.subject.fromyear = 2015
+        self.subject.datasetlist = [entry]
+
+        self.subject.datasets_found([['TestState', 'TestStateID']])
+        verify(cfc_app.management.commands.get_datasets).save_entry_to_hash(...)
 
     def test_datasets_found_with_states_with_newer_year_end_in_entry(self):
-        return
+        when(self.subject.fobhelp).dataset_items('TestState').thenReturn('TestState-Dataset-1234.json')
+
+        entry = {'state_id': 'TestStateID',
+                 'session_id': 1234,
+                 'dataset_date': '2015-01-30',
+                 'year_start': 2014,
+                 'year_end': 2015,
+                 'dataset_size': 0}
+        self.subject.fromyear = 2014
+        self.subject.datasetlist = [entry]
+
+        self.subject.datasets_found([['TestState', 'TestStateID']])
+        verify(cfc_app.management.commands.get_datasets).save_entry_to_hash(...)
 
     def test_datasets_found_with_unmatched_session_name(self):
-        return
+        when(self.subject.fobhelp).dataset_items('TestState').thenReturn('UnmatchedSessionName')
 
-    def test_datasets_found_with_matched_session_name(self):
-        return
+        entry = {'state_id': 'TestStateID',
+                 'session_id': 1234,
+                 'dataset_date': '2015-01-30',
+                 'year_start': 2014,
+                 'year_end': 2015,
+                 'dataset_size': 0}
+        self.subject.fromyear = 2015
+        self.subject.datasetlist = [entry]
+
+        self.subject.datasets_found([['TestState', 'TestStateID']])
+        verify(cfc_app.management.commands.get_datasets, times=0).save_entry_to_hash(...)
+
 
 # --api invokes Watson NLU, so we will want to mock that out
 # look at the django offial docs on test writing
