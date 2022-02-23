@@ -8,6 +8,8 @@
 :: stage1.bat migrate
 :: stage1.bat dbshell
 :: stage1.bat qcluster
+
+SET USE_SQLITE3='True'
 SET parms="%*"
 if [%parms%] == [""] ( SET parms=runserver localhost:3000 ) ELSE ( SET parms=%parms:"=%)
 python manage.py %parms%
