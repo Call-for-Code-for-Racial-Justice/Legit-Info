@@ -130,9 +130,9 @@ on how to deploy the project on a live system.
 
 Windows
 
-`stage1.bat makemigrations` OR `python manage.py makemigrations` 
+`stage1.bat makemigrations`
 
-`stage1.bat migrate` OR `python manage.py migrate`
+`stage1.bat migrate`
 
 6. Run the following command to generate a default user with some pre-existing impacts and locations. This creates an admin user `cfcadmin` with the password `Call4Code`.
 
@@ -140,7 +140,7 @@ Windows
 
 Windows
 
-`stage1.bat loaddata sources/cfc-seed.json` OR `python manage.py loaddata sources/cfc-seed.json`
+`stage1.bat loaddata sources/cfc-seed.json`
 
 7. Run the application with the following command.
 
@@ -148,7 +148,7 @@ Windows
 
 Windows
 
-`stage1.bat runserver localhost:3000` OR `python manage.py runserver localhost:3000`
+`stage1.bat runserver localhost:3000`
 
 ### States of Deployment
 
