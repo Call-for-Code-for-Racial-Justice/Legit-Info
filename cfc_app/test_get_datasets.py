@@ -2,16 +2,17 @@
 # -*- coding: utf-8 -*-
 
 """
-cfc_app/tests.py -- Perform simple tests
+cfc_app/test_get_datasets.py -- Characterization of behaviour on get_datasets custom command
 
-Written by James Stewart and Tony Pearson, IBM, 2020
+Written by Robert Bruce, 2022
 Licensed under Apache 2.0, see LICENSE for details
 """
 
 # System imports
-# Django and other third-party imports
 import datetime
 import os
+
+# Django and other third-party imports
 from unittest import mock
 from unittest.mock import call
 
@@ -21,10 +22,9 @@ from django.conf import LazySettings
 from django.test import Client
 from django.test import TestCase
 
-import cfc_app
-from cfc_app import models
-from cfc_app.management.commands.get_datasets import Command
 # Application imports
+import cfc_app
+from cfc_app.management.commands.get_datasets import Command
 
 client = Client()
 
@@ -43,13 +43,6 @@ class GetDatasetsCustomCommandTests(TestCase):
         mockito.unstub(cls.subject)
         mockito.unstub(cfc_app.management.commands.get_datasets)
 
-    # def test_test_get_datasets(self, mock_get_datasetlist):
-    #     out = StringIO()
-    #     call_command('get_datasets', '--api', '--frequency', '1', stdout=out)
-
-        # self.assertEqual(response.status_code, 200)
-        # self.assertContains(response, '{"status": "UP"}')
-
 # add_arguments
     @mock.patch("django.core.management.base.CommandParser")
     def test_add_arguments(self, parser):
@@ -61,30 +54,6 @@ class GetDatasetsCustomCommandTests(TestCase):
             call("--state", help="Process single state: AZ, OH"),
             call("--frequency", type=int, default=self.subject.frequency,
                                 help="Days since last DatasetList request")])
-        return
-
-# recent_enough
-    def test_recent_enough_with_with_api_file_more_than_one_week_old(self):
-        now = self.subject.now
-
-        return
-
-    def test_recent_enough_with_api_failue(self):
-        return
-
-    def test_recent_enough_with_not_calling_api_with_valid_file(self):
-        return
-
-    def test_recent_enough_with_not_calling_api_without_valid_file(self):
-        return
-
-    def test_recent_enough_with_invalid_legiscan_file(self):
-        return
-
-    def test_recent_enough_with_no_legiscan_file(self):
-        return
-
-    def test_recent_enough_with_more_than_5_versions(self):
         return
 
 # find_latest_dsl
@@ -146,29 +115,29 @@ class GetDatasetsCustomCommandTests(TestCase):
 # fetch_dataset
     def test_fetch_dataset_with_no_entries(self):
         self.subject.datasetlist = {}
-        self.subject.fetch_from_api = mockito.mock(self.subject.fetch_from_api)
+        when(self.subject).fetch_from_api(...).thenReturn()
         self.subject.fetch_dataset('TestState', 'TestStateID')
 
-        verify(self.subject.fetch_from_api, times=0).__call__(...)
+        verify(self.subject, times=0).fetch_from_api(...)
 
     def test_fetch_dataset_with_no_entries_for_this_state(self):
         self.subject.datasetlist = [{'state_id': 'SomeOtherState',
                                     'session_id': 1234,
                                     'year_end': 2020}]
-        self.subject.fetch_from_api = mockito.mock(self.subject.fetch_from_api)
+        when(self.subject).fetch_from_api(...).thenReturn()
         self.subject.fetch_dataset('TestState', 'TestStateID')
 
-        verify(self.subject.fetch_from_api, times=0).__call__(...)
+        verify(self.subject, times=0).fetch_from_api(...)
 
     def test_fetch_dataset_with_entry_for_this_state_with_no_entries_from_this_year(self):
         self.subject.fromyear = 2020
         self.subject.datasetlist = [{'state_id': 'TestStateID',
                                      'session_id': 1234,
                                      'year_end': 2015}]
-        self.subject.fetch_from_api = mockito.mock(self.subject.fetch_from_api)
+        when(self.subject).fetch_from_api(...).thenReturn()
         self.subject.fetch_dataset('TestState', 'TestStateID')
 
-        verify(self.subject.fetch_from_api, times=0).__call__(...)
+        verify(self.subject, times=0).fetch_from_api(...)
 
     def test_fetch_dataset_with_entry_for_this_state_with_entries_from_this_year(self):
         self.subject.fromyear = 2010
@@ -180,55 +149,6 @@ class GetDatasetsCustomCommandTests(TestCase):
         self.subject.fetch_dataset('TestState', 'TestStateID')
 
         verify(self.subject).fetch_from_api('TestState-Dataset-1234.json', entry)
-
-# fetch_from_api
-    def test_fetch_from_api_with_existing_session_with_existing_hash_code_when_not_using_api_with_bad_api(self):
-        return
-
-    def test_fetch_from_api_with_existing_session_without_existing_hash_code_when_not_using_api_with_bad_api(self):
-        return
-
-    def test_fetch_from_api_with_existing_session_with_existing_hash_code_when_using_api_with_bad_api(self):
-        return
-
-    def test_fetch_from_api_with_existing_session_without_existing_hash_code_when_using_api_with_bad_api(self):
-        return
-
-    def test_fetch_from_api_with_existing_session_with_existing_hash_code_when_not_using_api_without_session_data(self):
-        return
-
-    def test_fetch_from_api_with_existing_session_without_existing_hash_code_when_not_using_api_without_session_data(self):
-        return
-
-    def test_fetch_from_api_with_existing_session_with_existing_hash_code_when_using_api_without_session_data(self):
-        return
-
-    def test_fetch_from_api_with_existing_session_without_existing_hash_code_when_using_api_without_session_data(self):
-        return
-
-    def test_fetch_from_api_with_existing_session_with_existing_hash_code_when_not_using_api_with_error(self):
-        return
-
-    def test_fetch_from_api_with_existing_session_without_existing_hash_code_when_not_using_api_with_error(self):
-        return
-
-    def test_fetch_from_api_with_existing_session_with_existing_hash_code_when_using_api_with_error(self):
-        return
-
-    def test_fetch_from_api_with_existing_session_without_existing_hash_code_when_using_api_with_error(self):
-        return
-
-    def test_fetch_from_api_with_existing_session_with_existing_hash_code_when_not_using_api(self):
-        return
-
-    def test_fetch_from_api_with_existing_session_without_existing_hash_code_when_not_using_api(self):
-        return
-
-    def test_fetch_from_api_with_existing_session_with_existing_hash_code_when_using_api(self):
-        return
-
-    def test_fetch_from_api_with_existing_session_without_existing_hash_code_when_using_api(self):
-        return
 
 # datasets_found
     def test_datasets_found_with_no_states(self):
@@ -306,10 +226,3 @@ class GetDatasetsCustomCommandTests(TestCase):
 
         self.subject.datasets_found([['TestState', 'TestStateID']])
         verify(cfc_app.management.commands.get_datasets, times=0).save_entry_to_hash(...)
-
-
-# --api invokes Watson NLU, so we will want to mock that out
-# look at the django offial docs on test writing
-# obeythetestinggoat
-# could we extract documentation from our unit tests?
-# There are some existing github actions, even one that runs tests with coverage, we might want to see if there's a better way to do it.
