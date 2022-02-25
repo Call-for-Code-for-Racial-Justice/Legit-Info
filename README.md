@@ -130,6 +130,20 @@ on how to deploy the project on a live system.
 
 `./stage1 runserver localhost:3000`
 
+### Running the cron jobs
+
+Legit Info uses cron jobs to routinely fetch legislation data from Legiscan. The cron job can be run using the `weekly.sh` (for stage 1; development) shell script. However,
+in order to run the cron jobs, you need to set the following environment variables first:
+
+`FOB_STORAGE`
+
+`LEGISCAN_API_KEY`
+
+Set the `FOB_STORAGE` environment variable to the path to the folder on your local machine where you want the data to be stored.
+
+Set the `LEGISCAN_API_KEY` environment variable to the Legiscan API key you obtain from their website. Legiscan has a free tier
+that allows a few thousand queries per month, which should suffice for development purposes.
+
 ### States of Deployment
 
 ![Deployment Stages](docs/Deployment_Stages.png)
