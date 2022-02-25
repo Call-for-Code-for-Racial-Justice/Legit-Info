@@ -338,4 +338,24 @@ def save_entry_to_hash(session_name, entry):
 
     return None
 
+class JobDetail(models.Model):
+    """track details of the cron jobs"""
+
+    class Meta:
+        """ set plurality and ordering method """
+
+        app_label = 'cfc_app'
+        ordering = ['-start_time', 'region', 'name']
+        unique_together = ('name', 'region', 'start_time',)
+
+    name = models.CharField(max_length=80)
+    region = models.CharField(max_length=20)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    num_objects_processed = models.PositiveIntegerField()
+
+    def __str__(self):
+        """return a string representation of the model"""
+        return '[{}] {} - {}'.format(self.start_time, self.name, self.region)
+
 # end of module

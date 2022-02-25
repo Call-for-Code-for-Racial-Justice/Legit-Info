@@ -23,6 +23,7 @@ Licensed under Apache 2.0, see LICENSE for details
 import logging
 import os
 import re
+import six
 
 # Django and other third-party imports
 from django.core.management.base import BaseCommand, CommandError
@@ -36,7 +37,7 @@ import ibm_watson.natural_language_understanding_v1 as NLU
 from cfc_app.fob_storage import FobStorage
 from cfc_app.legiscan_api import LEGISCAN_ID
 from cfc_app.log_time import LogTime
-from cfc_app.models import Location, Impact, Law
+from cfc_app.models import JobDetail, Location, Impact, Law
 from cfc_app.Oneline import Oneline
 from cfc_app.show_progress import ShowProgress
 from cfc_app.word_map import WordMap
@@ -144,6 +145,8 @@ class Command(BaseCommand):
         self.womp = WordMap(RLIMIT)
         self.womp.load_csv(impact_list)
 
+        num_processed = {}
+
         locations = Location.objects.filter(legiscan_id__gt=0)
         locations = locations.order_by('hierarchy')
         for loc in locations:
@@ -159,18 +162,29 @@ class Command(BaseCommand):
             # import pdb; pdb.set_trace()
             print("Processing: {} ({})".format(loc.longname, state))
             try:
-                self.process_state(state)
+                num_processed[state] = self.process_state(state)
             except Exception as exc:
                 err_msg = f"151:Process State Error: {exc}"
                 logger.error(err_msg, exc_info=True)
                 raise AnalyzeTextError(err_msg) from exc
 
         timing.end_time(options['verbosity'])
+
+        for state, num_processed_state in six.iteritems(num_processed):
+            job_detail = JobDetail()
+            job_detail.name = 'analyze_text'
+            job_detail.region = state
+            job_detail.start_time = timing.start
+            job_detail.end_time = timing.end
+            job_detail.num_objects_processed = num_processed_state
+            job_detail.save()
+
         return None
 
     def process_state(self, state):
         """ process specific state of United States """
 
+        num_processed_state = 0
         cursor = self.after
         items = self.fob.list_items(prefix=state, suffix=".txt",
                                     after=cursor, limit=0)
@@ -185,7 +199,8 @@ class Command(BaseCommand):
             if 'BILLID' in header:
                 bill_id = header['BILLID']
                 logger.debug(f"231:bill_id={bill_id} {filename}")
-                self.process_legislation(filename, textdata, header)
+                if self.process_legislation(filename, textdata, header):
+                    num_processed_state += 1
                 if self.verbosity:
                     dot.show()
                 if self.limit > 0 and self.count >= self.limit:
@@ -196,7 +211,7 @@ class Command(BaseCommand):
                 continue
 
         dot.end()
-        return None
+        return num_processed_state
 
     def process_legislation(self, filename, extracted_lines, header):
         """ Process individual bill """
@@ -271,8 +286,9 @@ class Command(BaseCommand):
             if rel:
                 logger.debug(f"229:Filename {filename} Impact={imp_chosen}")
                 self.save_law(key, header, rel, imp_chosen)
+                return True
 
-        return None
+        return False
 
     @staticmethod
     def relevance_nlu(text):

@@ -20,6 +20,7 @@ import logging
 import re
 import tempfile
 import zipfile
+import six
 
 # Django and other third-party imports
 from bs4 import BeautifulSoup
@@ -36,7 +37,7 @@ from cfc_app.fob_storage import FobStorage
 from cfc_app.fob_helper import FobHelper
 from cfc_app.legiscan_api import LegiscanAPI, LEGISCAN_ID, LegiscanError
 from cfc_app.log_time import LogTime
-from cfc_app.models import Law, Location, Hash, save_source_hash
+from cfc_app.models import JobDetail, Law, Location, Hash, save_source_hash
 from cfc_app.Oneline import Oneline, Oneline_add_header
 from cfc_app.pdf_to_text import PDFtoText
 from cfc_app.show_progress import ShowProgress
@@ -128,6 +129,8 @@ class Command(BaseCommand):
 
         locations = Location.objects.filter(legiscan_id__gt=0)
 
+        num_processed = {}
+
         for loc in locations:
             self.loc = loc
 
@@ -142,8 +145,19 @@ class Command(BaseCommand):
             if (self.state is None) or (state == self.state):
                 logger.info(f"194:Processing: {loc.longname} ({state})")
                 self.process_location(state)
+                num_processed[state] = self.state_count
 
         timing.end_time(options['verbosity'])
+
+        for state, num_processed_state in six.iteritems(num_processed):
+            job_detail = JobDetail()
+            job_detail.name = 'extract_files'
+            job_detail.region = state
+            job_detail.start_time = timing.start
+            job_detail.end_time = timing.end
+            job_detail.num_objects_processed = num_processed_state
+            job_detail.save()
+
         return None
 
     def process_location(self, state):

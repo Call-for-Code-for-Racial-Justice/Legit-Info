@@ -16,6 +16,7 @@ Licensed under Apache 2.0, see LICENSE for details
 import datetime as DT
 import json
 import logging
+import six
 
 # Django and other third-party imports
 from django.conf import settings
@@ -26,7 +27,7 @@ from cfc_app.fob_storage import FobStorage
 from cfc_app.fob_helper import FobHelper
 from cfc_app.legiscan_api import LegiscanAPI, LEGISCAN_ID, LegiscanError
 from cfc_app.log_time import LogTime
-from cfc_app.models import Location, Hash, save_entry_to_hash
+from cfc_app.models import JobDetail, Location, Hash, save_entry_to_hash
 from cfc_app.bill_detail import date_type
 
 
@@ -129,6 +130,7 @@ class Command(BaseCommand):
             locations = Location.objects.filter(legiscan_id__gt=0)
 
         states = []
+        num_fetched = {}
         for loc in locations:
             state_id = loc.legiscan_id
             if state_id > 0:
@@ -144,7 +146,8 @@ class Command(BaseCommand):
             # Get dataset and master files, up to the --limit set
 
             try:
-                self.fetch_dataset(state, state_id)
+                num_fetched_state = self.fetch_dataset(state, state_id)
+                num_fetched[state] = num_fetched_state
             except Exception as exc:
                 logger.error(f"149:Fetch Error {exc}", exc_info=True)
                 raise GetDatasetError from exc
@@ -153,6 +156,16 @@ class Command(BaseCommand):
         self.datasets_found(states)
 
         timing.end_time(options['verbosity'])
+        
+        for state, num_fetched_state in six.iteritems(num_fetched):
+            job_detail = JobDetail()
+            job_detail.start_time = timing.start
+            job_detail.end_time = timing.end
+            job_detail.region = state
+            job_detail.num_objects_processed = num_fetched_state
+            job_detail.name = 'get_datasets'
+            job_detail.save()
+
         return None
 
     def recent_enough(self):
@@ -239,18 +252,21 @@ class Command(BaseCommand):
     def fetch_dataset(self, state, state_id):
         """ Fetch dataset for specific legislative session """
 
+        num_fetched = 0
         for entry in self.datasetlist:
             if entry['state_id'] == state_id:
                 session_id = entry['session_id']
                 session_name = self.fobhelp.dataset_name(state, session_id)
                 if entry['year_end'] >= self.fromyear:
-                    self.fetch_from_api(session_name, entry)
+                    if self.fetch_from_api(session_name, entry):
+                        num_fetched += 1
 
-        return None
+        return num_fetched
 
     def fetch_from_api(self, session_name, entry):
         """ Fetch dataset from Legiscan API """
 
+        fetch_successful = False
         fetch_new = False
         if self.fob.item_exists(session_name):
             entry_date = date_type(entry['dataset_date'])
@@ -275,11 +291,12 @@ class Command(BaseCommand):
                     logger.error(f"228:{session_data}")
                 else:
                     self.fob.upload_text(session_data, session_name)
+                    fetch_successful = True
             else:
                 err_msg = 'Fetch unsuccessful for: '+session_name
                 raise LegiscanError(f"234:{err_msg}")
 
-        return None
+        return fetch_successful
 
     def datasets_found(self, states):
         """ Process datasets found """
