@@ -17,5 +17,18 @@ tables="auth.user users.profile cfc_app.criteria cfc_app.impact cfc_app.location
 outfile="--output sources/cfc-seed.json"
 parms="dumpdata $tables $outfile"
 fi
+
+if [[ -z "${FOB_STORAGE}" ]]; then
+        echo "Error: FOB_STORAGE environment variable not found"
+        echo "Please set the FOB_STORAGE environment variable before running the script."
+        exit 0
+fi
+
+if [[ -z "${LEGISCAN_API_KEY}" ]]; then
+        echo "Error: LEGISCAN_API_KEY environment variable not found"
+        echo "Please set the LEGISCAN_API_KEY environment variable before running the script."
+        exit 0
+fi
+
 echo $parms
-cd ~/Develop/Legit-Info && pipenv run python manage.py $parms
+pipenv run python manage.py $parms
