@@ -16,6 +16,7 @@ from django.core.management import call_command
 from django.test import TestCase
 from io import StringIO
 from cfc_app.models import Location
+from cfc_app.models import Impact
 from django.core.management.base import CommandError
 from argparse import ArgumentError
 
@@ -35,12 +36,80 @@ class HealthEndpointTests(SimpleTestCase):
         self.assertContains(response, '{"status": "UP"}')
 
     def test_health_status_redirects(self):
-        """ Test that '/health' is redirected to '/health/' and returned with RC=301 """
+        """ Test that '/health' is redirected to '/health/' with RC=301 """
 
         response = self.client.get('/health')
-        self.assertEqual(response.status_code, 301)
-        self.assertEqual(response.url, '/health/')
+        self.assertRedirects(response, '/health/', 301, 200)
 
+class LocationsEndpointTests(TestCase):
+    """ Locations Endpoint use to show all supported locations """
+
+    def test_locations_template(self):
+        """ Test that locations uses 'locations.html' template """
+
+        response = self.client.get('/locations/')
+        self.assertTemplateUsed(response, 'locations.html')
+
+    def test_locations_redirects(self):
+        """ Test that '/locations' is redirected to '/locations/' with RC=301 """
+
+        response = self.client.get('/locations')
+        self.assertRedirects(response, '/locations/', 301, 200)
+
+
+class ImpactsEndpointTests(TestCase):
+    """ Impacts Endpoint used to show the impact areas """
+
+    def test_locations_template(self):
+        """ Test that impacts uses 'impacts.html' template """
+
+        response = self.client.get('/impacts/')
+        self.assertTemplateUsed(response, 'impacts.html')
+
+    def test_locations_redirects(self):
+        """ Test that '/impacts' is redirected to '/impacts/' with RC=301 """
+
+        response = self.client.get('/impacts')
+        self.assertRedirects(response, '/impacts/', 301, 200)
+
+        
+class SearchEndpointTests(TestCase):
+    """ Search Endpoint used to search for results """
+
+    def test_get_search_template(self):
+        """ Test that search uses 'search.html' template """
+
+        response = self.client.get('/search/')
+        self.assertTemplateUsed(response, 'search.html')
+
+    def test_get_search_template_redirects(self):
+        """ Test that '/search' is redirected to '/search/' with RC=301 """
+
+        response = self.client.get('/search')
+        self.assertRedirects(response, '/search/', 301, 200)
+
+    def test_post_search_missing_required_data_has_form_error(self):
+        """ Test that '/search' requires a location and at-least one impacts to be selected """
+
+        response = self.client.post('/search/', {})
+        self.assertFormError(response, 'form', 'location', 'A location must be selected')
+        self.assertFormError(response, 'form', 'impacts', 'Select one or more impact areas')
+
+    def test_post_search_with_required_data_redirect_to_results(self):
+        """ Test that '/search/' given valid location and impacts redirects to '/results' view """
+
+        Location.load_defaults()
+        Impact.load_defaults()
+
+        data = {
+            'location': ['2'],
+            'impacts': ['2', '3', '4', '5', '6'],
+        }
+
+        response = self.client.post('/search/', data)
+        self.assertRedirects(response, '/results/1/', 302, 200)
+
+        
 class AddStatesCustomCommandTests(TestCase):
     @classmethod
     def setUpTestData(cls):
