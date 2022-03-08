@@ -16,3 +16,4 @@
 * **Katie Christensen**
 * **Trevor Freudig**
 * **Winstongabriel Douglas**
+* **Robert Bruce**

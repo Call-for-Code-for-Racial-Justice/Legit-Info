@@ -39,7 +39,6 @@ pylint = "==2.6.2"
 pylint-django = "==2.4.2"
 isort = "==5.7.0"
 asgiref = "==3.3.1"
-whitenoise = {extras = ["brotli"], version = "*"}
 alabaster = "==0.7.12"
 astroid = "==2.4.2"
 certifi = "==2020.12.5"
@@ -90,3 +89,8 @@ websocket_client = "==0.48.0"
 django-q = "*"
 django-allow-cidr = "*"
 typing-extensions = "*"
+mockito = "*"
+
+[packages.whitenoise]
+extras = [ "brotli",]
+version = "*"
