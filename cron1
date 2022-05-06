@@ -32,4 +32,9 @@ if [[ -z "${LEGISCAN_API_KEY}" ]]; then
 fi
 
 echo $parms
+
+# change working directory to the one in which script resides
+scriptPath=`dirname $0`
+cd $scriptPath
+
 pipenv run python manage.py $parms

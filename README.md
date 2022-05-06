@@ -132,8 +132,8 @@ on how to deploy the project on a live system.
 
 ### Running the cron jobs
 
-Legit Info uses cron jobs to routinely fetch legislation data from Legiscan. The cron job can be run using the `weekly.sh` (for stage 1; development) shell script. However,
-in order to run the cron jobs, you need to set the following environment variables first:
+Legit Info uses cron jobs to routinely fetch legislation data from Legiscan, documented in [CRON.md](docs/CRON.md). The cron jobs can be run using the `weekly.sh`
+(for stage 1; development) shell script. However, in order to run the cron jobs, you need to set the following environment variables first:
 
 `FOB_STORAGE`
 

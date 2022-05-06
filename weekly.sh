@@ -15,6 +15,10 @@ if [[ -z "${LEGISCAN_API_KEY}" ]]; then
 	exit 0
 fi
 
+# change working directory to the one in which script resides
+scriptPath=`dirname $0`
+cd $scriptPath
+
 ./cron1 get_datasets --api
 ./cron1 extract_files --api --skip --limit 0
 ./cron1 analyze_text --api --skip --compare --limit 0
