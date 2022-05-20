@@ -12,7 +12,7 @@ Licensed under Apache 2.0, see LICENSE for details
 from django.contrib import admin
 
 # Register your models here.
-from .models import Location, Impact, Criteria, Law, Hash
+from .models import JobDetail, Location, Impact, Criteria, Law, Hash
 
 
 class CriteriaAdmin(admin.ModelAdmin):
@@ -69,9 +69,14 @@ class LocationAdmin(admin.ModelAdmin):
     fields = ("longname", "shortname", "govlevel", "legiscan_id", "hierarchy",
               "parent")
 
+class JobDetailAdmin(admin.ModelAdmin):
+    """ Admin for JobDetail """
+    list_display = ("id", "name", "region", "start_time", "end_time", "num_objects_processed")
+
 
 admin.site.register(Criteria, CriteriaAdmin)
 admin.site.register(Hash, HashAdmin)
 admin.site.register(Impact, ImpactAdmin)
 admin.site.register(Law, LawAdmin)
 admin.site.register(Location, LocationAdmin)
+admin.site.register(JobDetail, JobDetailAdmin)
