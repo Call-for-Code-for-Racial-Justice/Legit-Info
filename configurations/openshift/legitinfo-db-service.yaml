@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.service.healthcheck.readiness.interval: 10s
+    kompose.service.healthcheck.readiness.retries: "3"
+    kompose.service.healthcheck.readiness.start_period: 30s
+    kompose.service.healthcheck.readiness.test: CMD /usr/libexec/check-container
+    kompose.service.healthcheck.readiness.timeout: 10s
+  creationTimestamp: null
+  labels:
+    io.kompose.service: legitinfo-db
+  name: legitinfo-db
+spec:
+  ports:
+    - name: "5432"
+      port: 5432
+      targetPort: 5432
+  selector:
+    io.kompose.service: legitinfo-db
+status:
+  loadBalancer: {}

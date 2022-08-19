@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ImageStream
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: legitinfo
+  name: legitinfo
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: docker.io/callforcode/legit-info:1.0.0
+      generation: null
+      importPolicy: {}
+      name: 1.0.0
+      referencePolicy:
+        type: ""
+status:
+  dockerImageRepository: ""
