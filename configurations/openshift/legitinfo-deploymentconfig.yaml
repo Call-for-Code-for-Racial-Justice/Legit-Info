@@ -7,7 +7,7 @@ metadata:
     kompose.service.healthcheck.readiness.http_get_port: "8080"
     kompose.service.healthcheck.readiness.interval: 10s
     kompose.service.healthcheck.readiness.retries: "3"
-    kompose.service.healthcheck.readiness.start_period: 120s
+    kompose.service.healthcheck.readiness.start_period: 60s
     kompose.service.healthcheck.readiness.timeout: 10s
   creationTimestamp: null
   labels:
@@ -55,7 +55,7 @@ spec:
             httpGet:
               path: /health/
               port: 8080
-            initialDelaySeconds: 120
+            initialDelaySeconds: 60
             periodSeconds: 10
             timeoutSeconds: 10
           resources: {}

@@ -4,7 +4,7 @@ metadata:
   annotations:
     kompose.service.healthcheck.readiness.interval: 10s
     kompose.service.healthcheck.readiness.retries: "3"
-    kompose.service.healthcheck.readiness.start_period: 120s
+    kompose.service.healthcheck.readiness.start_period: 60s
     kompose.service.healthcheck.readiness.test: CMD /usr/libexec/check-container
     kompose.service.healthcheck.readiness.timeout: 10s
   creationTimestamp: null
@@ -49,7 +49,7 @@ spec:
             failureThreshold: 120
             periodSeconds: 5
             timeoutSeconds: 10
-            start_period: 120s
+            start_period: 60s
           name: legitinfo-db
           ports:
             - containerPort: 5432
@@ -58,7 +58,7 @@ spec:
               command:
                 - /usr/libexec/check-container
             failureThreshold: 3
-            initialDelaySeconds: 120
+            initialDelaySeconds: 60
             periodSeconds: 10
             timeoutSeconds: 10
           resources: {}
