@@ -14,8 +14,8 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir pipenv gunicorn django whitenoise django_bootstrap4 django_extensions django_q psycopg2-binary django-allow-cidr
 
 # Install python dependencies in /.venv
-COPY Pipfile .
-COPY Pipfile.lock .
+COPY Pipfile Pipfile.lock ./
+#COPY Pipfile.lock .
 RUN PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy
 
 

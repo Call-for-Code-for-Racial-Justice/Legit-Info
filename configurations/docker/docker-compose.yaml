@@ -29,7 +29,7 @@ services:
     container_name: legitinfo-app
     image: docker.io/callforcode/legit-info:1.0.0
     depends_on:
-      - db
+      - legitinfo-db
     labels:
       kompose.service.expose: "true"
       kompose.service.healthcheck.readiness.http_get_path: /health/
