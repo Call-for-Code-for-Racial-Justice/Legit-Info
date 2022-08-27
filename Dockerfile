@@ -24,7 +24,7 @@ FROM base AS runtime
 
 # Install extra packages
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends postgresql-client=11+200+deb10u4 iputils-ping=3:20180629-2+deb10u2 && rm -rf /var/lib/apt/lists/*
+    apt-get install -y --no-install-recommends postgresql-client=11+200+deb10u4 iputils-ping=3:20180629-2+deb10u2 curl=7.64.0-4+deb10u2 && rm -rf /var/lib/apt/lists/*
 
 # Create and switch to a new user
 RUN useradd --create-home --uid 1001 --gid 0 appuser
