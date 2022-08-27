@@ -12,7 +12,7 @@ spec:
     - annotations: null
       from:
         kind: DockerImage
-        name: docker.io/callforcode/legit-info:1.0.0
+        name: docker.io/callforcode/legit-info
       generation: null
       importPolicy: {}
       name: 1.0.0
