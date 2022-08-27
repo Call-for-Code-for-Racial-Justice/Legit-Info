@@ -22,7 +22,7 @@ RUN PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy
 FROM base AS runtime
 
 # Install extra packages
-RUN apt-get update && apt-get install -y --no-install-recommends postgresql-client iputils-ping && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends postgresql-client=14+238 iputils-ping=3:20211215-1 && rm -rf /var/lib/apt/lists/*
 
 # Copy virtual env from python-deps stage
 COPY --from=python-deps /.venv /.venv
