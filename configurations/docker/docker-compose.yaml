@@ -26,8 +26,8 @@ services:
       - postgresql-data:/var/lib/pgsql/data
 
   legitinfo:
-    container_name: legitinfo-app
-    image: docker.io/callforcode/legit-info:1.0.0
+    container_name: legitinfo
+    image: docker.io/callforcode/legit-info
     depends_on:
       - legitinfo-db
     labels:

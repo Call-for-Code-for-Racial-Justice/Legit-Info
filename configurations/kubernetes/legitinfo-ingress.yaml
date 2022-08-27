@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kompose.cmd: kompose -f configurations/docker/docker-compose.yaml --out configurations/kubernetes/ convert
+    kompose.service.expose: "true"
+    kompose.service.healthcheck.readiness.http_get_path: /health/
+    kompose.service.healthcheck.readiness.http_get_port: "8080"
+    kompose.service.healthcheck.readiness.interval: 10s
+    kompose.service.healthcheck.readiness.retries: "3"
+    kompose.service.healthcheck.readiness.start_period: 120s
+    kompose.service.healthcheck.readiness.timeout: 10s
+    kompose.version: 1.26.1 (a9d05d509)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: legitinfo
+  name: legitinfo
+spec:
+  rules:
+    - http:
+        paths:
+          - backend:
+              service:
+                name: legitinfo
+                port:
+                  number: 8080
+            path: /
+            pathType: Prefix
+status:
+  loadBalancer: {}

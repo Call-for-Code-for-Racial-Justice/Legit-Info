@@ -10,8 +10,8 @@ ENV PYTHONFAULTHANDLER 1
 FROM base AS python-deps
 
 # Install pipenv and compilation dependencies
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir pipenv gunicorn django whitenoise django_bootstrap4 django_extensions django_q psycopg2-binary django-allow-cidr
+RUN pip install --no-cache-dir --upgrade pip==22.2.2 && \
+    pip install --no-cache-dir pipenv==2022.8.24 gunicorn==20.1.0 django==4.1 django_bootstrap4==22.2 django_extensions==3.2.0 django-allow-cidr==0.5.0 django_q==1.3.9 psycopg2-binary==2.9.3 whitenoise==6.2.0
 
 # Install python dependencies in /.venv
 COPY Pipfile Pipfile.lock ./
