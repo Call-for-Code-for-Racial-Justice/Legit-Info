@@ -16,7 +16,7 @@ spec:
       command: ["/bin/bash", "-c"]
       args:
         - |-
-          oc patch deployment $(inputs.params.deployment) --patch='{"spec":{"template":{"spec":{
+          oc patch deploymentconfig $(inputs.params.deployment) --patch='{"spec":{"template":{"spec":{
             "containers":[{
               "name": "$(inputs.params.deployment)",
               "image":"$(inputs.params.IMAGE)"
