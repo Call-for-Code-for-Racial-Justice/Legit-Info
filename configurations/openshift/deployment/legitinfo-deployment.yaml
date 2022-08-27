@@ -1,14 +1,16 @@
-apiVersion: apps.openshift.io/v1
-kind: DeploymentConfig
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   annotations:
+    kompose.cmd: kompose -f configurations/docker/docker-compose.yaml --out configurations/openshift/deployment/ convert
     kompose.service.expose: "true"
     kompose.service.healthcheck.readiness.http_get_path: /health/
     kompose.service.healthcheck.readiness.http_get_port: "8080"
     kompose.service.healthcheck.readiness.interval: 10s
     kompose.service.healthcheck.readiness.retries: "3"
-    kompose.service.healthcheck.readiness.start_period: 60s
+    kompose.service.healthcheck.readiness.start_period: 120s
     kompose.service.healthcheck.readiness.timeout: 10s
+    kompose.version: 1.26.1 (a9d05d509)
   creationTimestamp: null
   labels:
     io.kompose.service: legitinfo
@@ -16,11 +18,21 @@ metadata:
 spec:
   replicas: 1
   selector:
-    io.kompose.service: legitinfo
-  strategy:
-    resources: {}
+    matchLabels:
+      io.kompose.service: legitinfo
+  strategy: {}
   template:
     metadata:
+      annotations:
+        kompose.cmd: kompose -f configurations/docker/docker-compose.yaml --out configurations/openshift/deployment/ convert
+        kompose.service.expose: "true"
+        kompose.service.healthcheck.readiness.http_get_path: /health/
+        kompose.service.healthcheck.readiness.http_get_port: "8080"
+        kompose.service.healthcheck.readiness.interval: 10s
+        kompose.service.healthcheck.readiness.retries: "3"
+        kompose.service.healthcheck.readiness.start_period: 120s
+        kompose.service.healthcheck.readiness.timeout: 10s
+        kompose.version: 1.26.1 (a9d05d509)
       creationTimestamp: null
       labels:
         io.kompose.service: legitinfo
@@ -46,8 +58,8 @@ spec:
                 secretKeyRef:
                   name: postgresql
                   key: database-user
-          image: ' '
-          name: legitinfo-app
+          image: docker.io/callforcode/legit-info
+          name: legitinfo
           ports:
             - containerPort: 8080
           readinessProbe:
@@ -55,26 +67,9 @@ spec:
             httpGet:
               path: /health/
               port: 8080
-            initialDelaySeconds: 60
+            initialDelaySeconds: 120
             periodSeconds: 10
             timeoutSeconds: 10
           resources: {}
       restartPolicy: Always
-  test: false
-  triggers:
-    - type: ConfigChange
-    - imageChangeParams:
-        automatic: true
-        containerNames:
-          - legitinfo-app
-        from:
-          kind: ImageStreamTag
-          name: legitinfo:1.0.0
-      type: ImageChange
-status:
-  availableReplicas: 0
-  latestVersion: 0
-  observedGeneration: 0
-  replicas: 0
-  unavailableReplicas: 0
-  updatedReplicas: 0
+status: {}

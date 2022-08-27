@@ -1,12 +1,14 @@
-apiVersion: apps.openshift.io/v1
-kind: DeploymentConfig
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   annotations:
+    kompose.cmd: kompose -f configurations/docker/docker-compose.yaml --out configurations/openshift/deployment/ convert
     kompose.service.healthcheck.readiness.interval: 10s
     kompose.service.healthcheck.readiness.retries: "3"
     kompose.service.healthcheck.readiness.start_period: 120s
     kompose.service.healthcheck.readiness.test: CMD /usr/libexec/check-container
     kompose.service.healthcheck.readiness.timeout: 10s
+    kompose.version: 1.26.1 (a9d05d509)
   creationTimestamp: null
   labels:
     io.kompose.service: legitinfo-db
@@ -14,12 +16,20 @@ metadata:
 spec:
   replicas: 1
   selector:
-    io.kompose.service: legitinfo-db
+    matchLabels:
+      io.kompose.service: legitinfo-db
   strategy:
-    resources: {}
     type: Recreate
   template:
     metadata:
+      annotations:
+        kompose.cmd: kompose -f configurations/docker/docker-compose.yaml --out configurations/openshift/deployment/ convert
+        kompose.service.healthcheck.readiness.interval: 10s
+        kompose.service.healthcheck.readiness.retries: "3"
+        kompose.service.healthcheck.readiness.start_period: 120s
+        kompose.service.healthcheck.readiness.test: CMD /usr/libexec/check-container
+        kompose.service.healthcheck.readiness.timeout: 10s
+        kompose.version: 1.26.1 (a9d05d509)
       creationTimestamp: null
       labels:
         io.kompose.service: legitinfo-db
@@ -41,7 +51,7 @@ spec:
                 secretKeyRef:
                   name: postgresql
                   key: database-user
-          image: ' '
+          image: registry.redhat.io/rhscl/postgresql-13-rhel7:latest
           livenessProbe:
             exec:
               command:
@@ -49,7 +59,6 @@ spec:
             failureThreshold: 120
             periodSeconds: 5
             timeoutSeconds: 10
-            start_period: 120s
           name: legitinfo-db
           ports:
             - containerPort: 5432
@@ -70,21 +79,4 @@ spec:
         - name: postgresql-data
           persistentVolumeClaim:
             claimName: postgresql-data
-  test: false
-  triggers:
-    - type: ConfigChange
-    - imageChangeParams:
-        automatic: true
-        containerNames:
-          - legitinfo-db
-        from:
-          kind: ImageStreamTag
-          name: legitinfo-db:latest
-      type: ImageChange
-status:
-  availableReplicas: 0
-  latestVersion: 0
-  observedGeneration: 0
-  replicas: 0
-  unavailableReplicas: 0
-  updatedReplicas: 0
+status: {}
