@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: DeploymentConfig
+kind: Deployment
 metadata:
   annotations:
     kompose.cmd: kompose -f configurations/docker/docker-compose.yaml --out configurations/kubernetes/ convert

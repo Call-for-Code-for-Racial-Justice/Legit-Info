@@ -1,5 +1,5 @@
 apiVersion: apps.openshift.io/v1
-kind: Deployment
+kind: DeploymentConfig
 metadata:
   annotations:
     kompose.service.expose: "true"
