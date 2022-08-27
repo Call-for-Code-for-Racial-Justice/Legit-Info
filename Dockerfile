@@ -14,15 +14,17 @@ RUN pip install --no-cache-dir --upgrade pip==22.2.2 && \
     pip install --no-cache-dir pipenv==2022.8.24 gunicorn==20.1.0 django==4.1 django_bootstrap4==22.2 django_extensions==3.2.0 django-allow-cidr==0.5.0 django_q==1.3.9 psycopg2-binary==2.9.3 whitenoise==6.2.0
 
 # Install python dependencies in /.venv
+WORKDIR /
 COPY Pipfile Pipfile.lock ./
-#COPY Pipfile.lock .
+
 RUN PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy
 
 
 FROM base AS runtime
 
 # Install extra packages
-RUN apt-get update && apt-get install -y --no-install-recommends postgresql-client=14+238 iputils-ping=3:20211215-1 && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends postgresql-client=11+200+deb10u4 iputils-ping=3:20180629-2+deb10u2 && rm -rf /var/lib/apt/lists/*
 
 # Create and switch to a new user
 RUN useradd --create-home --uid 1001 --gid 0 appuser
