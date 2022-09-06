@@ -1,0 +1,56 @@
+version: "3.2"
+
+services:
+  legitinfo-db:
+    container_name: legitinfo-db
+    image: registry.redhat.io/rhscl/postgresql-13-rhel7:latest
+    labels:
+      kompose.service.healthcheck.readiness.test: CMD /usr/libexec/check-container
+      kompose.service.healthcheck.readiness.interval: 10s
+      kompose.service.healthcheck.readiness.timeout: 10s
+      kompose.service.healthcheck.readiness.retries: 3
+      kompose.service.healthcheck.readiness.start_period: 120s
+    user: "postgres"
+    healthcheck:
+      test: /usr/libexec/check-container '--live'
+      interval: 5s
+      timeout: 10s
+      retries: 120
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRESQL_DATABASE: ${database-name}
+      POSTGRESQL_USER: ${database-user}
+      POSTGRESQL_PASSWORD: ${database-password}
+    volumes:
+      - postgresql-data:/var/lib/pgsql/data
+
+  legitinfo:
+    container_name: legitinfo
+    image: docker.io/callforcode/legit-info
+    depends_on:
+      - legitinfo-db
+    labels:
+      kompose.service.expose: "true"
+      kompose.service.healthcheck.readiness.http_get_path: /health/
+      kompose.service.healthcheck.readiness.http_get_port: 8080
+      kompose.service.healthcheck.readiness.interval: 10s
+      kompose.service.healthcheck.readiness.timeout: 10s
+      kompose.service.healthcheck.readiness.retries: 3
+      kompose.service.healthcheck.readiness.start_period: 120s
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      USE_SQLITE3: "False"
+      POSTGRESQL_HOSTNAME: legitinfo-db
+      POSTGRESQL_DATABASE: ${database-name}
+      POSTGRESQL_USER: ${database-user}
+      POSTGRESQL_PASSWORD: ${database-password}
+
+volumes:
+  postgresql-data:
+
+secrets:
+  postgresql:
+    file: ./postgresql.txt

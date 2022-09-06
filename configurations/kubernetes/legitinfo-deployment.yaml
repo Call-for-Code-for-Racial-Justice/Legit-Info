@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose -f configurations/docker/docker-compose.yaml --out configurations/kubernetes/ convert
+    kompose.service.expose: "true"
+    kompose.service.healthcheck.readiness.http_get_path: /health/
+    kompose.service.healthcheck.readiness.http_get_port: "8080"
+    kompose.service.healthcheck.readiness.interval: 10s
+    kompose.service.healthcheck.readiness.retries: "3"
+    kompose.service.healthcheck.readiness.start_period: 120s
+    kompose.service.healthcheck.readiness.timeout: 10s
+    kompose.version: 1.26.1 (a9d05d509)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: legitinfo
+  name: legitinfo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: legitinfo
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose -f configurations/docker/docker-compose.yaml --out configurations/kubernetes/ convert
+        kompose.service.expose: "true"
+        kompose.service.healthcheck.readiness.http_get_path: /health/
+        kompose.service.healthcheck.readiness.http_get_port: "8080"
+        kompose.service.healthcheck.readiness.interval: 10s
+        kompose.service.healthcheck.readiness.retries: "3"
+        kompose.service.healthcheck.readiness.start_period: 120s
+        kompose.service.healthcheck.readiness.timeout: 10s
+        kompose.version: 1.26.1 (a9d05d509)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: legitinfo
+    spec:
+      containers:
+        - env:
+            - name: POSTGRESQL_HOSTNAME
+              value: legitinfo-db
+            - name: USE_SQLITE3
+              value: "False"
+            - name: POSTGRESQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: database-name
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: database-password
+            - name: POSTGRESQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: database-user
+          image: docker.io/callforcode/legit-info
+          name: legitinfo
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health/
+              port: 8080
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            timeoutSeconds: 10
+          resources: {}
+      restartPolicy: Always
+status: {}

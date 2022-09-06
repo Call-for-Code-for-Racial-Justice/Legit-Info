@@ -1,0 +1,3 @@
+database-name=cfcappdb
+database-user=cfcuser
+database-password=cfcpassword

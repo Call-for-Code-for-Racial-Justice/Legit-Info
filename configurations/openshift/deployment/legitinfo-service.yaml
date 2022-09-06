@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.service.expose: "true"
+    kompose.service.healthcheck.readiness.http_get_path: /health/
+    kompose.service.healthcheck.readiness.http_get_port: "8080"
+    kompose.service.healthcheck.readiness.interval: 10s
+    kompose.service.healthcheck.readiness.retries: "3"
+    kompose.service.healthcheck.readiness.start_period: 120s
+    kompose.service.healthcheck.readiness.timeout: 10s
+  creationTimestamp: null
+  labels:
+    io.kompose.service: legitinfo
+  name: legitinfo
+spec:
+  ports:
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
+  selector:
+    io.kompose.service: legitinfo
+status:
+  loadBalancer: {}

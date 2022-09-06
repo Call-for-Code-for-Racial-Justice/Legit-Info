@@ -160,7 +160,7 @@ LOGGING = {
 ALLOWED_CIDR_NETS = ['10.0.0.0/8']
 
 ALLOWED_HOSTS = [ gethostname(), gethostbyname(gethostname()),
-                '.mybluemix.net', '.codeengine.appdomain.cloud', '0.0.0.0', '127.0.0.1', 'localhost']
+                '.mybluemix.net', '.codeengine.appdomain.cloud', '.apps-crc.testing', '0.0.0.0', '127.0.0.1', 'localhost']
 
 # Application definition
 
