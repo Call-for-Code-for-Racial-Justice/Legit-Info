@@ -1,0 +1,89 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    kompose.service.healthcheck.readiness.interval: 10s
+    kompose.service.healthcheck.readiness.retries: "3"
+    kompose.service.healthcheck.readiness.start_period: 120s
+    kompose.service.healthcheck.readiness.test: CMD /usr/libexec/check-container
+    kompose.service.healthcheck.readiness.timeout: 10s
+  creationTimestamp: null
+  labels:
+    io.kompose.service: legitinfo-db
+  name: legitinfo-db
+spec:
+  replicas: 1
+  selector:
+    io.kompose.service: legitinfo-db
+  strategy:
+    resources: {}
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: legitinfo-db
+    spec:
+      containers:
+        - env:
+            - name: POSTGRESQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: database-name
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: database-password
+            - name: POSTGRESQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: database-user
+          image: ' '
+          livenessProbe:
+            exec:
+              command:
+                - /usr/libexec/check-container '--live'
+            failureThreshold: 120
+            periodSeconds: 5
+            timeoutSeconds: 10
+          name: legitinfo-db
+          ports:
+            - containerPort: 5432
+          readinessProbe:
+            exec:
+              command:
+                - /usr/libexec/check-container
+            failureThreshold: 3
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            timeoutSeconds: 10
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/pgsql/data
+              name: postgresql-data
+      restartPolicy: Always
+      volumes:
+        - name: postgresql-data
+          persistentVolumeClaim:
+            claimName: postgresql-data
+  test: false
+  triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - legitinfo-db
+        from:
+          kind: ImageStreamTag
+          name: legitinfo-db:latest
+      type: ImageChange
+status:
+  availableReplicas: 0
+  latestVersion: 0
+  observedGeneration: 0
+  replicas: 0
+  unavailableReplicas: 0
+  updatedReplicas: 0
