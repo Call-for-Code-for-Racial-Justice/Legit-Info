@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  legitinfo-dev:
+    container_name: legitinfo-dev
+    build:
+      dockerfile: Dockerfile-devenv
+      context: ./
+    restart: always
+    environment:
+      - USE_SQLITE=True
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/app:rw
