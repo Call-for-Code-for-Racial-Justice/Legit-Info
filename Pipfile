@@ -10,7 +10,7 @@ selenium = "*"
 
 [packages]
 wheel = "*"
-gunicorn = "==20.0.4"
+gunicorn = "==23.0.0"
 ibmcloudenv = "==0.2.1"
 livereload = "==2.6.2"
 sqlparse = "==0.3.1"
